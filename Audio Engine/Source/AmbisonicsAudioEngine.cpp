@@ -57,8 +57,8 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 //	addAepChannel(6, 1.0, false, false, false, 0.0, -1.0, 0.0);
 //	setNewRouting(1, 1);
 //	setNewRouting(2, 2);
-//	setNewRouting(3, 4);
-//	setNewRouting(6, 3);	
+//	setNewRouting(3, 3);
+//	setNewRouting(4, 4);	
 //	enableNewRouting();
 //	activatePinkNoise(1, true);
 	
@@ -148,12 +148,17 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 	// last position:
 	setPosition(currentPosition);
 	
-	setSpeakerPositions (positionOfSpeaker);
-	  // To make sure that the number of speakers is smaller or equal than the number of active
-	  // output channels
-	
 	// Temp
-	activatePinkNoise(1, true);
+	addAepChannel(1, 1.0, false, false, false, -1.0, 0.0, 0.0);
+	addAepChannel(2, 1.0, false, false, false, 0.0, 1.0, 0.0);
+	addAepChannel(3, 1.0, false, false, false, 1.0, 0.0, 0.0);
+	addAepChannel(6, 1.0, false, false, false, 0.0, -1.0, 0.0);
+	setNewRouting(1, 1);
+	setNewRouting(2, 2);
+	setNewRouting(3, 3);
+	setNewRouting(4, 4);	
+	enableNewRouting();
+	
 
 }
 
@@ -420,39 +425,6 @@ void setAEPDistanceModeTo2 (double centerRadius,
 											   centerExponent,
 											   centerAttenuation,
 											   outsideCenterExponent);
-}
-
-void AmbisonicsAudioEngine::setSpeakerPositions (Array<void*> positionOfSpeaker_)
-{
-	DBG(T("AmbisonicsAudioEngine.setSpeakerPositions called"));
-
-	positionOfSpeaker = positionOfSpeaker_;
-
-	positionOfSpeakerMaybeReduced = positionOfSpeaker;
-	
-	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
-	BigInteger activeOutputChannels = currentAudioDevice->getActiveOutputChannels();
-	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
-	
-	// The number of speakers must be smaller or equal than the 
-	// numberOfActiveOutputChannels. Otherwise the program will crash 
-	// because getNextAudioBlock(..) in AudioSouceAmbipanning will access
-	// an undefined memory location.
-	
-	// To prevent this:
-	// If "number of speakers" > numberOfActiveOutputChannels)
-	// remove speakers until these numbers are equal.
-	while (positionOfSpeakerMaybeReduced.size() > numberOfActiveOutputChannels)
-	{
-		DBG(T("AmbisonicsAudioEngine.setSpeakerPositions: remove a speaker because there are more speakers than active outputs"))
-		positionOfSpeakerMaybeReduced.remove(positionOfSpeakerMaybeReduced.size() - 1);
-	}
-	DBG(T("AmbisonicsAudioEngine.setSpeakerPositions: positionOfSpeaker.size() = ") 
-		+ String(positionOfSpeaker.size()));
-	DBG(T("AmbisonicsAudioEngine.setSpeakerPositions: positionOfSpeakerMaybeReduced.size() = ") 
-		+ String(positionOfSpeakerMaybeReduced.size()));
-
-	audioRegionMixer.setSpeakerPositions(positionOfSpeakerMaybeReduced);
 }
 
 bool AmbisonicsAudioEngine::setSpacialEnvelopeForRegion (const int regionID,

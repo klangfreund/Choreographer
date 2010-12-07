@@ -359,16 +359,6 @@ public:
 								double outsideCenterExponent);
 	
 	/**
-	 Sets the positions of the connected speakers.
-
-	 @param positionOfSpeaker	The positionOfSpeaker is a void*-Array. The void 
-	                                pointers need to be typecasted to pointers to
-	                                SpeakerPosition
-					( (SpeakerPosition*)positionOfSpeaker[speakerNumber_StartingAtZero] ).
-	 */
-	void setSpeakerPositions (const Array<void*> positionOfSpeaker);
-	
-	/**
 	 Attaches a spacial envelope to a region. 
 
 	 The spacial envelope contains points. Such a point holds four values: The position
@@ -413,14 +403,6 @@ private:
 	
 	AudioRegionMixer audioRegionMixer;		///< An instance of a new object, manages 
 							///  and mixes audio regions.
-	
-	Array<void*> positionOfSpeaker;			///< An instance of a Juce array of void*. 
-							///  The void pointers
-							///  need to be typecasted to pointers to
-							///  SpeakerPosition
-							///  ( (SpeakerPosition*)positionOfSpeaker[SpeakerNumber-1] ).
-							///  This array is stored for convenience,
-							///  it is not used at the moment.
 
 	Array<void*> positionOfSpeakerMaybeReduced;	///< An instance of a Juce array of void*.
 							///  The void pointers

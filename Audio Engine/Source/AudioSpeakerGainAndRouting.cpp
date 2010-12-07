@@ -113,6 +113,7 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 		defaultAepChannelSettings->mute = FALSE;
 		defaultAepChannelSettings->activatePinkNoise = FALSE;
 		defaultAepChannelSettings->speakerPosition.setXYZ(0.0, 1.0, 0.0);
+		defaultAepChannelSettings->enableOutputMeasurement = FALSE; //TODO: THINK ABOUT THIS!
 		defaultAepChannelSettings->resetPeakValue = FALSE;
 		defaultAepChannelSettings->measuredRootMeanSquareValue = 0.0;
 		defaultAepChannelSettings->measuredPeakValue = 0.0;
@@ -127,6 +128,7 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 	specifiedAepChannelSettings->mute = mute;
 	specifiedAepChannelSettings->activatePinkNoise = activatePinkNoise;
 	specifiedAepChannelSettings->speakerPosition.setXYZ(x, y, z);
+	specifiedAepChannelSettings->enableOutputMeasurement = FALSE; //TODO: THINK ABOUT THIS!
 	specifiedAepChannelSettings->resetPeakValue = FALSE;
 	specifiedAepChannelSettings->measuredRootMeanSquareValue = 0.0;
 	specifiedAepChannelSettings->measuredPeakValue = 0.0;
@@ -359,7 +361,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	// the most recent routing configuration in the following loop).
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
 	
-	int x, y, z;
+	double x, y, z;
 	Array<void*> positionOfSpeakers;
 	
 	// The pairs in aepChannelHardwareOutputPairs are in ascending order,
