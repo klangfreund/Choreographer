@@ -1,0 +1,9 @@
+//
+// Prefix header for all source files of the 'Choreographer' target in the 'Choreographer' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+    #import <CoreData/CoreData.h>
+    #import <Cocoa/Cocoa.h>
+#endif
