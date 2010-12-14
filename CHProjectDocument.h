@@ -43,7 +43,7 @@
 - (IBAction)newTrajectory:(id)sender;
 - (IBAction)showPool:(id)sender;
 
-- (TrajectoryItem *)newTrajectoryItem:(NSString *)name;
+- (void)newTrajectoryItem:(NSString *)name forRegions:(NSSet *)regions;
 
 
 // IB actions

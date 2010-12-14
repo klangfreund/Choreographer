@@ -11,15 +11,27 @@
 
 @implementation Breakpoint
 
-+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val
+//+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val
+//{
+//	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
+//	
+//	[bp setTime:t];
+//	[bp setValue:val];
+//	
+//	return bp;
+//}
+
++ (Breakpoint *)breakpointWithTime:(NSUInteger)t position:(SpatialPosition *)pos
 {
 	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 	
 	[bp setTime:t];
-	[bp setValue:val];
+	[bp setPosition:pos];
 	
 	return bp;
+	
 }
+
 
 - (Breakpoint *)copy
 {
@@ -65,12 +77,12 @@
 	return breakpointType;
 }
 
-- (void)setTime:(long)val
+- (void)setTime:(NSUInteger)val
 {
 	time = val > 0 ? val : 0;
 }
 
-- (long)time {return time;}
+- (NSUInteger)time {return time;}
 
 - (void)setValue:(float)val
 {

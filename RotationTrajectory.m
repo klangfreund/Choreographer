@@ -7,9 +7,23 @@
 //
 
 #import "RotationTrajectory.h"
+#import "TrajectoryItem.h"
 
 
 @implementation RotationTrajectory
+
+- (id)init
+{
+	if(self = [super init])
+	{
+		rotationCentre = [[SpatialPosition positionWithX:0 Y:0 Z:0] retain];
+		initialPosition = [[SpatialPosition positionWithX:0.5 Y:0 Z:0] retain];
+		speed = 10;
+		[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
+		[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
+	}
+	return self;	
+}
 
 - (id)initWithCoder:(NSCoder *)coder
 {
@@ -18,7 +32,6 @@
     rotationCentre = [[coder decodeObjectForKey:@"centre"] retain];
     speed = [[coder decodeObjectForKey:@"speed"] floatValue];
 	
-	NSLog(@"unarchiveData %@ %@", self, rotationCentre);
 	return self;
 }
 
@@ -37,25 +50,11 @@
 	[super dealloc];
 }
 
-// accessors
-//- (void)initialPosition:(SpatialPosition *)pos
-//{
-//	if(initialPosition != pos)
-//	{
-//		[initialPosition release];
-//		initialPosition = [pos retain];
-//	}
-//}
-//
-//- (void)rotationCentre:(SpatialPosition *)pos
-//{
-//	if(rotationCentre != pos)
-//	{
-//		[rotationCentre release];
-//		rotationCentre = [pos retain];
-//	}
-//}
-
+- (void)setSpeed:(float)val
+{
+	speed = val;
+	[trajectoryItem archiveData];
+}
 
 - (NSArray *)additionalPositions
 {

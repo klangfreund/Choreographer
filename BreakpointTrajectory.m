@@ -68,6 +68,8 @@
 		else time = 1000;
 	}
 	
+	[trajectoryItem setValue:[NSNumber numberWithInt:time] forKey:@"duration"];
+	
 	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 	[bp setPosition:pos];
 	[bp setTime:time];

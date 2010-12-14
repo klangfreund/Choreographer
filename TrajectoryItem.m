@@ -7,6 +7,7 @@
 //
 
 #import "TrajectoryItem.h"
+#import "Trajectory.h"
 
 
 @implementation TrajectoryItem
@@ -57,7 +58,6 @@
 	[trajectory setValue:self forKey:@"trajectoryItem"];
 }
 
-
 #pragma mark -
 #pragma mark breakpoints for visualisation
 // -----------------------------------------------------------
@@ -106,6 +106,47 @@
 	return [trajectory additionalPositionName:item];
 }
 
+- (SpatialPosition *)namePosition
+{
+	SpatialPosition *pos1, *pos2;
+	float x,y,z;
+	
+	if(![[self valueForKey:@"adaptiveInitialPosition"] boolValue])
+	{
+		switch([self trajectoryType])
+		{
+			case 0:
+				return [(SpatialPosition *)[[trajectory valueForKey:@"breakpointArray"] objectAtIndex:0] position];
+			case 1:
+				return [trajectory valueForKey:@"initialPosition"];
+			case 2:
+				return [trajectory valueForKey:@"initialPosition"];
+			default:
+				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
+		}
+	}
+	else
+	{
+		switch([self trajectoryType])
+		{
+			case 0:
+				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
+			case 1:
+				return [trajectory valueForKey:@"rotationCentre"];
+			case 2:
+				pos1 = [trajectory valueForKey:@"boundingVolumePoint1"];
+				pos2 = [trajectory valueForKey:@"boundingVolumePoint2"];
+				x = pos1.x + (pos2.x - pos1.x) * 0.5;
+				y = pos1.y + (pos2.y - pos1.y) * 0.5;
+				z = pos1.z + (pos2.z - pos1.z) * 0.5;
+				return [SpatialPosition positionWithX:x Y:y Z:z];
+			default:
+				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
+		}
+	}
+	
+}
+
 #pragma mark -
 #pragma mark breakpoints for audio playback
 // -----------------------------------------------------------
@@ -125,7 +166,7 @@
 
 
 #pragma mark -
-#pragma mark 
+#pragma mark etc
 // -----------------------------------------------------------
 
 - (void)updateModel

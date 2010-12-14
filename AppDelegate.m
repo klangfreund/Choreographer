@@ -15,6 +15,32 @@
 
 @implementation AppDelegate
 
+- (IBAction)newDocument:(id)sender
+{
+	if([[[NSDocumentController sharedDocumentController] documents] count])
+	{
+		NSLog(@"only one open file at once");
+		NSBeep();
+	}
+	else
+	{
+		[[NSDocumentController sharedDocumentController] newDocument:sender];
+	}
+}
+
+- (IBAction)openDocument:(id)sender
+{
+	if([[[NSDocumentController sharedDocumentController] documents] count])
+	{
+		NSLog(@"only one open file at once");
+		NSBeep();
+	}
+	else
+	{
+		[[NSDocumentController sharedDocumentController] openDocument:sender];
+	}
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
 	// setting the defaults
@@ -116,8 +142,8 @@
 
 - (void)keyDown:(NSEvent *)event
 {
-	unsigned short keyCode = [event keyCode];
-	NSLog(@"App key code: %d ", keyCode);
+//	unsigned short keyCode = [event keyCode];
+//	NSLog(@"App key code: %d ", keyCode);
 }
 
 

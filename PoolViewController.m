@@ -12,7 +12,8 @@
 #import "AudioFile.h"
 #import "AudioRegion.h"
 #import "PoolViewController.h"
-#import "TrajectoryInspectorPanelController.h"
+#import "PoolViews.h"
+#import "TrajectoryInspectorWindowController.h"
 #import "SettingsMenu.h"
 #import "ImageAndTextCell.h"
 
@@ -67,6 +68,13 @@
     [audioItemTableView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, NSFilenamesPboardType, nil]];
     [trajectoryTableView registerForDraggedTypes:[NSArray arrayWithObjects: CHTrajectoryType, nil]];
 
+	// double click behaviour
+	[userOutlineView setDoubleAction:@selector(doubleClick:)];
+	[userOutlineView setTarget:self];
+	[audioItemTableView setDoubleAction:@selector(doubleClick:)];
+	[audioItemTableView setTarget:self];
+	[trajectoryTableView setDoubleAction:@selector(doubleClick:)];
+	[trajectoryTableView setTarget:self];
 
 	// register for notifications
 	[[NSNotificationCenter defaultCenter] addObserver:self
@@ -159,22 +167,21 @@
 
 - (IBAction)newTrajectory:(id)sender
 {	
-	TrajectoryItem *item;
+	regionsForNewTrajectoryItem = nil;
+	[self newTrajectoryItem:@"untitled"];
 	
-	if (item = [self newTrajectoryItem:nil])
-	{
 //		[userOutlineView deselectAll:nil];
 //		[audioItemTableView deselectAll:nil];
 //		[trajectoryTableView deselectAll:nil];
 		
 // todo: select new trajectory
 
-		if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue] == 1) // audio items view
-		{
-			[tabControl setSelectedSegment:2];	
-			[tabView selectTabViewItemAtIndex:2];		
-		}
-	}
+//		if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue] == 1) // audio items view
+//		{
+//			[tabControl setSelectedSegment:2];	
+//			[tabView selectTabViewItemAtIndex:2];		
+//		}
+
 }
 
 - (IBAction)deleteSelected:(id)sender
@@ -241,6 +248,22 @@
 #pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
+
+- (void)doubleClick:(id)sender
+{
+	// set selection to one single item and send show inspector
+	if([sender isKindOfClass:[PoolOutlineView class]])
+	{
+		[treeController setSelectionIndexPath:[NSIndexPath indexPathWithIndex:[sender clickedRow]]];
+		
+		id item = [[[treeController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
+		
+		if([item isKindOfClass:[TrajectoryItem class]])
+		{
+			[[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
+		}
+	}
+}
 
 - (void)openAudioFiles:(NSArray *)filenames
 {
@@ -337,20 +360,49 @@
 				
 				[[[document managedObjectContext] undoManager] setActionName:@"import audio"];
 			}
+
+			[(UserTreeController *)treeController updateSortIndex];
 		}
 	}
+	
 	
 	//[self refresh];
 }
 
 
-- (TrajectoryItem *)newTrajectoryItem:(NSString *)name
+- (void)newTrajectoryItem:(NSString *)name
 {
-	// create new trajectory (inspector panel)	
-	[[TrajectoryInspectorPanelController sharedTrajectoryInspectorPanelController] setValue:name forKey:@"name"];
-	if(![[TrajectoryInspectorPanelController sharedTrajectoryInspectorPanelController] newTrajectoryPanel])
-		return NULL; // user canceled
+	// show the new trajectory sheet
+	
+	[self setValue:name forKey:@"newTrajectoryName"];	
+	[self setValue:[NSNumber numberWithInt:0] forKey:@"newTrajectoryType"];
+	
+	[NSApp beginSheet:newTrajectorySheet
+	   modalForWindow:[[self view] window]
+		modalDelegate:self
+	   didEndSelector:@selector(newTrajectorySheetDidEnd: returnCode: contextInfo:)
+		  contextInfo:nil];
+}
 
+- (void)newTrajectorySheetOK
+{
+	[NSApp endSheet:newTrajectorySheet returnCode:NSOKButton];
+	[newTrajectorySheet orderOut:nil];
+}
+
+- (void)newTrajectorySheetCancel;
+{
+	[NSApp endSheet:newTrajectorySheet returnCode:NSCancelButton];
+	[newTrajectorySheet orderOut:nil];
+}
+
+- (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+	if(returnCode == NSCancelButton)
+	{
+		return;
+	}
+	
 	NSManagedObject *parentNode;
 	
 	// get (last) selected item
@@ -371,13 +423,13 @@
 	
 	
 	// check if the name is unique
-	name = [[TrajectoryInspectorPanelController sharedTrajectoryInspectorPanelController] name];
 	
 	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:[document managedObjectContext]];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	[request setEntity:entityDescription];
-	[request setPredicate:[NSPredicate predicateWithFormat:@"node.name == %@", name]];
+	[request setPredicate:[NSPredicate predicateWithFormat:@"node.name == %@", newTrajectoryName]];
 	NSError *error;
+	NSString *newName = [newTrajectoryName copy];
 	
 	if([[document managedObjectContext] countForFetchRequest:request error:&error])
 	{
@@ -386,11 +438,11 @@
 		
 		for(i=1;!unique;i++)
 		{
-			[request setPredicate:[NSPredicate predicateWithFormat:@"node.name == %@", [name stringByAppendingString:[NSString stringWithFormat:@" %i", i]]]];
+			[request setPredicate:[NSPredicate predicateWithFormat:@"node.name == %@", [newTrajectoryName stringByAppendingString:[NSString stringWithFormat:@" %i", i]]]];
 			
 			if([[document managedObjectContext] countForFetchRequest:request error:&error] == 0)
 			{
-				name = [name stringByAppendingString:[NSString stringWithFormat:@" %i", i]];
+				newName = [newTrajectoryName stringByAppendingString:[NSString stringWithFormat:@" %i", i]];
 				unique = YES;
 			}
 		}
@@ -403,11 +455,15 @@
 															inManagedObjectContext:[document managedObjectContext]]; 
 	
 	[newNode setValue:parentNode forKey:@"parent"]; 
-	[newNode setValue:name forKey:@"name"];
+	[newNode setValue:newName forKey:@"name"];
 	[newNode setValue:CHTrajectoryType forKey:@"type"];
 	[newNode setValue:newItem forKey:@"item"];
 
-	[[TrajectoryInspectorPanelController sharedTrajectoryInspectorPanelController] configureTrajectory:newItem];
+	[newItem setValue:[NSNumber numberWithInt:newTrajectoryType] forKey:@"trajectoryType"];
+	[newItem setValue:regionsForNewTrajectoryItem forKey:@"regions"];
+	
+	// store data
+	[newItem archiveData];
 	
 	// undo
 	[[[document managedObjectContext] undoManager] setActionName:@"new trajectory"];
@@ -416,13 +472,11 @@
 	[userOutlineView expandItem:selectedTreeNode];
 	
 	// todo: select the new trajectory
-	
-	return newItem;
 }
 
 - (BOOL)recursivelyDeleteNode:(id)node
 {		
-	NSEnumerator *nodeEnumerator, *regionEnumerator;
+	NSEnumerator *nodeEnumerator;
 	id subnode;
 	BOOL dirty = NO;
 	BOOL groupIsEmpty = YES;
@@ -472,11 +526,19 @@
 			}
 			
 			// remove all regions from arrangerView
-			regionEnumerator = [regions objectEnumerator];
-			while (region = [regionEnumerator nextObject])
+			for (region in regions)
 			{
 				[region removeFromView];
 			}
+		}
+								
+		// delete audio file if it isn't referenced anymore
+		AudioFile *audioFile = [node valueForKeyPath:@"item.audioFile"];
+
+		if([[audioFile valueForKey:@"audioItems"] count] == 1 && [node valueForKey:@"item"] == [[audioFile valueForKey:@"audioItems"] anyObject])
+		{
+			// NSLog(@"delete audioFile %@", audioFile);
+			[[document managedObjectContext] deleteObject:audioFile];
 		}
 	}
 	else if([[node valueForKey:@"type"] isEqualToString:CHTrajectoryType])
@@ -498,8 +560,7 @@
 			}
 
 			// nullify relations to regions
-			regionEnumerator = [regions objectEnumerator];
-			while (region = [regionEnumerator nextObject])
+			for (region in regions)
 			{
 				[region setValue:NULL forKey:@"trajectoryItem"];
 			}

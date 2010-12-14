@@ -17,6 +17,8 @@
 }
 
 // accessors
+- (void)setSpeed:(float)val;
+
 //- (void)initialPosition:(SpatialPosition *)pos;
 //- (void)rotationCentre:(SpatialPosition *)pos;
 

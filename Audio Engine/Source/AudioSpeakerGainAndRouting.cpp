@@ -307,16 +307,18 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 
 int AudioSpeakerGainAndRouting::enableNewRouting()
 {	
+	DBG(T("AudioSpeakerGainAndRouting: enableNewRouting called."));
+	
 	// This section is scope locked.
 	const ScopedLock sl (connectionLock);
 	
 	// Activate (and deactivate) the hardware device output channels as needed
 	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
 	audioDeviceManager->getAudioDeviceSetup(audioDeviceSetup);
-	DBG(T("Number of hardware output channels = ") + String(getNumberOfHardwareOutputChannels()));
+	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(getNumberOfHardwareOutputChannels()));
 	
 	// temp:
-	DBG(T("OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
+	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
 	
 	audioDeviceSetup.outputChannels.clear();
 	for (int i=0; i < getNumberOfHardwareOutputChannels(); i++)
@@ -326,14 +328,14 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 			audioDeviceSetup.outputChannels.setBit(i);
 		}
 		// temp:
-		DBG(T("OutputChannels (set bits) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
+		DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (set bits) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
 	}
 	
 	// temp
 	AudioIODevice* audioIODevice = audioDeviceManager->getCurrentAudioDevice();
 	BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
-	DBG(T("Number of active output channels (before) = ") + String(numberOfActiveOutputChannels));
+	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output channels (before) = ") + String(numberOfActiveOutputChannels));
 	// end temp
 	
 	audioDeviceSetup.useDefaultOutputChannels = false;
@@ -343,13 +345,13 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	String error = audioDeviceManager->setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
 	if (error != T(""))
 	{
-		DBG(T("Error message of setAudioDeviceSetup: ") + error);
+		DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Error message of setAudioDeviceSetup: ") + error);
 	}
 	
 	// temp
 	activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
-	DBG(T("Number of active output channels (after) = ") + String(numberOfActiveOutputChannels));
+	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output channels (after) = ") + String(numberOfActiveOutputChannels));
 	// end temp
 	
 	// Let the audioSpeakerGainAndRouting know about the new connections.

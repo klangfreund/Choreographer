@@ -68,8 +68,8 @@
 		
 		while(region = [enumerator nextObject])
 		{
-			regionStartTime = [[region valueForKey:@"startTime"] longLongValue];
-			regionEndTime = [[region valueForKeyPath:@"duration"] longLongValue] + regionStartTime;
+			regionStartTime = [[region valueForKey:@"startTime"] unsignedIntValue];
+			regionEndTime = [[region valueForKeyPath:@"duration"] unsignedIntValue] + regionStartTime;
 
 			if(regionStartTime < startTime)
 				startTime = regionStartTime;
@@ -94,14 +94,14 @@
 		height = maxYPos - minYPos + AUDIO_BLOCK_HEIGHT;
 	}
 	
-	frame.origin.x = [[self valueForKey:@"startTime"] longLongValue] * zoomFactorX;
+	frame.origin.x = [[self valueForKey:@"startTime"] longLongValue] * zoomFactorX + ARRANGER_OFFSET;
 	frame.origin.y = [[self valueForKey:@"yPosInArranger"] floatValue] * zoomFactorY;
 	frame.size.width = duration * zoomFactorX;
 	frame.size.height = height * zoomFactorY;
 }
 
-#pragma mark position
 #pragma mark -
+#pragma mark position
 // -----------------------------------------------------------
 
 - (void)calculatePositionBreakpoints
@@ -112,7 +112,7 @@
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])
 	{
-		NSLog(@"group region %x playback breakpoint to be modulated");
+		NSLog(@"group region %x playback breakpoints to be modulated", self);
 	}
 
 	for(Region *child in [self valueForKey:@"childRegions"])
@@ -208,6 +208,8 @@
 		[region setSelected:flag];
     }
 }
+
+- (NSNumber *)duration { return [NSNumber numberWithInt:duration]; }
 
 
 #pragma mark -

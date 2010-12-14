@@ -75,6 +75,9 @@
 - (void)setFrame:(NSRect)rect;
 - (NSNumber *)duration;
 
+// position
+- (void)modulateTrajectory;
+
 
 // notifications
 - (void)setZoom:(NSNotification *)notification;

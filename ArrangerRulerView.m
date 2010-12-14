@@ -91,7 +91,8 @@
 
 	// ---------------------------------
 	// markers
-/*	x = 5000 * zoomFactor;
+
+	x = 5000 * zoomFactor;
 	y = HEIGHT_1 + HEIGHT_2 * 0.2;
 	
 	float markerHandleSize = HEIGHT_2 * 0.8; 
@@ -107,8 +108,7 @@
 	[markerColor set];
 	[markerPath fill];
 	[[NSColor blackColor] set];
-	[markerPath stroke];
-*/	
+	[markerPath stroke];	
 
 
 	// ---------------------------------

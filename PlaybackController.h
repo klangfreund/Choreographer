@@ -16,8 +16,8 @@
 {
     ProjectSettings *projectSettings;
 
-	NSMutableArray *playbackEvents;
-
+	NSMutableSet *updateRegions;
+	
 	BOOL loopMode;
 	BOOL isPlaying;
 
@@ -52,6 +52,7 @@
 
 // prepare content
 - (void)updateAudioEngine:(NSNotification *)notification;
+- (void)recursivelyAddUpdateRegions:(id)region;
 
 // update GUI
 - (void)updateLocator;

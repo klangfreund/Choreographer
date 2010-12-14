@@ -22,11 +22,11 @@
 
 // position
 - (SpatialPosition *)regionPosition;
-- (SpatialPosition *)regionPositionAtTime:(long)time;
-- (SpatialPosition *)interpolatedPosition:(long)time
+- (SpatialPosition *)regionPositionAtTime:(NSUInteger)time;
+- (SpatialPosition *)interpolatedPosition:(NSUInteger)time
 							  breakpoint1:(Breakpoint *)bp1
 							  breakpoint2:(Breakpoint *)bp2;
-- (NSArray *)playbackBreakpointArray;
+//- (NSArray *)playbackBreakpointArray;
 
 // update model
 - (void)updatePositionInModel;

@@ -247,9 +247,10 @@
 	[poolViewController newTrajectory:sender];	
 }
 
-- (TrajectoryItem *)newTrajectoryItem:(NSString *)name;
+- (void)newTrajectoryItem:(NSString *)name forRegions:(NSSet *)regions
 {
-	return [poolViewController newTrajectoryItem:name];
+	[poolViewController setValue:regions forKey:@"regionsForNewTrajectoryItem"];
+	[poolViewController newTrajectoryItem:name];
 }
 
 - (IBAction)showPool:(id)sender
@@ -257,7 +258,7 @@
 	BOOL poolDisplayed = ![[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue];
 	
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithBool:poolDisplayed] forKey:@"poolDisplayed"];
+	[projectSettings setValue:[NSNumber numberWithBool:poolDisplayed] forKeyPath:@"projectSettingsDictionary.poolDisplayed"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
@@ -290,6 +291,22 @@
 - (void)setProjectSettings:(id)anything
 {
 	NSLog(@"************************************anything: %@", anything);
+}
+
+
+// If the document exists on disk, return the file name. Otherwise return the default ("Untitled Project").
+// This is used for the window title and for the default name when saving. 
+
+- (NSString *)displayName
+{
+    if ([self fileURL])
+	{
+        return [super displayName];
+    }
+	else
+	{
+        return [[super displayName] stringByReplacingOccurrencesOfString:@"Untitled" withString:@"Untitled Project"];
+	}
 }
 
 

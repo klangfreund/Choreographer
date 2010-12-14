@@ -20,12 +20,14 @@
 
 // accessors
 - (TrajectoryType)trajectoryType;
+- (void)setTrajectoryType:(TrajectoryType)type;
 
 // breakpoints/handles for visualisation
 - (NSArray *)linkedBreakpointArray;
 - (NSArray *)linkedBreakpointArrayWithInitialPosition:(SpatialPosition *)pos;
 - (NSArray *)additionalPositions;
 - (NSString *)additionalPositionName:(id)item;
+- (SpatialPosition *)namePosition;
 
 //- (NSEnumerator *)breakpointEnumerator;
 //- (id)trajectoryAttributeForKey:(NSString *)key;

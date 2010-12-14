@@ -466,6 +466,14 @@
 
 
 #pragma mark -
+#pragma mark position
+// -----------------------------------------------------------
+
+- (void)modulateTrajectory
+{}
+
+
+#pragma mark -
 #pragma mark notifications
 // -----------------------------------------------------------
 

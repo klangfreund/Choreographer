@@ -25,19 +25,20 @@ typedef enum _BreakpointType
 @interface Breakpoint : NSObject
 {
 	BreakpointType breakpointType;
-	long time;
+	NSUInteger time;
 	float value;
 	SpatialPosition *position;
 }
 
 @property BreakpointType breakpointType;
 
-+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val;
+//+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val;
++ (Breakpoint *)breakpointWithTime:(NSUInteger)t position:(SpatialPosition *)pos;
 
 // accessors
 
-- (long)time;
-- (void)setTime:(long)val;
+- (NSUInteger)time;
+- (void)setTime:(NSUInteger)val;
 
 - (float)value;
 - (void)setValue:(float)val;

@@ -159,19 +159,19 @@
 }
 	   
 
-- (SpatialPosition *)regionPositionAtTime:(long)time
+- (SpatialPosition *)regionPositionAtTime:(NSUInteger)time
 {	
-	if(time < [[self valueForKey:@"startTime"] longValue] || time > [[self valueForKey:@"startTime"] longValue] + [[self valueForKey:@"duration"] longValue])
+	if(time < [[self valueForKey:@"startTime"] unsignedIntValue] || time > [[self valueForKey:@"startTime"] unsignedIntValue] + [[self valueForKey:@"duration"] unsignedIntValue])
 		return nil;
 
 	
-	if(![self valueForKey:@"trajectoryItem"])
-	{
-		return position;
-	}
+//	if(![self valueForKey:@"trajectoryItem"])
+//	{
+//		return position;
+//	}
 	
 	
-	time -= [[self valueForKey:@"startTime"] longValue];
+	time -= [[self valueForKey:@"startTime"] unsignedIntValue];
 	
 	if([playbackBreakpointArray count] == 1)
 	{
@@ -222,7 +222,7 @@
 	return [self interpolatedPosition:time breakpoint1:tempBp1 breakpoint2:tempBp2];
 }
 
-- (SpatialPosition *)interpolatedPosition:(long)time
+- (SpatialPosition *)interpolatedPosition:(NSUInteger)time
 							  breakpoint1:(Breakpoint *)bp1
 							  breakpoint2:(Breakpoint *)bp2
 {
@@ -231,7 +231,7 @@
 	pos1 = [bp1 position];
 	pos2 = [bp2 position];
 	
-	float factor = (float)(time - [bp1 time]) / ([bp2 time] - [bp1 time]);
+	float factor = [bp2 time] == [bp1 time] ? 1 : (float)(time - [bp1 time]) / ([bp2 time] - [bp1 time]);
 	
 	return [SpatialPosition positionWithX:[pos1 x] * (1 - factor) + [pos2 x] * factor
 										Y:[pos1 y] * (1 - factor) + [pos2 y] * factor
@@ -239,69 +239,119 @@
 }
 
 /*	returns the audio region's spatial trajectory as a array of breakpoints
- no matter if the trajectory is an automated rotation a random walk */
-- (NSArray *)playbackBreakpointArray
-{
-	if(![self valueForKey:@"trajectoryItem"])
-	{
-		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setTime:0];
-		[bp setPosition:position];
-		
-		return [NSArray arrayWithObject:bp];
-	}
-	
-	return playbackBreakpointArray;
-}
+ no matter if the trajectory is an automated rotation or a random walk */
+//- (NSArray *)playbackBreakpointArray
+//{
+//	return playbackBreakpointArray;
+//}
 
 - (void)calculatePositionBreakpoints
 {
 	[playbackBreakpointArray release];
 	tempBp1 = tempBp2 = nil;
 
-	playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue] mode:0] retain];
+	if(![self valueForKey:@"trajectoryItem"])
+	{
+		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
+		[bp setTime:0];
+		[bp setPosition:position];
+		
+		playbackBreakpointArray = [[NSArray arrayWithObject:bp] retain];
+	}
+	else
+	{
+		playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue] mode:0] retain];		
+	}
+
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])
 	{
-		NSLog(@"region %x playback breakpoint to be modulated");
+		[self modulateTrajectory];
 	}
 }
 
 - (void)modulateTrajectory
 {
-	NSLog(@"group trajectory: %@", [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"]);
+	NSLog(@"audio region %x --- modulate breakpoints", self);
 	
-//	NSMutableArray *tempArray = [playbackBreakpointArray mutableCopy];
+	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	NSArray *ctlArray = [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"];
 	
-//	long origTime = 0;
-	long ctlTime = [self valueForKey:@"startTime"] - [self valueForKeyPath:@"parentRegion.startTime"];
-	int origIndex = 0, ctlIndex = 0;
-	Breakpoint *origBp1, *origBp2, *ctlBp1, *ctlBp2;
+	NSLog(@"last time %d %d",[[playbackBreakpointArray lastObject] time], [[ctlArray lastObject] time]);
 
-	origBp1 = [playbackBreakpointArray objectAtIndex:origIndex];
-	origBp2 = [playbackBreakpointArray objectAtIndex:++origIndex];
+	NSUInteger time = 0;
+	NSUInteger ctlTimeOffset = [[self valueForKey:@"startTime"] unsignedIntValue] - [[self valueForKeyPath:@"parentRegion.startTime"] unsignedIntValue];
+	int index = 0, ctlIndex = 0;
+	BOOL done = NO;
+
+	Breakpoint *bp1, *bp2, *ctlBp1, *ctlBp2;
+	SpatialPosition *pos, *ctlPos, *modPos;
+
+	bp1 = [playbackBreakpointArray objectAtIndex:index];
+	bp2 = [playbackBreakpointArray count] == 1 ? [playbackBreakpointArray objectAtIndex:index] :
+												 [playbackBreakpointArray objectAtIndex:++index];
 	
 	ctlBp1 = [ctlArray objectAtIndex:ctlIndex];
 	ctlBp2 = [ctlArray objectAtIndex:++ctlIndex];
 	
-	// search controll array from the beginning
-	while (ctlTime > [ctlBp2 time] && [ctlArray lastObject] != ctlBp2)
+
+	while(!done)
 	{
-		ctlBp1 = ctlBp2;
-		ctlBp2 = [ctlArray objectAtIndex:++ctlIndex];			
-	}
+		// search breakpoint array from the beginning to find the next pair of control breakpoints
+		if (time >= [bp2 time] && [playbackBreakpointArray lastObject] != bp2)
+		{
+			bp1 = bp2;
+			bp2 = [playbackBreakpointArray objectAtIndex:++index];			
+		}
 	
-	// all original bp
-	// all ctl bp
-	// sort
-	// remove duplicates
+		// search control array from the beginning to find the next pair of control breakpoints
+		if (time + ctlTimeOffset >= [ctlBp2 time] && [ctlArray lastObject] != ctlBp2)
+		{
+			ctlBp1 = ctlBp2;
+			ctlBp2 = [ctlArray objectAtIndex:++ctlIndex];			
+		}
 	
-	
-	for(Breakpoint *bp in playbackBreakpointArray)
-	{
+
+		// calculate position
+		pos = [self interpolatedPosition:time breakpoint1:bp1 breakpoint2:bp2];
+		ctlPos = [self interpolatedPosition:time + ctlTimeOffset breakpoint1:ctlBp1 breakpoint2:ctlBp2];
 		
-	}	
+		modPos = [SpatialPosition positionWithX:pos.x + ctlPos.x
+											  Y:pos.y + ctlPos.y
+											  Z:pos.z + ctlPos.z];
+		
+		[tempArray addObject:[Breakpoint breakpointWithTime:time position:modPos]];
+		
+		
+		// update time
+		NSLog(@"time %d bp1 %d bp2 %d ctlBp1 %d ctlBp2 %d", time, [bp1 time], [bp2 time], [ctlBp1 time], [ctlBp2 time]);
+		if(time >= [bp2 time] && [playbackBreakpointArray lastObject] == bp2 &&
+		   time >= [ctlBp2 time] - ctlTimeOffset && [ctlArray lastObject] == ctlBp2)
+		{
+			done = YES;
+			
+			[playbackBreakpointArray release];
+			playbackBreakpointArray = [tempArray retain];
+		}
+		else
+		{
+			if([playbackBreakpointArray lastObject] != bp2 && [ctlArray lastObject] == ctlBp2)
+				time = [bp2 time];
+			
+			else if([playbackBreakpointArray lastObject] == bp2 && [ctlArray lastObject] != ctlBp2)
+				time = [ctlBp2 time] - ctlTimeOffset;
+			
+			else if(time < [bp2 time] && [bp2 time] < [ctlBp2 time])
+				time = [bp2 time];
+
+			else
+				time = [ctlBp2 time] - ctlTimeOffset;
+		}
+	}
+		
+
+	NSLog(@"modulated breakpoints %@", playbackBreakpointArray);
+	
 	
 //	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
 //	NSArray *breakpointsArraySorted = [tempArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];

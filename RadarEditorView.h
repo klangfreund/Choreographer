@@ -74,6 +74,7 @@ typedef struct _RadarPoint
 - (void)drawRegionPositions:(NSRect)rect;
 - (void)drawTrajectories:(NSRect)rect;
 
+- (void)drawTrajectoryName:(TrajectoryItem *)trajectory;
 - (void)drawLinkedBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;
 - (void)drawAdditionalHandles:(TrajectoryItem *)trajectory;
 - (void)drawAdditionalShapes:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;

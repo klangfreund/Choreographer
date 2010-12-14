@@ -1033,7 +1033,7 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-	NSLog(@"ArrangerView key code: %d ", keyCode);
+//	NSLog(@"ArrangerView key code: %d ", keyCode);
 
 	NSUInteger locator;
 
@@ -1760,16 +1760,16 @@
 		trajectoryName = [trajectoryName stringByAppendingString:[[selectedRegions anyObject] valueForKeyPath:@"audioItem.node.name"]];
 	}
 	
-	TrajectoryItem *trajectory = [document newTrajectoryItem:trajectoryName];
-	if (!trajectory) return; // user canceled
-	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	Region *region;
-	
-	while((region = [enumerator nextObject]))
-	{
-		[region setValue:trajectory forKey:@"trajectoryItem"];
-	}
+	[document newTrajectoryItem:trajectoryName forRegions:selectedRegions];
+//	if (!trajectory) return; // user canceled
+//	
+//	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
+//	Region *region;
+//	
+//	while((region = [enumerator nextObject]))
+//	{
+//		[region setValue:trajectory forKey:@"trajectoryItem"];
+//	}
 	
 	[self setNeedsDisplay:YES];
 }
@@ -1781,7 +1781,7 @@
 	
 	while((region = [enumerator nextObject]))
 	{
-		[region setValue:NULL forKey:@"trajectoryItem"];
+		[region setValue:nil forKey:@"trajectoryItem"];
 	}
 
 	// notification

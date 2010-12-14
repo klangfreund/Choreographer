@@ -89,15 +89,22 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 	int i = [selectedIndices firstIndex];
 	
-	if(i == 0) return;
+	if(i == 0 ||
+	   !editableTrajectory ||
+	   displayMode == trajectoryDisplayMode && [[editableTrajectory valueForKey:@"trajectoryType"] intValue] != breakpointType)
+		return;
 		
 	while(i != NSNotFound)
 	{
 		if(displayMode == regionDisplayMode)
+		{
 			[editorSelection addObject:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] objectAtIndex:i - 1]];
-		else if(displayMode == trajectoryDisplayMode && editableTrajectory)
+		}
+		else if(displayMode == trajectoryDisplayMode)
+		{
 			[editorSelection addObject:[[editableTrajectory linkedBreakpointArray] objectAtIndex:i - 1]];
-
+		}
+		
 		i = [selectedIndices indexGreaterThanIndex:i];
 	}
 
@@ -145,10 +152,10 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 				return (row != 0);
 				break;
 			case rotationType:
-				return (row != 0 && row != 2);
+				return (row != 0 && row != 3);
 				break;
 			case randomType:
-				return (row != 0 && row != 2);
+				return (row != 0 && row != 4);
 				break;
 		}
 	}
@@ -175,14 +182,15 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 		sum = 0;
 		
 		// linked breakpoints (if any) plus title row
-		n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] count];
+		n = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.linkedBreakpointArray"] count];
 		if(n) sum += n + 1;
 			
-		// additional handles (if any) plus title row
+		// additional positions (if any) plus title row
 		n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] additionalPositions] count];
 		if(n) sum += n + 1;
 		
 		// meta parameter (if any) plus title row
+	//	n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] additionalPositions] count];
 			
 			
 		return sum;
@@ -395,10 +403,12 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 	if(row > 0) // row = 0 is header
 	{
 		row--;
-		if (row > 0 && // time is unchangeable for first brekpoint
-			[[tc identifier] isEqualToString:@"time"])
+		if ([[tc identifier] isEqualToString:@"time"])
 		{
-			[[[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row] setTime:[objectValue intValue]];
+			if([objectValue integerValue] < 1 ||	// time cannot be negative
+				row == 0)							// time is unchangeable for first brekpoint
+				return;
+			[[[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row] setTime:[objectValue integerValue]];
 			[editableTrajectory sortBreakpoints];
 		}
 		else
@@ -412,6 +422,23 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (void)rotationTrajectory:(id)trajectory setValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(int)row
 {
+	TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+	
+	switch(row)
+	{
+		case 1:
+			[[editableTrajectory valueForKeyPath:@"trajectory.rotationCentre"] setValue:objectValue forKey:[tc identifier]];
+			break;
+			
+		case 2:
+			[[editableTrajectory valueForKeyPath:@"trajectory.initialPosition"] setValue:objectValue forKey:[tc identifier]];
+			break;
+			
+		default:
+			break;
+	}
+
+	[editableTrajectory updateModel];	
 }
 
 - (void)randomTrajectory:(id)trajectory setValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(int)row;

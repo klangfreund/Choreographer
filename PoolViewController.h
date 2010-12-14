@@ -26,6 +26,12 @@
 	IBOutlet NSSegmentedControl *tabControl;
 	IBOutlet NSTabView *tabView;
 	
+	// new trajectory
+	IBOutlet NSPanel *newTrajectorySheet;
+	TrajectoryType newTrajectoryType;
+	NSString *newTrajectoryName;
+	NSSet *regionsForNewTrajectoryItem;
+
 	// Context Menu
 	IBOutlet NSMenu *contextMenu;
 	IBOutlet id dropOrderMenu;
@@ -48,7 +54,11 @@
 
 // actions
 - (void)openAudioFiles:(NSArray *)filenames;
-- (TrajectoryItem *)newTrajectoryItem:(NSString *)name;
+- (void)newTrajectoryItem:(NSString *)name;
+- (void)newTrajectorySheetOK;
+- (void)newTrajectorySheetCancel;
+- (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+
 - (BOOL)recursivelyDeleteNode:(id)node;
 
 // selection

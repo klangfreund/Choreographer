@@ -8,6 +8,7 @@
 
 #import "PlaybackController.h"
 #import "AudioRegion.h"
+#import "GroupRegion.h"
 #import "TrajectoryItem.h"
 #import "EditorContent.h"
 
@@ -37,7 +38,7 @@
 	NSLog(@"PlaybackController: dealloc");
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
-	[playbackEvents release];
+	[updateRegions release];
 	
 	[super dealloc];
 }
@@ -229,12 +230,16 @@
 
 - (void)updateAudioEngine:(NSNotification *)notification
 {
+	[updateRegions release];
+	updateRegions = [[NSMutableSet alloc] init];
+	
 	NSDictionary *info = [notification userInfo];
 
 	for (id key in info)
 	{
 		if(key == NSInsertedObjectsKey)
 		{
+			// NSLog(@"INSERT  --  %@",[info objectForKey:key]);
 			for(id object in [info objectForKey:key])
 			{		
 				if([object isKindOfClass:[TrajectoryItem class]])
@@ -250,49 +255,99 @@
 				else if([object isKindOfClass:[AudioRegion class]])
 				{
 					// update audio engine for this region
+					[object calculatePositionBreakpoints];
 					[[AudioEngine sharedAudioEngine] addAudioRegion:object];
 				}
 			}
 		}
 		else if(key == NSUpdatedObjectsKey)
 		{
-			NSMutableSet *updateRegions = [[[NSMutableSet alloc] init] autorelease]; 
+			// NSLog(@"UPDATE  --  %@",[info objectForKey:key]);
 			for(id object in [info objectForKey:key])
 			{		
 				if([object isKindOfClass:[TrajectoryItem class]])
 				{
-					NSSet *regions = [object valueForKey:@"regions"];
-					
-					for(id region in regions)
+					// update audio engine for all regions this trajectory
+					// is attached to
+					for(Region *region in [object valueForKey:@"regions"])
 					{
-						// update audio engine for all regions this trajectory
-						// is attached to
 						[region calculatePositionBreakpoints];
-						[updateRegions addObject:region];
+						[self recursivelyAddUpdateRegions:region];
+					}
+				}
+				else if([object isKindOfClass:[GroupRegion class]] &&
+						[object valueForKey:@"trajectoryItem"] == NULL)
+				{
+					// after a trajectory has been removed from a group region
+					// it can't be found by iterating through the trajectory's
+					// regions (as above)
+
+					[object calculatePositionBreakpoints];
+
+					for(Region *region in [object valueForKey:@"childRegions"])
+					{
+						[self recursivelyAddUpdateRegions:region];
 					}
 				}
 				else if([object isKindOfClass:[AudioRegion class]])
 				{
 					[updateRegions addObject:object];
+					
+					if([object valueForKey:@"trajectoryItem"] == NULL)
+					{
+						// after a trajectory has been removed from a group region
+						// it can't be found by iterating through the trajectory's
+						// regions (as above)
+						
+						[object calculatePositionBreakpoints];						
+					}
 				}
-			}
-			
-			for(id region in updateRegions)
-			{
-				// update audio engine
-				[[AudioEngine sharedAudioEngine] modifyAudioRegion:region];			
 			}
 		}
 		else if(key == NSDeletedObjectsKey)
 		{
+			// NSLog(@"DELETE  --  %@",[info objectForKey:key]);
 			for(id object in [info objectForKey:key])
 			{		
-				if([object isKindOfClass:[AudioRegion class]])
+				if([object isKindOfClass:[TrajectoryItem class]])
+				{
+					// update audio engine for all regions this trajectory
+					// is attached to
+					for(Region *region in [object valueForKey:@"regions"])
+					{
+						[region calculatePositionBreakpoints];
+						[self recursivelyAddUpdateRegions:region];
+					}
+				}
+				else if([object isKindOfClass:[AudioRegion class]])
 				{
 					// update audio engine for these regions
 					[[AudioEngine sharedAudioEngine] deleteAudioRegion:object];
 				}	
 			}
+		}
+	}
+	
+	for(id region in updateRegions)
+	{
+		// update audio engine
+		[[AudioEngine sharedAudioEngine] modifyAudioRegion:region];			
+	}
+	
+}
+
+
+- (void)recursivelyAddUpdateRegions:(Region *)region
+{
+	if([region isKindOfClass:[AudioRegion class]])
+	{
+		[updateRegions addObject:region];
+	}
+	else if([region isKindOfClass:[GroupRegion class]])
+	{
+		for(Region *region1 in [region valueForKey:@"childRegions"])
+		{
+			[self recursivelyAddUpdateRegions:region1];
 		}
 	}
 }

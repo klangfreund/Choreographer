@@ -26,17 +26,6 @@
 		153F154A0DF6D7C40037238D /* ProjectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F15490DF6D7C40037238D /* ProjectWindow.m */; };
 		153F154E0DF6D9530037238D /* RulerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F154D0DF6D9530037238D /* RulerScrollView.m */; };
 		153F178A0DF7293B0037238D /* SelectionRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F17890DF7293B0037238D /* SelectionRectangle.m */; };
-		1541CA87128AEF4D008E9E06 /* AmbisonicsAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA70128AEF4D008E9E06 /* AmbisonicsAudioEngine.cpp */; };
-		1541CA88128AEF4D008E9E06 /* AudioRegionMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA72128AEF4D008E9E06 /* AudioRegionMixer.cpp */; };
-		1541CA89128AEF4D008E9E06 /* AudioSourceAmbipanning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA74128AEF4D008E9E06 /* AudioSourceAmbipanning.cpp */; };
-		1541CA8A128AEF4D008E9E06 /* AudioSourceGainEnvelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA76128AEF4D008E9E06 /* AudioSourceGainEnvelope.cpp */; };
-		1541CA8B128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA78128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.cpp */; };
-		1541CA8C128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA7B128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.cpp */; };
-		1541CA8D128AEF4D008E9E06 /* AudioTransportSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA7D128AEF4D008E9E06 /* AudioTransportSourceMod.cpp */; };
-		1541CA8E128AEF4D008E9E06 /* BufferingAudioSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA7F128AEF4D008E9E06 /* BufferingAudioSourceMod.cpp */; };
-		1541CA8F128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA81128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.cpp */; };
-		1541CA90128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA83128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.cpp */; };
-		1541CA91128AEF4D008E9E06 /* SpeakerTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1541CA85128AEF4D008E9E06 /* SpeakerTestComponent.cpp */; };
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
 		155724F40DD8909800FA16E2 /* CounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155724F30DD8909800FA16E2 /* CounterView.m */; };
 		155725110DD8919A00FA16E2 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1557250E0DD8919A00FA16E2 /* ContainerView.m */; };
@@ -84,6 +73,7 @@
 		15DA2BF81174952F00DF3F79 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B3D1CC11661DD7009CB620 /* OpenGL.framework */; };
 		15DEFC280EC30B9800BBE6A8 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15DEFC260EC30B9800BBE6A8 /* MainMenu.xib */; };
 		15DEFE1C0EC3969E00BBE6A8 /* SmallTimelinePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15DEFE1B0EC3969E00BBE6A8 /* SmallTimelinePanel.m */; };
+		15E48AEA1296E36F0058DDDD /* TrajectoryInspectorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15E48AE91296E36F0058DDDD /* TrajectoryInspectorWindowController.m */; };
 		15E6D73C1252451F0091F8E3 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15E6D6391252451A0091F8E3 /* AudioEngine.mm */; };
 		15E6D73D1252451F0091F8E3 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15E6D63A1252451A0091F8E3 /* AudioEngineMainMenu.xib */; };
 		15E6D73E1252451F0091F8E3 /* debug.txt in Resources */ = {isa = PBXBuildFile; fileRef = 15E6D63B1252451A0091F8E3 /* debug.txt */; };
@@ -100,7 +90,18 @@
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F410B612777000004DA8AD /* ProjectSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F410B512777000004DA8AD /* ProjectSettings.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		22E1428E129A4F5400351E96 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E1428D129A4F4000351E96 /* libjuce.a */; };
+		15FBB58C12AA71FA003B7FDC /* AmbisonicsAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57212AA71FA003B7FDC /* AmbisonicsAudioEngine.cpp */; };
+		15FBB58D12AA71FA003B7FDC /* AudioRegionMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57412AA71FA003B7FDC /* AudioRegionMixer.cpp */; };
+		15FBB58E12AA71FA003B7FDC /* AudioSourceAmbipanning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57612AA71FA003B7FDC /* AudioSourceAmbipanning.cpp */; };
+		15FBB58F12AA71FA003B7FDC /* AudioSourceGainEnvelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57812AA71FA003B7FDC /* AudioSourceGainEnvelope.cpp */; };
+		15FBB59012AA71FA003B7FDC /* AudioSpeakerGainAndRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57A12AA71FA003B7FDC /* AudioSpeakerGainAndRouting.cpp */; };
+		15FBB59112AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB57F12AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.cpp */; };
+		15FBB59312AA71FA003B7FDC /* AudioTransportSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB58212AA71FA003B7FDC /* AudioTransportSourceMod.cpp */; };
+		15FBB59412AA71FA003B7FDC /* BufferingAudioSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB58412AA71FA003B7FDC /* BufferingAudioSourceMod.cpp */; };
+		15FBB59512AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB58612AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.cpp */; };
+		15FBB59612AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB58812AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.cpp */; };
+		15FBB59712AA71FA003B7FDC /* SpeakerTestComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15FBB58A12AA71FA003B7FDC /* SpeakerTestComponent.cpp */; };
+		2211885412B802B0007AA3A1 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2211885312B802A6007AA3A1 /* libjuce.a */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -109,11 +110,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		22E1428C129A4F4000351E96 /* PBXContainerItemProxy */ = {
+		2211885212B802A6007AA3A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 22E14285129A4F4000351E96 /* Juce.xcodeproj */;
+			containerPortal = 2211884B12B802A5007AA3A1 /* Juce.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 389351359BA78C682E1931A6;
+			remoteGlobalIDString = 389351359BA78C682E1931A6 /* libjuce.a */;
 			remoteInfo = Juce;
 		};
 /* End PBXContainerItemProxy section */
@@ -157,28 +158,6 @@
 		153F154D0DF6D9530037238D /* RulerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerScrollView.m; sourceTree = "<group>"; };
 		153F17880DF7293B0037238D /* SelectionRectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionRectangle.h; sourceTree = "<group>"; };
 		153F17890DF7293B0037238D /* SelectionRectangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionRectangle.m; sourceTree = "<group>"; };
-		1541CA70128AEF4D008E9E06 /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; };
-		1541CA71128AEF4D008E9E06 /* AmbisonicsAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbisonicsAudioEngine.h; sourceTree = "<group>"; };
-		1541CA72128AEF4D008E9E06 /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioRegionMixer.cpp; sourceTree = "<group>"; };
-		1541CA73128AEF4D008E9E06 /* AudioRegionMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegionMixer.h; sourceTree = "<group>"; };
-		1541CA74128AEF4D008E9E06 /* AudioSourceAmbipanning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceAmbipanning.cpp; sourceTree = "<group>"; };
-		1541CA75128AEF4D008E9E06 /* AudioSourceAmbipanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceAmbipanning.h; sourceTree = "<group>"; };
-		1541CA76128AEF4D008E9E06 /* AudioSourceGainEnvelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceGainEnvelope.cpp; sourceTree = "<group>"; };
-		1541CA77128AEF4D008E9E06 /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
-		1541CA78128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
-		1541CA79128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
-		1541CA7B128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
-		1541CA7C128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
-		1541CA7D128AEF4D008E9E06 /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
-		1541CA7E128AEF4D008E9E06 /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
-		1541CA7F128AEF4D008E9E06 /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
-		1541CA80128AEF4D008E9E06 /* BufferingAudioSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferingAudioSourceMod.h; sourceTree = "<group>"; };
-		1541CA81128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = juce_PositionableResamplingAudioSource.cpp; sourceTree = "<group>"; };
-		1541CA82128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_PositionableResamplingAudioSource.h; sourceTree = "<group>"; };
-		1541CA83128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
-		1541CA84128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
-		1541CA85128AEF4D008E9E06 /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; };
-		1541CA86128AEF4D008E9E06 /* SpeakerTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerTestComponent.h; sourceTree = "<group>"; };
 		15509AE11047F96900E0AEF0 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		155724F20DD8909800FA16E2 /* CounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CounterView.h; sourceTree = "<group>"; };
@@ -253,12 +232,12 @@
 		15DEFC270EC30B9800BBE6A8 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		15DEFE1A0EC3969E00BBE6A8 /* SmallTimelinePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallTimelinePanel.h; sourceTree = "<group>"; };
 		15DEFE1B0EC3969E00BBE6A8 /* SmallTimelinePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallTimelinePanel.m; sourceTree = "<group>"; };
+		15E48AE81296E36F0058DDDD /* TrajectoryInspectorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryInspectorWindowController.h; sourceTree = "<group>"; };
+		15E48AE91296E36F0058DDDD /* TrajectoryInspectorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrajectoryInspectorWindowController.m; sourceTree = "<group>"; };
 		15E6D6381252451A0091F8E3 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
 		15E6D6391252451A0091F8E3 /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
 		15E6D63A1252451A0091F8E3 /* AudioEngineMainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioEngineMainMenu.xib; sourceTree = "<group>"; };
 		15E6D63B1252451A0091F8E3 /* debug.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = debug.txt; sourceTree = "<group>"; };
-		15E6D6CB1252451C0091F8E3 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
-		15E6D6CC1252451C0091F8E3 /* JuceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuceHeader.h; sourceTree = "<group>"; };
 		15E6D6CD1252451D0091F8E3 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
 		15E6D7391252451F0091F8E3 /* SpeakerSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupWindowController.h; sourceTree = "<group>"; };
 		15E6D73A1252451F0091F8E3 /* SpeakerSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupWindowController.m; sourceTree = "<group>"; };
@@ -282,7 +261,31 @@
 		15F410B512777000004DA8AD /* ProjectSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettings.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		22E14285129A4F4000351E96 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce101122/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		15FBB51212AA70A9003B7FDC /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
+		15FBB51312AA70A9003B7FDC /* JuceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuceHeader.h; sourceTree = "<group>"; };
+		15FBB57212AA71FA003B7FDC /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; };
+		15FBB57312AA71FA003B7FDC /* AmbisonicsAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbisonicsAudioEngine.h; sourceTree = "<group>"; };
+		15FBB57412AA71FA003B7FDC /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioRegionMixer.cpp; sourceTree = "<group>"; };
+		15FBB57512AA71FA003B7FDC /* AudioRegionMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegionMixer.h; sourceTree = "<group>"; };
+		15FBB57612AA71FA003B7FDC /* AudioSourceAmbipanning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceAmbipanning.cpp; sourceTree = "<group>"; };
+		15FBB57712AA71FA003B7FDC /* AudioSourceAmbipanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceAmbipanning.h; sourceTree = "<group>"; };
+		15FBB57812AA71FA003B7FDC /* AudioSourceGainEnvelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceGainEnvelope.cpp; sourceTree = "<group>"; };
+		15FBB57912AA71FA003B7FDC /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
+		15FBB57A12AA71FA003B7FDC /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
+		15FBB57B12AA71FA003B7FDC /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
+		15FBB57F12AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
+		15FBB58012AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
+		15FBB58212AA71FA003B7FDC /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
+		15FBB58312AA71FA003B7FDC /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
+		15FBB58412AA71FA003B7FDC /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
+		15FBB58512AA71FA003B7FDC /* BufferingAudioSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferingAudioSourceMod.h; sourceTree = "<group>"; };
+		15FBB58612AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = juce_PositionableResamplingAudioSource.cpp; sourceTree = "<group>"; };
+		15FBB58712AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_PositionableResamplingAudioSource.h; sourceTree = "<group>"; };
+		15FBB58812AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
+		15FBB58912AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
+		15FBB58A12AA71FA003B7FDC /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; };
+		15FBB58B12AA71FA003B7FDC /* SpeakerTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerTestComponent.h; sourceTree = "<group>"; };
+		2211884B12B802A5007AA3A1 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce101122/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -300,9 +303,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22E1428E129A4F5400351E96 /* libjuce.a in Frameworks */,
-				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
-				15ED1FF90DDB9A21006A2351 /* AudioToolbox.framework in Frameworks */,
+				2211885412B802B0007AA3A1 /* libjuce.a in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -312,6 +313,8 @@
 				15DA2BDF117494FD00DF3F79 /* Carbon.framework in Frameworks */,
 				15DA2BEF1174952200DF3F79 /* WebKit.framework in Frameworks */,
 				15DA2BF81174952F00DF3F79 /* OpenGL.framework in Frameworks */,
+				15ED1FF90DDB9A21006A2351 /* AudioToolbox.framework in Frameworks */,
+				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,16 +371,8 @@
 			isa = PBXGroup;
 			children = (
 				15C35F7911C95EBF002E0175 /* Breakpoints */,
-				158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */,
-				158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */,
-				15C6D25C11C7E304001ABA00 /* Trajectory.h */,
-				15C6D25D11C7E304001ABA00 /* Trajectory.m */,
-				15CCF9CF11C6D5F700A328FE /* BreakpointTrajectory.h */,
-				15CCF9D011C6D5F700A328FE /* BreakpointTrajectory.m */,
-				15C6D76111C83BD0001ABA00 /* RotationTrajectory.h */,
-				15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */,
-				1560817311CECAA00033C628 /* RandomTrajectory.h */,
-				1560817411CECAA00033C628 /* RandomTrajectory.m */,
+				15E48AEB1296E3890058DDDD /* Trajectory */,
+				1596D44F1297D2D0001D7E8E /* Trajectory Inspector */,
 			);
 			name = Trajectories;
 			sourceTree = "<group>";
@@ -423,43 +418,6 @@
 				15D162B7116BD70B00E22B42 /* ImageAndTextCell.m */,
 			);
 			name = Misc;
-			sourceTree = "<group>";
-		};
-		1541CA6F128AEF4D008E9E06 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				1541CA70128AEF4D008E9E06 /* AmbisonicsAudioEngine.cpp */,
-				1541CA71128AEF4D008E9E06 /* AmbisonicsAudioEngine.h */,
-				1541CA72128AEF4D008E9E06 /* AudioRegionMixer.cpp */,
-				1541CA73128AEF4D008E9E06 /* AudioRegionMixer.h */,
-				1541CA74128AEF4D008E9E06 /* AudioSourceAmbipanning.cpp */,
-				1541CA75128AEF4D008E9E06 /* AudioSourceAmbipanning.h */,
-				1541CA76128AEF4D008E9E06 /* AudioSourceGainEnvelope.cpp */,
-				1541CA77128AEF4D008E9E06 /* AudioSourceGainEnvelope.h */,
-				1541CA78128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.cpp */,
-				1541CA79128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.h */,
-				1541CA7A128AEF4D008E9E06 /* modified Juce Classes */,
-				1541CA83128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.cpp */,
-				1541CA84128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.h */,
-				1541CA85128AEF4D008E9E06 /* SpeakerTestComponent.cpp */,
-				1541CA86128AEF4D008E9E06 /* SpeakerTestComponent.h */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
-		1541CA7A128AEF4D008E9E06 /* modified Juce Classes */ = {
-			isa = PBXGroup;
-			children = (
-				1541CA7B128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.cpp */,
-				1541CA7C128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.h */,
-				1541CA7D128AEF4D008E9E06 /* AudioTransportSourceMod.cpp */,
-				1541CA7E128AEF4D008E9E06 /* AudioTransportSourceMod.h */,
-				1541CA7F128AEF4D008E9E06 /* BufferingAudioSourceMod.cpp */,
-				1541CA80128AEF4D008E9E06 /* BufferingAudioSourceMod.h */,
-				1541CA81128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.cpp */,
-				1541CA82128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.h */,
-			);
-			path = "modified Juce Classes";
 			sourceTree = "<group>";
 		};
 		155724CE0DD88E7B00FA16E2 /* ProjectDocument */ = {
@@ -512,6 +470,16 @@
 			name = Panels;
 			sourceTree = "<group>";
 		};
+		1596D44F1297D2D0001D7E8E /* Trajectory Inspector */ = {
+			isa = PBXGroup;
+			children = (
+				15E48AE81296E36F0058DDDD /* TrajectoryInspectorWindowController.h */,
+				15E48AE91296E36F0058DDDD /* TrajectoryInspectorWindowController.m */,
+				15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */,
+			);
+			name = "Trajectory Inspector";
+			sourceTree = "<group>";
+		};
 		1597A3B3112EE32E00AFCAA9 /* Timeline Editor */ = {
 			isa = PBXGroup;
 			children = (
@@ -554,7 +522,7 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22E14285129A4F4000351E96 /* Juce.xcodeproj */,
+				2211884B12B802A5007AA3A1 /* Juce.xcodeproj */,
 				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
 				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
@@ -602,6 +570,23 @@
 			name = "Small Timeline Panel";
 			sourceTree = "<group>";
 		};
+		15E48AEB1296E3890058DDDD /* Trajectory */ = {
+			isa = PBXGroup;
+			children = (
+				158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */,
+				158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */,
+				15C6D25C11C7E304001ABA00 /* Trajectory.h */,
+				15C6D25D11C7E304001ABA00 /* Trajectory.m */,
+				15CCF9CF11C6D5F700A328FE /* BreakpointTrajectory.h */,
+				15CCF9D011C6D5F700A328FE /* BreakpointTrajectory.m */,
+				15C6D76111C83BD0001ABA00 /* RotationTrajectory.h */,
+				15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */,
+				1560817311CECAA00033C628 /* RandomTrajectory.h */,
+				1560817411CECAA00033C628 /* RandomTrajectory.m */,
+			);
+			name = Trajectory;
+			sourceTree = "<group>";
+		};
 		15E6D6361252451A0091F8E3 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -609,21 +594,12 @@
 				15E6D6391252451A0091F8E3 /* AudioEngine.mm */,
 				15E6D63A1252451A0091F8E3 /* AudioEngineMainMenu.xib */,
 				15E6D63B1252451A0091F8E3 /* debug.txt */,
-				15E6D6CA1252451C0091F8E3 /* JuceLibraryCode */,
 				15E6D6CD1252451D0091F8E3 /* README.txt */,
-				1541CA6F128AEF4D008E9E06 /* Source */,
+				15FBB51112AA70A9003B7FDC /* JuceLibraryCode */,
+				15FBB57112AA71FA003B7FDC /* Source */,
 				15E6D7381252451F0091F8E3 /* SpeakerSetup */,
 			);
 			path = "Audio Engine";
-			sourceTree = "<group>";
-		};
-		15E6D6CA1252451C0091F8E3 /* JuceLibraryCode */ = {
-			isa = PBXGroup;
-			children = (
-				15E6D6CB1252451C0091F8E3 /* AppConfig.h */,
-				15E6D6CC1252451C0091F8E3 /* JuceHeader.h */,
-			);
-			path = JuceLibraryCode;
 			sourceTree = "<group>";
 		};
 		15E6D7381252451F0091F8E3 /* SpeakerSetup */ = {
@@ -650,6 +626,7 @@
 				15204C2D0E4AFC51005E66F0 /* RadarEditorWindowController.m */,
 				15204C2A0E4AFC51005E66F0 /* RadarEditorView.h */,
 				15204C2B0E4AFC51005E66F0 /* RadarEditorView.m */,
+				151739C40EB3A79B00EABE92 /* RadarEditor.xib */,
 			);
 			name = "Radar Editor";
 			sourceTree = "<group>";
@@ -661,6 +638,7 @@
 				151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */,
 				15EA45340EC1B7AF003304E0 /* TableEditorView.h */,
 				15EA45350EC1B7AF003304E0 /* TableEditorView.m */,
+				151739C20EB3A79B00EABE92 /* TableEditor.xib */,
 			);
 			name = "Table Editor";
 			sourceTree = "<group>";
@@ -678,6 +656,60 @@
 			name = Regions;
 			sourceTree = "<group>";
 		};
+		15FBB51112AA70A9003B7FDC /* JuceLibraryCode */ = {
+			isa = PBXGroup;
+			children = (
+				15FBB51212AA70A9003B7FDC /* AppConfig.h */,
+				15FBB51312AA70A9003B7FDC /* JuceHeader.h */,
+			);
+			path = JuceLibraryCode;
+			sourceTree = "<group>";
+		};
+		15FBB57112AA71FA003B7FDC /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				15FBB57212AA71FA003B7FDC /* AmbisonicsAudioEngine.cpp */,
+				15FBB57312AA71FA003B7FDC /* AmbisonicsAudioEngine.h */,
+				15FBB57412AA71FA003B7FDC /* AudioRegionMixer.cpp */,
+				15FBB57512AA71FA003B7FDC /* AudioRegionMixer.h */,
+				15FBB57612AA71FA003B7FDC /* AudioSourceAmbipanning.cpp */,
+				15FBB57712AA71FA003B7FDC /* AudioSourceAmbipanning.h */,
+				15FBB57812AA71FA003B7FDC /* AudioSourceGainEnvelope.cpp */,
+				15FBB57912AA71FA003B7FDC /* AudioSourceGainEnvelope.h */,
+				15FBB57A12AA71FA003B7FDC /* AudioSpeakerGainAndRouting.cpp */,
+				15FBB57B12AA71FA003B7FDC /* AudioSpeakerGainAndRouting.h */,
+				15FBB57C12AA71FA003B7FDC /* html */,
+				15FBB57D12AA71FA003B7FDC /* modified Juce Classes */,
+				15FBB58812AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.cpp */,
+				15FBB58912AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.h */,
+				15FBB58A12AA71FA003B7FDC /* SpeakerTestComponent.cpp */,
+				15FBB58B12AA71FA003B7FDC /* SpeakerTestComponent.h */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		15FBB57C12AA71FA003B7FDC /* html */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = html;
+			sourceTree = "<group>";
+		};
+		15FBB57D12AA71FA003B7FDC /* modified Juce Classes */ = {
+			isa = PBXGroup;
+			children = (
+				15FBB57F12AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.cpp */,
+				15FBB58012AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.h */,
+				15FBB58212AA71FA003B7FDC /* AudioTransportSourceMod.cpp */,
+				15FBB58312AA71FA003B7FDC /* AudioTransportSourceMod.h */,
+				15FBB58412AA71FA003B7FDC /* BufferingAudioSourceMod.cpp */,
+				15FBB58512AA71FA003B7FDC /* BufferingAudioSourceMod.h */,
+				15FBB58612AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.cpp */,
+				15FBB58712AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.h */,
+			);
+			path = "modified Juce Classes";
+			sourceTree = "<group>";
+		};
 		19C28FB0FE9D524F11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -686,10 +718,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22E14286129A4F4000351E96 /* Products */ = {
+		2211884C12B802A5007AA3A1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				22E1428D129A4F4000351E96 /* libjuce.a */,
+				2211885312B802A6007AA3A1 /* libjuce.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -743,10 +775,7 @@
 				15A3FC8C10416364001092FD /* CHProjectDocument.xib */,
 				15EAB2B30FF49A0200A41A79 /* Pool.xib */,
 				15DEFC260EC30B9800BBE6A8 /* MainMenu.xib */,
-				151739C20EB3A79B00EABE92 /* TableEditor.xib */,
-				151739C40EB3A79B00EABE92 /* RadarEditor.xib */,
 				1597A3BB112EE43800AFCAA9 /* TimelineEditor.xib */,
-				15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
@@ -811,8 +840,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 22E14286129A4F4000351E96 /* Products */;
-					ProjectRef = 22E14285129A4F4000351E96 /* Juce.xcodeproj */;
+					ProductGroup = 2211884C12B802A5007AA3A1 /* Products */;
+					ProjectRef = 2211884B12B802A5007AA3A1 /* Juce.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -823,11 +852,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		22E1428D129A4F4000351E96 /* libjuce.a */ = {
+		2211885312B802A6007AA3A1 /* libjuce.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libjuce.a;
-			remoteRef = 22E1428C129A4F4000351E96 /* PBXContainerItemProxy */;
+			remoteRef = 2211885212B802A6007AA3A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -923,17 +952,18 @@
 				15A01FF5125CE2650001DD33 /* SpeakerSetups.m in Sources */,
 				15A02037125CEE380001DD33 /* OutputChannelStripController.m in Sources */,
 				15F410B612777000004DA8AD /* ProjectSettings.m in Sources */,
-				1541CA87128AEF4D008E9E06 /* AmbisonicsAudioEngine.cpp in Sources */,
-				1541CA88128AEF4D008E9E06 /* AudioRegionMixer.cpp in Sources */,
-				1541CA89128AEF4D008E9E06 /* AudioSourceAmbipanning.cpp in Sources */,
-				1541CA8A128AEF4D008E9E06 /* AudioSourceGainEnvelope.cpp in Sources */,
-				1541CA8B128AEF4D008E9E06 /* AudioSpeakerGainAndRouting.cpp in Sources */,
-				1541CA8C128AEF4D008E9E06 /* AudioDeviceSelectorComponentMod.cpp in Sources */,
-				1541CA8D128AEF4D008E9E06 /* AudioTransportSourceMod.cpp in Sources */,
-				1541CA8E128AEF4D008E9E06 /* BufferingAudioSourceMod.cpp in Sources */,
-				1541CA8F128AEF4D008E9E06 /* juce_PositionableResamplingAudioSource.cpp in Sources */,
-				1541CA90128AEF4D008E9E06 /* PinkNoiseGeneratorAudioSource.cpp in Sources */,
-				1541CA91128AEF4D008E9E06 /* SpeakerTestComponent.cpp in Sources */,
+				15E48AEA1296E36F0058DDDD /* TrajectoryInspectorWindowController.m in Sources */,
+				15FBB58C12AA71FA003B7FDC /* AmbisonicsAudioEngine.cpp in Sources */,
+				15FBB58D12AA71FA003B7FDC /* AudioRegionMixer.cpp in Sources */,
+				15FBB58E12AA71FA003B7FDC /* AudioSourceAmbipanning.cpp in Sources */,
+				15FBB58F12AA71FA003B7FDC /* AudioSourceGainEnvelope.cpp in Sources */,
+				15FBB59012AA71FA003B7FDC /* AudioSpeakerGainAndRouting.cpp in Sources */,
+				15FBB59112AA71FA003B7FDC /* AudioDeviceSelectorComponentMod.cpp in Sources */,
+				15FBB59312AA71FA003B7FDC /* AudioTransportSourceMod.cpp in Sources */,
+				15FBB59412AA71FA003B7FDC /* BufferingAudioSourceMod.cpp in Sources */,
+				15FBB59512AA71FA003B7FDC /* juce_PositionableResamplingAudioSource.cpp in Sources */,
+				15FBB59612AA71FA003B7FDC /* PinkNoiseGeneratorAudioSource.cpp in Sources */,
+				15FBB59712AA71FA003B7FDC /* SpeakerTestComponent.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,6 +1079,8 @@
 		26FC0AAA0875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
@@ -1059,10 +1091,8 @@
 		26FC0AAB0875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;

@@ -176,7 +176,7 @@
 	{		
 		if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 0)
 		{
-			pos = [region regionPositionAtTime:[[[EditorContent sharedEditorContent] valueForKey:@"locator"] longValue]];
+			pos = [region regionPositionAtTime:[[[EditorContent sharedEditorContent] valueForKey:@"locator"] unsignedIntValue]];
 		}
 		else
 		{
@@ -233,14 +233,35 @@
 		[self drawLinkedBreakpoints:trajectoryItem forRegion:nil];
 		[self drawAdditionalShapes:trajectoryItem forRegion: nil];
 		[self drawAdditionalHandles:trajectoryItem];
+
+		[self drawTrajectoryName:trajectoryItem];
 	}
 }
+
+- (void)drawTrajectoryName:(TrajectoryItem *)trajectory
+{
+	SpatialPosition *namePosition = [trajectory valueForKeyPath:@"namePosition"];
+	RadarPoint p1 = [self makePointX:[namePosition x] Y:[namePosition y] Z:[namePosition z]];
+	
+	NSString *string = [NSString stringWithFormat:@"%@", [trajectory valueForKeyPath:@"node.name"]];
+	if(trajectory == editableTrajectory)
+	{
+		[string drawAtPoint:NSMakePoint(p1.x - 5, p1.y1 + 7) withAttributes:attributesEditable];
+		DRAW_XZ([string drawAtPoint:NSMakePoint(p1.x - 5, p1.y2 + 7) withAttributes:attributesEditable]);
+	}
+	else
+	{
+		[string drawAtPoint:NSMakePoint(p1.x - 5, p1.y1 + 7) withAttributes:attributesNonEditable];
+		DRAW_XZ([string drawAtPoint:NSMakePoint(p1.x - 5, p1.y2 + 7) withAttributes:attributesNonEditable]);
+	}
+}
+
+
 
 - (void)drawLinkedBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region
 {
 	Breakpoint *breakpoint;
 	BreakpointBezierPath *handleBezierPathXY, *handleBezierPathXZ;
-	NSString *string;
 	RadarPoint p1,p2;
 	p1.x = -2; // initialise
 	
@@ -293,25 +314,6 @@
 	
 		[handleBezierPathXY stroke];
 		DRAW_XZ([handleBezierPathXZ stroke]);
-	}
-	
-	// trajectory name
-	
-	if([region regionPosition]) return; // only if displayed without an associated region
-	
-	breakpoint = [[trajectory linkedBreakpointArrayWithInitialPosition:[region valueForKey:@"position"]] objectAtIndex:0];
-	p1 = [self makePointX:[breakpoint x] Y:[breakpoint y] Z:[breakpoint z]];
-	
-	string = [NSString stringWithFormat:@"%@", [trajectory valueForKeyPath:@"node.name"]];
-	if(trajectory == editableTrajectory)
-	{
-		[string drawAtPoint:NSMakePoint(p1.x - 5, p1.y1 + 7) withAttributes:attributesEditable];
-		DRAW_XZ([string drawAtPoint:NSMakePoint(p1.x - 5, p1.y2 + 7) withAttributes:attributesEditable]);
-	}
-	else
-	{
-		[string drawAtPoint:NSMakePoint(p1.x - 5, p1.y1 + 7) withAttributes:attributesNonEditable];
-		DRAW_XZ([string drawAtPoint:NSMakePoint(p1.x - 5, p1.y2 + 7) withAttributes:attributesNonEditable]);
 	}
 }
 
@@ -714,20 +716,36 @@
 			{
 
 				[gridPath appendBezierPathWithOvalInRect:NSMakeRect(radarSize * 0.5 - x,
-																	radarSize * 0.5 - x,
+																	offset + radarSize * 1.5 - x,
 																	x * 2,
 																	x * 2)];
-			
+				
+				if([[controller valueForKey:@"viewMode"] intValue] > 0)
+				{
+					[gridPath appendBezierPathWithOvalInRect:NSMakeRect(radarSize * 0.5 - x,
+																		offset + radarSize * 0.5 - x,
+																		x * 2,
+																		x * 2)];
+				}
+
 				x += gridUnitD * (radarSize - 10) * 0.5;
 			}
 			
 			for(i=0;i<gridUnitAE;i++)
 			{
 				[gridPath moveToPoint:NSMakePoint(cos((i+gridUnitAE) * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5,
-												  sin((i+gridUnitAE) * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5)];
+												  sin((i+gridUnitAE) * pi / gridUnitAE) * (radarSize - 10) * 0.5 + offset + radarSize * 1.5)];
 				[gridPath lineToPoint:NSMakePoint(cos(i * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5,
-												  sin(i * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5)];
-			} 
+												  sin(i * pi / gridUnitAE) * (radarSize - 10) * 0.5 + offset + radarSize * 1.5)];
+	
+				if([[controller valueForKey:@"viewMode"] intValue] > 0)
+				{
+					[gridPath moveToPoint:NSMakePoint(cos((i+gridUnitAE) * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5,
+													  sin((i+gridUnitAE) * pi / gridUnitAE) * (radarSize - 10) * 0.5 + offset + radarSize * 0.5)];
+					[gridPath lineToPoint:NSMakePoint(cos(i * pi / gridUnitAE) * (radarSize - 10) * 0.5 + radarSize * 0.5,
+													  sin(i * pi / gridUnitAE) * (radarSize - 10) * 0.5 + offset + radarSize * 0.5)];
+				}
+			}
 			
 			break;
 
@@ -1211,7 +1229,7 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-	printf("\nRadar key code: %d", keyCode);
+//	printf("\nRadar key code: %d", keyCode);
 
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	activeAreaOfDisplay = (([event modifierFlags] & NSShiftKeyMask) == 0) ? 0 : 1;

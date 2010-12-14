@@ -137,7 +137,8 @@ static EditorContent *sharedEditorContent = nil;
 		
 		for(AudioRegion *region in allAudioRegions)
 		{
-			if([[region valueForKey:@"startTime"] longValue] <= locator &&
+			if([region isKindOfClass:[AudioRegion class]] &&
+			   [[region valueForKey:@"startTime"] longValue] <= locator &&
 			   [[region valueForKey:@"startTime"] longValue] + [[region valueForKey:@"duration"] longValue] >= locator)
 			{
 				[tempArray addObject:region];
