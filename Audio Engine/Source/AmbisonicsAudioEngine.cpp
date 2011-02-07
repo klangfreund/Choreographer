@@ -10,7 +10,7 @@
 #include "AmbisonicsAudioEngine.h"
 #include "SpeakerTestComponent.h"
 
-#define AUDIOTRANSPORT_BUFFER 2048
+#define AUDIOTRANSPORT_BUFFER 2048 // (choose a value >1024)
 
 // constructor
 AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
@@ -30,21 +30,34 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	
 	// load the previously selected settings for the audio device
 	XmlElement* const savedAudioState = ApplicationProperties::getInstance()->getUserSettings()
-	->getXmlValue (T("audioDeviceState"));	
-    audioDeviceManager.initialise (256, 256, savedAudioState, true);	
+	->getXmlValue (T("audioDeviceState"));
+	String err;
+    err = audioDeviceManager.initialise (256, 256, savedAudioState, true);
+	    // If you ever intend to remove this initialising block here in the constructor:
+	    // Keep in mind that you still have to call audioDeviceManager.initialise once. This
+	    // is the only occurence of this call in the whole Choreographer code.
     delete savedAudioState;
+
+//	String err;
+//	audioDeviceManager.initialise (256, 256, 0, true);
+	if (err != T(""))
+	{
+		DBG(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
+	}
 	
 	// figure out the number of active output channels:
 	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	    // this points to a needed object, don't delete it!
+	    // this points to an object already existing, don't delete it!
 	BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
 
 	
+	// Connect the objects together (for a better understanding, please take a look at
+	// the picture in the AmbisonicsAudioEngine Class Reference in the documentation):
 	audioSpeakerGainAndRouting.setSource (&audioRegionMixer);
 	audioTransportSource.setSource (&audioSpeakerGainAndRouting,
 									numberOfActiveOutputChannels,
-									2048); // tells it to buffer this many samples ahead (choose a value >1024)
+									AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
     audioSourcePlayer.setSource (&audioTransportSource);
 	audioDeviceManager.addAudioCallback (&audioSourcePlayer);
 	
@@ -243,7 +256,7 @@ void AmbisonicsAudioEngine::enableNewRouting()
 	// without this it might crash when lowering the number of
 	// active output ports.
 	bool wasPlaying = audioTransportSource.isPlaying();
-	int currentPosition;
+	int64 currentPosition;
 	if (wasPlaying)
 	{
 		currentPosition = getCurrentPosition();

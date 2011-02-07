@@ -347,7 +347,7 @@ void AudioRegionMixer::releaseResources()
 }
 
 // Implements the PositionableAudioSource method.
-void AudioRegionMixer::setNextReadPosition (int newPosition)
+void AudioRegionMixer::setNextReadPosition (int64 newPosition)
 {
 	// DBG(T("AudioRegionMixer: setNextReadPosition called."));
 	
@@ -411,7 +411,7 @@ void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
 }
 
 // Implements the PositionableAudioSource method.
-int AudioRegionMixer::getNextReadPosition() const
+int64 AudioRegionMixer::getNextReadPosition() const
 {
 	// DBG(T("AudioRegionMixer: getNextReadPosition called."));
 	
@@ -419,7 +419,7 @@ int AudioRegionMixer::getNextReadPosition() const
 }
 
 // Implements the PositionableAudioSource method.
-int AudioRegionMixer::getTotalLength() const
+int64 AudioRegionMixer::getTotalLength() const
 {
 	// DBG(T("AudioRegionMixer: getTotalLength called."));
 

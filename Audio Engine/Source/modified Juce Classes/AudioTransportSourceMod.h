@@ -51,8 +51,9 @@
  
  @see AudioSource, AudioSourcePlayer
  */
-class JUCE_API  AudioTransportSourceMod  : public PositionableAudioSource,
-public ChangeBroadcaster
+class JUCE_API  AudioTransportSourceMod
+    : public PositionableAudioSource,
+      public ChangeBroadcaster
 {
 public:
     //==============================================================================
@@ -76,13 +77,13 @@ public:
 	 @param newSource                        the new input source to use. This may be zero
 	 @param numberOfChannels				 the number of channels to deliver
 	 @param readAheadBufferSize              a size of buffer to use for reading ahead. If this
-	 is zero, no reading ahead will be done; if it's
-	 greater than zero, a BufferingAudioSource will be used
-	 to do the reading-ahead
+			                                 is zero, no reading ahead will be done; if it's
+                                             greater than zero, a BufferingAudioSource will be used
+                                             to do the reading-ahead.
 	 @param sourceSampleRateToCorrectFor     if this is non-zero, it specifies the sample
-	 rate of the source, and playback will be sample-rate
-	 adjusted to maintain playback at the correct pitch. If
-	 this is 0, no sample-rate adjustment will be performed
+                                             rate of the source, and playback will be sample-rate
+                                             adjusted to maintain playback at the correct pitch. If
+                                             this is 0, no sample-rate adjustment will be performed
 	 */
     void setSource (PositionableAudioSource* const newSource,
 					int numberOfChannels,
@@ -103,6 +104,9 @@ public:
 	 This is a time in seconds.
 	 */
     double getCurrentPosition() const;
+	
+    /** Returns the stream's length in seconds. */
+    double getLengthInSeconds() const;
 	
     /** Returns true if the player has stopped because its input stream ran out of data.
 	 */
@@ -153,13 +157,13 @@ public:
 	
     //==============================================================================
     /** Implements the PositionableAudioSource method. */
-    void setNextReadPosition (int newPosition);
+    void setNextReadPosition (int64 newPosition);
 	
     /** Implements the PositionableAudioSource method. */
-    int getNextReadPosition() const;
+    int64 getNextReadPosition() const;
 	
     /** Implements the PositionableAudioSource method. */
-    int getTotalLength() const;
+    int64 getTotalLength() const;
 	
     /** Implements the PositionableAudioSource method. 
 	  
@@ -204,15 +208,14 @@ private:
 	
 	// looping in the arranger:
 	bool arrangerIsLooping;
-	int loopStart;						// measured in samples
-	int loopEnd;						// measured in samples
-	int loopFadeTime;				    // measured in samples, 
+	int64 loopStart;					// measured in samples
+	int64 loopEnd;						// measured in samples
+	int64 loopFadeTime;				    // measured in samples, 
 										//   defines the fade out as well as the fade in time
 	bool fadeInCurrentAudioBlock;		// is used to fade in the first audio block after
 										//   the jump to the start of the loop.
 	
-    AudioTransportSourceMod (const AudioTransportSourceMod&);
-    AudioTransportSourceMod& operator= (const AudioTransportSourceMod&);
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AudioTransportSourceMod);
 };
 
 

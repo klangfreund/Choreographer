@@ -68,7 +68,7 @@ void AudioSourceGainEnvelope::releaseResources()
 }
 
 /** Implements the PositionableAudioSource method. */
-void AudioSourceGainEnvelope::setNextReadPosition (int newPosition)
+void AudioSourceGainEnvelope::setNextReadPosition (int64 newPosition)
 {
 	// if the newPosition is not at the expected position, right after the end
 	// of the last audio block
@@ -88,7 +88,7 @@ void AudioSourceGainEnvelope::setNextReadPosition (int newPosition)
 }
 
 /** Implements the PositionableAudioSource method. */
-int AudioSourceGainEnvelope::getNextReadPosition() const
+int64 AudioSourceGainEnvelope::getNextReadPosition() const
 {
 	return bufferingAudioSource->getNextReadPosition();
 }
@@ -211,7 +211,7 @@ void AudioSourceGainEnvelope::getNextAudioBlock (const AudioSourceChannelInfo& i
 	}
 }
 
-int AudioSourceGainEnvelope::getTotalLength() const
+int64 AudioSourceGainEnvelope::getTotalLength() const
 {
 	return bufferingAudioSource->getTotalLength();
 }

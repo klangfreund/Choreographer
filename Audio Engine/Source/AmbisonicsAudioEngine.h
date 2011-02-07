@@ -149,7 +149,7 @@ public:
 	/** Removes all connections between the AEP channels and
 	 the audio hardware output channels.
 	 
-	 To enable this routing free state, call enableNewRouting.
+	 To enable this state, call enableNewRouting.
 	 */	
 	void removeAllRoutings();
 	

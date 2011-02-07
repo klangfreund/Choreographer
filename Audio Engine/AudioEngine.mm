@@ -370,6 +370,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	{
 		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
 		ambisonicsAudioEngine->enableNewRouting();
+		    // An Philippe: Kannst du das hier noch so aendern, dass enableRouting nur
+		    // einmal aufgerufen wird, wenn alle Routings gesetzt worden sind?
+		    // Denn beim Aufruf von enableNewRouting muessen alle Buffer neu initialisiert
+		    // werden und der Audiograph neu erstellt werden. Das kann zu laestigen
+		    // Knacksern fuehren.
 	}
 }
 

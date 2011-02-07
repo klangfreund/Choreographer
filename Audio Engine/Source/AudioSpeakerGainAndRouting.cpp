@@ -320,6 +320,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	// temp:
 	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
 	
+	// Figure out which hardware outputs will be in use.
 	audioDeviceSetup.outputChannels.clear();
 	for (int i=0; i < getNumberOfHardwareOutputChannels(); i++)
 	{
@@ -357,7 +358,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	// Let the audioSpeakerGainAndRouting know about the new connections.
 	// The audioSpeakerGainAndRouting will tell the audioRegionMixer
 	// which speaker setting to use on which (active) hardware/buffer
-	// channel
+	// channel.
 	
 	// Remove all elements from the array (which will be filled with
 	// the most recent routing configuration in the following loop).
@@ -536,7 +537,7 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 }
 
 // Implements the PositionableAudioSource method.
-void AudioSpeakerGainAndRouting::setNextReadPosition (int newPosition)
+void AudioSpeakerGainAndRouting::setNextReadPosition (int64 newPosition)
 {
 	// DBG(T("AudioSpeakerGainAndRouting: setNextReadPosition called."));
 	
@@ -547,7 +548,7 @@ void AudioSpeakerGainAndRouting::setNextReadPosition (int newPosition)
 }	
 
 /** Implements the PositionableAudioSource method. */
-int AudioSpeakerGainAndRouting::getNextReadPosition() const
+int64 AudioSpeakerGainAndRouting::getNextReadPosition() const
 {
 	if (audioRegionMixer != 0)
 	{
@@ -560,7 +561,7 @@ int AudioSpeakerGainAndRouting::getNextReadPosition() const
 }
 
 /** Implements the PositionableAudioSource method. */
-int AudioSpeakerGainAndRouting::getTotalLength() const
+int64 AudioSpeakerGainAndRouting::getTotalLength() const
 {
 	if (audioRegionMixer != 0)
 	{

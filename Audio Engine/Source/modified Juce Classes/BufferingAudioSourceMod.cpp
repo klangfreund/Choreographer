@@ -40,9 +40,10 @@
 
 
 //==============================================================================
-class SharedBufferingAudioSourceModThread  : public DeletedAtShutdown,
-public Thread,
-private Timer
+class SharedBufferingAudioSourceModThread
+: public DeletedAtShutdown,
+  public Thread,
+  private Timer
 {
 public:
     SharedBufferingAudioSourceModThread()
@@ -118,8 +119,7 @@ private:
             deleteInstance();
     }
 	
-    SharedBufferingAudioSourceModThread (const SharedBufferingAudioSourceModThread&);
-    SharedBufferingAudioSourceModThread& operator= (const SharedBufferingAudioSourceModThread&);
+    JUCE_DECLARE_NON_COPYABLE (SharedBufferingAudioSourceModThread);
 };
 
 juce_ImplementSingleton (SharedBufferingAudioSourceModThread)
@@ -133,9 +133,9 @@ BufferingAudioSourceMod::BufferingAudioSourceMod (PositionableAudioSource* sourc
 												  int numberOfSamplesToBuffer_)
 : source (source_),
 deleteSourceWhenDeleted (deleteSourceWhenDeleted_),
-numberOfChannelsToBuffer (numberOfChannelsToBuffer_),  // by sam: new
+numberOfChannelsToBuffer (jmax (1, numberOfChannelsToBuffer_)),  // by sam: new
 numberOfSamplesToBuffer (jmax (1024, numberOfSamplesToBuffer_)),
-buffer (numberOfChannelsToBuffer_, 0), // by sam: changed
+buffer (numberOfChannelsToBuffer, 0), // by sam: changed
 bufferValidStart (0),
 bufferValidEnd (0),
 nextPlayPos (0),
@@ -199,7 +199,7 @@ void BufferingAudioSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
     const int validStart = jlimit (bufferValidStart, bufferValidEnd, nextPlayPos) - nextPlayPos;
     const int validEnd   = jlimit (bufferValidStart, bufferValidEnd, nextPlayPos + info.numSamples) - nextPlayPos;
 	
-    if (validStart == validEnd)
+    if (validStart == validEnd || info.buffer->getNumChannels() != buffer.getNumChannels())
     {
         // total cache miss
         info.clearActiveBufferRegion();
@@ -256,14 +256,14 @@ void BufferingAudioSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
         thread->notify();
 }
 
-int BufferingAudioSourceMod::getNextReadPosition() const
+int64 BufferingAudioSourceMod::getNextReadPosition() const
 {
     return (source->isLooping() && nextPlayPos > 0)
 	? nextPlayPos % source->getTotalLength()
 	: nextPlayPos;
 }
 
-void BufferingAudioSourceMod::setNextReadPosition (int newPosition)
+void BufferingAudioSourceMod::setNextReadPosition (int64 newPosition)
 {
     const ScopedLock sl (bufferStartPosLock);
 	
@@ -277,7 +277,7 @@ void BufferingAudioSourceMod::setNextReadPosition (int newPosition)
 
 bool BufferingAudioSourceMod::readNextBufferChunk()
 {
-    int newBVS, newBVE, sectionToReadStart, sectionToReadEnd;
+    int64 newBVS, newBVE, sectionToReadStart, sectionToReadEnd;
 	
     {
         const ScopedLock sl (bufferStartPosLock);
@@ -289,7 +289,7 @@ bool BufferingAudioSourceMod::readNextBufferChunk()
             bufferValidEnd = 0;
         }
 		
-        newBVS = jmax (0, nextPlayPos);
+        newBVS = jmax ((int64) 0, nextPlayPos);
         newBVE = newBVS + buffer.getNumSamples() - 4;
         sectionToReadStart = 0;
         sectionToReadEnd = 0;
@@ -306,8 +306,8 @@ bool BufferingAudioSourceMod::readNextBufferChunk()
             bufferValidStart = 0;
             bufferValidEnd = 0;
         }
-        else if (abs (newBVS - bufferValidStart) > 512
-				 || abs (newBVE - bufferValidEnd) > 512)
+        else if (std::abs ((int) (newBVS - bufferValidStart)) > 512
+				 || std::abs ((int) (newBVE - bufferValidEnd)) > 512)
         {
             newBVE = jmin (newBVE, bufferValidEnd + maxChunkSize);
 			
@@ -327,7 +327,7 @@ bool BufferingAudioSourceMod::readNextBufferChunk()
         if (bufferIndexStart < bufferIndexEnd)
         {
             readBufferSection (sectionToReadStart,
-                               sectionToReadEnd - sectionToReadStart,
+                               (int) (sectionToReadEnd - sectionToReadStart),
                                bufferIndexStart);
         }
         else
@@ -356,7 +356,7 @@ bool BufferingAudioSourceMod::readNextBufferChunk()
     }
 }
 
-void BufferingAudioSourceMod::readBufferSection (int start, int length, int bufferOffset)
+void BufferingAudioSourceMod::readBufferSection (const int64 start, const int length, const int bufferOffset)
 {
     if (source->getNextReadPosition() != start)
         source->setNextReadPosition (start);

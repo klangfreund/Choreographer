@@ -11,7 +11,7 @@
 #define __AUDIOSOURCEGAINENVELOPE_HEADER__
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "modified Juce Classes/juce_PositionableResamplingAudioSource.h"
+// #include "modified Juce Classes/juce_PositionableResamplingAudioSource.h"
 
 //==============================================================================
 /**
@@ -134,13 +134,13 @@ public:
 	
     //==============================================================================
     /** Implements the PositionableAudioSource method. */
-    void setNextReadPosition (int newPosition);
+    void setNextReadPosition (int64 newPosition);
 	
     /** Implements the PositionableAudioSource method. */
-    int getNextReadPosition() const;
+    int64 getNextReadPosition() const;
 	
     /** Implements the PositionableAudioSource method. */
-    int getTotalLength() const;
+    int64 getTotalLength() const;
 	
 	/** Implements the PositionableAudioSource method. */
     bool isLooping() const;
@@ -158,7 +158,7 @@ private:
 	inline void prepareForNewPosition(int newPosition);
 	
 	BufferingAudioSource* bufferingAudioSource;
-	PositionableResamplingAudioSource* positionableResamplingAudioSource;
+//	PositionableResamplingAudioSource* positionableResamplingAudioSource;
 	AudioFormatReaderSource* audioFormatReaderSource;
 	
 	Array<void*> gainEnvelope;

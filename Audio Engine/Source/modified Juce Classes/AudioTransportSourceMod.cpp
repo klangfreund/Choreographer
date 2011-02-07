@@ -81,6 +81,7 @@ void AudioTransportSourceMod::setSource (PositionableAudioSource* const newSourc
     AudioSource* newMasterSource = 0;
 	
 	ScopedPointer <BufferingAudioSourceMod> oldBufferingSource (bufferingSource);
+	    // Deletes the object when this section of code is finished.
     AudioSource* oldMasterSource = masterSource;
 	
     if (newSource != 0)
@@ -162,7 +163,12 @@ double AudioTransportSourceMod::getCurrentPosition() const
         return 0.0;
 }
 
-void AudioTransportSourceMod::setNextReadPosition (int newPosition)
+double AudioTransportSourceMod::getLengthInSeconds() const
+{
+    return getTotalLength() / sampleRate;
+}
+
+void AudioTransportSourceMod::setNextReadPosition (int64 newPosition)
 {
     if (positionableSource != 0)
     {	
@@ -170,23 +176,23 @@ void AudioTransportSourceMod::setNextReadPosition (int newPosition)
     }
 }
 
-int AudioTransportSourceMod::getNextReadPosition() const
+int64 AudioTransportSourceMod::getNextReadPosition() const
 {
     if (positionableSource != 0)
     {
-        return roundToInt (positionableSource->getNextReadPosition());
+        return (int64) (positionableSource->getNextReadPosition());
     }
 	
     return 0;
 }
 
-int AudioTransportSourceMod::getTotalLength() const
+int64 AudioTransportSourceMod::getTotalLength() const
 {
     const ScopedLock sl (callbackLock);
 	
     if (positionableSource != 0)
     {
-        return roundToInt (positionableSource->getTotalLength()); // * ratio);
+        return (int64) (positionableSource->getTotalLength()); // * ratio);
     }
 	
     return 0;
@@ -205,9 +211,9 @@ bool AudioTransportSourceMod::enableArrangerLoop(double loopStart_inSeconds, dou
 	if (loopStart_inSeconds < loopEnd_inSeconds && loopFadeTime_inSeconds >= 0 && sampleRate > 0.0) // this is a valid configuration
 	{		
 		arrangerIsLooping = true;
-		loopStart = roundToInt(loopStart_inSeconds * sampleRate);
-		loopEnd = roundToInt(loopEnd_inSeconds * sampleRate);
-		loopFadeTime = roundToInt(loopFadeTime_inSeconds * sampleRate);
+		loopStart = (int64) (loopStart_inSeconds * sampleRate);
+		loopEnd = (int64) (loopEnd_inSeconds * sampleRate);
+		loopFadeTime = (int64) (loopFadeTime_inSeconds * sampleRate);
 		return true;
 	}
 	else // if the input is not a valid configuration
@@ -249,7 +255,11 @@ void AudioTransportSourceMod::releaseResources()
     const ScopedLock sl (callbackLock);
 	
     if (masterSource != 0)
+	{
         masterSource->releaseResources();
+		    // Removes the bufferingAudioSourceMod from the 
+		    // SharedBufferingAudioSourceModThread.
+	}
 	
     isPrepared = false;
 }
@@ -315,8 +325,8 @@ void AudioTransportSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
 			}
 			else // if (playing)
 			{
-				int startOfCurrentAudioBlock = positionableSource->getNextReadPosition() - info.numSamples;
-				int endOfCurrentAudioBlock = positionableSource->getNextReadPosition();
+				int64 startOfCurrentAudioBlock = positionableSource->getNextReadPosition() - info.numSamples;
+				int64 endOfCurrentAudioBlock = positionableSource->getNextReadPosition();
 				
 				if (startOfCurrentAudioBlock < loopEnd &&  endOfCurrentAudioBlock >= loopEnd)
 				// the current audio block is crossing the end marker of the loop (loopEnd).

@@ -77,7 +77,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	  // the gain envelope is now applied.
 	
 	// copy the samples of the first channel (with index 0) to the other channels
-	for (int chan = 1; chan < numberOfSpeakers; ++chan)
+	for (int chan = 1; chan < info.buffer->getNumChannels(); ++chan)
 	{
 		info.buffer->copyFrom(chan, info.startSample, *info.buffer, 0, info.startSample, info.numSamples);
 	}
@@ -118,7 +118,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 			double xs, ys, zs; // speaker coordinates, used in the upcoming for-loop
 			double factor;  // used in the upcoming for-loop. Only here to 
 			                // make the code more readable.
-			for (int channel = 0; channel < numberOfSpeakers; channel++) 
+			for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 			{
 				xs = ((SpeakerPosition*)positionOfSpeaker[channel])->getX();
 				ys = ((SpeakerPosition*)positionOfSpeaker[channel])->getY();
@@ -139,7 +139,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 		}
 		
 		// finally, the start and end values are prepared and the fading can be calculated.
-		for (int channel = 0; channel < numberOfSpeakers; ++channel)
+		for (int channel = 0; channel < info.buffer->getNumChannels(); ++channel)
 		{
 			info.buffer->applyGainRamp(channel, 
 									   info.startSample, 
@@ -156,7 +156,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 		// If there is only one point in the spacial envelope
 		if (constantSpacialPosition)
 		{
-			for (int channel = 0; channel < numberOfSpeakers; ++channel)
+			for (int channel = 0; channel < info.buffer->getNumChannels(); ++channel)
 			{
 				info.buffer->applyGain(channel, info.startSample, info.numSamples, channelFactor[channel]);
 				  // arguments
@@ -172,7 +172,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 		{		
 			currentPosition = nextPlayPosition;
 			
-			for (int channel = 0; channel < numberOfSpeakers; channel++) 
+			for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 			{
 				// Points to the first sample in the audio block.
 				sample.set(channel, info.buffer->getSampleData(channel, info.startSample)); 
@@ -190,7 +190,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					numberOfRemainingSamples = audioBlockEndPosition - currentPosition;
 					while (--numberOfRemainingSamples >= 0)
 					{
-						for (int channel = 0; channel < numberOfSpeakers; channel++) 
+						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 						{
 							*sample[channel] *= channelFactor[channel];
 							sample.set(channel, sample[channel] + 1);
@@ -207,7 +207,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					numberOfRemainingSamples = nextSpacialPoint->getPosition() - currentPosition;
 					while (--numberOfRemainingSamples >= 0)
 					{
-						for (int channel = 0; channel < numberOfSpeakers; channel++) 
+						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 						{
 							*sample[channel] *= channelFactor[channel];
 							sample.set(channel, sample[channel] + 1);
@@ -216,7 +216,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					}
 					
 					// apply the gain to the sample at the nextGainPoint position					
-					for (int channel = 0; channel < numberOfSpeakers; channel++) 
+					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
 						channelFactor.set(channel, channelFactorAtNextSpacialPoint[channel]);
 						*sample[channel] *= channelFactor[channel];
@@ -247,7 +247,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					
 					int distance = nextSpacialPoint->getPosition() - previousSpacialPoint->getPosition();
 					
-					for (int channel = 0; channel < numberOfSpeakers; channel++) 
+					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
 						// calculate the values of the float-array channelFactorAtNextSpacialPoint
 						xs = ((SpeakerPosition*)positionOfSpeaker[channel])->getX();
@@ -271,7 +271,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 }
 
 /** Implements the PositionableAudioSource method. */
-void AudioSourceAmbipanning::setNextReadPosition (int newPosition)
+void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 {
 	// if the newPosition is not at the expected position, right after the end
 	// of the last audio block
@@ -291,13 +291,13 @@ void AudioSourceAmbipanning::setNextReadPosition (int newPosition)
 }
 
 /** Implements the PositionableAudioSource method. */
-int AudioSourceAmbipanning::getNextReadPosition () const
+int64 AudioSourceAmbipanning::getNextReadPosition () const
 {
 	return audioSourceGainEnvelope->getNextReadPosition();
 }
 
 /** Implements the PositionableAudioSource method. */
-int AudioSourceAmbipanning::getTotalLength () const
+int64 AudioSourceAmbipanning::getTotalLength () const
 {
 	return audioSourceGainEnvelope->getTotalLength();
 }

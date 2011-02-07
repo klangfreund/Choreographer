@@ -38,38 +38,35 @@ BEGIN_JUCE_NAMESPACE
 
 //==============================================================================
 /**
- A component containing controls to let the user change the audio settings of
- an AudioDeviceManager object.
- 
- Very easy to use - just create one of these and show it to the user.
- 
- @see AudioDeviceManager
- */
-class AudioDeviceSelectorComponentMod  : public Component,
-public ComboBoxListener, // (can't use ComboBox::Listener due to idiotic VC2005 bug)
-public ButtonListener,
-public ChangeListener
+    A component containing controls to let the user change the audio settings of
+    an AudioDeviceManager object.
+
+    Very easy to use - just create one of these and show it to the user.
+
+    @see AudioDeviceManager
+*/
+class AudioDeviceSelectorComponentMod : public AudioDeviceSelectorComponent
 {
 public:
     //==============================================================================
     /** Creates the component.
-	 
-	 If your app needs only output channels, you might ask for a maximum of 0 input
-	 channels, and the component won't display any options for choosing the input
-	 channels. And likewise if you're doing an input-only app.
-	 
-	 @param deviceManager            the device manager that this component should control
-	 @param minAudioInputChannels    the minimum number of audio input channels that the application needs
-	 @param maxAudioInputChannels    the maximum number of audio input channels that the application needs
-	 @param minAudioOutputChannels   the minimum number of audio output channels that the application needs
-	 @param maxAudioOutputChannels   the maximum number of audio output channels that the application needs
-	 @param showMidiInputOptions     if true, the component will allow the user to select which midi inputs are enabled
-	 @param showMidiOutputSelector   if true, the component will let the user choose a default midi output device
-	 @param showChannelsAsStereoPairs    if true, channels will be treated as pairs; if false, channels will be
-	 treated as a set of separate mono channels.
-	 @param hideAdvancedOptionsWithButton    if true, only the minimum amount of UI components
-	 are shown, with an "advanced" button that shows the rest of them
-	 */
+
+        If your app needs only output channels, you might ask for a maximum of 0 input
+        channels, and the component won't display any options for choosing the input
+        channels. And likewise if you're doing an input-only app.
+
+        @param deviceManager            the device manager that this component should control
+        @param minAudioInputChannels    the minimum number of audio input channels that the application needs
+        @param maxAudioInputChannels    the maximum number of audio input channels that the application needs
+        @param minAudioOutputChannels   the minimum number of audio output channels that the application needs
+        @param maxAudioOutputChannels   the maximum number of audio output channels that the application needs
+        @param showMidiInputOptions     if true, the component will allow the user to select which midi inputs are enabled
+        @param showMidiOutputSelector   if true, the component will let the user choose a default midi output device
+        @param showChannelsAsStereoPairs    if true, channels will be treated as pairs; if false, channels will be
+                                        treated as a set of separate mono channels.
+        @param hideAdvancedOptionsWithButton    if true, only the minimum amount of UI components
+                                        are shown, with an "advanced" button that shows the rest of them
+    */
     AudioDeviceSelectorComponentMod (AudioDeviceManager& deviceManager,
                                   const int minAudioInputChannels,
                                   const int maxAudioInputChannels,
@@ -79,45 +76,47 @@ public:
                                   const bool showMidiOutputSelector,
                                   const bool showChannelsAsStereoPairs,
                                   const bool hideAdvancedOptionsWithButton);
-	
+
     /** Destructor */
     ~AudioDeviceSelectorComponentMod();
-	
-	
-    //==============================================================================
-    /** @internal */
-    void resized();
-    /** @internal */
-    void comboBoxChanged (ComboBox*);
-    /** @internal */
-    void buttonClicked (Button*);
-    /** @internal */
-    void changeListenerCallback (ChangeBroadcaster*);
-    /** @internal */
-    void childBoundsChanged (Component*);
-	
-    //==============================================================================
-    juce_UseDebuggingNewOperator
-	
-private:
-    AudioDeviceManager& deviceManager;
-    ScopedPointer<ComboBox> deviceTypeDropDown;
-    ScopedPointer<Label> deviceTypeDropDownLabel;
-    ScopedPointer<Component> audioDeviceSettingsComp;
-    String audioDeviceSettingsCompType;
-    const int minOutputChannels, maxOutputChannels, minInputChannels, maxInputChannels;
-    const bool showChannelsAsStereoPairs;
-    const bool hideAdvancedOptionsWithButton;
-	
-    class MidiInputSelectorComponentListBox;
-    friend class ScopedPointer<MidiInputSelectorComponentListBox>;
-    ScopedPointer<MidiInputSelectorComponentListBox> midiInputsList;
-    ScopedPointer<ComboBox> midiOutputSelector;
-    ScopedPointer<Label> midiInputsLabel, midiOutputLabel;
-	
-    AudioDeviceSelectorComponentMod (const AudioDeviceSelectorComponentMod&);
-    AudioDeviceSelectorComponentMod& operator= (const AudioDeviceSelectorComponentMod&);
 };
+
+//
+//    //==============================================================================
+//    /** @internal */
+//    void resized();
+//    /** @internal */
+//    void comboBoxChanged (ComboBox*);
+//    /** @internal */
+//    void buttonClicked (Button*);
+//    /** @internal */
+//    void changeListenerCallback (ChangeBroadcaster*);
+//    /** @internal */
+//    void childBoundsChanged (Component*);
+//
+//    //==============================================================================
+//    juce_UseDebuggingNewOperator
+//
+//private:
+//    AudioDeviceManager& deviceManager;
+//    ScopedPointer<ComboBox> deviceTypeDropDown;
+//    ScopedPointer<Label> deviceTypeDropDownLabel;
+//    ScopedPointer<Component> audioDeviceSettingsComp;
+//    String audioDeviceSettingsCompType;
+//    const int minOutputChannels, maxOutputChannels, minInputChannels, maxInputChannels;
+//    const bool showChannelsAsStereoPairs;
+//    const bool hideAdvancedOptionsWithButton;
+//
+//    class MidiInputSelectorComponentListBox;
+//    friend class ScopedPointer<MidiInputSelectorComponentListBox>;
+//    ScopedPointer<MidiInputSelectorComponentListBox> midiInputsList;
+//    ScopedPointer<ComboBox> midiOutputSelector;
+//    ScopedPointer<Label> midiInputsLabel, midiOutputLabel;
+//
+//    AudioDeviceSelectorComponentMod (const AudioDeviceSelectorComponentMod&);
+//    AudioDeviceSelectorComponentMod& operator= (const AudioDeviceSelectorComponentMod&);
+//};
+//
 
 END_JUCE_NAMESPACE
 
