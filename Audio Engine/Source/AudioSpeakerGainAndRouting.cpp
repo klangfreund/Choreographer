@@ -13,7 +13,8 @@
 
 //==============================================================================
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
-: audioRegionMixer (0),
+: audioSource (0),
+  audioRegionMixer (0),
   audioDeviceManager (0),
   aepChannelHardwareOutputPairs (),
   aepChannelSettingsAscending (),
@@ -32,8 +33,9 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
 	pinkNoiseInfo.numSamples = 0;
 }
 
-AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_)
-: audioRegionMixer (0),
+AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_, AudioRegionMixer* audioRegionMixer_)
+: audioSource (0),
+  audioRegionMixer (audioRegionMixer_),
   audioDeviceManager (audioDeviceManager_),
   aepChannelHardwareOutputPairs (),
   aepChannelSettingsAscending (),
@@ -59,25 +61,25 @@ AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
 	removeAllRoutingsAndAllAepChannels();
 }
 
-void AudioSpeakerGainAndRouting::setSource (AudioRegionMixer* const newAudioRegionMixer)
+void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
 {
 	DBG(T("AudioSpeakerGainAndRouting: setSource called."));
 	
 	// sam: This part is copied from the AudioTransportSource
-    if (audioRegionMixer == newAudioRegionMixer)
+    if (audioSource == newAudioSource)
     {
-        if (audioRegionMixer == 0)
+        if (audioSource == 0)
             return;
 		
         setSource (0); // deselect and reselect to avoid releasing resources wrongly
     }
 	
-	PositionableAudioSource* oldAudioRegionMixer = audioRegionMixer;
+	AudioSource* oldAudioSource = audioSource;
 
-	audioRegionMixer = newAudioRegionMixer;
+	audioSource = newAudioSource;
 	
-	if (oldAudioRegionMixer != 0) {
-		oldAudioRegionMixer->releaseResources();
+	if (oldAudioSource != 0) {
+		oldAudioSource->releaseResources();
 	}
 }
 
@@ -431,8 +433,8 @@ void AudioSpeakerGainAndRouting::prepareToPlay (int samplesPerBlockExpected_, do
 {
 	DBG(T("AudioSpeakerGainAndRouting: prepareToPlay called."));
 	
-	if (audioRegionMixer != 0) {
-		audioRegionMixer->prepareToPlay(samplesPerBlockExpected_, sampleRate_);
+	if (audioSource != 0) {
+		audioSource->prepareToPlay(samplesPerBlockExpected_, sampleRate_);
 	}
 	
 	pinkNoiseGeneratorAudioSource.prepareToPlay(samplesPerBlockExpected_, sampleRate_);
@@ -444,8 +446,8 @@ void AudioSpeakerGainAndRouting::releaseResources()
 {
 	DBG(T("AudioSpeakerGainAndRouting: releaseResources called."));
 	
-	if (audioRegionMixer != 0) {
-		audioRegionMixer->releaseResources();
+	if (audioSource != 0) {
+		audioSource->releaseResources();
 	}
 
 }
@@ -456,13 +458,13 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 	
 	// DBG(T("AudioSpeakerGainAndRouting: nr of channels = ") + String(info.buffer->getNumChannels()));
 
-	if (audioRegionMixer != 0)
+	if (audioSource != 0)
 	{
 		// To save some typing and make the code more readable.
 		int nrOfActiveHWChannels = aepChannelSettingsOrderedByActiveHardwareChannels.size();
 
-		// Aquire a buffer of samples from the audioRegionMixer into the AudioSourceChannelInfo info.
-		audioRegionMixer->getNextAudioBlock(info);
+		// Aquire a buffer of samples from the audioSource into the AudioSourceChannelInfo info.
+		audioSource->getNextAudioBlock(info);
 		
 		// Before gain, mute or solo is applied to the audio stream, pink noise is
 		// added if desired. Pink noise comes before the gain, so it is controllable 
@@ -558,53 +560,4 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			}
 		}
 	}
-}
-
-// Implements the PositionableAudioSource method.
-void AudioSpeakerGainAndRouting::setNextReadPosition (int64 newPosition)
-{
-	// DBG(T("AudioSpeakerGainAndRouting: setNextReadPosition called."));
-	
-	if (audioRegionMixer != 0)
-	{
-		audioRegionMixer->setNextReadPosition(newPosition);
-	}
 }	
-
-/** Implements the PositionableAudioSource method. */
-int64 AudioSpeakerGainAndRouting::getNextReadPosition() const
-{
-	if (audioRegionMixer != 0)
-	{
-		return audioRegionMixer->getNextReadPosition();
-	}
-	else 
-	{
-		return 0;
-	}
-}
-
-/** Implements the PositionableAudioSource method. */
-int64 AudioSpeakerGainAndRouting::getTotalLength() const
-{
-	if (audioRegionMixer != 0)
-	{
-		return audioRegionMixer->getTotalLength();
-	}
-	else 
-	{
-		return 0;
-	}
-}
-
-bool AudioSpeakerGainAndRouting::isLooping() const
-{
-	if (audioRegionMixer != 0)
-	{
-		return audioRegionMixer->isLooping();
-	}
-	else 
-	{
-		return false;
-	}
-}

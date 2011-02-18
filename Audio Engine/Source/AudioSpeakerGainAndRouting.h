@@ -257,14 +257,14 @@ private:
  
  TODO
  */
-class JUCE_API  AudioSpeakerGainAndRouting  : public PositionableAudioSource
+class JUCE_API  AudioSpeakerGainAndRouting  : public AudioSource
 {
 public:
     //==============================================================================
     /** Constructor: Creates an AudioSpeakerGainAndRouting.
 	 */
 	AudioSpeakerGainAndRouting();
-    AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_);
+    AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_, AudioRegionMixer* audioRegionMixer_);
 	
     /** Destructor. */
     ~AudioSpeakerGainAndRouting();
@@ -278,7 +278,7 @@ public:
 	 
 	 @param newSource             The new input source to use. This might be zero.
 	 */
-    void setSource (AudioRegionMixer* const newAudioRegionMixer);
+    void setSource (AudioSource* const newAudioRegionMixer);
 	
 	/** Sets the AudioDeviceManager.
 	 
@@ -403,25 +403,6 @@ public:
     void getNextAudioBlock (const AudioSourceChannelInfo& info);
 	
     //==============================================================================
-    /** Implements the PositionableAudioSource method. */
-    void setNextReadPosition (int64 newPosition);
-	
-    /** Implements the PositionableAudioSource method. */
-    int64 getNextReadPosition() const;
-	
-    /** Implements the PositionableAudioSource method. */
-    int64 getTotalLength() const;
-	
-    /** Implements the PositionableAudioSource method. 
-	 
-	 Comment by Sam: This kind of loop means, that the
-	 source is repeated for an infinite number of time.
-	 Or stated differently, at any point in time, the
-	 source is producing sound, since it is looping.
-	 */
-    bool isLooping() const;
-	
-    //==============================================================================
 
 	
 private:
@@ -433,8 +414,8 @@ private:
 	 */
 	bool aepChannelIsConnectedWithActiveHardwareChannel(int aepChannel);
 	
-	AudioRegionMixer* audioRegionMixer;
-	
+	AudioSource* audioSource;
+	AudioRegionMixer* audioRegionMixer;	
 	AudioDeviceManager* audioDeviceManager;
 
 	AEPChannelHardwareOutputPairs aepChannelHardwareOutputPairs;

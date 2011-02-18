@@ -18,7 +18,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioSourcePlayer(),
       audioTransportSource(),
       audioRegionMixer(),
-	  audioSpeakerGainAndRouting(&audioDeviceManager)
+	  audioSpeakerGainAndRouting(&audioDeviceManager, &audioRegionMixer)
 {
 	
 	DBG(T("AmbisonicsAudioEngine: constructor called."));
@@ -64,11 +64,11 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	
 	// Connect the objects together (for a better understanding, please take a look at
 	// the picture in the AmbisonicsAudioEngine Class Reference in the documentation):
-	audioSpeakerGainAndRouting.setSource (&audioRegionMixer);
-	audioTransportSource.setSource (&audioSpeakerGainAndRouting,
+	audioTransportSource.setSource (&audioRegionMixer,
 									numberOfActiveOutputChannels,
 									AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
-    audioSourcePlayer.setSource (&audioTransportSource);
+	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
+    audioSourcePlayer.setSource (&audioSpeakerGainAndRouting);
 	audioDeviceManager.addAudioCallback (&audioSourcePlayer);
 	
 	
@@ -282,7 +282,7 @@ void AmbisonicsAudioEngine::enableNewRouting()
 	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
 	if (numberOfActiveOutputChannels > 0)
 	{
-		audioTransportSource.setSource (&audioSpeakerGainAndRouting,
+		audioTransportSource.setSource (&audioRegionMixer,
 										numberOfActiveOutputChannels,
 										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
 		
