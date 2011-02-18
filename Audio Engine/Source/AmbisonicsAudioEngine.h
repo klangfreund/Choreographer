@@ -416,6 +416,8 @@ private:
 							///  then speakers. This is done in 
 							///  AmbisonicsAudioEngine::setSpeakerPositions.
 	
+	/** Used for scope locking in enableNewRouting. */
+    CriticalSection lock;	
 };
 
 #endif // __AMBISONICS_AUDIO_ENGINE

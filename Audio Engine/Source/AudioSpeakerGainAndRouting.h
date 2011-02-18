@@ -26,6 +26,10 @@ struct JUCE_API aepChannelSettings
 	 */
 	double gain;
 	
+	/** Used to apply a gain ramp in the getNextAudioBlock.
+	 */	
+	double lastGain;
+	
 	/** Engages the solo.
 	 
 	 It is allowed to have solo activated on multiple AEP

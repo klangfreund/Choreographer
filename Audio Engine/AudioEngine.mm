@@ -115,7 +115,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)testNoise:(BOOL)enable forChannelatIndex:(NSUInteger)index
 {
 	NSLog(@"test noise %i in channel %i", enable, index);
-	ambisonicsAudioEngine->activatePinkNoise(index+1, enable);
+	ambisonicsAudioEngine->activatePinkNoise(index, enable);
 }
 
 #pragma mark -
@@ -351,6 +351,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)removeAllSpeakerChannels
 {
 	ambisonicsAudioEngine->removeAllRoutingsAndAllAepChannels();
+	  // Philippe: Ich verstehe nicht, weshalb das beim Programmstart aufgerufen wird.
 }
 
 - (void)addSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
@@ -370,11 +371,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	{
 		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
 		ambisonicsAudioEngine->enableNewRouting();
-		    // An Philippe: Kannst du das hier noch so aendern, dass enableRouting nur
+		    // An Philippe: Kannst du das hier so aendern, dass enableRouting nur
 		    // einmal aufgerufen wird, wenn alle Routings gesetzt worden sind?
 		    // Denn beim Aufruf von enableNewRouting muessen alle Buffer neu initialisiert
-		    // werden und der Audiograph neu erstellt werden. Das kann zu laestigen
-		    // Knacksern fuehren.
+		    // werden und der Audiograph neu erstellt werden. Das kann unter anderem zu
+		    // laestigen Knacksern fuehren.
 	}
 }
 
@@ -394,6 +395,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	{
 		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
 		ambisonicsAudioEngine->enableNewRouting();
+		    // An Philippe: Kannst du das hier so aendern, dass enableRouting nur
+		    // einmal aufgerufen wird, wenn alle Routings gesetzt worden sind?
+		    // Denn beim Aufruf von enableNewRouting muessen alle Buffer neu initialisiert
+		    // werden und der Audiograph neu erstellt werden. Das kann unter anderem zu
+		    // laestigen Knacksern fuehren.
 	}
 }
 

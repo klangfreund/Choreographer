@@ -16,7 +16,8 @@ BEGIN_JUCE_NAMESPACE
 
 //==============================================================================
 /**
-    A simple AudioSource that generates pink noise.
+    An AudioSource that generates correlated pink noise. I.e. all the channels
+    are fed with the same (mono) pink noise signal.
 
 */
 class JUCE_API  PinkNoiseGeneratorAudioSource  : public AudioSource
@@ -31,14 +32,7 @@ public:
 
     //==============================================================================
     /** Sets the signal's amplitude. */
-    void setNumberOfChannels (const int numberOfChannels_);
-
-    /** Toggles (on / off) the pink noise on the specified channel. */	
-	bool toggleNoise(int channelNumber);
-	
-    /** Sets the signal's amplitude. */
-    void setAmplitude (const float newAmplitude);	
-	
+    void setAmplitude (const double newAmplitude);		
 
     //==============================================================================
     /** Implementation of the AudioSource method. */
@@ -56,17 +50,9 @@ public:
 
 private:
     //==============================================================================
-	double sampleRate;
-    float amplitude;
-	float b0, b1, b2; // used for the "pink noise filter"
+    double amplitude;
+	double b0, b1, b2; // used for the "pink noise filter"
 	Random juceRandom;
-	
-	int numberOfChannels; // These are the active channels. Its the same number as
-						// info.buffer->getNumChannels() in getNextAudioBlock.
-	BigInteger makeNoiseOnThisChannels; // The bits specifies, if noise should be
-										// put on the corresponding channel.
-	BigInteger fadeIn;
-	BigInteger fadeOut;
 
     PinkNoiseGeneratorAudioSource (const PinkNoiseGeneratorAudioSource&);
     PinkNoiseGeneratorAudioSource& operator= (const PinkNoiseGeneratorAudioSource&);

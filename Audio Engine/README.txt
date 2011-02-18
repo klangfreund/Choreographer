@@ -8,7 +8,8 @@ A2. Open ./Builds/MacOSX/Juce.xcodeproj .
 
 A3. Maybe:
     Open 'Project "Juce" Info' window and check the
-    "Build Active Architecture Only"
+    "Build Active Architecture Only" (for both, "Debug" and "Release"
+	configuration)
 
 A4. Build it, once for the "Debug" configuration, once for the
     "Release" configuration.

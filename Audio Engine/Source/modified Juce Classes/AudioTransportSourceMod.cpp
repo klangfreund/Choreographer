@@ -81,7 +81,7 @@ void AudioTransportSourceMod::setSource (PositionableAudioSource* const newSourc
     AudioSource* newMasterSource = 0;
 	
 	ScopedPointer <BufferingAudioSourceMod> oldBufferingSource (bufferingSource);
-	    // Deletes the object when this section of code is finished.
+	    // Deletes the object when this section of code is left.
     AudioSource* oldMasterSource = masterSource;
 	
     if (newSource != 0)

@@ -20,8 +20,11 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioRegionMixer(),
 	  audioSpeakerGainAndRouting(&audioDeviceManager)
 {
-
 	
+	DBG(T("AmbisonicsAudioEngine: constructor called."));
+
+
+// OPTION 1:
 	// initialise settings file
 	ApplicationProperties::getInstance()
 	->setStorageParameters (T("Choreographer Ambisonics Audio Engine"),
@@ -38,12 +41,19 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	    // is the only occurence of this call in the whole Choreographer code.
     delete savedAudioState;
 
+// OPTION 2:
 //	String err;
-//	audioDeviceManager.initialise (256, 256, 0, true);
+//	err = audioDeviceManager.initialise (256, 256, 0, true);
+//	    // This doesn't work :(. This way, the initial AudioDeviceSetup (thats used internally by the
+//	    // audioDeviceManager) is kind of messed up.
+//	    // E.g. AudioDeviceSetup.outputChannels.toInteger() = 268435455 .
+//	    // The playhead of the Choreographer doesn't move, when initialised this way.
 	if (err != T(""))
 	{
 		DBG(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
 	}
+	
+	
 	
 	// figure out the number of active output channels:
 	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
@@ -64,14 +74,14 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	
 	// temp (test) ----------------------
 	
-//	addAepChannel(1, 1.0, false, false, false, -1.0, 0.0, 0.0);
-//	addAepChannel(2, 1.0, false, false, false, 0.0, 1.0, 0.0);
-//	addAepChannel(3, 1.0, false, false, false, 1.0, 0.0, 0.0);
-//	addAepChannel(6, 1.0, false, false, false, 0.0, -1.0, 0.0);
+//	addAepChannel(0, 1.0, false, false, false, -1.0, 0.0, 0.0);
+//	addAepChannel(1, 1.0, false, false, false, 0.0, 1.0, 0.0);
+//	addAepChannel(2, 1.0, false, false, false, 1.0, 0.0, 0.0);
+//	addAepChannel(3, 1.0, false, false, false, 0.0, -1.0, 0.0);
+//	setNewRouting(0, 0);
 //	setNewRouting(1, 1);
 //	setNewRouting(2, 2);
-//	setNewRouting(3, 3);
-//	setNewRouting(4, 4);	
+//	setNewRouting(3, 3);	
 //	enableNewRouting();
 //	activatePinkNoise(1, true);
 	
@@ -105,7 +115,7 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 	const bool showMidiOutputSelector = false;
 	const bool showChannelsAsStereoPairs = false;
 	const bool hideAdvancedOptionsWithButton = false;
-	AudioDeviceSelectorComponentMod audioDeviceSelectorComponent (audioDeviceManager,
+	AudioDeviceSelectorComponent audioDeviceSelectorComponent (audioDeviceManager,
 													0, 0,
 													0, 256,
 													showMidiInputOptions, 
@@ -162,15 +172,15 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 	setPosition(currentPosition);
 	
 	// Temp
-	addAepChannel(1, 1.0, false, false, false, -1.0, 0.0, 0.0);
-	addAepChannel(2, 1.0, false, false, false, 0.0, 1.0, 0.0);
-	addAepChannel(3, 1.0, false, false, false, 1.0, 0.0, 0.0);
-	addAepChannel(6, 1.0, false, false, false, 0.0, -1.0, 0.0);
-	setNewRouting(1, 1);
-	setNewRouting(2, 2);
-	setNewRouting(3, 3);
-	setNewRouting(4, 4);	
-	enableNewRouting();
+//	addAepChannel(0, 1.0, false, false, false, -1.0, 0.0, 0.0);
+//	addAepChannel(1, 1.0, false, false, false, 0.0, 1.0, 0.0);
+//	addAepChannel(2, 1.0, false, false, false, 1.0, 0.0, 0.0);
+//	addAepChannel(3, 1.0, false, false, false, 0.0, -1.0, 0.0);
+//	setNewRouting(0, 0);
+//	setNewRouting(1, 1);
+//	setNewRouting(2, 2);
+//	setNewRouting(3, 3);	
+//	enableNewRouting();
 	
 
 }
@@ -253,8 +263,8 @@ void AmbisonicsAudioEngine::removeAllRoutings()
 
 void AmbisonicsAudioEngine::enableNewRouting()
 {
-	// without this it might crash when lowering the number of
-	// active output ports.
+	// Since we're quite likely going to change the number of channels
+	// in the audio callback, we have to stop these callbacks.
 	bool wasPlaying = audioTransportSource.isPlaying();
 	int64 currentPosition;
 	if (wasPlaying)
@@ -263,6 +273,8 @@ void AmbisonicsAudioEngine::enableNewRouting()
 		stop();
 	}
 	
+	{
+	const ScopedLock sl (lock);
 	audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
 	
 	int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.enableNewRouting();
@@ -270,7 +282,7 @@ void AmbisonicsAudioEngine::enableNewRouting()
 	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
 	if (numberOfActiveOutputChannels > 0)
 	{
-		audioTransportSource.setSource (&audioRegionMixer,
+		audioTransportSource.setSource (&audioSpeakerGainAndRouting,
 										numberOfActiveOutputChannels,
 										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
 		
@@ -295,6 +307,7 @@ void AmbisonicsAudioEngine::enableNewRouting()
 //		audioTransportSource.setSource (0,
 //										0,
 //										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+	}
 	}
 	
 

@@ -199,7 +199,12 @@ void BufferingAudioSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
     const int validStart = jlimit (bufferValidStart, bufferValidEnd, nextPlayPos) - nextPlayPos;
     const int validEnd   = jlimit (bufferValidStart, bufferValidEnd, nextPlayPos + info.numSamples) - nextPlayPos;
 	
-    if (validStart == validEnd || info.buffer->getNumChannels() != buffer.getNumChannels())
+
+    if (validStart == validEnd || info.buffer->getNumChannels() < buffer.getNumChannels())
+		// Why is info.buffer->getNumChannels() > buffer.getNumChannels() allowed?
+		// Because it might be that there are e.g. 2 hardware inputs enabled and only 1
+		// hardware output. In this case info.buffer->getNumChannels() = 2 and
+		// buffer.getNumChannels() = 1.
     {
         // total cache miss
         info.clearActiveBufferRegion();
@@ -215,7 +220,7 @@ void BufferingAudioSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
 		
         if (validStart < validEnd)
         {
-            for (int chan = info.buffer->getNumChannels(); --chan >= 0;)
+            for (int chan = buffer.getNumChannels(); --chan >= 0;)
             {
                 const int startBufferIndex = (validStart + nextPlayPos) % buffer.getNumSamples();
                 const int endBufferIndex = (validEnd + nextPlayPos) % buffer.getNumSamples();

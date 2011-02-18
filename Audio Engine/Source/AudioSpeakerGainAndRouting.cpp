@@ -7,8 +7,9 @@
  *
  */
 
-
 #include "AudioSpeakerGainAndRouting.h"
+
+#define INITIAL_PINK_NOISE_BUFFER_SIZE 4096
 
 //==============================================================================
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
@@ -21,9 +22,14 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
   numberOfSoloedChannels (0),
   numberOfChannelsWithActivatedPinkNoise (0),
   pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, 0)
+  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE)
 {
 	DBG(T("AudioSpeakerGainAndRouting: constructor (without any argument) called."));
+	
+	// initialize the pinkNoiseInfo
+	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
+	pinkNoiseInfo.startSample = 0;
+	pinkNoiseInfo.numSamples = 0;
 }
 
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_)
@@ -36,9 +42,14 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audio
   numberOfSoloedChannels (0),
   numberOfChannelsWithActivatedPinkNoise (0),
   pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, 0)
+  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE)
 {
 	DBG(T("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager argument) called."));
+	
+	// initialize the pinkNoiseInfo
+	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
+	pinkNoiseInfo.startSample = 0;
+	pinkNoiseInfo.numSamples = 0;
 }
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
@@ -109,6 +120,7 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 	{
 		aepChannelSettings* defaultAepChannelSettings = new aepChannelSettings;
 		defaultAepChannelSettings->gain = 0.0;
+		defaultAepChannelSettings->lastGain = 0.0;
 		defaultAepChannelSettings->solo = FALSE;
 		defaultAepChannelSettings->mute = FALSE;
 		defaultAepChannelSettings->activatePinkNoise = FALSE;
@@ -124,6 +136,7 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 	// Add the specified AEP channel
 	aepChannelSettings* specifiedAepChannelSettings = new aepChannelSettings;
 	specifiedAepChannelSettings->gain = gain;
+	specifiedAepChannelSettings->lastGain = gain;
 	specifiedAepChannelSettings->solo = solo;
 	specifiedAepChannelSettings->mute = mute;
 	specifiedAepChannelSettings->activatePinkNoise = activatePinkNoise;
@@ -265,6 +278,8 @@ void AudioSpeakerGainAndRouting::removeAllRoutings()
 
 void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutputChannel)
 {
+	DBG(T("AudioSpeakerGainAndRouting: setNewRouting(") + String(aepChannel) + T(", ") + String(hardwareOutputChannel) + T(") called."));
+	
 	// check if the arguments define a valid configuration.
 	if (aepChannel < 0 && hardwareOutputChannel < 0)
 	{
@@ -443,7 +458,7 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 
 	if (audioRegionMixer != 0)
 	{
-		// To save some typing and make tho code more readable.
+		// To save some typing and make the code more readable.
 		int nrOfActiveHWChannels = aepChannelSettingsOrderedByActiveHardwareChannels.size();
 
 		// Aquire a buffer of samples from the audioRegionMixer into the AudioSourceChannelInfo info.
@@ -464,9 +479,15 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			// (which is good to judge the balance in loudness).
 			
 			// Generate the pink noise.
-			pinkNoiseBuffer.setSize(1, info.buffer->getNumSamples());
-			pinkNoiseInfo.buffer = &pinkNoiseBuffer;
-			pinkNoiseInfo.startSample = 0;
+			
+
+			if (pinkNoiseBuffer.getNumSamples() < info.buffer->getNumSamples())
+			{
+				pinkNoiseBuffer.setSize(1, info.buffer->getNumSamples());
+			}
+			
+			pinkNoiseInfo.startSample = info.startSample;
+			pinkNoiseInfo.numSamples = info.numSamples;
 			pinkNoiseGeneratorAudioSource.getNextAudioBlock(pinkNoiseInfo);
 			
 			for (int n = 0; n < nrOfActiveHWChannels; n++)
@@ -475,7 +496,7 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->activatePinkNoise)
 				{
 					info.buffer->addFrom(n, info.startSample, 
-										 pinkNoiseBuffer, 0, 0, info.numSamples);
+										 pinkNoiseBuffer, 0, info.startSample, info.numSamples);
 				}
 			}
 		}
@@ -486,8 +507,11 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			// neither a solo nor a mute
 			for (int n = 0; n < nrOfActiveHWChannels; n++)
 			{
-				info.buffer->applyGain(n, info.startSample, info.numSamples, 
+				info.buffer->applyGainRamp(n, info.startSample, info.numSamples,
+					aepChannelSettingsOrderedByActiveHardwareChannels[n]->lastGain,
 				    aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain);
+				
+				aepChannelSettingsOrderedByActiveHardwareChannels[n]->lastGain = aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain;
 			}
 		}
 		else
