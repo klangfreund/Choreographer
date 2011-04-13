@@ -9,6 +9,7 @@
 #import "AudioRegion.h"
 #import "ArrangerView.h"
 #import "AudioEngine.h"
+#import "AudioFile.h"
 
 @implementation AudioRegion
 
@@ -18,18 +19,21 @@
 
 - (void)awakeFromInsert
 {
+//	NSLog(@"AudioRegion %x awakeFromInsert", self);
 	[super awakeFromInsert];
-	NSLog(@"AudioRegion %x awakeFromInsert", self);
 	position = [[SpatialPosition alloc] init];
 }
 
 - (void)awakeFromFetch
 {
+//	NSLog(@"AudioRegion %x awakeFromFetch", self);
 	[super awakeFromFetch];
 	position = [[SpatialPosition alloc] init];
 	[position setX:[[self valueForKey:@"positionX"] floatValue]];
 	[position setY:[[self valueForKey:@"positionY"] floatValue]];
 	[position setZ:[[self valueForKey:@"positionZ"] floatValue]];
+
+	[self calculatePositionBreakpoints];
 
 	// update audio engine
 	[[AudioEngine sharedAudioEngine] addAudioRegion:self];
@@ -55,15 +59,13 @@
 	// colors
 	NSColor *textColor, *textBackgroundColor;
 
-	textBackgroundColor	= [NSColor	colorWithCalibratedHue:[color hueComponent]
-									saturation:[color saturationComponent]
-									brightness:[color brightnessComponent]
-									alpha:1];
+	textBackgroundColor = [color colorWithAlphaComponent:1.];
 	
 	textColor = [NSColor blackColor];
 	if([[self valueForKey:@"muted"] boolValue])
 	{
 		textColor = [textColor colorWithAlphaComponent:0.25];
+		textBackgroundColor = [color colorWithAlphaComponent:0.];
 	}
 	
 	// audio region name
@@ -77,7 +79,14 @@
 
 	name_r = NSInsetRect(name_r, 2.0, 1.0);
 
-	NSString *label = [NSString stringWithString:[self valueForKeyPath:@"audioItem.node.name"]];
+	NSString *label;
+	
+	if((AudioFile *)[[self valueForKeyPath:@"audioItem.audioFile"] audioFileID])
+		label = [NSString stringWithString:[self valueForKeyPath:@"audioItem.node.name"]];
+	else
+		label = [NSString stringWithFormat:@"---%@",[self valueForKeyPath:@"audioItem.node.name"]];
+	
+	
 	NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
 	[attrs setObject:[NSFont systemFontOfSize: 10] forKey:NSFontAttributeName];
 	[attrs setObject:textColor forKey:NSForegroundColorAttributeName];
@@ -90,7 +99,7 @@
 		float x = contentOffset / zoomFactorX;
 		float width = frame.size.width / zoomFactorX;
 		NSRect image_r = frame;
-		float opacity = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.projectSettingsDictionary.arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain ? 0.5 : 1.0;
+		float opacity = [[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain ? 0.5 : 1.0;
 				
 		if(![self valueForKey:@"trajectoryItem"] && !displaysTrajectoryPlaceholder)
 		{
@@ -109,7 +118,7 @@
 	}
 	
 	// draw gain rubberband
-	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
+	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
 	{
 		[self drawGainEnvelope:rect];
 	}
@@ -247,6 +256,8 @@
 
 - (void)calculatePositionBreakpoints
 {
+	NSLog(@"audio region %x --- calculate position breakpoints", self);
+
 	[playbackBreakpointArray release];
 	tempBp1 = tempBp2 = nil;
 
@@ -260,9 +271,8 @@
 	}
 	else
 	{
-		playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue] mode:0] retain];		
+		playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue]] retain];		
 	}
-
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])
 	{
@@ -272,7 +282,7 @@
 
 - (void)modulateTrajectory
 {
-	NSLog(@"audio region %x --- modulate breakpoints", self);
+//	NSLog(@"audio region %x --- modulate breakpoints", self);
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	NSArray *ctlArray = [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"];
@@ -310,7 +320,6 @@
 			ctlBp1 = ctlBp2;
 			ctlBp2 = [ctlArray objectAtIndex:++ctlIndex];			
 		}
-	
 
 		// calculate position
 		pos = [self interpolatedPosition:time breakpoint1:bp1 breakpoint2:bp2];

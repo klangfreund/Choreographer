@@ -19,8 +19,6 @@
 		rotationCentre = [[SpatialPosition positionWithX:0 Y:0 Z:0] retain];
 		initialPosition = [[SpatialPosition positionWithX:0.5 Y:0 Z:0] retain];
 		speed = 10;
-		[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
-		[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 	}
 	return self;	
 }
@@ -82,7 +80,9 @@
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
 {
-	long time = 0;
+	NSUInteger originalDur = [[trajectoryItem valueForKey:@"duration"] unsignedLongValue];
+	NSUInteger duration;
+	NSUInteger time = 0;
 	int timeIncrement = 1000. / fabs(speed);
 	int azimuthIncrement = speed > 0 ? 1 : -1;
 	
@@ -96,12 +96,25 @@
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 
-	while(time < dur)
+	if(mode == durationModeOriginal)
+	{
+		duration = originalDur;
+		duration = duration > dur ? dur : duration;
+	}
+	else
+		duration = dur;
+
+	
+	
+	while(time < duration)
 	{
 		bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setPosition:[tempPosition copy]];
 		[bp setTime:time];
 		[tempArray addObject:bp];
+		
+		if(mode == durationModePalindrome && (time % originalDur) == 0 && time != 0)
+			azimuthIncrement *= -1;
 		
 		time += timeIncrement;
 		[tempPosition setA:[tempPosition a] + azimuthIncrement];

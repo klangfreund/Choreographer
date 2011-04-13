@@ -92,8 +92,6 @@ static SmallTimelinePanel *sharedSmallTimelinePanel = nil;
     while (keepOn)
 	{
 		theEvent = [window nextEventMatchingMask: NSLeftMouseUpMask | NSLeftMouseDraggedMask];
-                    printf("\n...");
-
 
 		switch ([theEvent type])
 		{

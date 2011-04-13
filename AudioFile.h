@@ -12,9 +12,8 @@
 
 @interface AudioFile : NSManagedObject
 {
-	CFURLRef fileRef;
 	AudioFileID audioFileID;
-	unsigned int sampleRate;
+//	unsigned int sampleRate;
 	unsigned int bytesPerPacket;
 	UInt32 numOfFrames;
 	
@@ -25,7 +24,19 @@
 	id progress;
 }
 
+@property AudioFileID audioFileID;
+
++ (AudioFileID)idOfAudioFileAtPath:(NSString *)filePath;
++ (AudioStreamBasicDescription)descriptionOfAudioFile:(AudioFileID)audioFileID;
++ (UInt64)dataPacketsOfAudioFile:(AudioFileID)audioFileID;
++ (NSUInteger)durationOfAudioFileAtPath:(NSString *)filePath;
+
++ (NSArray *)allowedFileTypes;
+
+- (NSString *)filePathString;
 - (BOOL)openAudioFile;
+- (void)reopenAudioFile;
+- (void)relinkAudioFile;
 - (void)calculateOverviewImage;
 - (void)calculateOverviewImageThread;
 - (void)setOverviewData;

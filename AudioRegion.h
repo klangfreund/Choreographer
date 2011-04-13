@@ -13,8 +13,7 @@
 
 @interface AudioRegion : Region
 {
-	SpatialPosition *position;	
-
+	SpatialPosition *position;
 	Breakpoint *tempBp1, *tempBp2;
 }	
 // drawing

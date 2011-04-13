@@ -9,6 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "CHGlobals.h"
 #import "BreakpointView.h"
+#import "AudioItem.h"
 #import "TrajectoryItem.h"
 
 @class ArrangerView;
@@ -24,6 +25,7 @@
 	BreakpointView *gainBreakpointView;
 
 	NSRect frame;
+	NSRect trajectoryRect, trajectoryFrame;
 	NSColor *color;
 	
 	NSArray *playbackBreakpointArray;
@@ -73,6 +75,7 @@
 - (void)setSelected:(BOOL)flag;
 - (NSRect)frame;
 - (void)setFrame:(NSRect)rect;
+- (NSRect)trajectoryFrame;
 - (NSNumber *)duration;
 
 // position
@@ -93,7 +96,9 @@
 @interface PlaceholderRegion : NSObject
 {
 	NSRect frame;
-	Region *region; // region a trajectory placeholder is attached to
+	NSString *filePath;		// the file path (dragging from finder)
+	AudioItem *audioItem;	// the audio item the placeholder stands for (dragging audio regions)
+	Region *region;			// the region a trajectory placeholder is attached to (dragging trajectories)
 }
 
 + (PlaceholderRegion *)placeholderRegionWithFrame:(NSRect)rect;

@@ -12,7 +12,7 @@
 
 @interface SpeakerChannel : NSObject
 {
-	float gain;
+	float dbGain;
 	
 	BOOL solo;
 	BOOL mute;
@@ -26,7 +26,7 @@
 	id observer;
 }
 
-@property float gain;
+@property float dbGain;
 @property BOOL solo, mute;
 @property (assign) SpatialPosition *position;
 @property int hardwareDeviceOutputChannel;
@@ -58,6 +58,7 @@
 // update engine
 - (void)updateEngine;
 - (void)updateEngineForChannel:(SpeakerChannel *)channel;
+- (void)updateEngineRoutingForChannel:(SpeakerChannel *)channel;
 
 // accessors
 - (void)setName:(NSString *)string;

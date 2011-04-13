@@ -32,7 +32,7 @@
 
 - (void)dealloc
 {
-	NSLog(@"GroupRegion %x dealloc", self);
+//	NSLog(@"GroupRegion %x dealloc", self);
 	[super dealloc];
 }
 
@@ -108,7 +108,7 @@
 {
 	[playbackBreakpointArray release];
 	
-	playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:nil duration:[[self duration] longValue] mode:0] retain];
+	playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:nil duration:[[self duration] longValue]] retain];
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])
 	{

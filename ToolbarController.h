@@ -11,10 +11,12 @@
 
 @interface ToolbarController : NSObject <NSToolbarDelegate>
 {
-	IBOutlet NSWindow *theWindow;
-	
 	NSMutableDictionary *toolbarItems; //The dictionary that holds all our "master" copies of the NSToolbarItems
+
+	IBOutlet NSWindow *window;
+	
 	IBOutlet NSView *counterView; //the counter view (ends up in an NSToolbarItem)
+	IBOutlet NSView *loopCounterView; //the loop counter view (ends up in an NSToolbarItem)
 	IBOutlet NSView *transportView; //the transport view (ends up in an NSToolbarItem)
 	IBOutlet NSView *loopModeView; //the transport view (ends up in an NSToolbarItem)
 	IBOutlet NSView *masterVolumeSlider;

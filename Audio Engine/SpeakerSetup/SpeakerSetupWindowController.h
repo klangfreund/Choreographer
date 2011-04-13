@@ -7,7 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "SpeakerSetupWindowController.h"
 #import "PatchbayView.h"
+
 
 @interface SpeakerSetupWindowController : NSWindowController
 {
@@ -26,10 +28,12 @@
 	NSString *renameSheetTextInput;
 	id tempSetupPreset;
 	
-	NSMutableArray *outputChannelStripControllers;
+	NSMutableArray *speakerSetupChannelStripControllers;
 
 	int testNoiseChannel;
 }
+
++ (id)sharedSpeakerSetupWindowController;
 
 - (void)setSelectedIndex:(NSUInteger)index;
 - (void)updateGUI;

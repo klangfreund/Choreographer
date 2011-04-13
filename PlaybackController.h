@@ -7,14 +7,14 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "ProjectSettings.h"
 #import "AudioEngine.h"
 #import "RulerPlayhead.h"
+#import "CounterView.h"
 
 
 @interface PlaybackController : NSObject
 {
-    ProjectSettings *projectSettings;
+    NSManagedObject *projectSettings;
 
 	NSMutableSet *updateRegions;
 	
@@ -26,7 +26,8 @@
 
 	NSTimer		 *playbackTimer;
 	
-	IBOutlet id counter;
+	IBOutlet CounterView *mainCounter;
+	IBOutlet id loopCounter;
 	IBOutlet RulerPlayhead *rulerPlayhead;
 	IBOutlet id playhead;
 	
@@ -34,9 +35,10 @@
 }
 
 // accessors
-- (void)setProjectSettings:(NSManagedObject *)settings;
+//- (void)setProjectSettings:(NSManagedObject *)settings;
 - (void)setLoopMode:(BOOL)val;
 - (void)setIsPlaying:(BOOL)val;
+- (BOOL)isPlaying;
 - (void)setLocator:(unsigned long)sampleTime;
 - (unsigned long)locator;
 - (void)setMasterVolume:(float)value;

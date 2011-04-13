@@ -54,7 +54,7 @@
 	trajectoryType = type;
 	
 	[trajectory release];
-	trajectory = [[Trajectory trajectoryOfType:type] retain];
+	trajectory = [[Trajectory trajectoryOfType:type forItem:self] retain];
 	[trajectory setValue:self forKey:@"trajectoryItem"];
 }
 
@@ -151,8 +151,10 @@
 #pragma mark breakpoints for audio playback
 // -----------------------------------------------------------
 
-- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
+- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur
 {
+	int mode = [[self valueForKey:@"durationMode"] intValue];
+	
 	if([[self valueForKey:@"adaptiveInitialPosition"] boolValue])
 		return [trajectory playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:dur mode:mode];
 	else
@@ -172,24 +174,29 @@
 - (void)updateModel
 {
 	// synchronize trajectory data
-	// NSLog(@"Trajectory item: updateModel");
+	NSLog(@"Trajectory item %x: updateModel", self);
+	
+	// (re)calcalate duration
+	if(trajectoryType == breakpointType)
+	{
+		[self setValue:[trajectory valueForKey:@"duration"] forKey:@"duration"];
+	}
 	
 	// store actual data in model
 	[self archiveData];
 	
 	// undo
 	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
-	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit trajectory: %@", [[self valueForKey:@"node"] valueForKey:@"name"]]];
+	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit trajectory: %@", [self valueForKeyPath:@"node.name"]]];
 	[[[managedObjectContext undoManager] prepareWithInvocationTarget:self] undoableUpdate];
 }
 
 - (void)undoableUpdate
 {
-	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
-	[[[managedObjectContext undoManager] prepareWithInvocationTarget:self] undoableUpdate];
-	
 	[self unarchiveData];
 	
+	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
+	[[[managedObjectContext undoManager] prepareWithInvocationTarget:self] undoableUpdate];	
 }
 
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time

@@ -16,7 +16,25 @@
 
 - (void)awakeFromNib
 {
+	// register for notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(update:)
+												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
+	
 	[super awakeFromNib];
+}
+
+
+- (void)dealloc
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[super dealloc];
+}
+
+
+- (void)update:(NSNotification *)notification
+{
+	[self setNeedsDisplay:YES];
 }
 
 - (void)drawRect:(NSRect)rect
@@ -35,8 +53,8 @@
 	CHProjectDocument *document = [[[self window] windowController] document];
 	NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
 
-	float start = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue] * zoomFactor;
-	float end = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue] * zoomFactor;
+	float start = [[projectSettings valueForKey:@"loopRegionStart"] integerValue] * zoomFactor;
+	float end = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue] * zoomFactor;
 	
 	float locator, x, y;
 	NSBezierPath *locatorPath;
@@ -164,8 +182,8 @@
 						}
 					}
 
-					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionStart] forKeyPath:@"projectSettingsDictionary.loopRegionStart"];
-					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionEnd] forKeyPath:@"projectSettingsDictionary.loopRegionEnd"];
+					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionStart] forKey:@"loopRegionStart"];
+					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionEnd] forKey:@"loopRegionEnd"];
 
 					[playbackController setLoop];
 
@@ -207,15 +225,15 @@
 	if(document.keyboardModifierKeys == modifierCommand)
 	{
 		// command click, set new selection boundaries
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettingsDictionary.loopRegionStart"];
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettingsDictionary.loopRegionEnd"];
+		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionStart"];
+		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionEnd"];
 		mouseDraggingAction = rulerDragLoopRegionEnd;
 	}
 	else
 	{
 		// drag start or end handle
-		float tempSelectionStart = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue] * zoomFactor;
-		float tempSelectionEnd = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue] * zoomFactor;
+		float tempSelectionStart = [[projectSettings valueForKey:@"loopRegionStart"] integerValue] * zoomFactor;
+		float tempSelectionEnd = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue] * zoomFactor;
 
 		if(localPoint.x > tempSelectionStart - 8 && localPoint.x < tempSelectionStart)	
 			mouseDraggingAction = rulerDragLoopRegionStart;
@@ -260,25 +278,25 @@
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	localPoint.x -= ARRANGER_OFFSET;
 	
-	NSUInteger loopRegionStart = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue];
-	NSUInteger loopRegionEnd = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue];
+	NSUInteger loopRegionStart = [[projectSettings valueForKey:@"loopRegionStart"] integerValue];
+	NSUInteger loopRegionEnd = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue];
 
 	if(mouseDraggingAction == rulerDragLoopRegionEnd)
 	{
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettingsDictionary.loopRegionEnd"];
+		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionEnd"];
 		
 		if(loopRegionEnd < loopRegionStart)
 		{
-			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionStart] forKeyPath:@"projectSettingsDictionary.loopRegionEnd"];
+			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionStart] forKey:@"loopRegionEnd"];
 		}
 	}
 	else if(mouseDraggingAction == rulerDragLoopRegionStart)
 	{
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettingsDictionary.loopRegionStart"];
+		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionStart"];
 
 		if(loopRegionStart > loopRegionEnd)
 		{
-			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionEnd] forKeyPath:@"projectSettingsDictionary.loopRegionStart"];
+			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionEnd] forKey:@"loopRegionStart"];
 		}
 	}
 	
@@ -308,6 +326,5 @@
 		[self setFrameSize:s];
 	}
 }
-
 
 @end

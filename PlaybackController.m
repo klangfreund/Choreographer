@@ -20,17 +20,19 @@
 	self = [super init];
 	if (self)
 	{
-		// register for notifications
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(updateAudioEngine:)
-													 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
-
-		// initialise variables
-		locator = 0;
-		[self setMasterVolume:0];
-
 	}
 	return self;
+}
+
+- (void)awakeFromNib
+{
+	// register for notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(updateAudioEngine:)
+												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
+	
+	// initialise variables
+	locator = 0;
 }
 
 - (void)dealloc
@@ -48,19 +50,16 @@
 #pragma mark accessors
 // -----------------------------------------------------------
 
-- (void)setProjectSettings:(ProjectSettings *)settings
+- (void)setProjectSettings:(NSManagedObject *)settings
 {
 	[projectSettings release];
 	[settings retain];
 	projectSettings = settings;
 	
-	NSManagedObjectContext *context = nil;
-
-	NSLog(@"setProjectSettings: %x %x", projectSettings, context);
-	
-	// update local variable and gui objects that observe it
-	[self setValue:[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopMode"] forKey:@"loopMode"];
-	
+	// update local variables and gui objects that observe it
+	[self setMasterVolume:[[projectSettings valueForKey:@"projectMasterVolume"] floatValue]];
+	[self setLoopMode:[[projectSettings valueForKey:@"loopMode"] boolValue]];
+	[self setLoop];
 }
 
 
@@ -70,9 +69,9 @@
 	
 	loopMode = val;
 	
-	if(loopMode != [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopMode"] boolValue])
+	if(loopMode != [[projectSettings valueForKey:@"loopMode"] boolValue])
 	{
-		[projectSettings setValue:[NSNumber numberWithBool:loopMode] forKeyPath:@"projectSettingsDictionary.loopMode"];
+		[projectSettings setValue:[NSNumber numberWithBool:loopMode] forKey:@"loopMode"];
 		[self setLoop];
 	}
 }
@@ -88,10 +87,12 @@
 		[self startStop];
 }
 
+- (BOOL)isPlaying { return isPlaying; }
+
 
 - (void)setLocator:(unsigned long)sampleTime
 {
-//	NSLog(@"setLocator: %d", sampleTime);
+	//NSLog(@"setLocator: %d", sampleTime);
 	locator = sampleTime;
 	[self updateLocator];
 
@@ -109,6 +110,8 @@
 - (void)setMasterVolume:(float)value
 {
 	masterVolume = value;
+	
+	[projectSettings setValue:[NSNumber numberWithFloat:masterVolume] forKey:@"projectMasterVolume"];
 
 	[[AudioEngine sharedAudioEngine] setMasterVolume:value];
 }
@@ -199,7 +202,8 @@
 		}
 		else
 		{
-			locator = [[AudioEngine sharedAudioEngine] playbackLocation];
+			[self setValue:[NSNumber numberWithUnsignedInt:[[AudioEngine sharedAudioEngine] playbackLocation]]
+					forKey:@"locator"];
 			[self updateLocator];
 		}
 	}
@@ -207,15 +211,17 @@
 
 - (void)setLoop
 {
-//	NSLog(@"mode:%d bounds:%d %d",  [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopMode"] integerValue],
-//									[[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue],
-//									[[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue]);
+//	NSLog(@"mode:%d bounds:%d %d",  [[projectSettings valueForKey:@"loopMode"] integerValue],
+//									[[projectSettings valueForKey:@"loopRegionStart"] integerValue],
+//									[[projectSettings valueForKey:@"loopRegionEnd"] integerValue]);
 //
-	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopMode"] integerValue] &&
-	   [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue] < [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue])
+	[loopCounter setLocators];
+	
+	if([[projectSettings valueForKey:@"loopMode"] integerValue] &&
+	   [[projectSettings valueForKey:@"loopRegionStart"] integerValue] < [[projectSettings valueForKey:@"loopRegionEnd"] integerValue])
 	{
-		[[AudioEngine sharedAudioEngine] setLoopStart:[[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue] end:[[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionEnd"] integerValue]];
-		startLocator = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.loopRegionStart"] integerValue];
+		[[AudioEngine sharedAudioEngine] setLoopStart:[[projectSettings valueForKey:@"loopRegionStart"] integerValue] end:[[projectSettings valueForKey:@"loopRegionEnd"] integerValue]];
+		startLocator = [[projectSettings valueForKey:@"loopRegionStart"] integerValue];
 
 	}
 	else
@@ -332,6 +338,7 @@
 	{
 		// update audio engine
 		[[AudioEngine sharedAudioEngine] modifyAudioRegion:region];			
+		[region calculatePositionBreakpoints];
 	}
 	
 }
@@ -359,7 +366,7 @@
 
 - (void)updateLocator
 {
-	[counter setLocator:locator];
+	[mainCounter setLocator:locator];
 	[rulerPlayhead setLocator:locator];
 	[playhead setLocator:locator];
 	

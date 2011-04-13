@@ -8,21 +8,110 @@
 
 #import "AudioFile.h"
 #import "ProgressPanel.h"
+#import "Path.h"
 
 
 @implementation AudioFile
 
+@synthesize audioFileID;
+
+#pragma mark -
+#pragma mark class methods
+
++ (AudioFileID)idOfAudioFileAtPath:(NSString *)filePath
+{
+	OSStatus err;
+	AudioFileID audioFileID;
+	
+	// make CFURLRef from path
+	const char *path = [filePath cStringUsingEncoding:NSASCIIStringEncoding];
+	CFURLRef fileRef = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault, (UInt8 *)path, strlen(path), false);
+	
+	// open audio file
+	memset(&audioFileID, 0, sizeof(AudioFileID));
+	err = AudioFileOpenURL(fileRef, fsRdPerm, 0, &audioFileID);
+	
+	return audioFileID;
+}
+
+
++ (AudioStreamBasicDescription)descriptionOfAudioFile:(AudioFileID)audioFileID;
+{
+	OSStatus err;
+	AudioStreamBasicDescription basicDescription;
+	UInt32 propsize = sizeof(AudioStreamBasicDescription);
+	
+	memset(&basicDescription, 0, propsize);
+	
+	if(audioFileID)
+	{
+		err = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &propsize, &basicDescription);
+		NSAssert1(!err,@"AudioFileGetProperty failed with error %i",err);
+	}
+
+		//				printf("AUDIO FILE...\n");
+		//				printf("SampleRate %f\n",basicDescription.mSampleRate);
+		//				printf("FormatID %ld\n",basicDescription.mFormatID);
+		//				printf("FormatFlags %ld\n",basicDescription.mFormatFlags);
+		//				printf("BytesPerPacket %ld\n",basicDescription.mBytesPerPacket);
+		//				printf("FramesPerPacket %ld\n",basicDescription.mFramesPerPacket);
+		//				printf("BytesPerFrame %ld\n",basicDescription.mBytesPerFrame);
+		//				printf("ChannelsPerFrame %ld\n",basicDescription.mChannelsPerFrame);
+
+	return basicDescription;
+}
+
++ (UInt64)dataPacketsOfAudioFile:(AudioFileID)audioFileID;
+{
+	OSStatus err;
+
+	UInt64 dataPackets;						
+	UInt32 propsize = sizeof(UInt64);
+
+	err = AudioFileGetProperty(audioFileID,
+							   kAudioFilePropertyAudioDataPacketCount,
+							   &propsize,
+							   &dataPackets);
+	
+	return dataPackets;
+}
+
++ (NSUInteger)durationOfAudioFileAtPath:(NSString *)filePath
+{
+	AudioFileID audioFileID = [AudioFile idOfAudioFileAtPath:filePath];
+
+	if(!audioFileID)
+		return 0;
+
+	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
+	UInt64 dataPackets = [AudioFile dataPacketsOfAudioFile:audioFileID];
+	
+	// duration
+	NSUInteger duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;
+	
+	return duration;
+}
+
++ (NSArray *)allowedFileTypes
+{
+    return [NSArray arrayWithObjects: @"sd2", @"AIFF", @"aif", @"aiff", @"aifc", @"wav", @"WAV", NULL];
+}
+
+
+#pragma mark -
+#pragma mark life cycle
+
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
-	NSLog(@"AudioFile awakeFromInsert, path: %@", [self valueForKey:@"filePath"]);
+	NSLog(@"AudioFile %x awakeFromInsert", self);
 }
 
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"filePath"]);
-	[self openAudioFile];
+	NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
+	[self reopenAudioFile];
 }
 
 - (void)dealloc
@@ -32,83 +121,135 @@
 	[waveformImage dealloc];
 }
 
+#pragma mark -
+#pragma mark file
+
+- (NSString *)filePathString
+{
+	NSDocument *document = [[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument"];
+	return [[NSURL URLWithString:[self valueForKey:@"relativeFilePath"] relativeToURL:[document fileURL]] path];
+}
+
+
 - (BOOL)openAudioFile
 {	
-	OSStatus err;
-	
-	const char *path = [[self valueForKey:@"filePath"] cStringUsingEncoding:1];
-	
-	// make CFURLRef from path
-	fileRef = CFURLCreateFromFileSystemRepresentation(kCFAllocatorDefault, (UInt8 *)path, strlen(path), false);
-	
-	// open audio file
-	err = AudioFileOpenURL(fileRef, fsRdPerm, 0, &audioFileID);
-	if( err == noErr )
+	audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
+
+	// file successfully opened?
+	if(!audioFileID)
 	{
-		AudioStreamBasicDescription basicDescription;
-		UInt32 propsize = sizeof(AudioStreamBasicDescription);
-		
-		err = AudioFileGetProperty(audioFileID, kAudioFilePropertyDataFormat, &propsize, &basicDescription);
-		NSAssert1(!err,@"AudioFileGetProperty failed with error %i",err);
-		
-//				printf("FILE LOADED...\n");
-//				printf("SampleRate %f\n",basicDescription.mSampleRate);
-//				printf("FormatID %ld\n",basicDescription.mFormatID);
-//				printf("FormatFlags %ld\n",basicDescription.mFormatFlags);
-//				printf("BytesPerPacket %ld\n",basicDescription.mBytesPerPacket);
-//				printf("FramesPerPacket %ld\n",basicDescription.mFramesPerPacket);
-//				printf("BytesPerFrame %ld\n",basicDescription.mBytesPerFrame);
-//				printf("ChannelsPerFrame %ld\n",basicDescription.mChannelsPerFrame);
-		
-		// check channels
-		if(basicDescription.mChannelsPerFrame != 1)
-		{
-			NSAlert *alert = [NSAlert alertWithMessageText:@"Wrong number of channels"
-											 defaultButton:@"Can't import"
-										   alternateButton:nil
-											   otherButton:nil
-								 informativeTextWithFormat:[NSString stringWithFormat:@"%s is not a mono audio file", path]];
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Unreadable audio file"
+										 defaultButton:@"Can't import"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:[NSString stringWithFormat:@"%@", [self filePathString]]];
 			
-			// show alert in a modal dialog
-			[alert runModal];
-			return NO;
+		// show alert in a modal dialog
+		[alert runModal];
+
+		return NO;
+	}
+	
+	
+	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
+	UInt64 dataPackets = [AudioFile dataPacketsOfAudioFile:audioFileID];
+	
+	// check sample rate
+	if(basicDescription.mSampleRate != [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue])
+	{
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Wrong sample rate"
+										 defaultButton:@"Can't import"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:[NSString stringWithFormat:@"%@ doesn't have the appropriate sample rate", [self filePathString]]];
+		
+		// show alert in a modal dialog
+		[alert runModal];
+		return NO;
+	}
+	
+	// check channels
+	if(basicDescription.mChannelsPerFrame != 1)
+	{
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Wrong number of channels"
+										 defaultButton:@"Can't import"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:[NSString stringWithFormat:@"%@ is not a mono audio file", [self filePathString]]];
+		
+		// show alert in a modal dialog
+		[alert runModal];
+		return NO;
+	}
+	
+	// get duration
+	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;	
+	
+	// [self calculateOverviewImage];
+	return YES;
+}
+
+- (void)reopenAudioFile
+{	
+	audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
+
+	// file successfully opened?
+	if(!audioFileID)
+	{
+		// get filename from path
+		NSArray *listPath = [[self filePathString] componentsSeparatedByString:@"/"];
+		NSString *theName = [NSString stringWithString:[listPath objectAtIndex:[listPath count]-1]];
+
+		NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Can't find audio file %@", theName]
+										 defaultButton:@"Relink"
+									   alternateButton:nil //@"Delete"
+										   otherButton:@"Skip"
+							 informativeTextWithFormat:[NSString stringWithFormat:@"%@", [self filePathString]]];
+		
+		// show alert in a modal dialog
+		int button = [alert runModal];
+		
+		
+		switch(button)
+		{
+			case NSAlertDefaultReturn: // relink
+				[self relinkAudioFile];
+				break;
+							
+			case NSAlertAlternateReturn: // delete reference
+				break;
+
+			default: // skip (that is, do nothing)
+				break;
 		}
 		
-		// bytes per packet
-		bytesPerPacket = basicDescription.mBytesPerPacket;
-		
-		// sampleRate
-		sampleRate = basicDescription.mSampleRate;
-		
-		// data paket count	
-		UInt64 filePackets;						
-		
-		propsize = sizeof(UInt64);
-		err = AudioFileGetProperty(audioFileID,
-								   kAudioFilePropertyAudioDataPacketCount,
-								   &propsize,
-								   &filePackets);
-		
-		NSAssert1(!err, @"AudioFileGetProperty (packet count) failed with error %i", err);
-		
-		//printf("filePackets %ld\n",filePackets);
-		
-		// number of frames
-		numOfFrames = filePackets * basicDescription.mFramesPerPacket;
-		
-		// duration
-		duration = numOfFrames / basicDescription.mSampleRate * 1000;
-		
-		// [self calculateOverviewImage];
-		return YES;
+		return;
 	}
-	else
-		return NO;
+}
+
+- (void)relinkAudioFile
+{
+	// choose audio file in an open panel
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+	
+    [openPanel setTreatsFilePackagesAsDirectories:NO];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setCanChooseFiles:YES];
+	[openPanel setAllowedFileTypes:[AudioFile allowedFileTypes]];
+	[openPanel setPrompt:@"Relink"];
+	
+	if([openPanel runModal] == NSOKButton)
+	{
+		[openPanel orderOut:self];
+		[self setValue:[[openPanel filenames] objectAtIndex:0] forKey:@"relativeFilePath"];
+		[self openAudioFile];	
+	}
 }
 
 - (void) calculateOverviewImage
 {
-	progress = [[ProgressPanel sharedProgressPanel] addProgressWithTitle:[NSString stringWithFormat:@"Calculating overview for %@", [self valueForKey:@"filePath"]]];
+	progress = [[ProgressPanel sharedProgressPanel] addProgressWithTitle:[NSString stringWithFormat:@"Calculating overview for %@", [self valueForKey:@"relativeFilePath"]]];
 	
 	[NSThread detachNewThreadSelector:@selector(calculateOverviewImageThread)
 							 toTarget:self

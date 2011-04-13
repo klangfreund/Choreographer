@@ -212,7 +212,7 @@ bool AudioSpeakerGainAndRouting::setSolo(int aepChannel, bool enable)
 		DBG(T("AudioSpeakerGainAndRouting: setSolo called. numberOfSoloedChannels = ") + String(numberOfSoloedChannels));
 
 		return true;
-		}
+	}
 }
 
 bool AudioSpeakerGainAndRouting::setMute(int aepChannel, bool enable)

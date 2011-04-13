@@ -58,8 +58,8 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	// figure out the number of active output channels:
 	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
 	    // this points to an object already existing, don't delete it!
-	BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
-	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
+//	const BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
+	int numberOfActiveOutputChannels = (audioIODevice->getActiveOutputChannels()).countNumberOfSetBits();
 
 	
 	// Connect the objects together (for a better understanding, please take a look at
@@ -190,7 +190,8 @@ void AmbisonicsAudioEngine::getNameOfCurrentAudioDevice (char* audioDeviceName,
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
 	String audioDeviceNameString = currentAudioIODevice->getName();
-	audioDeviceNameString.copyToCString(audioDeviceName, maxBufferSizeBytes);
+	// audioDeviceNameString.copyToCString(audioDeviceName, maxBufferSizeBytes);
+    audioDeviceNameString.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
 }
 
 double AmbisonicsAudioEngine::getCurrentSampleRate ()

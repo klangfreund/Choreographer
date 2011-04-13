@@ -12,7 +12,7 @@
 
 @implementation SpeakerChannel
 
-@synthesize gain, solo, mute, position, hardwareDeviceOutputChannel;
+@synthesize dbGain, solo, mute, position, hardwareDeviceOutputChannel;
 
 
 - (id)init
@@ -20,7 +20,7 @@
 	self = [super init];
 	if(self)
 	{
-		gain = 0;
+		dbGain = 0;
 		position = [[SpatialPosition alloc] init];
 		hardwareDeviceOutputChannel = -1;
 	}
@@ -42,7 +42,7 @@
 	
 	observer = [object retain];
 	
-	[self addObserver:observer forKeyPath:@"gain" options:0 context:nil];
+	[self addObserver:observer forKeyPath:@"dbGain" options:0 context:nil];
 	[self addObserver:observer forKeyPath:@"solo" options:0 context:nil];
 	[self addObserver:observer forKeyPath:@"mute" options:0 context:nil];
 	[self addObserver:observer forKeyPath:@"position.a" options:0 context:nil];
@@ -55,7 +55,7 @@
 {
 	if(!object) return;
 			
-	[self removeObserver:observer forKeyPath:@"gain"];
+	[self removeObserver:observer forKeyPath:@"dbGain"];
 	[self removeObserver:observer forKeyPath:@"position.a"];
 	[self removeObserver:observer forKeyPath:@"position.e"];
 	[self removeObserver:observer forKeyPath:@"position.d"];
@@ -71,7 +71,7 @@
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    gain = [coder decodeFloatForKey:@"gain"];
+    dbGain = [coder decodeFloatForKey:@"dbGain"];
 	position = [[coder decodeObjectForKey:@"position"] retain];
     hardwareDeviceOutputChannel = [coder decodeIntForKey:@"output"];
     return self;
@@ -79,7 +79,7 @@
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-	[coder encodeFloat:gain forKey:@"gain"];
+	[coder encodeFloat:dbGain forKey:@"dbGain"];
     [coder encodeObject:position forKey:@"position"];
 	[coder encodeInt:hardwareDeviceOutputChannel forKey:@"output"];
 }
@@ -92,7 +92,7 @@
 {
 	SpeakerChannel *copy = [[[SpeakerChannel alloc] init] autorelease];
 	
-	[copy setValue:[NSNumber numberWithFloat:gain] forKey:@"gain"];
+	[copy setValue:[NSNumber numberWithFloat:dbGain] forKey:@"dbGain"];
 	[copy setValue:[[position copy] retain] forKey:@"position"];
 	[copy setValue:[NSNumber numberWithInt:hardwareDeviceOutputChannel] forKey:@"hardwareDeviceOutputChannel"];
 	
@@ -129,7 +129,14 @@
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
 
 	// updateEngine
-	[self updateEngineForChannel:object];
+	if([keyPath isEqualToString:@"hardwareDeviceOutputChannel"])
+	{
+		[self updateEngineRoutingForChannel:object];
+	}
+	else
+	{
+		[self updateEngineForChannel:object];
+	}
 }
 
 - (void)synchronizeWith:(SpeakerSetupPreset *)preset
@@ -187,21 +194,29 @@
 
 - (void)updateEngine
 {
-
-	NSLog(@"update engine....");
+	//NSLog(@"update engine....");
 	
+	// remove all speaker channels in order to build a new speaker setup from scatch
 	[[AudioEngine sharedAudioEngine] removeAllSpeakerChannels];
 	
+	// add the speaker channels
 	for(SpeakerChannel *channel in speakerChannels)
 	{
 		[[AudioEngine sharedAudioEngine] addSpeakerChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
 	}
 
+	// finally: validate the new setup (ie. rebuild the audio buffers)
+	[[AudioEngine sharedAudioEngine] validateSpeakerSetup];
 }
 
 - (void)updateEngineForChannel:(SpeakerChannel *)channel
 {
-	[[AudioEngine sharedAudioEngine] updateSpeakerChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
+	[[AudioEngine sharedAudioEngine] updateParametersForChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
+}
+
+- (void)updateEngineRoutingForChannel:(SpeakerChannel *)channel
+{
+	[[AudioEngine sharedAudioEngine] updateRoutingForChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
 }
 
 
@@ -367,8 +382,10 @@
 		[unarchiver finishDecoding];
 		[unarchiver release];
 		
-		[self setValue:tempPresets forKey:@"presets"];
-		[self setValue:[NSNumber numberWithUnsignedInt:index] forKey:@"selectedIndex"];
+//		[self setValue:tempPresets forKey:@"presets"];
+//		[self setValue:[NSNumber numberWithUnsignedInt:index] forKey:@"selectedIndex"];
+		presets = tempPresets;
+		selectedIndex = index;
 	}
 	
 	if(!presets)
@@ -496,7 +513,10 @@
 			[setupNode addChild:channelNode];
 			[channelNode addAttribute:[NSXMLNode attributeWithName:@"index" stringValue:[NSString stringWithFormat:@"%i", i++]]];
 			
-			[channelNode addChild:[NSXMLNode elementWithName:gainNodeName stringValue:[[channel valueForKey:@"gain"] stringValue]]];
+			NSXMLElement* gainNode = [NSXMLElement elementWithName:gainNodeName];
+			[gainNode addAttribute:[NSXMLNode attributeWithName:@"unit" stringValue:@"db"]];
+			[gainNode setStringValue:[[channel valueForKey:@"dbGain"] stringValue]];
+			[channelNode addChild:gainNode];
 			
 			NSXMLElement* positionNode = [NSXMLElement elementWithName:positionNodeName];
 			[positionNode addAttribute:[NSXMLNode attributeWithName:@"type" stringValue:@"xyz"]];

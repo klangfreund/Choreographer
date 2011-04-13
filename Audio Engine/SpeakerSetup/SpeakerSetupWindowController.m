@@ -8,15 +8,26 @@
 
 #import "SpeakerSetupWindowController.h"
 #import "SpeakerSetups.h"
-#import "OutputChannelStripController.h"
+#import "SpeakerSetupChannelStrip.h"
 #import "AudioEngine.h"
 
 
 @implementation SpeakerSetupWindowController
 
+static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
+
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
+
++ (id)sharedSpeakerSetupWindowController
+{
+    if (!sharedSpeakerSetupWindowController)
+	{
+        sharedSpeakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
+    }
+    return sharedSpeakerSetupWindowController;
+}
 
 - (id)init
 {
@@ -27,23 +38,27 @@
 		[speakerSetups unarchiveData];
 		[[speakerSetups selectedPreset] updateEngine];
 		selectedIndex = [[speakerSetups valueForKey:@"selectedIndex"] unsignedIntValue];
+		selectedSetup = [speakerSetups selectedPreset];
 
 		[self setWindowFrameAutosaveName:@"SpeakerSetupWindow"];
 		testNoiseChannel = -1;
 	}
+
 	return self;
 }
 		
 - (void)awakeFromNib
 {
-	[self setValue:[NSNumber numberWithUnsignedInt:selectedIndex] forKey:@"selectedIndex"]; // init popup button
+	NSLog(@"awakeFromNib");
+
+	[self setValue:[speakerSetups selectedPreset] forKey:@"selectedSetup"];		// needed to enable bindings
 	[self updateGUI];
 }
 
 - (void) dealloc
 {
 	[speakerSetups release];
-	[outputChannelStripControllers release];
+	[speakerSetupChannelStripControllers release];
 	[super dealloc];
 }
 
@@ -68,16 +83,17 @@
 
 - (void)updateGUI
 {
+	NSLog(@"Speaker Setup Window Controller: update GUI");
 	[hardwareOutputTextField setStringValue:[[AudioEngine sharedAudioEngine] nameOfHardwareOutputDevice]];
 	
 	// stop any running test noise
 
 	if(testNoiseChannel > -1)
-		[[outputChannelStripControllers objectAtIndex:testNoiseChannel] setValue:[NSNumber numberWithBool:NO] forKey:@"test"];
+		[[speakerSetupChannelStripControllers objectAtIndex:testNoiseChannel] setValue:[NSNumber numberWithBool:NO] forKey:@"test"];
 
 	// remove all channel strips
 
-	[outputChannelStripControllers release];
+	[speakerSetupChannelStripControllers release];
 	
 	NSArray *subviews = [[patchbayView subviews] copy];
 	for(NSView *view in subviews)
@@ -107,13 +123,13 @@
 	
 	// add the speaker channels
 
-	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"OutputChannelStrip" bundle:nil] ;
+	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"SpeakerSetupChannelStrip" bundle:nil] ;
 	
 	NSRect r = [patchbayView frame];
 	id item;
 	int i;
 	
-	outputChannelStripControllers = [[NSMutableArray alloc] init];
+	speakerSetupChannelStripControllers = [[NSMutableArray alloc] init];
 
 	unsigned short maxNumberOfChannels = numberOfOutputChannels > numberOfhardwareDeviceOutputChannels ? numberOfOutputChannels : numberOfhardwareDeviceOutputChannels;
 	r.size.height = maxNumberOfChannels * 25 + 6;
@@ -121,10 +137,10 @@
 	
 	for(i=0;i<numberOfOutputChannels;i++)
 	{
-		OutputChannelStripController *controller = [[[OutputChannelStripController alloc] init] autorelease];
+		SpeakerSetupChannelStrip *controller = [[[SpeakerSetupChannelStrip alloc] init] autorelease];
 		NSArray *theArray;
 
-		[outputChannelStripControllers addObject:controller];
+		[speakerSetupChannelStripControllers addObject:controller];
 		
 		[controller setValue:self forKey:@"speakerSetupWindowController"];
 		[controller setValue:[NSNumber numberWithInt:i] forKey:@"channelIndex"];
@@ -157,8 +173,8 @@
 	{
 		if(testNoiseChannel > -1)
 		{
-			[[outputChannelStripControllers objectAtIndex:testNoiseChannel] setValue:[NSNumber numberWithBool:NO] forKey:@"test"];
 			[[AudioEngine sharedAudioEngine] testNoise:NO forChannelatIndex:testNoiseChannel];
+			[[speakerSetupChannelStripControllers objectAtIndex:testNoiseChannel] setValue:[NSNumber numberWithBool:NO] forKey:@"test"];
 		}
 
 		testNoiseChannel = index;
@@ -184,7 +200,8 @@
 						  modalDelegate:self
 						 didEndSelector:@selector(unsavedPresetsAlertDidEnd: returnCode: contextInfo:)
 							contextInfo:nil];
-	return NO;
+
+		return NO;
 	}
 	
 	return YES;

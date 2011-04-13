@@ -24,6 +24,8 @@
  */
 - (void)awakeFromInsert
 {
+//	NSLog(@"Region %x awakeFromInsert", self);
+
 	[self commonAwake];
 	gainBreakpointArray = [[NSMutableArray alloc] init];
 	[gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
@@ -44,17 +46,12 @@
 
 - (void)awakeFromFetch
 {
+//	NSLog(@"Region %x awakeFromFetch", self);
+
 	[self commonAwake];
 	[self unarchiveData];
 	
 	frame = NSMakeRect(0, 0, 0, 0);
-	
-//	[[self valueForKey:@"trajectoryItem"] addObserver:self
-//										   forKeyPath:@"trajectoryData"
-//											  options:0
-//											  context:NULL];
-	
-	[self calculatePositionBreakpoints];
 }
 
 - (void)commonAwake
@@ -73,12 +70,18 @@
 	// register for notifications
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(setZoom:)
-												 name:@"arrangerViewZoomFactorDidChange" object:nil];
+												 name:@"arrangerViewZoomFactorDidChange"
+											   object:nil];
 }	
 
+//- (void)prepareForDeletion
+//{
+//	NSLog(@"Region %x prepareForDeletion", self);
+//}
 
 - (void)dealloc
 {
+	NSLog(@"Region %x dealloc", self);
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[projectSettings release];	
@@ -141,10 +144,10 @@
 	}
 	
 	// muted / unmuted
-	if([[self valueForKey:@"muted"] boolValue])
-	{
-		backgroundColor = [color colorWithAlphaComponent:0.15];
-	}
+//	if([[self valueForKey:@"muted"] boolValue])
+//	{
+//		backgroundColor = [color colorWithAlphaComponent:0.15];
+//	}
 	
 	
 
@@ -198,16 +201,84 @@
 											  alpha: 0.7];
 		}
 
-		NSRect r = frame;
-		r.size.height = frame.size.height > REGION_NAME_BLOCK_HEIGHT ? REGION_TRAJECTORY_BLOCK_HEIGHT : frame.size.height * 0.5;
-		r.origin.y += frame.size.height > REGION_NAME_BLOCK_HEIGHT ? frame.size.height - REGION_TRAJECTORY_BLOCK_HEIGHT : frame.size.height * 0.5;
+
+		trajectoryRect.origin.x = frame.origin.x;
+		trajectoryRect.origin.y = frame.origin.y + (frame.size.height > REGION_NAME_BLOCK_HEIGHT ? frame.size.height - REGION_TRAJECTORY_BLOCK_HEIGHT : frame.size.height * 0.5);
+		trajectoryRect.size.height = frame.size.height > REGION_NAME_BLOCK_HEIGHT ? REGION_TRAJECTORY_BLOCK_HEIGHT : frame.size.height * 0.5;
+		trajectoryRect.size.width = frame.size.width;
+
+		trajectoryFrame = trajectoryRect;
 		
-		r = NSInsetRect(r, 2.0, 1.0);
+		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] != durationModeScaled)
+		{
+			trajectoryRect.size.width = [[self valueForKeyPath:@"trajectoryItem.duration"] unsignedIntValue] * zoomFactorX;
+		}
+		
+		// minimum width
+		if(trajectoryRect.size.width < 10)
+		{
+			trajectoryRect.size.width = frame.size.width < 10 ? frame.size.width * 0.5 : 10;
+		}
+		
+		
 
-		[trajectoryRegionColor set];
-		[[NSBezierPath bezierPathWithRoundedRect:r xRadius:2 yRadius:2] fill];
+		// draw trajectory region
+		// ----------------------
+		
+		trajectoryFrame = NSInsetRect(trajectoryFrame, 2.0, 2.0);
+		trajectoryRect = NSInsetRect(trajectoryRect, 2.0, 2.0);
 
-		r = NSInsetRect(r, 2.0, 1.0);
+		[trajectoryRegionColor set];		
+		
+		// draw loop
+
+		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] == durationModeLoop ||
+		   [[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] == durationModePalindrome)
+		{
+			NSRect loopFrame = trajectoryFrame;
+			
+			[[trajectoryRegionColor colorWithAlphaComponent:0.35] set];
+			[[NSBezierPath bezierPathWithRoundedRect:loopFrame xRadius:3 yRadius:3] fill];
+			
+			[trajectoryRegionColor set];		
+		}
+		
+		
+
+		// draw triangle if trajectory is longer then audio region
+
+		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] != durationModeScaled &&
+		   [[self valueForKeyPath:@"trajectoryItem.duration"] unsignedIntValue] > [[self valueForKey:@"duration"] unsignedIntValue])
+		{
+			trajectoryRect.size.width = frame.size.width - 8;
+
+			NSPoint p1 = NSMakePoint(trajectoryRect.origin.x + trajectoryRect.size.width - 2.5, trajectoryRect.origin.y + 2.0);
+			NSPoint p2 = NSMakePoint(trajectoryRect.origin.x + trajectoryRect.size.width - 2.5, trajectoryRect.origin.y + REGION_TRAJECTORY_BLOCK_HEIGHT - 2.0);
+			NSPoint p3 = NSMakePoint(trajectoryRect.origin.x + trajectoryRect.size.width + 8, trajectoryRect.origin.y + REGION_TRAJECTORY_BLOCK_HEIGHT * 0.5);
+		
+			NSBezierPath *triangle = [NSBezierPath bezierPath];
+			[triangle moveToPoint:p1];
+			[triangle lineToPoint:p2];
+			[triangle lineToPoint:p3];
+			[triangle lineToPoint:p1];
+		
+			[triangle fill];
+		}
+		else
+		{
+			[[NSBezierPath bezierPathWithRoundedRect:trajectoryFrame xRadius:3 yRadius:3] stroke];			
+		}
+
+		
+		// draw trajectory region itself
+		[[NSBezierPath bezierPathWithRoundedRect:trajectoryRect xRadius:3 yRadius:3] fill];
+
+
+		
+
+		// draw trajectory name
+		
+		trajectoryFrame = NSInsetRect(trajectoryFrame, 2.0, 1.0);
 		
 		if([self valueForKeyPath:@"trajectoryItem.node.name"])
 		{
@@ -215,9 +286,10 @@
 			NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
 			[attrs setObject:[NSFont systemFontOfSize: 10] forKey:NSFontAttributeName];
 			[attrs setObject:[NSColor blackColor] forKey:NSForegroundColorAttributeName];
-			[label drawInRect:r withAttributes:attrs];
+			[label drawInRect:trajectoryFrame withAttributes:attrs];
 		}
 	}
+
 	
 	// draw frame
 	[frameColor set];
@@ -452,13 +524,31 @@
 - (NSRect)frame { return frame; }
 - (void)setFrame:(NSRect)rect { frame = rect; }	
 
+- (NSRect)trajectoryFrame { return trajectoryFrame; }
+
 - (void)setSuperview:(ArrangerView *)view
 {
-	superview = view;
+	// the region is added to the arranger
+	if(!superview && view)
+	{	
+		// register for notifications
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(setZoom:)
+													 name:@"arrangerViewZoomFactorDidChange"
+												   object:nil];
+		
+		// initialize zoom
+		zoomFactorX = [[view valueForKey:@"zoomFactorX"] floatValue];
+		zoomFactorY = [[view valueForKey:@"zoomFactorY"] floatValue];		
+	}
 
-	// initialize zoom
-	zoomFactorX = [[superview valueForKey:@"zoomFactorX"] floatValue];
-	zoomFactorY = [[superview valueForKey:@"zoomFactorY"] floatValue];		
+	// the region is removed from the arranger
+	if(superview && !view)
+	{
+		[[NSNotificationCenter defaultCenter] removeObserver:self];
+	}
+
+	superview = view;
 }
 
 

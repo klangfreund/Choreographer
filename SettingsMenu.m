@@ -13,52 +13,127 @@
 
 - (void)awakeFromNib
 {
-	NSEnumerator *enumerator = [[self itemArray] objectEnumerator];
+	models = [NSMutableDictionary new];
+	keyPaths = [NSMutableDictionary new];
+	currentItems = [NSMutableDictionary new];
+	highestIndexPerSection = [NSMutableArray new];
+	int index;
+	
 	NSMenuItem *menuItem;
 	
-	while(menuItem = [enumerator nextObject])
+	for(menuItem in [self itemArray])
 	{
-		[menuItem setTarget:self];
-		[menuItem setAction:@selector(menuAction:)];
-		[menuItem setState:NSOffState];
+		index = [self indexOfItem:menuItem];
+		
+		if(![menuItem isSeparatorItem])
+		{
+			[menuItem setTarget:self];
+			[menuItem setAction:@selector(menuAction:)];
+			
+			if(index == 0)
+			{
+				[menuItem setState:NSOnState];
+			}
+			else if(index > 0  && [[self itemAtIndex:index - 1] isSeparatorItem])
+			{
+				[highestIndexPerSection addObject:[NSNumber numberWithInt:index - 2]];
+				[menuItem setState:NSOnState];
+			}
+			else
+			{
+				[menuItem setState:NSOffState];
+			}
+		}
 	}
 
-	id item = [self itemAtIndex:0];
-	[self menuAction:item];
+	[highestIndexPerSection addObject:[NSNumber numberWithInt:index]];
 }
 
-
-- (void)setModel:(id)aModel keyPath:(NSString *)aString
+- (void) dealloc
 {
-	model = aModel;
-	keyPath = aString;
-	
-	id item = [self itemWithTag:[[model valueForKeyPath:keyPath] integerValue]];
-	if(!item)
-	{
-		item = currentItem;
-	}
-	
-	[self menuAction:item];
+	[models release];
+	[keyPaths release];
+	[currentItems release];
+	[highestIndexPerSection release];
+	[super dealloc];
 }
+
+
 
 - (void)setModel:(id)aModel key:(NSString *)aString
 {
-	[self setModel:aModel keyPath:aString];
+	[self setModel:aModel keyPath:aString index:0];
+}
+
+- (void)setModel:(id)aModel key:(NSString *)aString index:(NSInteger)i
+{
+	[self setModel:aModel keyPath:aString index:i];
+}
+
+- (void)setModel:(id)aModel keyPath:(NSString *)aString
+{
+	[self setModel:aModel keyPath:aString index:0];
+}
+
+- (void)setModel:(id)aModel keyPath:(NSString *)aString index:(NSInteger)i
+{
+	[models setObject:aModel forKey:[NSNumber numberWithInt:i]];
+	[keyPaths setObject:aString forKey:[NSNumber numberWithInt:i]];
+	id model = aModel;
+	int loIndex = i == 0 ? 0 : [[highestIndexPerSection objectAtIndex:i - 1] intValue] + 2;
+	int hiIndex = [[highestIndexPerSection objectAtIndex:i] intValue];
+	id item = [self itemAtIndex:loIndex];
+	
+	for(NSMenuItem *tempItem in [self itemArray])
+	{
+		if([self indexOfItem:tempItem] >= loIndex && [self indexOfItem:tempItem] <= hiIndex &&
+		   [tempItem tag] == [[model valueForKeyPath:aString] integerValue])
+		{
+			item = tempItem;
+			break;
+		}
+	}
+	
+	[self menuAction:item];
 }
 
 
 - (void)menuAction:(id)sender
 {
-	[currentItem setState:NSOffState];
-	currentItem = sender;
-	[currentItem setState:NSOnState];
+	int index = [self indexOfItem:sender];
+	int section = 0;
 	
-	selectedTag = [currentItem tag];
+	for(NSNumber *highestIndex in highestIndexPerSection)
+	{
+		if(index > [highestIndex intValue])
+			section++;
+	}
+		
+	int loIndex = section == 0 ? 0 : [[highestIndexPerSection objectAtIndex:section-1] intValue];
+	int hiIndex = [[highestIndexPerSection objectAtIndex:section] intValue];
+	int i;
+	NSMenuItem *item;
+	NSInteger selectedTag;
+	
+	for(i=loIndex;i<=hiIndex;i++)
+	{
+		item = [self itemAtIndex:i];
+		[item setState:NSOffState];
+		
+		if(item == sender)
+		{
+			[currentItems setObject:sender forKey:[NSNumber numberWithInt:section]];
+			[sender setState:NSOnState];
+			selectedTag = [sender tag];
+		}
+	}
 
 	// update model
 	// (exclude from undo)
 	id document = [[NSDocumentController sharedDocumentController] currentDocument];
+	id model = [models objectForKey:[NSNumber numberWithInt:section]];
+	id keyPath = [keyPaths objectForKey:[NSNumber numberWithInt:section]];
+				
 	[[[document managedObjectContext] undoManager] disableUndoRegistration];
 	[model setValue:[NSNumber numberWithInt:selectedTag] forKeyPath:keyPath];
 	[[document managedObjectContext] processPendingChanges];

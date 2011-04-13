@@ -78,8 +78,12 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)dealloc
 {
+	// Juce
 	delete ambisonicsAudioEngine;
-
+	
+	shutdownJuce_GUI();
+	NSLog(@"AudioEngine.mm: dealloc");
+	
 	[speakerSetupWindowController release];
 	[super dealloc];
 }
@@ -180,13 +184,12 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (NSString *)nameOfHardwareOutputDevice
 {
-	int bufferSize = 20;
+	int bufferSize = 40;
 	char audioDeviceName[bufferSize];
 	
 	ambisonicsAudioEngine->getNameOfCurrentAudioDevice (audioDeviceName, bufferSize);
 
 	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
-//	return @"AudioIODriver";
 }
 
 - (double)cpuUsage
@@ -232,17 +235,16 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	// first this region is given a unique index to identify it in the future
 	unsigned int index = regionIndex++;
-	
-	NSLog(@"addAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
-	
+		
 	[audioRegion setValue:[NSNumber numberWithInt:index] forKey:@"playbackIndex"];
 	
 	unsigned long  startTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * 44.1;
 	unsigned long  duration = [[audioRegion valueForKey:@"duration"] unsignedLongValue] * 44.1;
 	unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * 44.1;
 
-	NSString *filePath = [audioRegion valueForKeyPath:@"audioItem.audioFile.filePath"];
-	
+	NSString *filePath = [audioRegion valueForKeyPath:@"audioItem.audioFile.filePathString"];
+
+	NSLog(@"addAudioRegion(%d) %@", index, filePath);
 
 	
 	// add the audio region to the scheduler	
@@ -356,7 +358,8 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)addSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
 {	
-	double gainLinear = pow(10, 0.05 * channel.gain);
+	double gainLinear = pow(10, 0.05 * channel.dbGain);
+
 	ambisonicsAudioEngine->addAepChannel(index,
 										 gainLinear,
 										 channel.solo,
@@ -370,39 +373,42 @@ static AudioEngine *sharedAudioEngine = nil;
 	if(channel.hardwareDeviceOutputChannel < [self numberOfHardwareDeviceOutputChannels])
 	{
 		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
-		ambisonicsAudioEngine->enableNewRouting();
-		    // An Philippe: Kannst du das hier so aendern, dass enableRouting nur
-		    // einmal aufgerufen wird, wenn alle Routings gesetzt worden sind?
-		    // Denn beim Aufruf von enableNewRouting muessen alle Buffer neu initialisiert
-		    // werden und der Audiograph neu erstellt werden. Das kann unter anderem zu
-		    // laestigen Knacksern fuehren.
 	}
 }
 
-- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
+- (void)validateSpeakerSetup
+{
+	// after adding or removing speaker channels, this method is called
+	// to rebuild the audio buffers
+	
+	ambisonicsAudioEngine->enableNewRouting();
+}
+
+
+- (void)updateParametersForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
 {
 	ambisonicsAudioEngine->setSpeakerPosition(index,
 											  channel.position.x,
 											  channel.position.y,
 											  channel.position.z);
 	
-	double gainLinear = pow(10, 0.05 * channel.gain);	
-	ambisonicsAudioEngine->setGain(index, gainLinear);
+	double gain = pow(10, 0.05 * channel.dbGain);
+	ambisonicsAudioEngine->setGain(index, gain);
 	ambisonicsAudioEngine->setSolo(index, channel.solo);
 	ambisonicsAudioEngine->setMute(index, channel.mute);
 	
+	//	NSLog(@"update channel %i x=%f y=%f z=%f out:%i", index, channel.position.x, channel.position.y, channel.position.z, channel.hardwareDeviceOutputChannel + 1);
+	//	NSLog(@" - gain=%f solo=%i mute=%i", gain, channel.solo, channel.mute);
+}
+
+- (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
+{
 	if(channel.hardwareDeviceOutputChannel < [self numberOfHardwareDeviceOutputChannels])
 	{
 		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
 		ambisonicsAudioEngine->enableNewRouting();
-		    // An Philippe: Kannst du das hier so aendern, dass enableRouting nur
-		    // einmal aufgerufen wird, wenn alle Routings gesetzt worden sind?
-		    // Denn beim Aufruf von enableNewRouting muessen alle Buffer neu initialisiert
-		    // werden und der Audiograph neu erstellt werden. Das kann unter anderem zu
-		    // laestigen Knacksern fuehren.
 	}
 }
-
 
 #pragma mark -
 #pragma mark settings

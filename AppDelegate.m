@@ -10,10 +10,13 @@
 #import "RadarEditorWindowController.h"
 #import "TableEditorWindowController.h"
 #import "TimelineEditorWindowController.h"
+#import "MarkersWindowController.h"
 #import "AudioEngine.h"
 
 
 @implementation AppDelegate
+
+@synthesize currentProjectDocument;
 
 - (IBAction)newDocument:(id)sender
 {
@@ -24,7 +27,31 @@
 	}
 	else
 	{
-		[[NSDocumentController sharedDocumentController] newDocument:sender];
+		// a new document is immediately named and saved
+		// (important to store the relative paths of audio files)
+		
+		NSSavePanel *savePanel = [NSSavePanel savePanel];
+		[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"binary",nil]];
+		[savePanel setNameFieldStringValue:@"Untitled Project"];
+
+		// accessory view (project sample rate)
+		[self setValue:[NSNumber numberWithInt:44100] forKey:@"projectSampleRate"];
+		[savePanel setAccessoryView:openPanelAccessoryView];
+
+		if([savePanel runModal] == NSOKButton)
+		{
+			[[NSDocumentController sharedDocumentController] newDocument:sender];
+			
+			[currentProjectDocument setValue:[NSNumber numberWithInt:projectSampleRate] forKeyPath:@"projectSettings.projectSampleRate"];
+			
+			// currentProjectDocument has been set in the ProjectDocuments init method
+			[currentProjectDocument saveToURL:[savePanel URL]
+									   ofType:[currentProjectDocument fileType]
+							 forSaveOperation:NSSaveOperation
+									 delegate:nil
+							  didSaveSelector:nil
+								  contextInfo:nil];
+		}
 	}
 }
 
@@ -41,9 +68,25 @@
 	}
 }
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+
+- (void)applicationWillFinishLaunching:(NSNotification *)notification
+{
+	[startupSplashWindow center];
+	[startupSplashWindow makeKeyAndOrderFront:nil];
+	[startupSplashWindow setStyleMask:NSBorderlessWindowMask];
+	[startupSplashWindow setBackgroundColor:[NSColor whiteColor]];	
+	[startupSplashWindow setAlphaValue:0.85];
+
+	[startupStatusTextField setStringValue:@"Starting Up"];
+	[self setValue:CHOREOGRAPHER_VERSION forKey:@"versionString"];
+	[startupSplashWindow display];
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
 	// setting the defaults
+	[startupStatusTextField setStringValue:@"Reading Preferences"];
+	[startupSplashWindow display];
 	
 	NSColor *audioRegionColor = [NSColor colorWithCalibratedRed: 0.2 green: 0.6 blue: 1.0 alpha: 1];
 	NSColor *groupRegionColor = [NSColor colorWithCalibratedRed: 0.2 green: 1.0 blue: 0.2 alpha: 1];
@@ -63,6 +106,9 @@
 	[[NSUserDefaultsController sharedUserDefaultsController] setAppliesImmediately:YES];
 
 	// instantiate the audio engine
+	[startupStatusTextField setStringValue:@"Initialize Audio Engine"];
+	[startupSplashWindow display];
+
 	[AudioEngine sharedAudioEngine];
 
 	// instantiate the editor content object (= data model)
@@ -79,9 +125,13 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(updateWindowsMenu:)
 												 name:NSWindowDidResignKeyNotification object:nil];		
+
+
+
+	[startupSplashWindow orderOut:nil];
 }
 
-- (NSApplicationTerminateReply)applicationShouldTerminate:(NSNotification *)aNotification
+- (NSApplicationTerminateReply)applicationShouldTerminate:(NSNotification *)notification
 {
 	// unsaved changes in the audio engine?
 //	return NSTerminateLater;
@@ -117,6 +167,12 @@
 {
 	[[TimelineEditorWindowController sharedTimelineEditorWindowController] showWindow:nil];
 }
+
+- (IBAction)showMarkersWindow:(id)sender
+{
+	[[MarkersWindowController sharedMarkersWindowController] showWindow:nil];
+}
+
 
 - (void)updateWindowsMenu:(NSNotification *)notification
 {

@@ -27,7 +27,8 @@
 }
 
 - (void)setHorizontalRulerType:(NSPopUpButton *)sender;
-- (void)setZoomFactor:(NSNotification *)aNotification;
+
+- (void)setZoomFactor:(NSNotification *)notification;
 @end
 
 

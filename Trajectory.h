@@ -14,12 +14,12 @@
 @interface Trajectory : NSObject <NSCoding>
 {
 	id trajectoryItem;
-	unsigned long duration;
+//	unsigned long duration;
 
 	SpatialPosition	*initialPosition;
 }
 
-+ (Trajectory *)trajectoryOfType:(int)trajectoryType;
++ (Trajectory *)trajectoryOfType:(int)trajectoryType forItem:(id)trajectoryItem;
 
 // breakpoints for visualisation
 - (NSArray *)linkedBreakpoints;

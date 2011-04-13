@@ -8,15 +8,15 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CHGlobals.h"
-#import "ProjectSettings.h"
 #import "PoolViewController.h"
 
 @class ArrangerView;
 
 @interface CHProjectDocument : NSPersistentDocument
 {
-    ProjectSettings *projectSettings;
+    NSManagedObject *projectSettings;
 
+	IBOutlet id toolbarController;
 	IBOutlet NSSplitView *splitView;
 	IBOutlet NSTreeController *treeController;
 	IBOutlet ArrangerView *arrangerView;
@@ -29,6 +29,7 @@
 	
 	Modifiers keyboardModifierKeys;
 }
+@property (assign) PoolViewController *poolViewController;
 @property Modifiers keyboardModifierKeys;
 
 - (void)setup;
@@ -51,7 +52,7 @@
 // accessors
 - (float)zoomFactorX;
 - (float)zoomFactorY;
-- (void)setProjectSettings:(id)anything;
+//- (void)setProjectSettings:(id)anything;
 
 
 // selection management

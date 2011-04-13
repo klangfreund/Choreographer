@@ -33,7 +33,7 @@
 //- (id)trajectoryAttributeForKey:(NSString *)key;
 
 // breakpoints for audio playback
-- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode;
+- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur;
 
 - (void)updateModel;
 - (void)undoableUpdate;

@@ -38,8 +38,10 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (void) refreshView
 {
+//	NSLog(@"Table Editor refresh view");
+	
 	[tableEditorView reloadData];
-
+	
 	// hide name column for trajectories
 	NSTableColumn *column = [tableEditorView tableColumnWithIdentifier:@"name"];
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
@@ -67,8 +69,9 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			[rowIndexes addIndex:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] indexOfObject:item] + 1];
 		else if(displayMode == trajectoryDisplayMode)
 		{
-			if([[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray])
-				[rowIndexes addIndex:[[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] indexOfObject:item] + 1];
+			NSInteger index = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] indexOfObject:item];
+			if(index != NSNotFound)
+				[rowIndexes addIndex:index + 1];
 		}
 	}		
 	[tableEditorView selectRowIndexes:rowIndexes byExtendingSelection:NO];
@@ -135,8 +138,6 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)row
 {
-	NSLog(@"shouldSelectRow");
-
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 
@@ -204,6 +205,8 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (id)tableView:(NSTableView *)tv objectValueForTableColumn:(id)tc row:(NSInteger)row
 {
+//	NSLog(@"%@ objectValueForTableColumn", [self className]);
+
 	int displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	NSArray *displayedRegions = [[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
@@ -257,7 +260,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 				id breakpoint = [[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row];
 				if ([[tc identifier] isEqualToString:@"time"])
 				{
-					return [NSNumber numberWithUnsignedLong:[[breakpoint valueForKey:@"time"] unsignedLongValue]];
+					return [NSString stringWithFormat:@"%d", [[breakpoint valueForKey:@"time"] unsignedLongValue]];
 				}
 				else
 				{

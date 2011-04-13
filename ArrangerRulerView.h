@@ -27,6 +27,8 @@ typedef enum _RulerMouseDraggingAction
 	RulerMouseDraggingAction mouseDraggingAction;
 }
 
+- (void)update:(NSNotification *)notification;
+
 - (void)mouseDownInLoopRegionArea:(NSPoint)localPoint;
 - (void)mouseDownInMarkerArea:(NSPoint)localPoint;
 - (void)mouseDownInPlayheadArea:(NSPoint)localPoint;

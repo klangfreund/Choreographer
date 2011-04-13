@@ -86,7 +86,10 @@
 
 - (void)removeAllSpeakerChannels;
 - (void)addSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
-- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
+- (void)validateSpeakerSetup;
+//- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
+- (void)updateParametersForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
+- (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
 
 
 // Settings

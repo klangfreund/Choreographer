@@ -53,7 +53,7 @@
 - (IBAction)poolTab:(id)sender;
 
 // actions
-- (void)openAudioFiles:(NSArray *)filenames;
+- (id)importFile:(NSURL *)absoluteFilePath;
 - (void)newTrajectoryItem:(NSString *)name;
 - (void)newTrajectorySheetOK;
 - (void)newTrajectorySheetCancel;
@@ -69,7 +69,8 @@
 - (void)refresh:(NSNotification *)notification;
 
 
-- (NSString *)nodeImageName:(id)item;
+- (NSString *)nodeImageName:(id)node;
+- (NSColor *)nodeTextColor:(id)node;
 - (BOOL)treeNode:(NSTreeNode *)aNode isDescendantOfNodeInArray:(NSArray *)nodes;
 
 @end

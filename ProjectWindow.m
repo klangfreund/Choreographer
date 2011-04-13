@@ -33,6 +33,11 @@
 	[super dealloc];
 }
 
+- (void)setFrame:(NSRect)frameRect display:(BOOL)flag
+{
+	[super setFrame:frameRect display:flag];
+}
+
 
 #pragma mark -
 #pragma mark keyboard events

@@ -59,6 +59,7 @@ static EditorContent *sharedEditorContent = nil;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
+	NSLog(@"observeValueForKeyPath %@", keyPath);
 	[self setDisplayedItems];
 }
 
@@ -82,8 +83,7 @@ static EditorContent *sharedEditorContent = nil;
 	
 
 	// find the regions that are actually displayed
-	[self setDisplayedItems];
-	
+	[self setDisplayedItems];	
 }
 
 - (void)synchronizeWithLocator:(unsigned long)value
@@ -192,7 +192,8 @@ static EditorContent *sharedEditorContent = nil;
 	}
 	else
 	{
-		[editableTrajectory updateModel];
+		if([[[EditorContent sharedEditorContent] valueForKey:@"editorSelection"] count])
+			[editableTrajectory updateModel];
 	}
 }
 

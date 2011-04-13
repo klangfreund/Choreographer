@@ -6,6 +6,8 @@
 //  Copyright 2010 Zurich University of the Arts. All rights reserved.
 //
 
+#define CHOREOGRAPHER_VERSION @"Version: alpha 1"
+
 
 // types for drag and drop
 #define CHAudioItemType @"audio"
@@ -78,6 +80,18 @@ typedef enum _TrajectoryType
 	randomType,
 	externalType
 } TrajectoryType;
+
+// Trajectory Duration Mode
+// (must correspond to the tags set in IB)
+
+typedef enum _TrajectoryDurationMode
+{
+	durationModeNotSet = -1,
+	durationModeOriginal = 0,
+	durationModeScaled,
+	durationModeLoop,
+	durationModePalindrome
+} TrajectoryDurationMode;
 
 
 //___________________________________________________________________________________________________________________________

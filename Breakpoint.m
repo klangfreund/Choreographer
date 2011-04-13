@@ -39,6 +39,7 @@
 	
 	[newBp setTime:time];
 	[newBp setValue:value];
+	[newBp setPosition:position];
 	
 	return newBp;
 }

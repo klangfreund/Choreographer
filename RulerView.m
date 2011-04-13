@@ -242,9 +242,7 @@
 	[self setNeedsDisplay:YES];
 }
 
-- (void)setZoomFactor:(NSNotification *)notification
-{
-//	[self setNeedsDisplay:YES];
-}
+- (void)setZoomFactor:(NSNotification *)notification {}
+
 
 @end

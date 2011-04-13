@@ -11,9 +11,11 @@
 #import "EditorContent.h"
 #import "ProjectWindow.h"
 #import "ArrangerView.h"
+#import "ToolbarController.h"
 
 @implementation CHProjectDocument
 
+@synthesize poolViewController;
 @synthesize keyboardModifierKeys;
 
 #pragma mark -
@@ -27,6 +29,7 @@
     if (self != nil)
 	{
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+
         projectSettings = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectSettings"
 											   inManagedObjectContext:managedObjectContext];
     }
@@ -42,6 +45,7 @@
     if (self != nil)
 	{
 		keyboardModifierKeys = modifierNone;
+		[[NSApplication sharedApplication] setValue:self forKeyPath:@"delegate.currentProjectDocument"];
 	}
 
 	NSLog(@"CHProjectDocument: init %@", self);
@@ -64,14 +68,18 @@
 	[self setup];
 	
 	// project window
-	[[theWindowController window] setFrame:NSRectFromString([projectSettings valueForKeyPath:@"projectSettingsDictionary.projectWindowFrame"]) display:YES];
+	NSWindow *window = [theWindowController window];
+	if([projectSettings valueForKey:@"projectWindowFrame"])
+	{
+		[window setFrame:NSRectFromString([projectSettings valueForKey:@"projectWindowFrame"]) display:YES];
+	}
 	
 	// instantiate and add pool
 	NSView *splitSubview = [[splitView subviews] objectAtIndex:1];
-	float width = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolViewWidth"] floatValue];
+	float width = [[projectSettings valueForKey:@"poolViewWidth"] floatValue];
 	NSRect r = NSMakeRect(0, 0, width, [splitSubview frame].size.height);
 
-	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue])
+	if([[projectSettings valueForKey:@"poolDisplayed"] boolValue])
 		[splitView setPosition:[splitView frame].size.width - width ofDividerAtIndex:0];	
 	else
 		[splitView setPosition:[splitView frame].size.width ofDividerAtIndex:0];
@@ -155,6 +163,13 @@
 	return result;
 }
 
+//- (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
+//{
+//	NSLog(@"CHProjectDocument: can close ");
+//
+//}
+
+
 - (void)close
 {
 	NSLog(@"CHProjectDocument: close %@", self);
@@ -163,13 +178,24 @@
 
 	if([[NSDocumentController sharedDocumentController] currentDocument] == nil)
 	{
-		// closing the last open document
 		[self synchronizeEditors:NO];
 	}
 	
+	[arrangerView close];
 	[super close];
 }
 
+//- (void)saveDocument:(id)sender
+//{
+//	[super saveDocument:sender];
+//}
+
+
+- (void)revertDocumentToSaved:(id)sender
+{
+	NSLog(@"CHProjectDocument: revert %@", self);
+	[super revertDocumentToSaved:sender];
+}
 
 - (void)dealloc
 {
@@ -186,11 +212,11 @@
 
 - (IBAction)xZoomIn:(id)sender
 {
-	float zoomFactorX = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorX"] floatValue];
+	float zoomFactorX = [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
 	zoomFactorX *= 1.2;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKeyPath:@"projectSettingsDictionary.zoomFactorX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"zoomFactorX"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
@@ -199,23 +225,23 @@
 
 - (IBAction)xZoomOut:(id)sender
 {
-	float zoomFactorX = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorX"] floatValue];
+	float zoomFactorX = [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
 	zoomFactorX /= 1.2;
 	zoomFactorX = zoomFactorX < 0.0001 ? 0.0001 : zoomFactorX;
 
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKeyPath:@"projectSettingsDictionary.zoomFactorX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"zoomFactorX"];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
 
 - (IBAction)yZoomIn:(id)sender
 {	
-	float zoomFactorY = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorY"] floatValue];
+	float zoomFactorY = [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
 	zoomFactorY *= 1.2;
 	zoomFactorY = zoomFactorY > 10 ? 10 : zoomFactorY;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKeyPath:@"projectSettingsDictionary.zoomFactorY"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"zoomFactorY"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
@@ -224,12 +250,12 @@
 
 - (IBAction)yZoomOut:(id)sender
 {	
-	float zoomFactorY = [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorY"] floatValue];
+	float zoomFactorY = [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
 	zoomFactorY /= 1.2;
 	zoomFactorY = zoomFactorY < 0.1 ? 0.1 : zoomFactorY;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKeyPath:@"projectSettingsDictionary.zoomFactorY"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"zoomFactorY"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
@@ -255,17 +281,17 @@
 
 - (IBAction)showPool:(id)sender
 {
-	BOOL poolDisplayed = ![[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue];
+	BOOL poolDisplayed = ![[projectSettings valueForKey:@"poolDisplayed"] boolValue];
 	
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithBool:poolDisplayed] forKeyPath:@"projectSettingsDictionary.poolDisplayed"];
+	[projectSettings setValue:[NSNumber numberWithBool:poolDisplayed] forKey:@"poolDisplayed"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
 	if(poolDisplayed)
 	{
 		[sender setState:NSOnState];
-		[splitView setPosition:[splitView frame].size.width - [[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolViewWidth"] floatValue] ofDividerAtIndex:0];
+		[splitView setPosition:[splitView frame].size.width - [[projectSettings valueForKey:@"poolViewWidth"] floatValue] ofDividerAtIndex:0];
 	}
 	else
 	{
@@ -280,17 +306,12 @@
 // -----------------------------------------------------------
 - (float)zoomFactorX
 { 
-	return [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorX"] floatValue];
+	return [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
 }
 
 - (float)zoomFactorY
 {
-	return [[projectSettings valueForKeyPath:@"projectSettingsDictionary.zoomFactorY"] floatValue];
-}
-
-- (void)setProjectSettings:(id)anything
-{
-	NSLog(@"************************************anything: %@", anything);
+	return [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
 }
 
 
@@ -367,13 +388,13 @@
 - (void)windowDidResize:(NSNotification *)notification
 {
 	NSWindow *window = [notification object];
-	[projectSettings setValue:NSStringFromRect([window frame]) forKeyPath:@"projectSettingsDictionary.projectWindowFrame"];
+	[projectSettings setValue:NSStringFromRect([window frame]) forKey:@"projectWindowFrame"];
 }
 
 - (void)windowDidMove:(NSNotification *)notification
 {
 	NSWindow *window = [notification object];
-	[projectSettings setValue:NSStringFromRect([window frame]) forKeyPath:@"projectSettingsDictionary.projectWindowFrame"];
+	[projectSettings setValue:NSStringFromRect([window frame]) forKey:@"projectWindowFrame"];
 }
 
 
@@ -384,7 +405,7 @@
 
 - (CGFloat)splitView:(NSSplitView *)sender constrainMinCoordinate:(CGFloat)proposedMin ofSubviewAt:(NSInteger)offset
 {
- 	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue])
+ 	if([[projectSettings valueForKey:@"poolDisplayed"] boolValue])
 		return [sender frame].size.width - 450;
 	else
 		return [sender frame].size.width;
@@ -392,7 +413,7 @@
 
 - (CGFloat)splitView:(NSSplitView *)sender constrainMaxCoordinate:(CGFloat)proposedMax ofSubviewAt:(NSInteger)offset
 {
- 	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue]) 
+ 	if([[projectSettings valueForKey:@"poolDisplayed"] boolValue]) 
 		return proposedMax - 180;
 	else
 		return proposedMax;
@@ -430,12 +451,12 @@
 
 - (CGFloat)splitView:(NSSplitView *)view constrainSplitPosition:(CGFloat)proposedPosition ofSubviewAt:(NSInteger)index
 {
-	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolDisplayed"] boolValue])
+	if([[projectSettings valueForKey:@"poolDisplayed"] boolValue])
 	{
 		float width = [splitView frame].size.width - proposedPosition;
 
 		[[[self managedObjectContext] undoManager] disableUndoRegistration];
-		[projectSettings setValue:[NSNumber numberWithFloat:width] forKeyPath:@"projectSettingsDictionary.poolViewWidth"];
+		[projectSettings setValue:[NSNumber numberWithFloat:width] forKey:@"poolViewWidth"];
 		[[self managedObjectContext] processPendingChanges];
 		[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	}

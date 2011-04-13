@@ -16,6 +16,7 @@
 #import "TrajectoryInspectorWindowController.h"
 #import "SettingsMenu.h"
 #import "ImageAndTextCell.h"
+#import "Path.h"
 
 
 @implementation PoolViewController
@@ -41,8 +42,8 @@
 {
 	// get stored settings
 	projectSettings = [[document valueForKey:@"projectSettings"] retain];
-	[tabControl setSelectedSegment:[[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue]];	
-	[tabView selectTabViewItemAtIndex:[[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue]];
+	[tabControl setSelectedSegment:[[projectSettings valueForKey:@"poolSelectedTab"] intValue]];	
+	[tabView selectTabViewItemAtIndex:[[projectSettings valueForKey:@"poolSelectedTab"] intValue]];
 	
 	// make userOutlineView and tableView appear with gradient selection, and behave like the Finder, iTunes, etc.
 	[userOutlineView setSelectionHighlightStyle:NSTableViewSelectionHighlightStyleSourceList];
@@ -56,12 +57,11 @@
 	[audioItemTableView setBackgroundColor:background];
 	[trajectoryTableView setBackgroundColor:background];
 	
-//	[[userOutlineView tableColumnWithIdentifier: @"user"] setDataCell: [[ImageAndTextCell alloc] init]];
 	[[audioItemTableView tableColumnWithIdentifier: @"audioItem"] setDataCell: [[ImageAndTextCell alloc] init]];
 	[[trajectoryTableView tableColumnWithIdentifier: @"trajectoryItem"] setDataCell: [[ImageAndTextCell alloc] init]];
 
 	// initialise context menu
-	[dropOrderMenu setModel:projectSettings keyPath:@"projectSettingsDictionary.poolDropOrder"];
+	[dropOrderMenu setModel:projectSettings key:@"poolDropOrder"];
 	
 	// register for drag and drop
     [userOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, CHTrajectoryType, CHFolderType, NSFilenamesPboardType, nil]];
@@ -131,34 +131,36 @@
 {
 	// choose audio file in an open panel
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-    NSArray *fileTypes = [NSArray arrayWithObjects: @"sd2", @"AIFF", @"aif", @"aiff", @"aifc", @"wav", @"WAV", NULL];
 
     [openPanel setTreatsFilePackagesAsDirectories:NO];
     [openPanel setAllowsMultipleSelection:YES];
     [openPanel setCanChooseDirectories:NO];
     [openPanel setCanChooseFiles:YES];
-	[openPanel setAllowedFileTypes:fileTypes];
+	[openPanel setAllowedFileTypes:[AudioFile allowedFileTypes]];
 
 	// 10.5.
+	/*
 	if([openPanel runModalForTypes:fileTypes] == NSOKButton)
 	{
 		[openPanel orderOut:self]; // close panel before we might present an error
 		[self openAudioFiles:[openPanel filenames]];
 	}
+	*/
 	
-	// 10.6
-	/*
 	[openPanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
 	{
         if (result == NSOKButton)
 		{
             [openPanel orderOut:self]; // close panel before we might present an error
-            [self openAudioFiles:[openPanel filenames]];
+            for(NSURL *url in [openPanel URLs])
+			{
+				[self importFile:url];
+			}
         }
     }];
-	*/
+	
 
-	if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue] == 2) // trajectory view
+	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) // trajectory view
 	{
 		[tabControl setSelectedSegment:1];	
 		[tabView selectTabViewItemAtIndex:1];		
@@ -170,17 +172,18 @@
 	regionsForNewTrajectoryItem = nil;
 	[self newTrajectoryItem:@"untitled"];
 	
+	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio items view
+	{
+		[tabControl setSelectedSegment:2];	
+		[tabView selectTabViewItemAtIndex:2];		
+	}
+
+	
 //		[userOutlineView deselectAll:nil];
 //		[audioItemTableView deselectAll:nil];
 //		[trajectoryTableView deselectAll:nil];
 		
 // todo: select new trajectory
-
-//		if([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue] == 1) // audio items view
-//		{
-//			[tabControl setSelectedSegment:2];	
-//			[tabView selectTabViewItemAtIndex:2];		
-//		}
 
 }
 
@@ -190,7 +193,7 @@
 	id node;
 	BOOL dirty = NO;
 	
-	switch ([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue])
+	switch ([[projectSettings valueForKey:@"poolSelectedTab"] intValue])
 	{
 		case 0: // user view
 			nodeEnumerator = [[treeController selectedObjects] objectEnumerator];
@@ -229,7 +232,7 @@
 {
 	// update preferences
 //	[[[document managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithInt:[sender selectedSegment]] forKeyPath:@"projectSettingsDictionary.poolSelectedTab"];
+	[projectSettings setValue:[NSNumber numberWithInt:[sender selectedSegment]] forKey:@"poolSelectedTab"];
 //	[[document managedObjectContext] processPendingChanges];
 //	[[[document managedObjectContext] undoManager] enableUndoRegistration];
 	
@@ -238,7 +241,7 @@
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
 {
-	if ([item action] == @selector(poolAddFolder:) && [[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue] != 0)
+	if ([item action] == @selector(poolAddFolder:) && [[projectSettings valueForKey:@"poolSelectedTab"] intValue] != 0)
 		return NO;
 	else
 		return YES;
@@ -265,7 +268,7 @@
 	}
 }
 
-- (void)openAudioFiles:(NSArray *)filenames
+- (AudioItem *)importFile:(NSURL *)absoluteFilePath
 {
 	// take the selectetd group node (if any) as parent node
 	NSManagedObject *parentNode = nil;
@@ -278,95 +281,85 @@
 		}
 	}
 	
-	// open selected audio files.
-	// for each:
-	// - insert audio file in model
-	// - insert a new audio item / node in model
+	// get file path
+	NSString *relativeFilePath = [Path path:absoluteFilePath relativeTo:[document fileURL]];
+	NSString *filePath = [[NSURL URLWithString:relativeFilePath relativeToURL:[document fileURL]] path];
+
+//	NSLog(@"**document: %@", [document fileURL]);
+//	NSLog(@"**file: %@", absoluteFilePath);
+//	NSLog(@"**relative: %@", relativeFilePath);
+//	NSLog(@"**absolute: %@", filePath);
+
 	
+	// check if this audioFile already exists in data model
 	NSManagedObjectContext *context = [document managedObjectContext];
-	NSEnumerator *enumerator = [filenames objectEnumerator];
-	NSString* path;
-	
-	while (path = [enumerator nextObject])
+	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"AudioItem" inManagedObjectContext:context];
+	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	[request setEntity:entityDescription];
+	[request setPredicate:[NSPredicate predicateWithFormat:@"(isOriginal == YES) AND (audioFile.relativeFilePath == %@)", relativeFilePath]];
+	NSError *error;
+	NSArray *audioItemsArray = [context executeFetchRequest:request error:&error];
+		
+
+	if([audioItemsArray count]) // duplicate
 	{
-		// check if this audioFile already exists in data model
-		BOOL duplicate = NO;
+		return [audioItemsArray objectAtIndex:0];
+	}		
 
-		NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"AudioFile" inManagedObjectContext:context];
-		NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-		[request setEntity:entityDescription];
-		NSError *error;
-		NSArray *audioFilesArray = [context executeFetchRequest:request error:&error];
-		
-		for(id item in audioFilesArray)
-		{
-			if([path isEqualToString:[item valueForKey:@"filePath"]])
-			{
-				duplicate = YES;
-				break;
-			}
-		}		
-		
-		if(!duplicate)
-		{
-			// insert audio file, node and audio item
-			AudioFile *newAudioFile = [NSEntityDescription insertNewObjectForEntityForName:@"AudioFile"
-																	inManagedObjectContext:context]; 
-			NSManagedObject *newNode = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
-																	 inManagedObjectContext:context];
-			AudioItem *newAudioItem = [NSEntityDescription insertNewObjectForEntityForName:@"AudioItem"
-																	inManagedObjectContext:context]; 
-			
-			
-			
-			// get filename from path
-			NSArray *listPath = [path componentsSeparatedByString:@"/"];
-			NSString *theName = [NSString stringWithString:[listPath objectAtIndex:[listPath count]-1]];
-			
-			
-			// set attributes and relationships
-			
-			[newAudioFile setValue:path forKey:@"filePath"];
-			[newAudioFile setValue:[NSSet setWithObject:newAudioItem] forKey:@"audioItems"];
-			
-			[newNode setValue:parentNode forKey:@"parent"]; 
-			[newNode setValue:[NSNumber numberWithBool:YES] forKey:@"isLeaf"];				
-			[newNode setValue:theName forKey:@"name"];
-			[newNode setValue:CHAudioItemType forKey:@"type"];
-			[newNode setValue:newAudioItem forKey:@"item"];
-			
-			[newAudioItem setValue:newNode forKey:@"node"];
-			[newAudioItem setValue:newAudioFile forKey:@"audioFile"];
-			[newAudioItem setValue:[NSNumber numberWithBool:YES] forKey:@"isOriginal"];
-			
-			if(![newAudioFile openAudioFile])
-			{
-				// if opening the audio file wasn't successful delete the objects
-				[context deleteObject:newAudioFile];
-				[context deleteObject:newNode];
-				[context deleteObject:newAudioItem];
-			}
-			else
-			{
-				// for newly imported audio files:
-				// audio item has original length
-				[newAudioItem setValue:[newAudioFile valueForKey:@"duration"] forKey:@"duration"];
-				
-				// expand parent node
-				//				[userOutlineView expandItem:parentNode];
-				// select the new item
-				//[userOutlineView adaptSelection:[NSSet setWithObject:newNode]];
-				[[userOutlineView window] makeFirstResponder:userOutlineView];
-				
-				[[[document managedObjectContext] undoManager] setActionName:@"import audio"];
-			}
-
-			[(UserTreeController *)treeController updateSortIndex];
-		}
+	// insert audio file, node and audio item
+	AudioFile *newAudioFile = [NSEntityDescription insertNewObjectForEntityForName:@"AudioFile"
+															inManagedObjectContext:context]; 
+	NSManagedObject *newNode = [NSEntityDescription insertNewObjectForEntityForName:@"Node"
+															 inManagedObjectContext:context];
+	AudioItem *newAudioItem = [NSEntityDescription insertNewObjectForEntityForName:@"AudioItem"
+															inManagedObjectContext:context]; 
+	
+	
+	
+	// get filename from path
+	NSString *theName = [filePath lastPathComponent];
+	
+	
+	// set attributes and relationships
+	
+	[newAudioFile setValue:relativeFilePath forKey:@"relativeFilePath"];
+	[newAudioFile setValue:[NSSet setWithObject:newAudioItem] forKey:@"audioItems"];
+	
+	[newNode setValue:parentNode forKey:@"parent"]; 
+	[newNode setValue:[NSNumber numberWithBool:YES] forKey:@"isLeaf"];				
+	[newNode setValue:theName forKey:@"name"];
+	[newNode setValue:CHAudioItemType forKey:@"type"];
+	[newNode setValue:newAudioItem forKey:@"item"];
+	
+	[newAudioItem setValue:newNode forKey:@"node"];
+	[newAudioItem setValue:newAudioFile forKey:@"audioFile"];
+	[newAudioItem setValue:[NSNumber numberWithBool:YES] forKey:@"isOriginal"];
+	
+	if(![newAudioFile openAudioFile])
+	{
+		// if opening the audio file wasn't successful delete the objects
+		[context deleteObject:newAudioFile];
+		[context deleteObject:newNode];
+		[context deleteObject:newAudioItem];
 	}
+	else
+	{
+		// for newly imported audio files:
+		// audio item has original length
+		[newAudioItem setValue:[newAudioFile valueForKey:@"duration"] forKey:@"duration"];
+		
+		// expand parent node
+		//				[userOutlineView expandItem:parentNode];
+		// select the new item
+		//[userOutlineView adaptSelection:[NSSet setWithObject:newNode]];
+		[[userOutlineView window] makeFirstResponder:userOutlineView];
+		
+		[[[document managedObjectContext] undoManager] setActionName:@"import audio"];
+	}
+
+	[(UserTreeController *)treeController updateSortIndex];
 	
-	
-	//[self refresh];
+	return newAudioItem;
 }
 
 
@@ -403,22 +396,26 @@
 		return;
 	}
 	
-	NSManagedObject *parentNode;
+	NSManagedObject *parentNode = nil;
+	NSTreeNode *selectedTreeNode = nil;
 	
-	// get (last) selected item
-	NSIndexSet *selectedIndices = [userOutlineView selectedRowIndexes];
-	NSTreeNode *selectedTreeNode = [userOutlineView itemAtRow:[selectedIndices lastIndex]];
-	NSManagedObject *selectedNode = [selectedTreeNode representedObject];
+	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user view
+	{
+		// get (last) selected item
+		NSIndexSet *selectedIndices = [userOutlineView selectedRowIndexes];
+		selectedTreeNode = [userOutlineView itemAtRow:[selectedIndices lastIndex]];
+		NSManagedObject *selectedNode = [selectedTreeNode representedObject];
 
-	if([selectedIndices count] == 1 && ![[selectedNode valueForKey:@"isLeaf"] boolValue])
-	{
-		// the only selected item is a group
-		parentNode = selectedNode;
-	}
-	else
-	{
-		// insert as sibling of the last selected item
-		parentNode = [selectedNode valueForKey:@"parent"];
+		if([selectedIndices count] == 1 && ![[selectedNode valueForKey:@"isLeaf"] boolValue])
+		{
+			// the only selected item is a group
+			parentNode = selectedNode;
+		}
+		else
+		{
+			// insert as sibling of the last selected item
+			parentNode = [selectedNode valueForKey:@"parent"];
+		}
 	}
 	
 	
@@ -650,7 +647,7 @@
 	id object;
 	id item;
 		
-	switch([[projectSettings valueForKeyPath:@"projectSettingsDictionary.poolSelectedTab"] intValue])
+	switch([[projectSettings valueForKey:@"poolSelectedTab"] intValue])
 	{	
 		case 0:
 			enumerator = [[treeController selectedObjects] objectEnumerator];
@@ -717,16 +714,28 @@
 #pragma mark etc...
 // -----------------------------------------------------------
 
-- (NSString *)nodeImageName:(id)item
+- (NSString *)nodeImageName:(id)node
 {
 	/* depending on the type return the appropriate image */
-	if([item valueForKey:@"isLeaf"] == [NSNumber numberWithBool:NO])
+	if([node valueForKey:@"isLeaf"] == [NSNumber numberWithBool:NO])
 		return @"folder";
 	
-	if([[item valueForKey:@"type"] isEqualToString:CHAudioItemType])
+	if([[node valueForKey:@"type"] isEqualToString:CHAudioItemType])
 		return @"audioItem";
+
 	else
 		return @"trajectoryItem";
+}
+
+- (NSColor *)nodeTextColor:(id)node
+{
+	/* return the appropriate color */
+	if([[node valueForKey:@"type"] isEqualToString:CHAudioItemType] && 
+	   ![[node valueForKeyPath:@"item.audioFile"] audioFileID])
+		return [NSColor grayColor];
+	
+	else
+		return [NSColor blackColor];
 }
 
 
@@ -736,6 +745,8 @@
 	ImageAndTextCell *imageAndTextCell = (ImageAndTextCell *)cell;
 	NSImage *image = [NSImage imageNamed:[self nodeImageName:[item representedObject]]];
 	[imageAndTextCell setImage:image];
+
+	[imageAndTextCell setTextColor:[self nodeTextColor:[item representedObject]]];
 }
 
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tc row:(NSInteger)row
@@ -743,6 +754,12 @@
 	ImageAndTextCell *imageAndTextCell = (ImageAndTextCell *)cell;
 	NSImage *image = [NSImage imageNamed:[tc identifier]];
 	[imageAndTextCell setImage:image];
+	
+	if([[tc identifier] isEqualToString:@"audioItem"] && ![[[[audioItemArrayController arrangedObjects] objectAtIndex:row] valueForKeyPath:@"item.audioFile"] audioFileID])
+		[imageAndTextCell setTextColor:[NSColor grayColor]];
+	else
+		[imageAndTextCell setTextColor:[NSColor blackColor]];
+		
 }
 
 #pragma mark -
@@ -873,8 +890,11 @@
 	}
 	else
 	{
-		NSLog(@"a file dragged from the finder");
-		[self openAudioFiles:[[info draggingPasteboard] propertyListForType:NSFilenamesPboardType]];
+		// a file dragged from the finder
+		for(NSString *path in [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType])
+		{
+			[self importFile:[NSURL URLWithString:path]];
+		}
 	}
     return YES;
 /*	
@@ -898,7 +918,6 @@
 	}
 	else
 	{
-		// a file dragged from the finder
 		[self openAudioFiles:[[info draggingPasteboard] propertyListForType:NSFilenamesPboardType]];
 		return YES;
 	}

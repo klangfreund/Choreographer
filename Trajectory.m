@@ -14,7 +14,7 @@
 
 @implementation Trajectory
 
-+ (Trajectory *)trajectoryOfType:(int)trajectoryType
++ (Trajectory *)trajectoryOfType:(int)trajectoryType forItem:(id)trajectoryItem
 {
 	Trajectory *trajectory = nil;
 	
@@ -25,9 +25,13 @@
 			break;
 		case rotationType:
 			trajectory = [[[RotationTrajectory alloc] init] autorelease];
+			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
+			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 			break;
 		case randomType:
 			trajectory = [[[RandomTrajectory alloc] init] autorelease];
+			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
+			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 			break;
 	}
 		
@@ -38,14 +42,14 @@
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super init];
-    duration = [[coder decodeObjectForKey:@"duration"] unsignedLongValue];
+//    duration = [[coder decodeObjectForKey:@"duration"] unsignedLongValue];
 	
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeObject:[NSNumber numberWithUnsignedLong:duration] forKey:@"duration"];
+ //   [coder encodeObject:[NSNumber numberWithUnsignedLong:duration] forKey:@"duration"];
 }
 
 

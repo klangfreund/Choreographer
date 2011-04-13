@@ -8,7 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 #import "CHProjectDocument.h"
-#import "ProjectSettings.h"
 #import "CHGlobals.h"
 #import "AudioItem.h"
 #import "Region.h"
@@ -27,23 +26,33 @@
 
 @end
 
+typedef enum _ArrangerViewDragAndDropAction
+{
+	arrangerViewDragInvalid = -1,
+	arrangerViewDragNone = 0,
+	arrangerViewDragAudioFromPool,
+	arrangerViewDragTrajectoryFromPool,
+	arrangerViewDragAudioFromFinder
+} ArrangerViewDragAndDropAction;
+
+
 @interface ArrangerView : NSView
 {
 	CHProjectDocument *document;
 	IBOutlet id playbackController;
 
-    ProjectSettings *projectSettings;
+    NSManagedObject *projectSettings;
 	
 	NSManagedObjectContext *context;
 
 	
 	// Context Menus + Popup Buttons
-	IBOutlet NSMenu* regionMenu;
-	IBOutlet NSMenu* arrangerMenu;
+	IBOutlet NSMenu* regionContextMenu;
+	IBOutlet id trajectoryContextMenu;
+	IBOutlet NSMenu* arrangerContextMenu;
 	IBOutlet id nudgeAmountMenu;
-	IBOutlet id verticalGridModeMenu;
-	IBOutlet id horizontalGridModeMenu;
-	IBOutlet id horizontalGridAmountMenu;
+	IBOutlet id yGridLinesMenu;
+	IBOutlet id xGridLinesMenu;
 
 	IBOutlet id arrangerDisplayModePopupButton;
 
@@ -54,9 +63,9 @@
 	// selection
 	NSMutableSet *selectedRegions;
 	NSMutableSet *tempSelectedRegions;
-	Region *hitRegion;
+	Region *hitAudioRegion;
 	
-	id RegionForSelectedTrajectories;
+	id regionForSelectedTrajectories;
 	NSMutableSet *selectedTrajectories;
 
 	// properties
@@ -68,23 +77,26 @@
 	int dragging;
 	float draggingParameter[4];
 	NSPoint storedEventLocation;
-
+	
 	MarqueeView *marqueeView;
 	
-	int horizontalGridAmount;
-	NSBezierPath *verticalGridPath, *horizontalGridPath;
+	int xGridAmount;
+	NSBezierPath *yGridPath, *xGridPath;
 	
 
 	float zoomFactorX, zoomFactorY;
+
+	ArrangerViewDragAndDropAction arrangerViewDragAndDropAction;
 }
 
 - (void)setup;
-- (void)recalculateHorizontalGridPath;
-- (void)recalculateVerticalGridPath;
+- (void)close;
+- (void)recalculateXGridPath;
+- (void)recalculateYGridPath;
 - (void)recalculateArrangerProperties;
 - (void)recalculateArrangerSize;
 
-// dragging from pool
+// drag and drop
 - (void)trajectoryDraggingUpdated:(id <NSDraggingInfo>)info;
 - (void)audioDraggingUpdated:(id <NSDraggingInfo>)info;
 - (BOOL)performTrajectoryDragOperation:(id <NSDraggingInfo>)info;
@@ -126,7 +138,7 @@
 - (id)pointInRegion:(NSPoint)point;
 - (void)showSelectionRectangle:(NSEvent *)event;
 
-// actions
+// menu actions
 - (IBAction)addNewTrajectory:(id)sender;
 - (IBAction)removeTrajectory:(id)sender;
 
@@ -149,6 +161,14 @@
 - (IBAction)trim:(id)sender;
 - (IBAction)split:(id)sender;
 - (IBAction)heal:(id)sender;
+
+// context menu actions
+- (IBAction)contextAddNewTrajectory:(id)sender;
+- (IBAction)contextRemoveTrajectory:(id)sender;
+
+- (IBAction)contextMute:(id)sender;
+- (IBAction)contextLock:(id)sender;
+
 
 // notifications
 - (void)setZoom:(NSNotification *)notification;

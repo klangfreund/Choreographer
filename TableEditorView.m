@@ -19,7 +19,7 @@
 
 - (BOOL)becomeFirstResponder
 {
-	printf("\nTableEditorView -- becomeFirstResponder...");
+//	printf("\nTableEditorView -- becomeFirstResponder...");
 	return YES;
 }
 
@@ -30,7 +30,6 @@
 
 	switch (keyCode)
 	{
-
 	
 		default:
 			[[[[[[NSDocumentController sharedDocumentController] currentDocument] windowControllers] objectAtIndex:0] window] keyDown:event];

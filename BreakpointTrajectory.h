@@ -15,4 +15,6 @@
 	NSMutableArray *breakpointArray;
 }
 
+// accessor
+- (NSUInteger)duration;
 @end

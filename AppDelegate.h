@@ -11,12 +11,23 @@
 
 @interface AppDelegate : NSObject
 {
+	IBOutlet NSWindow *startupSplashWindow;
+	IBOutlet NSTextField *startupStatusTextField;
+	IBOutlet NSView *openPanelAccessoryView;
+	
+	NSString *versionString;
+	NSInteger projectSampleRate;
+	
+	id currentProjectDocument;
 }
+
+@property (assign) id currentProjectDocument;
 
 - (IBAction)showArrangerWindow:(id)sender;
 - (IBAction)showRadarEditorWindow:(id)sender;
 - (IBAction)showTimelineEditorWindow:(id)sender;
 - (IBAction)showTableEditorWindow:(id)sender;
+- (IBAction)showMarkersWindow:(id)sender;
 
 /*
 - (IBAction) showTransportPanelAction: (id) sender ;

@@ -802,7 +802,7 @@
 - (void)selectAll:(id)sender
 {
 	[editorSelection removeAllObjects];
-	[editorSelection addObjectsFromArray:[editableTrajectory breakpointArray]];
+	[editorSelection addObjectsFromArray:[editableTrajectory linkedBreakpointArray]];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
 }

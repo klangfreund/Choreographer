@@ -334,7 +334,7 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-	NSLog(@"Patchbay View key code: %d ", keyCode);
+//	NSLog(@"Patchbay View key code: %d ", keyCode);
 		
 	switch(keyCode)
 	{

@@ -7,6 +7,7 @@
 //
 
 #import "RandomTrajectory.h"
+#import "CHGlobals.h"
 
 
 @implementation RandomTrajectory
@@ -21,8 +22,6 @@
 		minSpeed = 0.1;
 		maxSpeed = 0.2;
 		stability = 0;
-		[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
-		[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 	}
 	return self;	
 }
@@ -87,7 +86,8 @@
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
 {
-	long time = 0;
+	NSUInteger time = 0;
+	NSUInteger duration;
 	int timeIncrement = 100;
 	
 	float x = [boundingVolumePoint1 x] < [boundingVolumePoint2 x] ? [boundingVolumePoint1 x] : [boundingVolumePoint2 x];
@@ -106,7 +106,15 @@
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	
-	while(time < dur)
+	if(mode == durationModeOriginal)
+	{
+		duration = [[trajectoryItem valueForKey:@"duration"] unsignedLongValue];
+		duration = duration > dur ? dur : duration;
+	}
+	else
+		duration = dur;
+
+	while(time < duration)
 	{
 		bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setPosition:[tempPosition copy]];
