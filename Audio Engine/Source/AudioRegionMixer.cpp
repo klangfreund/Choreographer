@@ -250,9 +250,14 @@ void AudioRegionMixer::setSpeakerPositions (Array<void*> positionOfSpeaker)
 	AudioSourceAmbipanning::setPositionOfSpeakers (positionOfSpeaker);	
 	AudioSourceAmbipanning::setNumberOfSpeakers (positionOfSpeaker.size());	
 	// inform all regions about the change
+	DBG(T("positionOfSpeaker.size() = ") + String(positionOfSpeaker.size()));
+	DBG(T("regions.size() = ") + String(regions.size()));
+	if (positionOfSpeaker.size() > 0)
+	{
 	for (int i = 0; i < regions.size(); i++)
 	{
 		((AudioRegion*)regions[i])->audioSourceAmbipanning->reallocateMemoryForTheArrays();
+	}
 	}
 }
 

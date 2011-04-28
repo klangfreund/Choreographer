@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 11.06.08.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "AppDelegate.h"
@@ -31,8 +31,9 @@
 		// (important to store the relative paths of audio files)
 		
 		NSSavePanel *savePanel = [NSSavePanel savePanel];
-		[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"binary",nil]];
+		[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"chproj",nil]];
 		[savePanel setNameFieldStringValue:@"Untitled Project"];
+		[savePanel setExtensionHidden:YES];
 
 		// accessory view (project sample rate)
 		[self setValue:[NSNumber numberWithInt:44100] forKey:@"projectSampleRate"];
@@ -78,7 +79,9 @@
 	[startupSplashWindow setAlphaValue:0.85];
 
 	[startupStatusTextField setStringValue:@"Starting Up"];
-	[self setValue:CHOREOGRAPHER_VERSION forKey:@"versionString"];
+	
+	NSString *version = [NSString stringWithFormat:@"Version: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+	[self setValue:version forKey:@"versionString"];
 	[startupSplashWindow display];
 }
 
@@ -136,6 +139,12 @@
 	// unsaved changes in the audio engine?
 //	return NSTerminateLater;
 	return NSTerminateNow;
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+	// release and free the audio engine
+	[AudioEngine release];
 }
 
 - (BOOL)applicationShouldOpenUntitledFile:(NSApplication *)sender

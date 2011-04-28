@@ -52,29 +52,24 @@ struct JUCE_API aepChannelSettings
 	/** Enables the measurement of the samples that are sent to
 	 the audio driver.
 	 
-	 The measured values are measuredRootMeanSquareValue and
+	 The measured values are measuredDecayingValue and
 	 measuredPeakValue.
 	 */
-	bool enableOutputMeasurement;
-	
-	/** Resets the peak value (which is written to measuredPeakValue),
-	 that is measured on the output sample stream.
-	 */
-	bool resetPeakValue;
+	bool enableMeasurement;
 	
 	/** If enableOutputMeasurement is set, the root mean square
 	 with a fall off is stored in this variable.
 	 
 	 Measured are the samples that are sent to the audio driver.
 	 */
-	double measuredRootMeanSquareValue;
+	float measuredDecayingValue;
 
 	/** If enableOutputMeasurement is set, the peak value is 
 	 stored in this variable.
 	 
 	 Measured are the samples that are sent to the audio driver.
 	 */
-	double measuredPeakValue;
+	float measuredPeakValue;
 };
 
 //==============================================================================
@@ -334,16 +329,43 @@ public:
 	bool setGain(int aepChannel, double gain);
 
 	/** Enables or disables the solo mode of the chosen aepChannel.
+	 
+	 Multiple aepChannels can have the solo engaged.
+	 Solo has a higher priority than mute. E.g. if you solo a muted
+	 aepChannel, the audio will get through.
 	 */
-	bool setSolo(int aepChanel, bool enable);
+	bool setSolo(int aepChannel, bool enable);
 
 	/** Enables or disables the mute mode of the chosen aepChannel.
 	 */
-	bool setMute(int aepChanel, bool enable);
+	bool setMute(int aepChannel, bool enable);
 
 	/** Enables or disables the output of pink noise on the chosen aepChannel.
 	 */
-	bool activatePinkNoise(int aepChanel, bool enable);
+	bool activatePinkNoise(int aepChannel, bool enable);
+	
+	/** Enables or disables the measurement for the chosen aepChannel.
+	 */
+	bool enableMeasurement(int aepChannel, bool enable);
+
+	/** Resets the measured peak value to zero.
+	 */
+	bool resetMeasuredPeakValue(int aepChannel);
+
+	/** Returns the measured decaying value.
+	 
+	 This method is intended to be used by some visualization element
+	 e.g. by a VU meter.
+	 */
+	float getMeasuredDecayingValue(int aepChannel);
+
+	/** Returns the measured peak value.
+	 
+	 This method is intended to be used by some visualization element
+	 e.g. by a VU meter.
+	 */
+	float getMeasuredPeakValue(int aepChannel);
+	
 	
 	/**
 	 Connects an aepChannel and a hardwareDeviceChannel. Each of
@@ -433,12 +455,14 @@ private:
 	int numberOfMutedChannels; 
 	int numberOfSoloedChannels;
 	int numberOfChannelsWithActivatedPinkNoise;
+	int numberOfChannelsWithEnabledMeasurement;
 	
 	AudioSampleBuffer pinkNoiseBuffer;  ///< Used in getNextAudioBlock .
 	AudioSourceChannelInfo pinkNoiseInfo; ///< Used in getNextAudioBlock .
 	PinkNoiseGeneratorAudioSource pinkNoiseGeneratorAudioSource;
 	
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
+	CriticalSection audioSpeakerGainAndRoutingLock;
 
 };
 

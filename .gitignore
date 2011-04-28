@@ -1,0 +1,5 @@
+# ignore all directories and files in the build directory
+build/**/*
+
+# more info about the .gitignore file:
+# http://gitready.com/beginner/2009/01/19/ignoring-files.html

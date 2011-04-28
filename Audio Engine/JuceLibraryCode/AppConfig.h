@@ -13,6 +13,9 @@
 
 // IMPORTANT: Enable this for the Release configuration only:
 // #define NDEBUG 1
+// IMPORTANT: Enable this for the Debug configuration only:
+#define DEBUG 1
+
 
 //#define  JUCE_FORCE_DEBUG
 //#define  JUCE_LOG_ASSERTIONS

@@ -107,7 +107,7 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		22C7E9E51345E6CA00AC2458 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C7E9E41345E6A800AC2458 /* libjuce.a */; };
+		22817611135C3A4000FD353B /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22817610135C3A2300FD353B /* libjuce.a */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -116,9 +116,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		22C7E9E31345E6A800AC2458 /* PBXContainerItemProxy */ = {
+		2281760F135C3A2300FD353B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 22C7E9DC1345E6A700AC2458 /* Juce.xcodeproj */;
+			containerPortal = 22817608135C3A2300FD353B /* Juce.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 389351359BA78C682E1931A6;
 			remoteInfo = Juce;
@@ -297,7 +297,7 @@
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		22C7E9DC1345E6A700AC2458 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110401/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		22817608135C3A2300FD353B /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -315,7 +315,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22C7E9E51345E6CA00AC2458 /* libjuce.a in Frameworks */,
+				22817611135C3A4000FD353B /* libjuce.a in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -642,7 +642,7 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22C7E9DC1345E6A700AC2458 /* Juce.xcodeproj */,
+				22817608135C3A2300FD353B /* Juce.xcodeproj */,
 				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
 				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
@@ -745,10 +745,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22C7E9DD1345E6A700AC2458 /* Products */ = {
+		22817609135C3A2300FD353B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				22C7E9E41345E6A800AC2458 /* libjuce.a */,
+				22817610135C3A2300FD353B /* libjuce.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -870,8 +870,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 22C7E9DD1345E6A700AC2458 /* Products */;
-					ProjectRef = 22C7E9DC1345E6A700AC2458 /* Juce.xcodeproj */;
+					ProductGroup = 22817609135C3A2300FD353B /* Products */;
+					ProjectRef = 22817608135C3A2300FD353B /* Juce.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -882,11 +882,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		22C7E9E41345E6A800AC2458 /* libjuce.a */ = {
+		22817610135C3A2300FD353B /* libjuce.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libjuce.a;
-			remoteRef = 22C7E9E31345E6A800AC2458 /* PBXContainerItemProxy */;
+			remoteRef = 2281760F135C3A2300FD353B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -1120,13 +1120,14 @@
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
 				GCC_WARN_MISSING_PARENTHESES = YES;
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				SDKROOT = "";

@@ -237,19 +237,39 @@ bool AmbisonicsAudioEngine::setGain(int aepChannel, double gain)
 	return audioSpeakerGainAndRouting.setGain(aepChannel, gain);
 }
 
-bool AmbisonicsAudioEngine::setSolo(int aepChanel, bool enable)
+bool AmbisonicsAudioEngine::setSolo(int aepChannel, bool enable)
 {
-	return audioSpeakerGainAndRouting.setSolo(aepChanel, enable);
+	return audioSpeakerGainAndRouting.setSolo(aepChannel, enable);
 }
 
-bool AmbisonicsAudioEngine::setMute(int aepChanel, bool enable)
+bool AmbisonicsAudioEngine::setMute(int aepChannel, bool enable)
 {
-	return audioSpeakerGainAndRouting.setMute(aepChanel, enable);
+	return audioSpeakerGainAndRouting.setMute(aepChannel, enable);
 }
 
-bool AmbisonicsAudioEngine::activatePinkNoise(int aepChanel, bool enable)
+bool AmbisonicsAudioEngine::activatePinkNoise(int aepChannel, bool enable)
 {
-	return audioSpeakerGainAndRouting.activatePinkNoise(aepChanel, enable);
+	return audioSpeakerGainAndRouting.activatePinkNoise(aepChannel, enable);
+}
+
+bool AmbisonicsAudioEngine::enableMeasurement(int aepChannel, bool enable)
+{
+	return audioSpeakerGainAndRouting.enableMeasurement(aepChannel, enable);
+}
+
+bool AmbisonicsAudioEngine::resetMeasuredPeakValue(int aepChannel)
+{
+	return audioSpeakerGainAndRouting.resetMeasuredPeakValue(aepChannel);
+}
+
+float AmbisonicsAudioEngine::getMeasuredDecayingValue(int aepChannel)
+{
+	return audioSpeakerGainAndRouting.getMeasuredDecayingValue(aepChannel);
+}
+
+float AmbisonicsAudioEngine::getMeasuredPeakValue(int aepChannel)
+{
+	return audioSpeakerGainAndRouting.getMeasuredPeakValue(aepChannel);
 }
 
 void AmbisonicsAudioEngine::setNewRouting(int aepChannel, int hardwareOutputChannel)

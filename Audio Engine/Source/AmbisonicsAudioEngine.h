@@ -110,24 +110,47 @@ public:
 	bool setSpeakerPosition(int aepChannel, double x, double y, double z);
 	
 	/** Sets the gain of the chosen aepChannel.
-	 THIS FUNCTION IS NOT YET IMPLEMENTED.
 	 */
 	bool setGain(int aepChannel, double gain);
 	
 	/** Enables or disables the solo mode of the chosen aepChannel.
-	 THIS FUNCTION IS NOT YET IMPLEMENTED.
+	 
+	 Multiple aepChannels can have the solo engaged.
+	 Solo has a higher priority than mute. E.g. if you solo a muted
+	 aepChannel, the audio will get through.
 	 */
 	bool setSolo(int aepChanel, bool enable);
 	
 	/** Enables or disables the mute mode of the chosen aepChannel.
-	 THIS FUNCTION IS NOT YET IMPLEMENTED.
+
 	 */
 	bool setMute(int aepChanel, bool enable);
 	
 	/** Enables or disables the output of pink noise on the chosen aepChannel.
-	 THIS FUNCTION IS NOT YET IMPLEMENTED.
 	 */
 	bool activatePinkNoise(int aepChanel, bool enable);
+	
+	/** Enables or disables the measurement for the chosen aepChannel.
+	 */
+	bool enableMeasurement(int aepChannel, bool enable);
+	
+	/** Resets the measured peak value to zero.
+	 */
+	bool resetMeasuredPeakValue(int aepChannel);
+	
+	/** Returns the measured decaying value.
+	 
+	 This method is intended to be used by some visualization element
+	 e.g. by a VU meter.
+	 */
+	float getMeasuredDecayingValue(int aepChannel);
+	
+	/** Returns the measured peak value.
+	 
+	 This method is intended to be used by some visualization element
+	 e.g. by a VU meter.
+	 */
+	float getMeasuredPeakValue(int aepChannel);	
 	
 	/**
 	 Connects an aepChannel and a hardwareDeviceChannel. Each of
