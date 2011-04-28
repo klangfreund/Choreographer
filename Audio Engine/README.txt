@@ -7,9 +7,8 @@ A1. Get Juce via
 A2. Open ./Builds/MacOSX/Juce.xcodeproj .
 
 A3. Maybe:
-    Open 'Project "Juce" Info' window and check the
-    "Build Active Architecture Only" (for both, "Debug" and "Release"
-	configuration)
+    Open Project "Juce" Info window and check the
+    "Build Active Architecture Only"
 
 A4. Build it, once for the "Debug" configuration, once for the
     "Release" configuration.
@@ -33,17 +32,4 @@ B4. In this Overview pane, drag and drop the
     "Frameworks/Juce Frameworks/Juce.xcodeproj/libjuce.a" to
     "Targets/Choreographer/Link Binary With Libraries"
 
-B5. You might would like to open the Info window and check
-    "Build Active Architecture Only" for both configurations, such
-	that the building cycle is a little shorter.
-	Before you build it might be neccessary to clean via
-	Build -> Clean (check both check-boxes).
-
 You're ready to build :)
-
-
-
-
-
-how to work with git
---------------------

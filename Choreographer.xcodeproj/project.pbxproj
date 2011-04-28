@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 44;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		15009E5611C0150A00FCE0F7 /* SettingsPopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 15009E5511C0150A00FCE0F7 /* SettingsPopupButton.m */; };
+		15012D201369313D0000116A /* LevelMeterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15012D1F1369313D0000116A /* LevelMeterView.m */; };
 		150C8947133AB1D1005A585D /* Path.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C8946133AB1D1005A585D /* Path.m */; };
 		151739B70EB3A5F500EABE92 /* TableEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */; };
 		151739C60EB3A79B00EABE92 /* TableEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C20EB3A79B00EABE92 /* TableEditor.xib */; };
@@ -30,18 +31,15 @@
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
 		15512E8C13267F9700C6D038 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15512E5713267F9700C6D038 /* AudioEngine.mm */; };
 		15512E8D13267F9700C6D038 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5813267F9700C6D038 /* AudioEngineMainMenu.xib */; };
-		15512E8E13267F9700C6D038 /* debug.txt in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5913267F9700C6D038 /* debug.txt */; };
-		15512E8F13267F9700C6D038 /* Doxyfile in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5A13267F9700C6D038 /* Doxyfile */; };
-		15512E9013267F9700C6D038 /* juce.tag in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5B13267F9700C6D038 /* juce.tag */; };
 		15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */; };
 		15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */; };
 		15512E9313267F9700C6D038 /* MeterBridgeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */; };
-		15512E9413267F9700C6D038 /* README.txt in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6413267F9700C6D038 /* README.txt */; };
 		15512E9513267F9700C6D038 /* AmbisonicsAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6613267F9700C6D038 /* AmbisonicsAudioEngine.cpp */; };
 		15512E9613267F9700C6D038 /* AudioRegionMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6813267F9700C6D038 /* AudioRegionMixer.cpp */; };
 		15512E9713267F9700C6D038 /* AudioSourceAmbipanning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6A13267F9700C6D038 /* AudioSourceAmbipanning.cpp */; };
 		15512E9813267F9700C6D038 /* AudioSourceGainEnvelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6C13267F9700C6D038 /* AudioSourceGainEnvelope.cpp */; };
 		15512E9913267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */; };
+		15512E9B13267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */; };
 		15512E9C13267F9700C6D038 /* AudioTransportSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */; };
 		15512E9D13267F9700C6D038 /* BufferingAudioSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */; };
 		15512E9F13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7C13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp */; };
@@ -56,7 +54,9 @@
 		155725120DD8919A00FA16E2 /* RulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725100DD8919A00FA16E2 /* RulerView.m */; };
 		1557251A0DD891D800FA16E2 /* ArrangerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725190DD891D800FA16E2 /* ArrangerView.m */; };
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
+		1562074E1355E9E5006A1F29 /* MeterBridgeChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
+		157393DD134CB609003FEE5F /* juce.tag in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5B13267F9700C6D038 /* juce.tag */; };
 		158E9D7C0EAE3D7800435D25 /* TrajectoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */; };
 		158E9F0A0EAE6C4A00435D25 /* Breakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9F090EAE6C4A00435D25 /* Breakpoint.m */; };
 		15979422133D3E49006FCFE6 /* MainCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15979421133D3E49006FCFE6 /* MainCounterView.m */; };
@@ -107,7 +107,7 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		22817611135C3A4000FD353B /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22817610135C3A2300FD353B /* libjuce.a */; };
+		22D6ADBB1369CF5400325914 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22D6ADBA1369CF3D00325914 /* libjuce.a */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -116,9 +116,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2281760F135C3A2300FD353B /* PBXContainerItemProxy */ = {
+		22D6ADB91369CF3D00325914 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 22817608135C3A2300FD353B /* Juce.xcodeproj */;
+			containerPortal = 22D6ADB21369CF3D00325914 /* Juce.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 389351359BA78C682E1931A6;
 			remoteInfo = Juce;
@@ -130,6 +130,8 @@
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		15009E5411C0150A00FCE0F7 /* SettingsPopupButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsPopupButton.h; sourceTree = "<group>"; };
 		15009E5511C0150A00FCE0F7 /* SettingsPopupButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsPopupButton.m; sourceTree = "<group>"; };
+		15012D1E1369313D0000116A /* LevelMeterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelMeterView.h; sourceTree = "<group>"; };
+		15012D1F1369313D0000116A /* LevelMeterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelMeterView.m; sourceTree = "<group>"; };
 		150C8945133AB1D1005A585D /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		150C8946133AB1D1005A585D /* Path.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Path.m; sourceTree = "<group>"; };
 		151525B00DDAFE8900BB5114 /* CHGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHGlobals.h; sourceTree = "<group>"; };
@@ -191,6 +193,8 @@
 		15512E6D13267F9700C6D038 /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
 		15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
 		15512E6F13267F9700C6D038 /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
+		15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
+		15512E7513267F9700C6D038 /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
 		15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
 		15512E7713267F9700C6D038 /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
 		15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
@@ -217,6 +221,8 @@
 		155725190DD891D800FA16E2 /* ArrangerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerView.m; sourceTree = "<group>"; };
 		1560817311CECAA00033C628 /* RandomTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomTrajectory.h; sourceTree = "<group>"; };
 		1560817411CECAA00033C628 /* RandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomTrajectory.m; sourceTree = "<group>"; };
+		1562074C1355E9E5006A1F29 /* MeterBridgeChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeChannelStrip.h; sourceTree = "<group>"; };
+		1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeChannelStrip.m; sourceTree = "<group>"; };
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
 		158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryItem.h; sourceTree = "<group>"; };
@@ -297,7 +303,7 @@
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		22817608135C3A2300FD353B /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		22D6ADB21369CF3D00325914 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -315,7 +321,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22817611135C3A4000FD353B /* libjuce.a in Frameworks */,
+				22D6ADBB1369CF5400325914 /* libjuce.a in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -444,10 +450,10 @@
 				15512E5A13267F9700C6D038 /* Doxyfile */,
 				15512E5B13267F9700C6D038 /* juce.tag */,
 				15512E5C13267F9700C6D038 /* JuceLibraryCode */,
-				15512E5F13267F9700C6D038 /* MeterBridge */,
 				15512E6413267F9700C6D038 /* README.txt */,
 				15512E6513267F9700C6D038 /* Source */,
 				15512E8013267F9700C6D038 /* SpeakerSetup */,
+				15512E5F13267F9700C6D038 /* MeterBridge */,
 			);
 			path = "Audio Engine";
 			sourceTree = "<group>";
@@ -464,10 +470,12 @@
 		15512E5F13267F9700C6D038 /* MeterBridge */ = {
 			isa = PBXGroup;
 			children = (
+				1562074C1355E9E5006A1F29 /* MeterBridgeChannelStrip.h */,
+				1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */,
 				15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */,
-				15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */,
 				15512E6213267F9700C6D038 /* MeterBridgeWindowController.h */,
 				15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */,
+				15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */,
 			);
 			path = MeterBridge;
 			sourceTree = "<group>";
@@ -503,6 +511,8 @@
 		15512E7113267F9700C6D038 /* modified Juce Classes */ = {
 			isa = PBXGroup;
 			children = (
+				15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */,
+				15512E7513267F9700C6D038 /* AudioDeviceSelectorComponentMod.h */,
 				15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */,
 				15512E7713267F9700C6D038 /* AudioTransportSourceMod.h */,
 				15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */,
@@ -521,9 +531,9 @@
 				15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */,
 				15512E8613267F9700C6D038 /* SpeakerSetups.h */,
 				15512E8713267F9700C6D038 /* SpeakerSetups.m */,
-				15512E8813267F9700C6D038 /* SpeakerSetupWindow.xib */,
 				15512E8913267F9700C6D038 /* SpeakerSetupWindowController.h */,
 				15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */,
+				15512E8813267F9700C6D038 /* SpeakerSetupWindow.xib */,
 			);
 			path = SpeakerSetup;
 			sourceTree = "<group>";
@@ -551,6 +561,8 @@
 				1597941F133D3E19006FCFE6 /* Counter */,
 				1557250D0DD8919A00FA16E2 /* ContainerView.h */,
 				1557250E0DD8919A00FA16E2 /* ContainerView.m */,
+				15012D1E1369313D0000116A /* LevelMeterView.h */,
+				15012D1F1369313D0000116A /* LevelMeterView.m */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";
@@ -642,7 +654,7 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22817608135C3A2300FD353B /* Juce.xcodeproj */,
+				22D6ADB21369CF3D00325914 /* Juce.xcodeproj */,
 				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
 				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
@@ -745,10 +757,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22817609135C3A2300FD353B /* Products */ = {
+		22D6ADB31369CF3D00325914 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				22817610135C3A2300FD353B /* libjuce.a */,
+				22D6ADBA1369CF3D00325914 /* libjuce.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -857,7 +869,7 @@
 				ORGANIZATIONNAME = "Zurich University of the Arts";
 			};
 			buildConfigurationList = 26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "Choreographer" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -870,8 +882,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 22817609135C3A2300FD353B /* Products */;
-					ProjectRef = 22817608135C3A2300FD353B /* Juce.xcodeproj */;
+					ProductGroup = 22D6ADB31369CF3D00325914 /* Products */;
+					ProjectRef = 22D6ADB21369CF3D00325914 /* Juce.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -882,11 +894,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		22817610135C3A2300FD353B /* libjuce.a */ = {
+		22D6ADBA1369CF3D00325914 /* libjuce.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libjuce.a;
-			remoteRef = 2281760F135C3A2300FD353B /* PBXContainerItemProxy */;
+			remoteRef = 22D6ADB91369CF3D00325914 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -916,14 +928,11 @@
 				15EBEC8712BF777A00C30D46 /* MarkersWindow.xib in Resources */,
 				15AAAEFB12C22A8C00BF3035 /* choreographer_logo.eps in Resources */,
 				15512E8D13267F9700C6D038 /* AudioEngineMainMenu.xib in Resources */,
-				15512E8E13267F9700C6D038 /* debug.txt in Resources */,
-				15512E8F13267F9700C6D038 /* Doxyfile in Resources */,
-				15512E9013267F9700C6D038 /* juce.tag in Resources */,
 				15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */,
 				15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */,
-				15512E9413267F9700C6D038 /* README.txt in Resources */,
 				15512EA313267F9700C6D038 /* SpeakerSetupChannelStrip.xib in Resources */,
 				15512EA513267F9700C6D038 /* SpeakerSetupWindow.xib in Resources */,
+				157393DD134CB609003FEE5F /* juce.tag in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -990,6 +999,7 @@
 				15512E9713267F9700C6D038 /* AudioSourceAmbipanning.cpp in Sources */,
 				15512E9813267F9700C6D038 /* AudioSourceGainEnvelope.cpp in Sources */,
 				15512E9913267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp in Sources */,
+				15512E9B13267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp in Sources */,
 				15512E9C13267F9700C6D038 /* AudioTransportSourceMod.cpp in Sources */,
 				15512E9D13267F9700C6D038 /* BufferingAudioSourceMod.cpp in Sources */,
 				15512E9F13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp in Sources */,
@@ -1000,6 +1010,8 @@
 				150C8947133AB1D1005A585D /* Path.m in Sources */,
 				15979422133D3E49006FCFE6 /* MainCounterView.m in Sources */,
 				159794C3133D5269006FCFE6 /* LoopCounterView.m in Sources */,
+				1562074E1355E9E5006A1F29 /* MeterBridgeChannelStrip.m in Sources */,
+				15012D201369313D0000116A /* LevelMeterView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1076,7 +1088,7 @@
 		26FC0AA60875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -1087,9 +1099,9 @@
 				GCC_PREFIX_HEADER = Choreographer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = macosx10.6;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1098,7 +1110,7 @@
 		26FC0AA70875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
@@ -1106,9 +1118,9 @@
 				GCC_PREFIX_HEADER = Choreographer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = macosx10.6;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1116,36 +1128,26 @@
 		26FC0AAA0875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				GCC_C_LANGUAGE_STANDARD = c99;
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
-				GCC_WARN_MISSING_PARENTHESES = YES;
-				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
-				SDKROOT = "";
-				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Debug;
 		};
 		26FC0AAB0875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
 				PREBINDING = NO;
-				SDKROOT = macosx10.6;
-				VALID_ARCHS = "x86_64 i386 ppc ppc64 ppc7400 ppc970";
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
 			};
 			name = Release;
 		};

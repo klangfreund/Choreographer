@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 28.09.10.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "SpeakerSetupWindowController.h"
@@ -14,20 +14,20 @@
 
 @implementation SpeakerSetupWindowController
 
-static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
+//static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
 
-+ (id)sharedSpeakerSetupWindowController
-{
-    if (!sharedSpeakerSetupWindowController)
-	{
-        sharedSpeakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
-    }
-    return sharedSpeakerSetupWindowController;
-}
+//+ (id)sharedSpeakerSetupWindowController
+//{
+//    if (!sharedSpeakerSetupWindowController)
+//	{
+//        sharedSpeakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
+//    }
+//    return sharedSpeakerSetupWindowController;
+//}
 
 - (id)init
 {
@@ -49,16 +49,22 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 		
 - (void)awakeFromNib
 {
-	NSLog(@"awakeFromNib");
-
 	[self setValue:[speakerSetups selectedPreset] forKey:@"selectedSetup"];		// needed to enable bindings
 	[self updateGUI];
+	
+	// register for notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(updateGUI)
+												 name:@"hardwareDidChange" object:nil];		
 }
 
 - (void) dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+
 	[speakerSetups release];
 	[speakerSetupChannelStripControllers release];
+	
 	[super dealloc];
 }
 
@@ -76,14 +82,15 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 	
 		[self setValue:[speakerSetups selectedPreset] forKey:@"selectedSetup"];
 	
-		[self updateGUI];
+		// send notification
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 	}
 }
 
 
 - (void)updateGUI
 {
-	NSLog(@"Speaker Setup Window Controller: update GUI");
+//	NSLog(@"Speaker Setup Window Controller: update GUI");
 	[hardwareOutputTextField setStringValue:[[AudioEngine sharedAudioEngine] nameOfHardwareOutputDevice]];
 	
 	// stop any running test noise
@@ -232,7 +239,9 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 - (void)addSpeakerChannel
 {
 	[[speakerSetups selectedPreset] newSpeakerChannel];
-	[self updateGUI];
+
+	// send notification
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 }
 
 - (void)removeSpeakerChannel
@@ -249,7 +258,9 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 	{
 		// only if there is at least one channel
 		[[speakerSetups selectedPreset] removeSpeakerChannelAtIndex:i];
-		[self updateGUI];
+
+		// send notification
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 	}
 }
 
@@ -484,7 +495,8 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 		// update the popup button whose selection is bound to selectedSetupIndex 
 		[self setValue:[speakerSetups valueForKey:@"selectedIndex"] forKey:@"selectedIndex"];
 
-		[self updateGUI];
+		// send notification
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 	}
 }
 
@@ -495,7 +507,8 @@ static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
 	// update the popup button whose selection is bound to selectedSetupIndex 
 	[self setValue:[speakerSetups valueForKey:@"selectedIndex"] forKey:@"selectedIndex"];
 
-	[self updateGUI];
+	// send notification
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 }
 
 - (void)saveAllPresets

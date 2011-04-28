@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 28.03.10.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "AudioEngine.h"
@@ -73,6 +73,9 @@ static AudioEngine *sharedAudioEngine = nil;
 	// instantiate the Speaker Setup Window
 	speakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
 	
+	// instantiate the Meter Bridge Window
+	meterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
+	
 	regionIndex = 0;	
 }
 
@@ -105,6 +108,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	[speakerSetupWindowController showWindow:nil];
 }
 
+- (IBAction)showMeterBridge:(id)sender
+{	
+	[meterBridgeWindowController showWindow:nil];
+}
+
 
 #pragma mark -
 #pragma mark auxiliary playback
@@ -135,6 +143,8 @@ static AudioEngine *sharedAudioEngine = nil;
 	isPlaying = YES;
 	
 	ambisonicsAudioEngine->start();
+	
+	[meterBridgeWindowController run];
 }
 
 - (void)stopAudio
@@ -176,6 +186,12 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	return (int)ambisonicsAudioEngine->getCurrentSampleRate();
 }
+
+- (unsigned short)numberOfSpeakerChannels
+{
+	return [[speakerSetupWindowController valueForKeyPath:@"speakerSetups.selectedPreset"] countSpeakerChannels];
+}
+
 
 - (unsigned short)numberOfHardwareDeviceOutputChannels
 {
@@ -410,6 +426,39 @@ static AudioEngine *sharedAudioEngine = nil;
 	}
 }
 
+#pragma mark -
+#pragma mark level meter
+// -----------------------------------------------------------
+
+
+- (void)enableVolumeLevelMeasurement:(BOOL)val
+{
+	int i;
+	
+	for(i=0;i<[self numberOfSpeakerChannels];i++)
+	{
+		ambisonicsAudioEngine->enableMeasurement(i, val);
+	}
+}
+
+- (void)resetVolumePeakLevel:(NSUInteger)channel
+{
+	ambisonicsAudioEngine->resetMeasuredPeakValue(channel);
+}
+
+- (float)volumeLevel:(NSUInteger)channel
+{
+	float gain = ambisonicsAudioEngine->getMeasuredDecayingValue(channel);
+	return 20 * log10(gain);
+}
+
+- (float)volumePeakLevel:(NSUInteger)channel
+{
+	float gain = ambisonicsAudioEngine->getMeasuredPeakValue(channel);
+	return 20 * log10(gain);
+}
+
+ 
 #pragma mark -
 #pragma mark settings
 // -----------------------------------------------------------

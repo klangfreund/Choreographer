@@ -3,13 +3,14 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 28.03.10.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 #import <AudioToolbox/AudioToolbox.h>
 #import "SpatialPosition.h"
 #import "SpeakerSetupWindowController.h"
+#import "MeterBridgeWindowController.h"
 
 #ifdef __cplusplus
 #include "AmbisonicsAudioEngine.h"
@@ -22,6 +23,7 @@
 	#endif
 	
 	SpeakerSetupWindowController *speakerSetupWindowController;
+	MeterBridgeWindowController *meterBridgeWindowController;
 	
 	IBOutlet NSMenu *menu;
 
@@ -37,6 +39,7 @@
 // Menu (UI Actions)
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
+- (IBAction)showMeterBridge:(id)sender;
 
 
 // Auxiliary Playback
@@ -58,6 +61,7 @@
 - (BOOL)isPlaying;
 - (unsigned long)playbackLocation;
 - (unsigned int)sampleRate;
+- (unsigned short)numberOfSpeakerChannels;
 - (unsigned short)numberOfHardwareDeviceOutputChannels;
 - (NSString *)nameOfHardwareOutputDevice;
 - (double)cpuUsage;
@@ -92,7 +96,15 @@
 - (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
 
 
-// Settings
+//  Level Meter
+
+- (void)enableVolumeLevelMeasurement:(BOOL)val;
+- (void)resetVolumePeakLevel:(NSUInteger)channel;
+- (float)volumeLevel:(NSUInteger)channel;
+- (float)volumePeakLevel:(NSUInteger)channel;
+
+
+//  Settings
 
 - (void)setPersistentSetting:(id)data forKey:(NSString *)key;
 - (id)persistentSettingForKey:(NSString *)key;

@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 16.02.07.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "RulerScrollView.h"

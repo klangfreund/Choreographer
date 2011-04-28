@@ -15,9 +15,8 @@
 
 #include "AppConfig.h"
 #include "/Users/sam/data/res/projects_dev/juce110413/juce/juce.h"
-//#include "/Users/philippekocher/Documents/CocoaPlayground/_ChoreographerProject/juce/juce.h"
-
-
+//#include "/Users/philippekocher/Desktop/juce/juce.h"
+//#include "/Users/philippekocher/Documents/CocoaPlayground/juce/juce.h"
 
 namespace ProjectInfo
 {

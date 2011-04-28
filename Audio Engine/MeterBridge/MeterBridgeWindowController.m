@@ -3,29 +3,18 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 22.12.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "MeterBridgeWindowController.h"
-#import "SpeakerSetupWindowController.h"
+#import "MeterBridgeChannelStrip.h"
 #import "AudioEngine.h"
 
 @implementation MeterBridgeWindowController
 
-static MeterBridgeWindowController *sharedMeterBridgeWindowController = nil;
-
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
-
-+ (id)sharedMeterBridgeWindowController
-{
-    if (!sharedMeterBridgeWindowController)
-	{
-        sharedMeterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
-    }
-    return sharedMeterBridgeWindowController;
-}
 
 - (id)init
 {
@@ -40,12 +29,27 @@ static MeterBridgeWindowController *sharedMeterBridgeWindowController = nil;
 - (void)awakeFromNib
 {
 	[self updateGUI];
+
+	// register for notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(updateGUI)
+												 name:@"hardwareDidChange" object:nil];		
 }
 
 - (void) dealloc
 {
-	[meterBridgeChannelStripControllers release];
+	[[NSNotificationCenter defaultCenter] removeObserver:self];	
+
+	[meterBridgeChannelStrips release];
 	[super dealloc];
+}
+
+- (void)showWindow:(id)sender
+{
+	[super showWindow:sender];
+	
+	if([[AudioEngine sharedAudioEngine] isPlaying])
+		[self run];
 }
 
 #pragma mark -
@@ -54,48 +58,104 @@ static MeterBridgeWindowController *sharedMeterBridgeWindowController = nil;
 
 - (void)updateGUI
 {
-	NSLog(@"Meter Bridge Window Controller: update GUI");
+//	NSLog(@"Meter Bridge Window Controller: update GUI");
 
 	// remove all channel strips
 
-	[meterBridgeChannelStripControllers release];
+	[meterBridgeChannelStrips release];
+
+	NSArray *subviews = [[channelStripView subviews] copy];
+	for(NSView *view in subviews)
+	{
+		[view removeFromSuperview];
+	}
 
 	// add new channel strips
 
-	NSUInteger numberOfOutputChannels =  [[[SpeakerSetupWindowController sharedSpeakerSetupWindowController] valueForKey:@"selectedSetup"] countSpeakerChannels];
+	NSUInteger numberOfOutputChannels =  [[AudioEngine sharedAudioEngine] numberOfSpeakerChannels];
 
 	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"MeterBridgeChannelStrip" bundle:nil] ;
 	
-	NSRect r = [meterBridgeView frame];
+	NSRect r = [[self window] frame];
 	id item;
 	int i;
 	
-	meterBridgeChannelStripControllers = [[NSMutableArray alloc] init];
+	meterBridgeChannelStrips = [[NSMutableArray alloc] init];
 	
-	r.size.width = numberOfOutputChannels * 50;
-	[meterBridgeView setFrame:r];
+	r.size.width = 55 + numberOfOutputChannels * 30;
+	[[self window] setFrame:r display:YES];
 	
 	for(i=0;i<numberOfOutputChannels;i++)
 	{
-		NSObjectController *controller = [[[NSObjectController alloc] init] autorelease];
+		MeterBridgeChannelStrip *strip = [[[MeterBridgeChannelStrip alloc] init] autorelease];
 		NSArray *theArray;
 		
-		[meterBridgeChannelStripControllers addObject:controller];
+		[meterBridgeChannelStrips addObject:strip];
 		
-//		[controller setValue:self forKey:@"speakerSetupWindowController"];
-//		[controller setValue:[NSNumber numberWithInt:i] forKey:@"channelIndex"];
+		[strip setValue:[NSNumber numberWithInt:i + 1] forKey:@"channelIndex"];
 		
-		[nib instantiateNibWithOwner:controller topLevelObjects:&theArray];
+		[nib instantiateNibWithOwner:strip topLevelObjects:&theArray];
 
 		for(item in theArray)
 		{
 			if([item isKindOfClass:[NSView class]])
 			{
-				[item setFrameOrigin:NSMakePoint(i * 50,0)];
-				[meterBridgeView addSubview:item];
+				[item setFrameOrigin:NSMakePoint(i * 30,0)];
+				[channelStripView addSubview:item];
 			}
 		}
 	}
-}	
+}
+
+- (void)run
+{
+	if(refreshGUITimer)
+	{
+		[refreshGUITimer invalidate];
+	}
+	
+	if([[self window] isVisible])
+	{
+		[[AudioEngine sharedAudioEngine] enableVolumeLevelMeasurement:YES];
+
+		refreshGUITimer = [NSTimer timerWithTimeInterval:0.01
+												  target:self
+												selector:@selector(tick)
+												userInfo:nil
+												 repeats:YES];
+
+		[[NSRunLoop currentRunLoop] addTimer:refreshGUITimer forMode:NSRunLoopCommonModes];
+	}
+	else
+	{
+		[[AudioEngine sharedAudioEngine] enableVolumeLevelMeasurement:NO];
+	}
+
+}
+
+- (void)tick
+{
+	int i;
+	
+	if(![[AudioEngine sharedAudioEngine] isPlaying] || ![[self window] isVisible])
+	{
+		[refreshGUITimer invalidate];
+		refreshGUITimer = nil;
+		for(i=0;i<[meterBridgeChannelStrips count];i++)
+		{
+			MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
+			[strip resetDisplay];
+		}
+	}
+	else
+	{
+		for(i=0;i<[meterBridgeChannelStrips count];i++)
+		{
+			MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
+			[strip update];
+		}
+	}
+}
+
 
 @end

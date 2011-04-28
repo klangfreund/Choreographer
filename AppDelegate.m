@@ -69,7 +69,6 @@
 	}
 }
 
-
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
 {
 	[startupSplashWindow center];

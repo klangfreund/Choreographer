@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 28.08.09.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "Region.h"

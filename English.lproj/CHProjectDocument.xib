@@ -12,9 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="921"/>
 			<integer value="321"/>
-			<integer value="923"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -950,11 +948,13 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{0, 10}, {290, 50}}</string>
 						<reference key="NSSuperview" ref="542135914"/>
+						<reference key="NSWindow"/>
 						<string key="NSClassName">LoopCounterView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{290, 60}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="435967860">
@@ -1036,6 +1036,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{20, 9}, {38, 26}}</string>
 						<reference key="NSSuperview" ref="679714601"/>
+						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="987540478">
 							<int key="NSCellFlags">67239424</int>
@@ -1054,6 +1055,7 @@
 				</object>
 				<string key="NSFrameSize">{80, 45}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSSlider" id="386912358">
@@ -1079,7 +1081,7 @@
 			<object class="NSUserDefaultsController" id="1000710356">
 				<object class="NSMutableArray" key="NSDeclaredKeys">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>self.masterVolume</string>
+					<string>isPlaying</string>
 				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
@@ -1497,22 +1499,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: values.self.masterVolume</string>
-						<reference key="source" ref="62764329"/>
-						<reference key="destination" ref="1000710356"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="62764329"/>
-							<reference key="NSDestination" ref="1000710356"/>
-							<string key="NSLabel">value: values.self.masterVolume</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">values.self.masterVolume</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">952</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: self.loopMode</string>
 						<reference key="source" ref="288002947"/>
 						<reference key="destination" ref="228899350"/>
@@ -1526,6 +1512,78 @@
 						</object>
 					</object>
 					<int key="connectionID">955</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.masterVolume</string>
+						<reference key="source" ref="62764329"/>
+						<reference key="destination" ref="228899350"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="62764329"/>
+							<reference key="NSDestination" ref="228899350"/>
+							<string key="NSLabel">value: self.masterVolume</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.masterVolume</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">959</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">target: self</string>
+						<reference key="source" ref="135020595"/>
+						<reference key="destination" ref="228899350"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="135020595"/>
+							<reference key="NSDestination" ref="228899350"/>
+							<string key="NSLabel">target: self</string>
+							<string key="NSBinding">target</string>
+							<string key="NSKeyPath">self</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSSelectorName</string>
+								<string key="NS.object.0">stopPlayback</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">963</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">target: self</string>
+						<reference key="source" ref="912341771"/>
+						<reference key="destination" ref="228899350"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="912341771"/>
+							<reference key="NSDestination" ref="228899350"/>
+							<string key="NSLabel">target: self</string>
+							<string key="NSBinding">target</string>
+							<string key="NSKeyPath">self</string>
+							<object class="NSDictionary" key="NSOptions">
+								<string key="NS.key.0">NSSelectorName</string>
+								<string key="NS.object.0">returnToZero</string>
+							</object>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">965</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: isPlaying</string>
+						<reference key="source" ref="43106197"/>
+						<reference key="destination" ref="228899350"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="43106197"/>
+							<reference key="NSDestination" ref="228899350"/>
+							<string key="NSLabel">value: isPlaying</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">isPlaying</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">967</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2506,9 +2564,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{106, 31}, {1000, 484}}</string>
+					<string>{{12, -18}, {1000, 484}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{106, 31}, {1000, 484}}</string>
+					<string>{{12, -18}, {1000, 484}}</string>
 					<integer value="1"/>
 					<integer value="0"/>
 					<string>{{12, 641}, {1000, 515}}</string>
@@ -2666,7 +2724,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">955</int>
+			<int key="maxID">967</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

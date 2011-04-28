@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 22.12.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
@@ -11,12 +11,15 @@
 
 @interface MeterBridgeWindowController : NSWindowController
 {
-	IBOutlet NSView *meterBridgeView;
-	NSMutableArray *meterBridgeChannelStripControllers;
+	IBOutlet NSView *channelStripView;
+	NSMutableArray *meterBridgeChannelStrips;
+
+	NSTimer		 *refreshGUITimer;
 }
 
-+ (id)sharedMeterBridgeWindowController;
-
 - (void)updateGUI;
+
+- (void)run;
+- (void)tick;
 
 @end

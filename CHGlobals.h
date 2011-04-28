@@ -3,10 +3,10 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 10.11.07.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
-#define CHOREOGRAPHER_VERSION @"Version: alpha 1"
+//#define CHOREOGRAPHER_VERSION @"Version: alpha 1"
 
 
 // types for drag and drop

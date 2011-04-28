@@ -3,7 +3,7 @@
 //  Choreographer
 //
 //  Created by Philippe Kocher on 06.10.10.
-//  Copyright 2010 Zurich University of the Arts. All rights reserved.
+//  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
 #import "SpeakerSetups.h"
@@ -22,6 +22,7 @@
 	{
 		dbGain = 0;
 		position = [[SpatialPosition alloc] init];
+		position.d = 1;
 		hardwareDeviceOutputChannel = -1;
 	}
 	
@@ -194,7 +195,7 @@
 
 - (void)updateEngine
 {
-	//NSLog(@"update engine....");
+	NSLog(@"update engine....");
 	
 	// remove all speaker channels in order to build a new speaker setup from scatch
 	[[AudioEngine sharedAudioEngine] removeAllSpeakerChannels];
