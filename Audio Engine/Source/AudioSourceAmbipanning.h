@@ -465,6 +465,7 @@ private:
 
 	SpacialEnvelopePointComparator spacialEnvelopePointComparator;
 	bool newSpacialEnvelopeSet;
+	bool numberOfSpeakersChanged;
 	bool constantSpacialPosition;
 	
 	int volatile nextPlayPosition;

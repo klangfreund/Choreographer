@@ -16,7 +16,9 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
       audioBlockEndPosition (-2),
       previousSpacialPoint (),
 	  nextSpacialPoint (),
-	  nextSpacialPointIndex (0)
+	  nextSpacialPointIndex (0),
+	  newSpacialEnvelopeSet (false),
+	  numberOfSpeakersChanged (false)
 {
 	DBG(T("AudioSourceAmbipanning: constructor called."));
 	
@@ -67,7 +69,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 								    // the current audio block.
 	
 	// only the first channel of info will be filled with audio.
-	// (Since only mono sources are allowed in this application.)
+	// (Since only mono sources are allowed.)
 	monoBuffer.setDataToReferTo(info.buffer->getArrayOfChannels(), 1, info.buffer->getNumSamples());
 	monoInfo.startSample = info.startSample;
 	monoInfo.numSamples = info.numSamples;
@@ -86,19 +88,22 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	
 
 	// This will be executed when a new spacial envelope has been set with setSpacialEnvelope(..).
-	if (newSpacialEnvelopeSet)
+	if (newSpacialEnvelopeSet || numberOfSpeakersChanged)
 	{
-		Array<void*> oldSpacialEnvelope = spacialEnvelope;
-		spacialEnvelope = newSpacialEnvelope;
-		previousChannelFactor = channelFactor; // This is used in the info.buffer->applyGainRamp(..)
-		// a couple of lines below to generate a smooth transition from the current spacial value to 
-		// the spacial value of the new envelope.
-		
-		// delete content of the old spacial envelope
-		for (int i = oldSpacialEnvelope.size(); --i >= 0;)
+		if (newSpacialEnvelopeSet)
 		{
-			SpacialEnvelopePoint* spacialEnvelopePointToDelete = (SpacialEnvelopePoint*)oldSpacialEnvelope[i];
-			delete spacialEnvelopePointToDelete;
+			Array<void*> oldSpacialEnvelope = spacialEnvelope;
+			spacialEnvelope = newSpacialEnvelope;
+			previousChannelFactor = channelFactor; // This is used in the info.buffer->applyGainRamp(..)
+			// a couple of lines below to generate a smooth transition from the current spacial value to 
+			// the spacial value of the new envelope.
+			
+			// delete content of the old spacial envelope
+			for (int i = oldSpacialEnvelope.size(); --i >= 0;)
+			{
+				SpacialEnvelopePoint* spacialEnvelopePointToDelete = (SpacialEnvelopePoint*)oldSpacialEnvelope[i];
+				delete spacialEnvelopePointToDelete;
+			}
 		}
 		
 		if (spacialEnvelope.size() == 1) // by the way: size() == 0 can't be, this was
@@ -336,21 +341,30 @@ void AudioSourceAmbipanning::setSpacialEnvelope(Array<void*> newSpacialEnvelope_
 
 void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
 {
-	int size = channelFactorAtPreviousSpacialPoint.size();
-	int numberOfNewElements = jmax(numberOfSpeakers - size, 0);
-	channelFactorAtPreviousSpacialPoint.insertMultiple(size - 1, 0.0, numberOfNewElements);
-	channelFactorAtNextSpacialPoint.insertMultiple(size - 1, 0.0, numberOfNewElements);
-	channelFactor.insertMultiple(size - 1, 0.0, numberOfNewElements);
-	previousChannelFactor.insertMultiple(size - 1, 0.0, numberOfNewElements);
-	channelFactorDelta.insertMultiple(size - 1, 0.0, numberOfNewElements);
-	  // arguments:
-	  //  indexToInsertAt         = size - 1
-	  //  newElement              = 0.0
-	  //  numberOfTimesToInsertIt = numberOfNewElements
-	sample.insertMultiple(size - 1, 0, numberOfNewElements);
+//	int old_size = channelFactor.size();
+	int new_size = numberOfSpeakers;
 	
-	newSpacialEnvelopeSet = true; // Even thought not exactly a true statement, this enforces 
-	  // getNextAudioBlock(..) to refill the arrays
+//	if (new_size != old_size)
+//	{
+		channelFactorAtPreviousSpacialPoint.clear();
+		channelFactorAtNextSpacialPoint.clear();
+		channelFactor.clear();
+		previousChannelFactor.clear();
+		channelFactorDelta.clear();
+		
+		int indexToInsertAt = 0;
+		double newElement = 0.0;
+		int numberOfTimesToInsertIt = new_size;
+		channelFactorAtPreviousSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+		channelFactorAtNextSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+		channelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+		previousChannelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+		channelFactorDelta.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);		
+//	}
+	
+	numberOfSpeakersChanged = true; // This will trigger the section in
+		// getNextAudioBlock() which will fill the Factor-Arrays with
+		// useful values.
 }
 
 // ------------ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/   ------------
@@ -368,7 +382,11 @@ void AudioSourceAmbipanning::setNumberOfSpeakers(int numberOfSpeakers_)
 }
 
 void AudioSourceAmbipanning::setPositionOfSpeakers(Array<void*> positionOfSpeaker_)
-{
+{	
+	// Deallocation of memory needs to be done at another place, since
+	// all AudioSourceAmbipanning objects refere to the same memory location
+	// for this.
+	
 	positionOfSpeaker = positionOfSpeaker_;
 }
 

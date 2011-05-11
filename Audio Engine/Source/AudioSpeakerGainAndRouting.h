@@ -436,6 +436,8 @@ private:
 	 */
 	bool aepChannelIsConnectedWithActiveHardwareChannel(int aepChannel);
 	
+	bool deleteSpeakerPositions(Array<void*> positionOfSpeakers_);
+	
 	AudioSource* audioSource;
 	AudioRegionMixer* audioRegionMixer;	
 	AudioDeviceManager* audioDeviceManager;
@@ -456,6 +458,11 @@ private:
 	int numberOfSoloedChannels;
 	int numberOfChannelsWithActivatedPinkNoise;
 	int numberOfChannelsWithEnabledMeasurement;
+	
+	Array<void*> positionOfSpeakers;
+			///< This class needs to know it, because it is responsible
+			///  for the deallocation of the SpeakerPosition's. Which happens
+			///  in enableNewRouting().
 	
 	AudioSampleBuffer pinkNoiseBuffer;  ///< Used in getNextAudioBlock .
 	AudioSourceChannelInfo pinkNoiseInfo; ///< Used in getNextAudioBlock .

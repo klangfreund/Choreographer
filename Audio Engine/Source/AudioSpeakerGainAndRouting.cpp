@@ -24,7 +24,8 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
   numberOfChannelsWithActivatedPinkNoise (0),
   numberOfChannelsWithEnabledMeasurement (0),
   pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE)
+  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
+  positionOfSpeakers ()
 {
 	DBG(T("AudioSpeakerGainAndRouting: constructor (without any argument) called."));
 	
@@ -46,7 +47,8 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audio
   numberOfChannelsWithActivatedPinkNoise (0),
   numberOfChannelsWithEnabledMeasurement (0),
   pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE)
+  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
+  positionOfSpeakers ()
 {
 	DBG(T("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager argument) called."));
 	
@@ -61,6 +63,7 @@ AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
 	DBG(T("AudioSpeakerGainAndRouting: destructor called."));
 	
 	removeAllRoutingsAndAllAepChannels();
+	deleteSpeakerPositions(positionOfSpeakers);
 }
 
 void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
@@ -106,6 +109,8 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 											   bool mute, bool activatePinkNoise, 
 											   double x, double y, double z)
 {
+	DBG(T("AudioSpeakerGainAndRouting: addAepChannel has been called."));
+
 	if (aepChannelSettingsAscending.size() > aepChannel)
 	{
 		// The specified AEP channel already exists.
@@ -462,7 +467,9 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
 	
 	double x, y, z;
-	Array<void*> positionOfSpeakers;
+	Array<void*> oldPositionOfSpeakers = positionOfSpeakers;
+	Array<void*> newPositionOfSpeakers;
+	positionOfSpeakers = newPositionOfSpeakers;
 	
 	// The pairs in aepChannelHardwareOutputPairs are in ascending order,
 	// sorted by their hardware output channel values.
@@ -476,7 +483,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 		aepChannelSettingsOrderedByActiveHardwareChannels.add(
 		    aepChannelSettingsAscending[AepChannelConnectedWithTheIthActiveHardwareOutput]);
 		
-		// Fill the positionOfSpeakers array.
+		// Fill the newPositionOfSpeakers array.
 		x = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getX();
 		y = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getY();
 		z = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getZ();
@@ -487,8 +494,21 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	// Let the audioRegionMixer know about the new speaker configurations.
 	audioRegionMixer->setSpeakerPositions(positionOfSpeakers);
 	
+	// delete the content of the oldPositionOfSpeakers
+	deleteSpeakerPositions(oldPositionOfSpeakers);
+	
 	// Return the number of active hardware output channels.
 	return aepChannelHardwareOutputPairs.size();
+}
+
+bool AudioSpeakerGainAndRouting::deleteSpeakerPositions(Array<void*> positionOfSpeakers_)
+{
+	for (int i = positionOfSpeakers_.size(); --i >= 0;)
+	{
+		SpeakerPosition* speakerPositionToDelete = (SpeakerPosition*)positionOfSpeakers_[i];
+		delete speakerPositionToDelete;
+	}
+	return true;
 }
 
 void AudioSpeakerGainAndRouting::removeAllRoutingsAndAllAepChannels()

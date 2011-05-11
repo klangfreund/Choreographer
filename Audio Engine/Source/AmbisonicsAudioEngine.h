@@ -30,7 +30,7 @@ public:
 	/**
 	 The constructor of AmbisonicsAudioEngine.
 	 
-	 Creates an AmbisonicsAudioEngine.
+	 Creates an AmbisonicsAudioEngine object.
 	 */
 	AmbisonicsAudioEngine ();
 	

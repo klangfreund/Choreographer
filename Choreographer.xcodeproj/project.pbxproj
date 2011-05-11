@@ -493,19 +493,11 @@
 				15512E6D13267F9700C6D038 /* AudioSourceGainEnvelope.h */,
 				15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */,
 				15512E6F13267F9700C6D038 /* AudioSpeakerGainAndRouting.h */,
-				15512E7013267F9700C6D038 /* html */,
 				15512E7113267F9700C6D038 /* modified Juce Classes */,
 				15512E7C13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp */,
 				15512E7D13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.h */,
 			);
 			path = Source;
-			sourceTree = "<group>";
-		};
-		15512E7013267F9700C6D038 /* html */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = html;
 			sourceTree = "<group>";
 		};
 		15512E7113267F9700C6D038 /* modified Juce Classes */ = {
