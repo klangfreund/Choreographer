@@ -31,13 +31,16 @@
 	NSMutableArray *speakerSetupChannelStripControllers;
 
 	int testNoiseChannel;
-}
 
-//+ (id)sharedSpeakerSetupWindowController;
+	NSTimer *refreshGUITimer;
+}
 
 - (void)setSelectedIndex:(NSUInteger)index;
 - (void)updateGUI;
 - (void)testNoise:(BOOL)enable channelIndex:(int)index;
+
+- (void)run;
+- (void)tick;
 
 // window delegate methods
 - (void)unsavedPresetsAlertDidEnd:(NSAlert *)alert returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo;

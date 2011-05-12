@@ -14,20 +14,9 @@
 
 @implementation SpeakerSetupWindowController
 
-//static SpeakerSetupWindowController *sharedSpeakerSetupWindowController = nil;
-
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
-
-//+ (id)sharedSpeakerSetupWindowController
-//{
-//    if (!sharedSpeakerSetupWindowController)
-//	{
-//        sharedSpeakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
-//    }
-//    return sharedSpeakerSetupWindowController;
-//}
 
 - (id)init
 {
@@ -70,7 +59,26 @@
 
 
 #pragma mark -
-#pragma mark refresh gui
+#pragma mark window
+// -----------------------------------------------------------
+
+- (void)showWindow:(id)sender
+{
+	[super showWindow:sender];
+	[self run];
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[refreshGUITimer invalidate];
+	refreshGUITimer = nil;
+	
+	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:NO];
+}
+
+
+#pragma mark -
+#pragma mark update gui
 // -----------------------------------------------------------
 
 - (void)setSelectedIndex:(NSUInteger)index
@@ -188,6 +196,48 @@
 		[[AudioEngine sharedAudioEngine] testNoise:YES forChannelatIndex:testNoiseChannel];
 	}
 }
+
+//- (void)resetAllPeaks
+//{
+//	int i;
+//	
+//	for(i=0;i<[speakerSetupChannelStripControllers count];i++)
+//	{
+//		SpeakerSetupChannelStrip *strip = [speakerSetupChannelStripControllers objectAtIndex:i];
+//		[strip resetPeak];
+//		[strip update];
+//	}
+//}
+
+- (void)run
+{
+	if(refreshGUITimer)
+	{
+		[refreshGUITimer invalidate];
+	}
+	
+	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:YES];
+	
+	refreshGUITimer = [NSTimer timerWithTimeInterval:0.05
+											  target:self
+											selector:@selector(tick)
+											userInfo:nil
+											 repeats:YES];
+	
+	[[NSRunLoop currentRunLoop] addTimer:refreshGUITimer forMode:NSRunLoopCommonModes];
+}
+
+- (void)tick
+{
+	int i;
+	
+	for(i=0;i<[speakerSetupChannelStripControllers count];i++)
+	{
+		SpeakerSetupChannelStrip *strip = [speakerSetupChannelStripControllers objectAtIndex:i];
+		[strip update];
+	}
+}
+
 
 #pragma mark -
 #pragma mark window delegate methods

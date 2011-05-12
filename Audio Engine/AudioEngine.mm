@@ -77,6 +77,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	meterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
 	
 	regionIndex = 0;	
+	volumeLevelMeasurementClientCount = 0;
 }
 
 - (void)dealloc
@@ -126,7 +127,6 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)testNoise:(BOOL)enable forChannelatIndex:(NSUInteger)index
 {
-	NSLog(@"test noise %i in channel %i", enable, index);
 	ambisonicsAudioEngine->activatePinkNoise(index, enable);
 }
 
@@ -143,8 +143,6 @@ static AudioEngine *sharedAudioEngine = nil;
 	isPlaying = YES;
 	
 	ambisonicsAudioEngine->start();
-	
-	[meterBridgeWindowController run];
 }
 
 - (void)stopAudio
@@ -281,9 +279,13 @@ static AudioEngine *sharedAudioEngine = nil;
 
 	NSLog(@"modifyAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
 
-	unsigned long  newStartTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * 44.1;
-	unsigned long  newDuration = [[audioRegion valueForKey:@"duration"] unsignedLongValue] * 44.1;
-	unsigned long  newOffsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * 44.1;
+	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	int fromMsToSamples = 0.001*sampleRate;
+	
+	// These new values are measured in samples
+	unsigned long  newStartTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * fromMsToSamples;
+	unsigned long  newDuration = [[audioRegion valueForKey:@"duration"] unsignedLongValue] * fromMsToSamples;
+	unsigned long  newOffsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 
 	ambisonicsAudioEngine->modifyAudioRegion(index, newStartTime, newDuration, newOffsetInFile);
 
@@ -341,13 +343,22 @@ static AudioEngine *sharedAudioEngine = nil;
 //	NSLog(@"setSpatialAutomation for AudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
 	
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	int fromMsToSamples = 0.001*sampleRate;
+	unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 	for(id bp in [audioRegion valueForKey:@"playbackBreakpointArray"])
 	{
+		// Reminder from the documentation of ambisonicsAudioEngine->setSpacialEnvelopeForRegion(..):
+		//  The spacial envelope contains points. Such a point holds four values: The position
+		//  (the time information, measured in samples, starting at the beginning of the audiofile
+		//   - not at the beginning of a region with an offset) and the x, y and z coordinates.
 		SpacialEnvelopePoint* spacialEnvelopePoint 
-		  = new SpacialEnvelopePoint([[bp valueForKey:@"time"] longValue] * 0.001 * sampleRate,
+		  = new SpacialEnvelopePoint([[bp valueForKey:@"time"] longValue] * fromMsToSamples + offsetInFile,
 									 [[bp valueForKey:@"x"] floatValue],
 									 [[bp valueForKey:@"y"] floatValue],
 									 [[bp valueForKey:@"z"] floatValue]);
+			// The "+ offsetInFile" is needed because the GUI wants to start with the spacial envelope at
+			// the start of a region, whereas the audio engine wants it to start at the beginning of the
+			// audio file.
 		spacialEnvelope.add(spacialEnvelopePoint);
 		
 //		NSLog(@"time: %ld x: %f y: %f z: %f",
@@ -431,15 +442,37 @@ static AudioEngine *sharedAudioEngine = nil;
 // -----------------------------------------------------------
 
 
+- (void)volumeLevelMeasurementClient:(BOOL)val
+{
+
+	// int i;
+	
+	if(val && volumeLevelMeasurementClientCount == 0)
+	{
+		NSLog(@"enable Volume Meter");
+		[self enableVolumeLevelMeasurement:YES];		
+	}
+	else if(!val && volumeLevelMeasurementClientCount == 1)
+	{
+		NSLog(@"disable Volume Meter");
+		[self enableVolumeLevelMeasurement:NO];
+	}
+
+	
+	if(val)volumeLevelMeasurementClientCount++;
+	else volumeLevelMeasurementClientCount--;
+}
+
 - (void)enableVolumeLevelMeasurement:(BOOL)val
 {
 	int i;
-	
+
 	for(i=0;i<[self numberOfSpeakerChannels];i++)
 	{
 		ambisonicsAudioEngine->enableMeasurement(i, val);
 	}
 }
+
 
 - (void)resetVolumePeakLevel:(NSUInteger)channel
 {

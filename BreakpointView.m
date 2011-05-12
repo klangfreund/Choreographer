@@ -10,6 +10,7 @@
 #import "BreakpointBezierPath.h"
 #import "CHProjectDocument.h"
 #import "CHGlobals.h"
+#import "EditorContent.h"
 #import "ToolTip.h"
 #import "Region.h"
 
@@ -22,22 +23,20 @@
 @synthesize breakpointArray;
 @synthesize xAxisMin, xAxisMax;
 @synthesize yAxisMin, yAxisMax;
-@synthesize 
-toolTipString;
+@synthesize toolTipString;
 
 
 - (id)init
 {
 	if(self = [super init])
 	{
-		selectedBreakpoints = [[NSMutableSet alloc] init];
+		isKey = NO;
 	}
 	return self;
 }
 
 - (void)dealloc
 {
-	[selectedBreakpoints release];
 	[gridPath release];
 	
 	[super dealloc];	
@@ -50,6 +49,8 @@ toolTipString;
 	double xAxisValue, yAxisValue;
 	Breakpoint *bp;
 	
+
+	editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
 
 	// background
 
@@ -98,7 +99,7 @@ toolTipString;
 		p1 = NSMakePoint(rect.origin.x + xAxisValue, rect.origin.y + rect.size.height - yAxisValue);
 		breakpointBezierPath = [BreakpointBezierPath breakpointBezierPathWithType:breakpointTypeNormal location:p1];
 		
-		if([selectedBreakpoints containsObject:bp])
+		if([editorSelection containsObject:bp])
 			[[NSColor blackColor] set];
 		else
 			[[NSColor whiteColor] set];
@@ -134,7 +135,7 @@ toolTipString;
 	rect.size.height = MOUSE_POINTER_SIZE / yAxisFactor;
 	
 	hit = nil;
-	
+	isKey = YES;	
 
 	// COMMAND click adds new point
 	if(document.keyboardModifierKeys == modifierCommand)
@@ -142,13 +143,15 @@ toolTipString;
 		bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setValue:[NSNumber numberWithFloat:rect.origin.x] forKey:xAxisValueKeypath];
 		[bp setValue:[NSNumber numberWithFloat:rect.origin.y] forKey:yAxisValueKeypath];
+		[bp setBreakpointType:breakpointTypeNormal];
+
 		[breakpointArray addObject:bp];
 		[self sortBreakpoints];
 
 		// select the new point
 		hit = bp;
-		[selectedBreakpoints removeAllObjects];
-		[selectedBreakpoints addObject:bp];
+		[editorSelection removeAllObjects];
+		[editorSelection addObject:bp];
 		
 		return;
 	}
@@ -163,14 +166,14 @@ toolTipString;
 		{
 			if(NSPointInRect(p, rect))
 			{
-				if([selectedBreakpoints containsObject:bp])
+				if([editorSelection containsObject:bp])
 				{
-					[selectedBreakpoints removeObject:bp];
+					[editorSelection removeObject:bp];
 				}
 				else
 				{
 					hit = bp;
-					[selectedBreakpoints addObject:bp];
+					[editorSelection addObject:bp];
 					[self sortBreakpoints];
 				}
 				return;
@@ -182,10 +185,10 @@ toolTipString;
 			if(NSPointInRect(p, rect))
 			{
 				hit = bp;
-				if(![selectedBreakpoints containsObject:bp])
+				if(![editorSelection containsObject:bp])
 				{
-					[selectedBreakpoints removeAllObjects];
-					[selectedBreakpoints addObject:bp];
+					[editorSelection removeAllObjects];
+					[editorSelection addObject:bp];
 				}
 				return;
 			}
@@ -198,7 +201,7 @@ toolTipString;
 
 - (NSPoint)proposedMouseDrag:(NSPoint)delta
 {
-	if(![selectedBreakpoints count]) return delta;
+	if(![editorSelection count] || !isKey) return delta;
 
 	NSPoint tempDelta = delta;
 	
@@ -211,7 +214,7 @@ toolTipString;
 	tempDelta.x /= xAxisFactor; 
 	tempDelta.y /= yAxisFactor;
 	
-	for(Breakpoint *bp in selectedBreakpoints)
+	for(Breakpoint *bp in editorSelection)
 	{
 		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue];
 		yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue];
@@ -242,7 +245,7 @@ toolTipString;
 
 - (void)mouseDragged:(NSPoint)delta
 {
-	if(![selectedBreakpoints count]) return;
+	if(![editorSelection count] || !isKey) return;
 		
 	double xAxisFactor = frame.size.width / (xAxisMax - xAxisMin);
 	double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
@@ -253,7 +256,7 @@ toolTipString;
 	delta.x /= xAxisFactor; 
 	delta.y /= yAxisFactor;
 	
-	for(Breakpoint *bp in selectedBreakpoints)
+	for(Breakpoint *bp in editorSelection)
 	{
 		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] + delta.x;
 		yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - delta.y;
@@ -275,11 +278,12 @@ toolTipString;
 {
 	[self performUpdateCallback];
 
-	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
-	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];
+//	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
+//	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];
 //	[[[managedObjectContext undoManager] prepareWithInvocationTarget:self] undoableUpdateView];
 
 	[ToolTip release];
+	isKey = NO;
 }
 
 
@@ -301,13 +305,13 @@ toolTipString;
 
 - (void)deselectAll
 {
-	[selectedBreakpoints removeAllObjects];
+	[editorSelection removeAllObjects];
 }
 
 
 - (void)removeSelectedBreakpoints
 {
-	for(Breakpoint *bp in selectedBreakpoints)
+	for(Breakpoint *bp in editorSelection)
 	{
 		[breakpointArray removeObject:bp];
 	}

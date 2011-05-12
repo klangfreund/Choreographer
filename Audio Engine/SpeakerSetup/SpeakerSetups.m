@@ -57,12 +57,15 @@
 	if(!object) return;
 			
 	[self removeObserver:observer forKeyPath:@"dbGain"];
+	[self removeObserver:observer forKeyPath:@"solo"];
+	[self removeObserver:observer forKeyPath:@"mute"];
 	[self removeObserver:observer forKeyPath:@"position.a"];
 	[self removeObserver:observer forKeyPath:@"position.e"];
 	[self removeObserver:observer forKeyPath:@"position.d"];
 	[self removeObserver:observer forKeyPath:@"hardwareDeviceOutputChannel"];
 
 	[observer release];
+	observer = nil;
 }
 
 

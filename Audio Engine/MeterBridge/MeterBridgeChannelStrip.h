@@ -12,11 +12,13 @@
 @interface MeterBridgeChannelStrip : NSObject
 {
 	IBOutlet LevelMeterView *levelMeterView;
+	id meterBridgeWindowController;
 	int channelIndex;
 }
 
 - (void)update;
 - (void)resetPeak;
-- (void)resetDisplay;
+- (void)resetAllPeaks;
+//- (void)resetDisplay;
 
 @end

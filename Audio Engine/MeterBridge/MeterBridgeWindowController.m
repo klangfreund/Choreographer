@@ -44,16 +44,27 @@
 	[super dealloc];
 }
 
+
+#pragma mark -
+#pragma mark window
+// -----------------------------------------------------------
+
 - (void)showWindow:(id)sender
 {
 	[super showWindow:sender];
-	
-	if([[AudioEngine sharedAudioEngine] isPlaying])
-		[self run];
+	[self run];
+}
+
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[refreshGUITimer invalidate];
+	refreshGUITimer = nil;
+
+	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:NO];
 }
 
 #pragma mark -
-#pragma mark refresh gui
+#pragma mark update gui
 // -----------------------------------------------------------
 
 - (void)updateGUI
@@ -84,6 +95,8 @@
 	
 	r.size.width = 55 + numberOfOutputChannels * 30;
 	[[self window] setFrame:r display:YES];
+	[[self window] setContentMaxSize:NSMakeSize(r.size.width, FLT_MAX)];
+	[[self window] setContentMinSize:NSMakeSize(r.size.width, 200)];
 	
 	for(i=0;i<numberOfOutputChannels;i++)
 	{
@@ -92,6 +105,7 @@
 		
 		[meterBridgeChannelStrips addObject:strip];
 		
+		[strip setValue:self forKey:@"meterBridgeWindowController"];
 		[strip setValue:[NSNumber numberWithInt:i + 1] forKey:@"channelIndex"];
 		
 		[nib instantiateNibWithOwner:strip topLevelObjects:&theArray];
@@ -100,10 +114,30 @@
 		{
 			if([item isKindOfClass:[NSView class]])
 			{
-				[item setFrameOrigin:NSMakePoint(i * 30,0)];
+				r = [item frame];
+				r.origin = NSMakePoint(i * 30,0);
+				r.size.height = [channelStripView frame].size.height;
+				[item setFrame:r];
+				
 				[channelStripView addSubview:item];
 			}
 		}
+	}
+
+
+	[[AudioEngine sharedAudioEngine] enableVolumeLevelMeasurement:YES];
+}
+
+
+- (void)resetAllPeaks
+{
+	int i;
+
+	for(i=0;i<[meterBridgeChannelStrips count];i++)
+	{
+		MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
+		[strip resetPeak];
+		[strip update];
 	}
 }
 
@@ -114,46 +148,25 @@
 		[refreshGUITimer invalidate];
 	}
 	
-	if([[self window] isVisible])
-	{
-		[[AudioEngine sharedAudioEngine] enableVolumeLevelMeasurement:YES];
+	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:YES];
 
-		refreshGUITimer = [NSTimer timerWithTimeInterval:0.01
-												  target:self
-												selector:@selector(tick)
-												userInfo:nil
-												 repeats:YES];
+	refreshGUITimer = [NSTimer timerWithTimeInterval:0.05
+											  target:self
+											selector:@selector(tick)
+											userInfo:nil
+											 repeats:YES];
 
-		[[NSRunLoop currentRunLoop] addTimer:refreshGUITimer forMode:NSRunLoopCommonModes];
-	}
-	else
-	{
-		[[AudioEngine sharedAudioEngine] enableVolumeLevelMeasurement:NO];
-	}
-
+	[[NSRunLoop currentRunLoop] addTimer:refreshGUITimer forMode:NSRunLoopCommonModes];
 }
 
 - (void)tick
 {
 	int i;
 	
-	if(![[AudioEngine sharedAudioEngine] isPlaying] || ![[self window] isVisible])
+	for(i=0;i<[meterBridgeChannelStrips count];i++)
 	{
-		[refreshGUITimer invalidate];
-		refreshGUITimer = nil;
-		for(i=0;i<[meterBridgeChannelStrips count];i++)
-		{
-			MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
-			[strip resetDisplay];
-		}
-	}
-	else
-	{
-		for(i=0;i<[meterBridgeChannelStrips count];i++)
-		{
-			MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
-			[strip update];
-		}
+		MeterBridgeChannelStrip *strip = [meterBridgeChannelStrips objectAtIndex:i];
+		[strip update];
 	}
 }
 

@@ -14,9 +14,24 @@
 	IBOutlet id owner;
 	float level;
 	float peakLevel;
+	
+	BOOL isVertical;
+
+	NSColor *tickColor;
+	NSColor *overloadColor;
+	NSColor *hotColor;
+	NSColor *coolColor;	
 }
+
+- (void)drawVertical:(NSRect)dirtyRect;
+- (void)drawHorizontal:(NSRect)dirtyRect;
 
 - (void)setLevel:(float)dBValue;
 - (void)setPeakLevel:(float)dBValue;
+
+@end
+
+
+@interface DBLabelsView : NSView
 
 @end

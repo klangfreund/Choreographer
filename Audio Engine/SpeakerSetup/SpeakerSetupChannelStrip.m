@@ -8,6 +8,7 @@
 
 #import "SpeakerSetupChannelStrip.h"
 #import "SpeakerSetupWindowController.h"
+#import "AudioEngine.h"
 
 @implementation SpeakerSetupChannelStrip
 
@@ -26,6 +27,13 @@
 	[speakerSetupWindowController testNoise:val channelIndex:channelIndex];
 	test = val;
 }
+
+- (void)update
+{
+//	levelMeterView.peakLevel = [[AudioEngine sharedAudioEngine] volumePeakLevel:channelIndex]; 			
+	levelMeterView.level = [[AudioEngine sharedAudioEngine] volumeLevel:channelIndex];
+}
+
 
 // text field delegate method
 // remove fokus when user hits return/enter

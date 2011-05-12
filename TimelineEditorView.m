@@ -120,7 +120,7 @@
 	for(BreakpointView *bpView in breakpointViews)
 	{
 		[bpView setValue:[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] forKey:@"breakpointArray"];
-		[bpView setUpdateCallbackObject:[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] selector:@selector(archiveData)];
+//		[bpView setUpdateCallbackObject:[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] selector:@selector(archiveData)];
 
 		[bpView drawInRect:r];
 		
@@ -154,6 +154,8 @@
 	{
 		[bpView mouseDown:localPoint];
 	}
+
+	[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] updateModel];
 }
 
 //- (NSPoint)proposedMouseDrag:(NSPoint)delta

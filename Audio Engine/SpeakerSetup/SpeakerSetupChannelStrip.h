@@ -8,10 +8,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "SpeakerSetups.h"
+#import "LevelMeterView.h"
 
 
 @interface SpeakerSetupChannelStrip : NSObjectController
 {
+	IBOutlet LevelMeterView *levelMeterView;
+
 	id speakerSetupWindowController;
 	SpeakerChannel *speakerChannel;
 	int channelIndex;
@@ -20,5 +23,6 @@
 }
 
 - (void)setTest:(BOOL)val;
+- (void)update;
 
 @end

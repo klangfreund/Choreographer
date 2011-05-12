@@ -385,7 +385,8 @@ public:
 	 Attaches a spacial envelope to a region. 
 
 	 The spacial envelope contains points. Such a point holds four values: The position
-	 (the time information, measured in samples) and the x, y and z coordinates.
+	 (the time information, measured in samples, starting at the beginning of the audiofile
+	 - not at the beginning of a region with an offset) and the x, y and z coordinates.
 	 The spacial envelope defines the change of the coordinates over time. Linear interpolation
 	 of the resulting gain values for the speakers for this source is used in between points.
 	 For all time instances before the first point, the coordinates of the first point is

@@ -8,6 +8,7 @@
 
 #import "MeterBridgeChannelStrip.h"
 #import "AudioEngine.h"
+#import "MeterBridgeWindowController.h"
 
 
 @implementation MeterBridgeChannelStrip
@@ -23,9 +24,14 @@
 	[[AudioEngine sharedAudioEngine] resetVolumePeakLevel:channelIndex - 1];
 }
 
-- (void)resetDisplay
+- (void)resetAllPeaks
 {
-	levelMeterView.level = -70;
+	[meterBridgeWindowController resetAllPeaks];
 }
+
+//- (void)resetDisplay
+//{
+//	levelMeterView.level = -70;
+//}
 
 @end

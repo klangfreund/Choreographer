@@ -12,12 +12,14 @@
 @interface MeterBridgeWindowController : NSWindowController
 {
 	IBOutlet NSView *channelStripView;
-	NSMutableArray *meterBridgeChannelStrips;
+	NSMutableArray	*meterBridgeChannelStrips;
 
-	NSTimer		 *refreshGUITimer;
+	NSTimer			*refreshGUITimer;
 }
 
 - (void)updateGUI;
+
+- (void)resetAllPeaks;
 
 - (void)run;
 - (void)tick;

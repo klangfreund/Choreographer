@@ -153,6 +153,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 									   channelFactor[channel]);
 		}
 		newSpacialEnvelopeSet = false;
+		numberOfSpeakersChanged = false;
 	}
 	
 	// This is the regular case

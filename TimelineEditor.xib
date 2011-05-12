@@ -2,17 +2,17 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
-		<string key="IBDocument.SystemVersion">10J567</string>
+		<string key="IBDocument.SystemVersion">10J869</string>
 		<string key="IBDocument.InterfaceBuilderVersion">823</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
-		<string key="IBDocument.HIToolboxVersion">462.00</string>
+		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">823</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="1"/>
+			<integer value="3"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -41,7 +41,7 @@
 				<string key="NSWindowTitle">Timeline Editor</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
 				<string key="NSWindowContentMinSize">{300, 200}</string>
 				<object class="NSView" key="NSWindowView" id="82813442">
 					<reference key="NSNextResponder"/>
@@ -56,7 +56,7 @@
 								<object class="NSTextField" id="508893606">
 									<reference key="NSNextResponder" ref="655615538"/>
 									<int key="NSvFlags">266</int>
-									<string key="NSFrame">{{17, 5}, {208, 18}}</string>
+									<string key="NSFrame">{{17, 5}, {566, 18}}</string>
 									<reference key="NSSuperview" ref="655615538"/>
 									<bool key="NSEnabled">YES</bool>
 									<object class="NSTextFieldCell" key="NSCell" id="95620659">
@@ -123,7 +123,7 @@
 										<string key="NSColorName">controlColor</string>
 										<object class="NSColor" key="NSColor">
 											<int key="NSColorSpace">3</int>
-											<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+											<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
 										</object>
 									</object>
 									<int key="NScvFlags">2</int>
@@ -136,7 +136,7 @@
 									<reference key="NSTarget" ref="801673763"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSCurValue">1</double>
-									<double key="NSPercent">0.9636363</double>
+									<double key="NSPercent">0.96363627910614014</double>
 								</object>
 								<object class="NSScroller" id="391666093">
 									<reference key="NSNextResponder" ref="801673763"/>
@@ -146,7 +146,7 @@
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="801673763"/>
 									<string key="NSAction">_doScroller:</string>
-									<double key="NSPercent">0.50602409999999998</double>
+									<double key="NSPercent">0.50602412223815918</double>
 								</object>
 							</object>
 							<string key="NSFrame">{{0, 149}, {600, 40}}</string>
@@ -190,7 +190,7 @@
 									<reference key="NSTarget" ref="255035819"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSCurValue">1</double>
-									<double key="NSPercent">0.99328859060402686</double>
+									<double key="NSPercent">0.99328857660293579</double>
 								</object>
 								<object class="NSScroller" id="512757155">
 									<reference key="NSNextResponder" ref="255035819"/>
@@ -201,7 +201,7 @@
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="255035819"/>
 									<string key="NSAction">_doScroller:</string>
-									<double key="NSPercent">0.9966666666666667</double>
+									<double key="NSPercent">0.99666666984558105</double>
 								</object>
 							</object>
 							<string key="NSFrame">{{-1, -1}, {600, 150}}</string>
@@ -218,7 +218,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{300, 222}</string>
-				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="774722253">
 				<bool key="NSSharedInstance">YES</bool>

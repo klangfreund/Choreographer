@@ -297,7 +297,7 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int regionID, Array<vo
 					spacialEnvelope.addSorted(spacialEnvelopePointComparator, newLastSpacialPoint);
 				}
 				
-				//temp: to check
+				//DEBUGGING:
 				// firstGainPoint = (AudioEnvelopePoint*)gainEnvelope[0];
 				// DBG(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
 			}

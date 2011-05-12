@@ -27,9 +27,10 @@
 	
 	IBOutlet NSMenu *menu;
 
-	unsigned int regionIndex;
-	
 	BOOL isPlaying;
+
+	NSUInteger regionIndex;
+	NSUInteger volumeLevelMeasurementClientCount;
 }
 
 + (AudioEngine *)sharedAudioEngine;
@@ -98,6 +99,7 @@
 
 //  Level Meter
 
+- (void)volumeLevelMeasurementClient:(BOOL)val;
 - (void)enableVolumeLevelMeasurement:(BOOL)val;
 - (void)resetVolumePeakLevel:(NSUInteger)channel;
 - (float)volumeLevel:(NSUInteger)channel;

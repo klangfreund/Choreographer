@@ -18,8 +18,10 @@
 	Region *owningRegion;
 	
 	NSMutableArray *breakpointArray;
-	NSMutableSet *selectedBreakpoints;
+	id editorSelection;
 	Breakpoint *hit;
+	
+	BOOL isKey; // this breakpoint view is being edited
 
 	NSString *xAxisValueKeypath, *yAxisValueKeypath;
 	unsigned int xAxisMin, xAxisMax;
