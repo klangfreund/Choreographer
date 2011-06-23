@@ -344,6 +344,13 @@ public:
 	 */
 	bool activatePinkNoise(int aepChannel, bool enable);
 	
+	/** Sets the amplitude of the pink noise generator.
+	 * This affects the volume of all pink noises on all channels.
+	 * Setting a new amplitude won't result in a click, since a gain
+	 * ramp is applied to avoid it.
+	 */
+	void setAmplitudeOfPinkNoiseGenerator(const double newAmplitude_);
+										  
 	/** Enables or disables the measurement for the chosen aepChannel.
 	 */
 	bool enableMeasurement(int aepChannel, bool enable);

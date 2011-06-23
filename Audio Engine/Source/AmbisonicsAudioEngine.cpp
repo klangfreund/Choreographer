@@ -11,6 +11,7 @@
 #include "SpeakerTestComponent.h"
 
 #define AUDIOTRANSPORT_BUFFER 2048 // (choose a value >1024)
+#define SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK 512
 
 // constructor
 AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
@@ -26,20 +27,24 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 
 // OPTION 1:
 	// initialise settings file
-	ApplicationProperties::getInstance()
-	->setStorageParameters (T("Choreographer Ambisonics Audio Engine"),
-							T("settings"), String::empty, 1000,
-							PropertiesFile::storeAsXML);
-	
-	// load the previously selected settings for the audio device
-	XmlElement* const savedAudioState = ApplicationProperties::getInstance()->getUserSettings()
-	->getXmlValue (T("audioDeviceState"));
-	String err;
-    err = audioDeviceManager.initialise (256, 256, savedAudioState, true);
-	    // If you ever intend to remove this initialising block here in the constructor:
-	    // Keep in mind that you still have to call audioDeviceManager.initialise once. This
-	    // is the only occurence of this call in the whole Choreographer code.
-    delete savedAudioState;
+//	ApplicationProperties::getInstance()
+//	->setStorageParameters (T("Choreographer Ambisonics Audio Engine"),
+//							T("settings"), String::empty, 1000,
+//							PropertiesFile::storeAsXML);
+//	
+//	// load the previously selected settings for the audio device
+//	XmlElement* const savedAudioState = ApplicationProperties::getInstance()->getUserSettings()
+//	->getXmlValue (T("audioDeviceState"));
+//	String err;
+//    err = audioDeviceManager.initialise (256, 256, savedAudioState, true);
+//	    // If you ever intend to remove this initialising block here in the constructor:
+//	    // Keep in mind that you still have to call audioDeviceManager.initialise once. This
+//	    // is the only occurence of this call in the whole Choreographer code.
+//    delete savedAudioState;
+//	if (err != T(""))
+//	{
+//		DBG(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
+//	}
 
 // OPTION 2:
 //	String err;
@@ -48,16 +53,64 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 //	    // audioDeviceManager) is kind of messed up.
 //	    // E.g. AudioDeviceSetup.outputChannels.toInteger() = 268435455 .
 //	    // The playhead of the Choreographer doesn't move, when initialised this way.
-	if (err != T(""))
+
+	
+	// Initialize the audioDeviceManager (and with it the audioDevice).
+	// ---------------------------------
+	String errorString;
+	int numInputChannelsNeeded = 256;
+	int numOutputChannelsNeeded = 256;
+	bool selectDefaultDeviceOnFailure = true;
+	errorString = audioDeviceManager.initialise (numInputChannelsNeeded, 
+										 numOutputChannelsNeeded, 
+										 0, 
+										 selectDefaultDeviceOnFailure);
+	if (errorString.isNotEmpty())
 	{
-		DBG(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
+		DBG(T("AmbisonicsAudioEngine, constructor: audioDeviceManager, initialisation error = ") + errorString);
+	}
+	
+	// TEMP: Select an audioDevice
+	// ---------------------------
+	
+	// Get the audioDevices names
+	StringArray deviceNames;
+	deviceNames = getAvailableAudioDeviceNames();
+	
+	// Check if there are audioDevices available at all.
+	if (deviceNames.size() < 1)
+	{
+		DBG(T("AmbisonicsAudioEngine, constructor: Can't find a Core Audio device."));
+	}
+	else
+	{
+		DBG(T("AmbisonicsAudioEngine, constructor: Available audio devices:"));
+		for (int i = 0; i < deviceNames.size(); ++i)
+		{
+			DBG(deviceNames[i]);
+			// Output on the console on my system:
+			//	Built-in Output
+			//	Soundflower (2ch)
+			//	Soundflower (16ch)
+		}
+		
+		// Select an audioDevice
+		String chosenOutputDevice = deviceNames[0];
+		//String chosenOutputDevice = T("bla");		
+		String errorString;
+		errorString = setAudioDevice(chosenOutputDevice);
+		if (errorString.isNotEmpty())
+		{
+			DBG(T("AmbisonicsAudioEngine, constructor: Wasn't able to set the audio device ") + chosenOutputDevice);
+			DBG(errorString);
+		}		
 	}
 	
 	
 	
 	// figure out the number of active output channels:
 	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	    // this points to an object already existing, don't delete it!
+	    // This points to an object already existing, don't delete it!
 //	const BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	int numberOfActiveOutputChannels = (audioIODevice->getActiveOutputChannels()).countNumberOfSetBits();
 
@@ -146,14 +199,14 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 //	dialogWindow.setContentComponent(0, false);
 	
 	// store this settings...
-	XmlElement* const audioState = audioDeviceManager.createStateXml();
-	
-	ApplicationProperties::getInstance()->getUserSettings()
-	->setValue (T("audioDeviceState"), audioState);
-	
-	delete audioState;
-	
-	ApplicationProperties::getInstance()->getUserSettings()->saveIfNeeded();
+//	XmlElement* const audioState = audioDeviceManager.createStateXml();
+//	
+//	ApplicationProperties::getInstance()->getUserSettings()
+//	->setValue (T("audioDeviceState"), audioState);
+//	
+//	delete audioState;
+//	
+//	ApplicationProperties::getInstance()->getUserSettings()->saveIfNeeded();
 	
 	
 	// figure out the number of active output channels:
@@ -185,13 +238,71 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 
 }
 
-void AmbisonicsAudioEngine::getNameOfCurrentAudioDevice (char* audioDeviceName,
-														 int maxBufferSizeBytes)
+StringArray AmbisonicsAudioEngine::getAvailableAudioDeviceNames()
+{
+	// Figure out if there is an audioIODeviceType called "CoreAudio".
+	AudioIODeviceType* audioIODeviceTypeCoreAudio = 0;
+	String coreAudioString("CoreAudio");
+	for (int i = 0; i < audioDeviceManager.getAvailableDeviceTypes().size(); ++i)
+	{
+		if (audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i)->getTypeName() == coreAudioString)
+		{
+			DBG(T("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Got the AudioIODeviceType for the CoreAudio."));
+			audioIODeviceTypeCoreAudio = audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i);			
+		}
+	}
+	
+	if (audioIODeviceTypeCoreAudio == 0)
+	{
+		DBG(T("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Couldn't find CoreAudio."));
+		StringArray returnValue; // An empty StringArray.
+		return returnValue;
+	}
+	else
+	{
+		audioIODeviceTypeCoreAudio->scanForDevices();
+		StringArray deviceNames;
+		bool wantInputNames = false;
+		deviceNames = audioIODeviceTypeCoreAudio->getDeviceNames(wantInputNames);
+		
+		return deviceNames;
+	}	
+}
+
+String AmbisonicsAudioEngine::setAudioDevice(String audioDeviceName)
+{
+	// Set the device as new output device
+	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
+	audioDeviceSetup.outputDeviceName = audioDeviceName;
+	bool treatAsChosenDevice = true;
+	String errorString;
+	errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
+	
+	// On failure, initialise the audioDeviceManager again, such that there is at
+	// least something available for audio output.
+	if (errorString.isNotEmpty())
+	{
+		String errorString2;
+		int numInputChannelsNeeded = 256;
+		int numOutputChannelsNeeded = 256;
+		bool selectDefaultDeviceOnFailure = true;
+		errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
+													  numOutputChannelsNeeded, 
+													  0, 
+													  selectDefaultDeviceOnFailure);
+		if (errorString2.isNotEmpty())
+		{
+			DBG(T("AmbisonicsAudioEngine::setAudioDevice: audioDeviceManager, initialisation error = ") + errorString);
+		}
+	}
+	
+	return errorString;
+}
+
+String AmbisonicsAudioEngine::getNameOfCurrentAudioDevice ()
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	String audioDeviceNameString = currentAudioIODevice->getName();
-	// audioDeviceNameString.copyToCString(audioDeviceName, maxBufferSizeBytes);
-    audioDeviceNameString.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
+	return currentAudioIODevice->getName();
 }
 
 double AmbisonicsAudioEngine::getCurrentSampleRate ()
@@ -208,6 +319,58 @@ int AmbisonicsAudioEngine::getNumberOfHardwareOutputChannels()
 int AmbisonicsAudioEngine::getNumberOfAepChannels()
 {
 	return audioSpeakerGainAndRouting.getNumberOfAepChannels();
+}
+
+bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile, 
+										 int bitsPerSample, 
+										 String description,
+										 String originator,
+										 String originatorRef,
+										 int64 timeReferenceSamples,
+										 String codingHistory,
+										 int startSample,
+										 int numberOfSamplesToRead)
+{
+	File fileToWriteTo(absolutePathToAudioFile);	
+	// If this file exists, it needs to be deleted.
+	// (Otherwise the bounced audio would be appended to the existing file.)
+	fileToWriteTo.deleteFile();
+	
+	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();
+	
+	// Generate the metadataValues for the wav file.
+	Time dateAndTime;
+	dateAndTime.setSystemTimeToThisTime();
+	const StringPairArray metadataValues = WavAudioFormat::createBWAVMetadata(description,
+																			  originator, 
+																			  originatorRef, 
+																			  dateAndTime, 
+																			  timeReferenceSamples, 
+																			  codingHistory);
+	// Set up the audioFormatWriter.
+	WavAudioFormat wavAudioFormat;
+	int qualityOptionIndex = 0; // no compression.
+	AudioFormatWriter* audioFormatWriter = wavAudioFormat.createWriterFor(fileOutputStream, 
+																		  getCurrentSampleRate(), 
+																		  getNumberOfHardwareOutputChannels(), 
+																		  bitsPerSample, 
+																		  metadataValues, 
+																		  qualityOptionIndex);
+	
+	// Remember the current playhead position.
+	int currentPosition = getCurrentPosition();
+	
+	// Write the audio file.
+	setPosition(startSample);	
+	audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
+	bool success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
+												   numberOfSamplesToRead, 
+												   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+	
+	// Reset the playhead position
+	setPosition(currentPosition);
+	
+	return success;
 }
 
 bool AmbisonicsAudioEngine::addAepChannel(int aepChannel, double gain, 
@@ -250,6 +413,11 @@ bool AmbisonicsAudioEngine::setMute(int aepChannel, bool enable)
 bool AmbisonicsAudioEngine::activatePinkNoise(int aepChannel, bool enable)
 {
 	return audioSpeakerGainAndRouting.activatePinkNoise(aepChannel, enable);
+}
+
+void AmbisonicsAudioEngine::setAmplitudeOfPinkNoiseGenerator(const double amplitude)
+{
+	audioSpeakerGainAndRouting.setAmplitudeOfPinkNoiseGenerator(amplitude);
 }
 
 bool AmbisonicsAudioEngine::enableMeasurement(int aepChannel, bool enable)

@@ -41,19 +41,34 @@ public:
 	
 	/**
 	 Opens a dialogWindow to set up the audioDeviceManager.
+	 
+	 THIS WILL BE REMOVED SOON.
 	 */
 	void showAudioSettingsWindow();
 
 	/**
-	 Returns the name of the current AudioIODevice.
+	 Returns the names of all available Core Audio devices.
 	 
-	 @param audioDeviceName  The name will be put into this
-	 character array.
-	 @param maxBufferSizeBytes This determines the maximum length
-	 of audioDeviceName.
+	 @return	The names of all available Core Audio devices.
+				They are put into a Juce StringArray.
 	 */
-	void getNameOfCurrentAudioDevice (char* audioDeviceName,
-									  int maxBufferSizeBytes);
+	StringArray getAvailableAudioDeviceNames ();
+
+	/**
+	 Sets the Core Audio device used for the audio output.
+	 
+	 @return	An error message if anything went wrong, or 
+				an empty string if it worked ok.
+	 */
+	String setAudioDevice (String audioDeviceName);
+	
+	/**
+	 Returns the name of the current AudioIODevice (core audio).
+	 
+	 @return	A Juce string object containing the name of the
+				current AudioIODevice.
+	 */
+	String getNameOfCurrentAudioDevice ();
 
 	/**
 	 Returns the currently used sample rate of the AudioIODevice
@@ -79,6 +94,30 @@ public:
 	 to them (by setSpeakerPosition).
 	 */	
 	int getNumberOfAepChannels();
+	
+	/** Write the specified interval to a file.
+	 
+	 @param absolutePathToAudioFile	The absolute path to the audio file.
+	 @param bitsPerSample			The desired bit depth.
+	 @param description				For the wav-metadata: description.
+	 @param originator				For the wav-metadata: originator.
+	 @param originatorRef			For the wav-metadata: originatorRef.
+	 @param timeReferenceSamples	For the wav-metadata: timeReferenceSamples.
+	 @param codingHistory			For the wav-metadata: codingHistory.
+	 @param startSample				From where the bouncing should begin
+	 @param numberOfSamplesToRead	The number of samples to bounce.
+	 
+	 @return						True, if the operation was successful.
+	 */	
+	bool bounceToDisc(String absolutePathToAudioFile, 
+					  int bitsPerSample, 
+					  String description,
+					  String originator,
+					  String originatorRef,
+					  int64 timeReferenceSamples,
+					  String codingHistory,
+					  int startSample,
+					  int numberOfSamplesToRead);
 	
 	/** Adds a new AEP channel to the array of AEP channels.
 	 
@@ -129,6 +168,13 @@ public:
 	/** Enables or disables the output of pink noise on the chosen aepChannel.
 	 */
 	bool activatePinkNoise(int aepChanel, bool enable);
+	
+	/** Sets the amplitude of the pink noise generator.
+	 * This affects the volume of all pink noises on all channels.
+	 * Setting a new amplitude won't result in a click, since a gain
+	 * ramp is applied to avoid it.
+	 */
+	void setAmplitudeOfPinkNoiseGenerator(const double amplitude);
 	
 	/** Enables or disables the measurement for the chosen aepChannel.
 	 */
@@ -412,7 +458,7 @@ public:
 	
 private:
 	AudioDeviceManager audioDeviceManager;		///< An instance of a Juce object. 
-							///  Tis is the connection to 
+							///  This is the connection to 
 							///  the audio hardware. See the Juce 
 							///  documentation.
 

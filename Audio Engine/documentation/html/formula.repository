@@ -1,0 +1,10 @@
+\form#0:\[ \textrm{gain}_{n}(t) = \left( \frac{2 + x_{\textrm{speaker}_n} \cdot x_{\textrm{source}} + y_{\textrm{speaker}_n} \cdot y_{\textrm{source}} + z_{\textrm{speaker}_n} \cdot z_{\textrm{source}} }{2} \right)^{M} \cdot \textrm{distanceGain}(t), \]
+\form#1:$ r $
+\form#2:$M$
+\form#3:$\textrm{distanceGain}(t)$
+\form#4:\[ \textrm{distanceGain} := \left(\frac{r}{\textrm{centerRadius}}\right)^\textrm{centerExponent} \cdot (1 - \textrm{centerAttenuation}) + \textrm{centerAttenuation} \]
+\form#5:\[ \textrm{modifiedOrder} := \textrm{order} \cdot \frac{r}{\textrm{centerRadius}} \]
+\form#6:\[ \textrm{distanceGain} := 10^{(r - \textrm{centerRadius}) \cdot \textrm{dBFalloffPerUnit} \cdot 0.05} \]
+\form#7:\[ \textrm{modifiedOrder} := \textrm{order} \]
+\form#8:\[ \textrm{distanceGain} := \left( r - \textrm{centerRadius} + 1 \right)^{\textrm{outsideCenterExponent}} \]
+\form#9:\[ \textrm{output}_{n}(t) = \textrm{gain}_{n}(t) \cdot \textrm{input}(t). \]

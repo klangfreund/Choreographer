@@ -198,10 +198,11 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (NSString *)nameOfHardwareOutputDevice
 {
-	int bufferSize = 40;
-	char audioDeviceName[bufferSize];
+	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
 	
-	ambisonicsAudioEngine->getNameOfCurrentAudioDevice (audioDeviceName, bufferSize);
+	int maxBufferSizeBytes = 120;
+	char audioDeviceName[maxBufferSizeBytes];
+	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
 
 	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
 }
@@ -488,7 +489,10 @@ static AudioEngine *sharedAudioEngine = nil;
 - (float)volumePeakLevel:(NSUInteger)channel
 {
 	float gain = ambisonicsAudioEngine->getMeasuredPeakValue(channel);
+//	if (channel == 0)
+//		NSLog(@" - channel=%i gain=%f", channel, gain);
 	return 20 * log10(gain);
+
 }
 
  

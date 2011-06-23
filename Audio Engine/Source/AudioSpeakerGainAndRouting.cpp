@@ -283,6 +283,12 @@ bool AudioSpeakerGainAndRouting::activatePinkNoise(int aepChannel, bool enable)
 	}
 }
 
+void AudioSpeakerGainAndRouting::setAmplitudeOfPinkNoiseGenerator(const double newAmplitude_)
+{
+	pinkNoiseGeneratorAudioSource.setAmplitude(newAmplitude_);
+}
+
+
 bool AudioSpeakerGainAndRouting::enableMeasurement(int aepChannel, bool enable)
 {
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsAscending.size()) 
