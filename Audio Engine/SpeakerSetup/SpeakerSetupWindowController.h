@@ -13,6 +13,9 @@
 
 @interface SpeakerSetupWindowController : NSWindowController
 {
+	NSArray *outputDevices;
+	NSInteger selectedOutputDeviceIndex;
+	
 	id speakerSetups;
 	NSUInteger selectedIndex;
 	id selectedSetup;

@@ -76,6 +76,10 @@ static AudioEngine *sharedAudioEngine = nil;
 	// instantiate the Meter Bridge Window
 	meterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
 	
+	// settings
+	[self setTestNoiseVolume:-12];
+
+	
 	regionIndex = 0;	
 	volumeLevelMeasurementClientCount = 0;
 }
@@ -96,6 +100,31 @@ static AudioEngine *sharedAudioEngine = nil;
 #pragma mark -
 #pragma mark Menu (UI Actions)
 // -----------------------------------------------------------
+
+- (void)bounceToDisk
+{
+	NSLog(@"bounce to disk");
+	
+	[self stopAudio];
+	
+	String absolutePathToAudioFile("/Users/sam/Desktop/bounce.wav");
+	int bitsPerSample = 16;
+	String description("Test bounce");
+	String originator("Sam");
+	String originatorRef("Choreographer");
+	String codingHistory; 
+	int startSample = 22*44100;
+	int numberOfSamplesToRead = 8*44100;
+	ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
+										bitsPerSample, 
+										description, 
+										originator, 
+										originatorRef,
+										codingHistory, 
+										startSample, 
+										numberOfSamplesToRead);	
+}
+
 
 - (IBAction)showHardwareSetup:(id)sender
 {
@@ -203,7 +232,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	int maxBufferSizeBytes = 120;
 	char audioDeviceName[maxBufferSizeBytes];
 	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
-
+	
 	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
 }
 
@@ -240,7 +269,11 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 }
 
-
+- (void)setTestNoiseVolume:(float)dbValue
+{
+	float gain = pow(10, 0.05 * dbValue);
+	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
+}
 
 #pragma mark -
 #pragma mark scheduled playback
@@ -445,17 +478,14 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)volumeLevelMeasurementClient:(BOOL)val
 {
-
-	// int i;
-	
 	if(val && volumeLevelMeasurementClientCount == 0)
 	{
-		NSLog(@"enable Volume Meter");
+		//NSLog(@"enable Volume Meter");
 		[self enableVolumeLevelMeasurement:YES];		
 	}
 	else if(!val && volumeLevelMeasurementClientCount == 1)
 	{
-		NSLog(@"disable Volume Meter");
+		//NSLog(@"disable Volume Meter");
 		[self enableVolumeLevelMeasurement:NO];
 	}
 
@@ -489,10 +519,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (float)volumePeakLevel:(NSUInteger)channel
 {
 	float gain = ambisonicsAudioEngine->getMeasuredPeakValue(channel);
-//	if (channel == 0)
-//		NSLog(@" - channel=%i gain=%f", channel, gain);
 	return 20 * log10(gain);
-
 }
 
  
@@ -502,7 +529,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setPersistentSetting:(id)data forKey:(NSString *)key
 {
-	NSDictionary *dict = [NSDictionary dictionaryWithObject:data forKey:@"speakerSetups"];
+	NSDictionary *dict = [NSDictionary dictionaryWithObject:data forKey:key];
 	NSUserDefaults *def = [[NSUserDefaults alloc] init];
 	[def setPersistentDomain:dict forName:@"net.icst.choreographer.audioEngine"];
 	[def release];	
@@ -512,7 +539,7 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	NSUserDefaults *def = [[NSUserDefaults alloc] init];
 	NSDictionary *dict = [def persistentDomainForName:@"net.icst.choreographer.audioEngine"];
-	id data = [dict objectForKey:@"speakerSetups"];
+	id data = [dict objectForKey:key];
 	[def release];
 	return data;
 }

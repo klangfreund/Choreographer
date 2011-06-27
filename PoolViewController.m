@@ -281,6 +281,7 @@
 		}
 	}
 	
+	NSLog(@"path: %@", absoluteFilePath);
 	// get file path
 	NSString *relativeFilePath = [Path path:absoluteFilePath relativeTo:[document fileURL]];
 	NSString *filePath = [[NSURL URLWithString:relativeFilePath relativeToURL:[document fileURL]] path];
@@ -874,9 +875,9 @@
 */
 - (BOOL)outlineView:(NSOutlineView *)poolView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
 {	
-	NSLog(@"item %@", item);
-	NSLog(@"childIndex %d", index);
-	NSLog(@"draggingPasteboard %@", [[info draggingPasteboard] dataForType:PoolPboardType]);
+//	NSLog(@"item %@", item);
+//	NSLog(@"childIndex %d", index);
+//	NSLog(@"pasteboard pool-type %@", [[info draggingPasteboard] dataForType:PoolPboardType]);
 
 	index = index == NSOutlineViewDropOnItemIndex ? 0 : index;
 
@@ -893,7 +894,8 @@
 		// a file dragged from the finder
 		for(NSString *path in [[info draggingPasteboard] propertyListForType:NSFilenamesPboardType])
 		{
-			[self importFile:[NSURL URLWithString:path]];
+			[self importFile:[NSURL URLWithString:[path stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]]];
+			// important: add the percent escapes to obtain a proper URL
 		}
 	}
     return YES;

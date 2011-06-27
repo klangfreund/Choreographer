@@ -23,6 +23,9 @@
 	self = [self initWithWindowNibName:@"SpeakerSetupWindow"];
 	if(self)
 	{
+		outputDevices = [[NSArray arrayWithObjects:@"first device", @"second device", @"third device", nil] retain];
+		selectedOutputDeviceIndex = 1;
+		
 		speakerSetups = [[SpeakerSetups alloc] init];
 		[speakerSetups unarchiveData];
 		[[speakerSetups selectedPreset] updateEngine];
@@ -51,6 +54,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 
+	[outputDevices release];
 	[speakerSetups release];
 	[speakerSetupChannelStripControllers release];
 	

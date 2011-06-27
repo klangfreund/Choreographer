@@ -15,8 +15,13 @@
 
 - (void)update
 {
-	levelMeterView.peakLevel = [[AudioEngine sharedAudioEngine] volumePeakLevel:channelIndex - 1]; 			
+	levelMeterPeakView.level = [[AudioEngine sharedAudioEngine] volumePeakLevel:channelIndex - 1]; 			
 	levelMeterView.level = [[AudioEngine sharedAudioEngine] volumeLevel:channelIndex - 1];
+	
+	if([[AudioEngine sharedAudioEngine] isPlaying])
+		levelMeterView.peakLevel = [[AudioEngine sharedAudioEngine] volumeLevel:channelIndex - 1];
+	else
+		levelMeterView.peakLevel = -100;
 }
 
 - (void)resetPeak
@@ -28,10 +33,5 @@
 {
 	[meterBridgeWindowController resetAllPeaks];
 }
-
-//- (void)resetDisplay
-//{
-//	levelMeterView.level = -70;
-//}
 
 @end

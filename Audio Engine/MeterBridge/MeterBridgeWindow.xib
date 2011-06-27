@@ -39,10 +39,10 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSWindowTemplate" id="524941588">
-				<int key="NSWindowStyleMask">27</int>
+				<int key="NSWindowStyleMask">11</int>
 				<int key="NSWindowBacking">2</int>
 				<string key="NSWindowRect">{{162, 101}, {500, 200}}</string>
-				<int key="NSWTFlags">-1535638528</int>
+				<int key="NSWTFlags">611845120</int>
 				<string key="NSWindowTitle">Meter Brigde</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
@@ -77,14 +77,14 @@
 												<object class="NSCustomView" id="977444903">
 													<reference key="NSNextResponder" ref="210585195"/>
 													<int key="NSvFlags">20</int>
-													<string key="NSFrameSize">{40, 180}</string>
+													<string key="NSFrameSize">{40, 160}</string>
 													<reference key="NSSuperview" ref="210585195"/>
 													<string key="NSClassName">DBLabelsView</string>
 												</object>
 												<object class="NSTextField" id="180514384">
 													<reference key="NSNextResponder" ref="210585195"/>
 													<int key="NSvFlags">12</int>
-													<string key="NSFrame">{{3, 179}, {35, 17}}</string>
+													<string key="NSFrame">{{0, 159}, {35, 17}}</string>
 													<reference key="NSSuperview" ref="210585195"/>
 													<bool key="NSEnabled">YES</bool>
 													<object class="NSTextFieldCell" key="NSCell" id="724555706">
@@ -329,9 +329,9 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">AUJIAAAAAAAAA</bytes>
 					</object>
-					<string>{{113, 418}, {500, 200}}</string>
+					<string>{{113, 419}, {500, 200}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{113, 418}, {500, 200}}</string>
+					<string>{{113, 419}, {500, 200}}</string>
 					<boolean value="NO"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>

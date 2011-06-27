@@ -73,7 +73,7 @@
 	NSRect name_r = frame;
 	name_r.size.height = frame.size.height > REGION_NAME_BLOCK_HEIGHT ? REGION_NAME_BLOCK_HEIGHT : frame.size.height;
 
-	name_r = NSInsetRect(name_r, 2.0, 1.0);
+	name_r = NSInsetRect(name_r, 1.0, 1.0);
 	[textBackgroundColor set];
 	[[NSBezierPath bezierPathWithRoundedRect:name_r xRadius:2 yRadius:2] fill];
 
@@ -123,6 +123,8 @@
 		[self drawGainEnvelope:rect];
 	}
 	
+
+	[super drawFrame:rect];
 }
 
 

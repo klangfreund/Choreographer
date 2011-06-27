@@ -173,10 +173,10 @@
 		case 21:
 		case 86:
 			num = 4; break;
-		case 22:
+		case 23:
 		case 87:
 			num = 5; break;
-		case 25:
+		case 22:
 		case 88:
 			num = 6; break;
 		case 26:
@@ -185,7 +185,7 @@
 		case 28:
 		case 91:
 			num = 8; break;
-		case 23:
+		case 25:
 		case 92:
 			num = 9; break;
 		case 29:
@@ -247,6 +247,13 @@
 	
 	num = (num + 10 * oldValue) % numberFieldModulo[selectedNumberField];
 	numberFieldValue[selectedNumberField] = num;
+	
+	// set all subsequent number fields to 0
+	int i;
+	for(i=selectedNumberField+1;i<countNumberFields;i++)
+	{
+		numberFieldValue[i] = 0;
+	}
 
 	[self setNeedsDisplay:YES];
 }

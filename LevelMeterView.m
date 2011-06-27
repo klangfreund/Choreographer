@@ -196,27 +196,6 @@
 	}
 }	
 
-- (BOOL)acceptsFirstMouse:(NSEvent *)event
-{
-	return YES;
-	// first click activates the window automatically
-	// so the user can immediately reset a peak
-}
-
-- (void)mouseDown:(NSEvent *)event
-{
-	if([event modifierFlags] & NSAlternateKeyMask)
-	{
-		[owner performSelectorInBackground:@selector(resetAllPeaks) withObject:nil];
-	}
-	else
-	{
-		[owner performSelectorInBackground:@selector(resetPeak) withObject:nil];
-		peakLevel = -70;
-		[self setNeedsDisplay:YES];
-	}
-}
-
 - (void)setLevel:(float)dBValue
 {
 	level = dBValue > 0 ? 0 : dBValue;
@@ -226,7 +205,17 @@
 
 - (void)setPeakLevel:(float)dBValue
 {
-	peakLevel = dBValue > 0 ? 0 : dBValue;
+	float value = dBValue > 0 ? 0 : dBValue;
+
+	if(value > peakLevel || peakLevelCounter > 20)
+	{
+		peakLevel = value;
+		peakLevelCounter = 0;
+	}
+	else
+	{
+		peakLevelCounter++;		
+	}
 
 	[self setNeedsDisplay:YES];
 }
@@ -244,6 +233,85 @@
 }
 
 @end
+
+@implementation LevelMeterPeakView
+
+- (id)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self)
+	{
+        // initialization
+
+		level = -70;
+		
+    	// colors
+		
+		normalColor		= [[NSColor colorWithCalibratedRed: 0.6 green: 0.6 blue: 0.6 alpha: 1] retain];
+		overloadColor	= [[NSColor colorWithCalibratedRed: 1.0 green: 0.2 blue: 0.3 alpha: 1] retain];
+		
+	}
+    return self;
+}
+
+- (void) dealloc
+{
+	[normalColor release];
+	[overloadColor release];
+	
+	[super dealloc];
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+	NSRect r = [self bounds];
+	
+	if(level < 0)
+		[normalColor set];
+	else
+		[overloadColor set];
+	NSRectFill(r);
+	
+	
+	NSString *label;
+	NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
+	[attrs setObject:[NSFont systemFontOfSize:9] forKey:NSFontAttributeName];
+	[attrs setObject:[NSColor blackColor] forKey:NSForegroundColorAttributeName];
+
+	label = [NSString stringWithFormat:@"%0.2f", level];
+	[label drawAtPoint:NSMakePoint(0,4) withAttributes:attrs];
+}
+
+- (BOOL)acceptsFirstMouse:(NSEvent *)event
+{
+	return YES;
+	// first click activates the window automatically
+	// so the user can immediately reset a peak
+}
+
+- (void)mouseDown:(NSEvent *)event
+{
+	if([event modifierFlags] & NSAlternateKeyMask)
+	{
+		[owner performSelectorInBackground:@selector(resetAllPeaks) withObject:nil];
+	}
+	else
+	{
+		[owner performSelectorInBackground:@selector(resetPeak) withObject:nil];
+		level = -70;
+		[self setNeedsDisplay:YES];
+	}
+}
+
+- (void)setLevel:(float)dBValue
+{
+	level = dBValue;
+	
+	[self setNeedsDisplay:YES];
+}
+
+@end
+
 
 @implementation DBLabelsView
 

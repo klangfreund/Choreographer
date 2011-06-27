@@ -13,7 +13,7 @@
 #import "MeterBridgeWindowController.h"
 
 #ifdef __cplusplus
-#include "AmbisonicsAudioEngine.h"
+#include "Source/AmbisonicsAudioEngine.h"
 #endif
 
 @interface AudioEngine : NSObject
@@ -38,6 +38,7 @@
 - (void)setup;
 
 // Menu (UI Actions)
+- (void)bounceToDisk;
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
@@ -77,6 +78,9 @@
 
 - (void)setUseHipassFilter:(BOOL)filter;
 - (void)setUseDelay:(BOOL)delay;
+
+- (void)setTestNoiseVolume:(float)dbValue;
+
 
 
 //  Schedule Playback

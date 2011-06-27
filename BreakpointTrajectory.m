@@ -113,7 +113,7 @@
 	NSUInteger originalDur = [[trajectoryItem valueForKey:@"duration"] unsignedLongValue];
 	Breakpoint *bp, *scaledBp;
 	NSUInteger timeOffset = 0, time = 0;
-	NSUInteger count, i = 0;
+	NSUInteger count, i = 0, direction = 0;
 
 	NSMutableArray *tempArray;
 	
@@ -134,7 +134,7 @@
 	{
 		tempArray = [breakpointArray mutableCopy];
 	}
-	else
+	else if(mode == durationModeLoop)
 	{
 		tempArray = [[[NSMutableArray alloc] init] autorelease];
 		count = [breakpointArray count];
@@ -154,7 +154,42 @@
 			bp.time = time;
 			
 			NSLog(@"time = %d", time);
-
+			
+			[tempArray addObject:bp];
+		}
+	}
+	else if(mode == durationModePalindrome)
+	{
+		tempArray = [[[NSMutableArray alloc] init] autorelease];
+		count = [breakpointArray count];
+		while (time < dur)
+		{
+			bp = [[breakpointArray objectAtIndex:(i % count)] copy];
+			if(bp.time == 0 && direction != 0) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
+			{
+				timeOffset += originalDur;
+				time = bp.time + timeOffset;
+				direction = 0; // upwards
+			}
+			else if(i == count-1) // last breakpoint
+			{
+				time = bp.time + timeOffset;
+				direction = 1; // downwards
+				timeOffset += originalDur;
+			}
+			else
+			{
+				if(direction == 0)
+					time = bp.time + timeOffset;
+				else
+					time = (originalDur - bp.time + timeOffset);
+			}
+			
+			bp.time = time;
+			
+			NSLog(@"time = %d", time);
+			i += direction == 0 ? 1 : -1;
+			
 			[tempArray addObject:bp];
 		}
 	}

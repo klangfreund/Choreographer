@@ -34,13 +34,30 @@ static TimelineEditorWindowController *sharedTimelineEditorWindowController = ni
     return self;
 }
 
+- (void)awakeFromNib
+{
+	[super awakeFromNib];
+	
+	// synchronize scroll views
+	[rulerScrollView setSynchronizedScrollView:arrangerScrollView];
+	[arrangerScrollView setSynchronizedScrollView:rulerScrollView];	
+}
+
 //- (void)dealloc
 //{
 //	[super dealloc];
 //}
 
-- (void) refreshView
+
+- (void)becomeKeyWindow
+{	
+	[self flagsChanged:nil];  // to "reset" the modifier keys...
+}
+
+- (void)refreshView
 {
+//	NSLog(@"Timeline Editor refresh view");
+
 	TrajectoryItem *trajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	
 	TrajectoryType tempTrajectoryType = [[trajectory valueForKey:@"trajectoryType"] intValue];

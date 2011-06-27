@@ -21,7 +21,7 @@
 		boundingVolumePoint2 = [[SpatialPosition positionWithX:0.5 Y:0.5 Z:0.5] retain];
 		minSpeed = 0.1;
 		maxSpeed = 0.2;
-		stability = 0;
+		stability = 1000;
 	}
 	return self;	
 }
@@ -34,20 +34,21 @@
     boundingVolumePoint2 = [[coder decodeObjectForKey:@"boundingVolumePoint2"] retain];
     minSpeed = [[coder decodeObjectForKey:@"minSpeed"] floatValue];
     maxSpeed = [[coder decodeObjectForKey:@"maxSpeed"] floatValue];
-    stability = [[coder decodeObjectForKey:@"stability"] floatValue];
+    stability = [[coder decodeObjectForKey:@"stability"] unsignedLongValue];
 	
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
+	NSLog(@"encode with coder");
     [super encodeWithCoder:coder];
     [coder encodeObject:initialPosition forKey:@"initialPosition"];
     [coder encodeObject:boundingVolumePoint1 forKey:@"boundingVolumePoint1"];
     [coder encodeObject:boundingVolumePoint2 forKey:@"boundingVolumePoint2"];
     [coder encodeObject:[NSNumber numberWithFloat:minSpeed] forKey:@"minSpeed"];
     [coder encodeObject:[NSNumber numberWithFloat:maxSpeed] forKey:@"maxSpeed"];
-    [coder encodeObject:[NSNumber numberWithFloat:stability] forKey:@"stability"];
+    [coder encodeObject:[NSNumber numberWithUnsignedLong:stability] forKey:@"stability"];
 }
 
 - (void)dealloc
@@ -89,12 +90,16 @@
 	NSUInteger time = 0;
 	NSUInteger duration;
 	int timeIncrement = 100;
+	BOOL flip = NO;
 	
 	float x = [boundingVolumePoint1 x] < [boundingVolumePoint2 x] ? [boundingVolumePoint1 x] : [boundingVolumePoint2 x];
 	float y = [boundingVolumePoint1 y] < [boundingVolumePoint2 y] ? [boundingVolumePoint1 y] : [boundingVolumePoint2 y];
 	
 	float xDimension = fabs([boundingVolumePoint1 x] - [boundingVolumePoint2 x]);
 	float yDimension = fabs([boundingVolumePoint1 y] - [boundingVolumePoint2 y]);
+	
+	SpatialPosition *spatialIncrement = [SpatialPosition position];
+
 	
 	Breakpoint *bp;
 	SpatialPosition *tempPosition;
@@ -116,14 +121,50 @@
 
 	while(time < duration)
 	{
+		if(0 == (time % stability))
+		{
+			spatialIncrement.d = minSpeed + (float)rand() / RAND_MAX * (maxSpeed - minSpeed);
+			spatialIncrement.a = (float)rand() / RAND_MAX * 360;
+			// - when bounding box z=0,
+		}
+		
 		bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setPosition:[tempPosition copy]];
 		[bp setTime:time];
 		[tempArray addObject:bp];
 		
 		time += timeIncrement;
-		[tempPosition setX:x + (float)rand() / RAND_MAX * xDimension];
-		[tempPosition setY:y + (float)rand() / RAND_MAX * yDimension];
+		[tempPosition setX:tempPosition.x + spatialIncrement.x];
+		[tempPosition setY:tempPosition.y + spatialIncrement.y];
+		
+		// tempPosition is outside boundaries
+		// - mirror position and reverse the spatialIncrement
+		if(tempPosition.x < x)
+		{
+			tempPosition.x = 2 * x - tempPosition.x;
+			flip = YES;
+		}
+		if(tempPosition.x > x + xDimension)
+		{
+			tempPosition.x = 2 * (x + xDimension) - tempPosition.x;
+			flip = YES;
+		}
+		if(tempPosition.y < y)
+		{
+			tempPosition.y = 2 * y - tempPosition.y;
+			flip = YES;
+		}
+		if(tempPosition.y > y + yDimension)
+		{
+			tempPosition.y = 2 * (y + yDimension) - tempPosition.y;
+			flip = YES;
+		}
+		
+		if(flip)
+		{
+			spatialIncrement.d *= -1;
+			flip = NO;
+		}
 	}
 	
 	return [NSArray arrayWithArray:tempArray];

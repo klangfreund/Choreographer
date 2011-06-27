@@ -10,6 +10,7 @@
 #import "AudioRegion.h"
 #import "CHProjectDocument.h"
 #import "Breakpoint.h"
+#import "BreakpointBezierPath.h"
 
 @implementation Region
 
@@ -140,14 +141,16 @@
 	// locked / unlocked
 	if([[self valueForKey:@"locked"] boolValue])
 	{
-		frameColor = [NSColor blackColor];
 	}
 	
 	// muted / unmuted
-//	if([[self valueForKey:@"muted"] boolValue])
-//	{
-//		backgroundColor = [color colorWithAlphaComponent:0.15];
-//	}
+	if([[self valueForKey:@"muted"] boolValue])
+	{
+		backgroundColor = [NSColor	colorWithCalibratedHue:[color hueComponent]
+												saturation:[color saturationComponent] * 0.5
+												brightness: [color brightnessComponent] * 0.5
+													 alpha: [color alphaComponent]];
+	}
 	
 	
 
@@ -271,8 +274,8 @@
 
 		
 		// draw trajectory region itself
-		[[NSBezierPath bezierPathWithRoundedRect:trajectoryRect xRadius:3 yRadius:3] fill];
 
+		[[NSBezierPath bezierPathWithRoundedRect:trajectoryRect xRadius:3 yRadius:3] fill];
 
 		
 
@@ -291,9 +294,6 @@
 	}
 
 	
-	// draw frame
-	[frameColor set];
-	[[NSBezierPath bezierPathWithRoundedRect:frame xRadius:5 yRadius:5] stroke];
 }
 
 - (void)drawGainEnvelope:(NSRect)rect
@@ -310,22 +310,33 @@
 		r.size.height -= REGION_NAME_BLOCK_HEIGHT + REGION_TRAJECTORY_BLOCK_HEIGHT + 4;
 	}
 	
-	r.origin.x += 2;
-	r.size.width -= 4;
 	
 	gainBreakpointView.xAxisValueKeypath = @"time";
 	gainBreakpointView.yAxisValueKeypath = @"value";
 	
-	gainBreakpointView.xAxisMin = 0;
 	gainBreakpointView.xAxisMax = [[self valueForKeyPath:@"duration"] intValue];
+	gainBreakpointView.zoomFactorX = zoomFactorX;
 	
 	gainBreakpointView.yAxisMin = -72;
 	gainBreakpointView.yAxisMax = 18;
-	
+
 	[gainBreakpointView drawInRect:r];
 }
 
+- (void)drawFrame:(NSRect)rect
+{
+	// color
+	NSColor *frameColor = color;
+	
+	// locked / unlocked
+	if([[self valueForKey:@"locked"] boolValue])
+	{
+		frameColor = [NSColor blackColor];
+	}
 
+	[frameColor set];
+	[[NSBezierPath bezierPathWithRoundedRect:frame xRadius:5 yRadius:5] stroke];	
+}
 
 - (NSColor *)color
 {
@@ -353,7 +364,8 @@
 
 - (void)mouseDown:(NSPoint)location
 {
-	[gainBreakpointView mouseDown:location];
+	if(![[self valueForKey:@"locked"] boolValue])
+		[gainBreakpointView mouseDown:location];
 }
 
 - (NSPoint)proposedMouseDrag:(NSPoint)delta
@@ -363,12 +375,17 @@
 
 - (void)mouseDragged:(NSPoint)delta
 {
-	[gainBreakpointView mouseDragged:delta];
+	if(![[self valueForKey:@"locked"] boolValue])
+		[gainBreakpointView mouseDragged:delta];
 }
 
 - (void)mouseUp:(NSEvent *)event
 {
-	[gainBreakpointView mouseUp:event];	
+	if(![[self valueForKey:@"locked"] boolValue])
+		[gainBreakpointView mouseUp:event];	
+
+	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
+	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];
 }
 
 

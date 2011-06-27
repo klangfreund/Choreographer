@@ -37,6 +37,8 @@ static TrajectoryInspectorWindowController *sharedTrajectoryInspectorWindowContr
 {
 	[self showWindow:nil];
 	
+	currentTrajectoryItem = item;
+	
 	switch ([[item valueForKey:@"trajectoryType"] intValue])
 	{
 		case 0:
@@ -63,6 +65,8 @@ static TrajectoryInspectorWindowController *sharedTrajectoryInspectorWindowContr
 
 	NSWindowController *windowController = [[[[NSDocumentController sharedDocumentController] currentDocument] windowControllers] objectAtIndex:0];
 	[[windowController window] makeKeyAndOrderFront:nil];
+	
+	[currentTrajectoryItem archiveData];
 	
 //	id document = [[NSDocumentController sharedDocumentController] currentDocument];
 //	NSLog(@"window %@", [document window]);

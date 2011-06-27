@@ -183,7 +183,7 @@
 	}
 	
 	// get duration
-	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;	
+	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;
 	
 	// [self calculateOverviewImage];
 	return YES;
@@ -225,6 +225,11 @@
 		
 		return;
 	}
+	
+	// get duration
+	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
+	UInt64 dataPackets = [AudioFile dataPacketsOfAudioFile:audioFileID];
+	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;
 }
 
 - (void)relinkAudioFile

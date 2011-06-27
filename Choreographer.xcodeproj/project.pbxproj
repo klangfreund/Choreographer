@@ -10,6 +10,10 @@
 		15009E5611C0150A00FCE0F7 /* SettingsPopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 15009E5511C0150A00FCE0F7 /* SettingsPopupButton.m */; };
 		15012D201369313D0000116A /* LevelMeterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15012D1F1369313D0000116A /* LevelMeterView.m */; };
 		150C8947133AB1D1005A585D /* Path.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C8946133AB1D1005A585D /* Path.m */; };
+		15155E55139CE34200A8BC0D /* MarkersWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E54139CE34200A8BC0D /* MarkersWindow.xib */; };
+		15155E57139CE35900A8BC0D /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */; };
+		15155E59139CE37000A8BC0D /* SpeakerSetupWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */; };
+		15155E98139CE92100A8BC0D /* Choreographer.help in Resources */ = {isa = PBXBuildFile; fileRef = 15155E7E139CE92100A8BC0D /* Choreographer.help */; };
 		151739B70EB3A5F500EABE92 /* TableEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */; };
 		151739C60EB3A79B00EABE92 /* TableEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C20EB3A79B00EABE92 /* TableEditor.xib */; };
 		151739C70EB3A79B00EABE92 /* RadarEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C40EB3A79B00EABE92 /* RadarEditor.xib */; };
@@ -30,7 +34,6 @@
 		153F178A0DF7293B0037238D /* SelectionRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F17890DF7293B0037238D /* SelectionRectangle.m */; };
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
 		15512E8C13267F9700C6D038 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15512E5713267F9700C6D038 /* AudioEngine.mm */; };
-		15512E8D13267F9700C6D038 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5813267F9700C6D038 /* AudioEngineMainMenu.xib */; };
 		15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */; };
 		15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */; };
 		15512E9313267F9700C6D038 /* MeterBridgeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */; };
@@ -47,7 +50,6 @@
 		15512EA213267F9700C6D038 /* SpeakerSetupChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8413267F9700C6D038 /* SpeakerSetupChannelStrip.m */; };
 		15512EA313267F9700C6D038 /* SpeakerSetupChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */; };
 		15512EA413267F9700C6D038 /* SpeakerSetups.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8713267F9700C6D038 /* SpeakerSetups.m */; };
-		15512EA513267F9700C6D038 /* SpeakerSetupWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E8813267F9700C6D038 /* SpeakerSetupWindow.xib */; };
 		15512EA613267F9700C6D038 /* SpeakerSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */; };
 		155724F40DD8909800FA16E2 /* CounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155724F30DD8909800FA16E2 /* CounterView.m */; };
 		155725110DD8919A00FA16E2 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1557250E0DD8919A00FA16E2 /* ContainerView.m */; };
@@ -100,14 +102,13 @@
 		15EA47571042CC0200F1A7BB /* AudioFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 15EA47561042CC0200F1A7BB /* AudioFile.m */; };
 		15EAB2B50FF49A0200A41A79 /* Pool.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15EAB2B30FF49A0200A41A79 /* Pool.xib */; };
 		15EAB2F30FF4A6D300A41A79 /* PoolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15EAB2F20FF4A6D300A41A79 /* PoolViewController.m */; };
-		15EBEC8712BF777A00C30D46 /* MarkersWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15EBEC8612BF777A00C30D46 /* MarkersWindow.xib */; };
 		15EBEC8D12BF78E400C30D46 /* MarkersWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15EBEC8C12BF78E400C30D46 /* MarkersWindowController.m */; };
 		15ED1F320DDB8420006A2351 /* ToolbarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED1F310DDB8420006A2351 /* ToolbarController.m */; };
 		15ED1FF90DDB9A21006A2351 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15ED1FF80DDB9A21006A2351 /* AudioToolbox.framework */; };
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		22A18070137B0C2900CE3197 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22A1806F137B0C1F00CE3197 /* libjuce.a */; };
+		2214C9B413B3B10700AEC408 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214C9B313B3B0F700AEC408 /* libjuce.a */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -116,9 +117,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		22A1806E137B0C1F00CE3197 /* PBXContainerItemProxy */ = {
+		2214C9B213B3B0F700AEC408 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 22A18067137B0C1F00CE3197 /* Juce.xcodeproj */;
+			containerPortal = 2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 389351359BA78C682E1931A6;
 			remoteInfo = Juce;
@@ -135,13 +136,13 @@
 		150C8945133AB1D1005A585D /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		150C8946133AB1D1005A585D /* Path.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Path.m; sourceTree = "<group>"; };
 		151525B00DDAFE8900BB5114 /* CHGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHGlobals.h; sourceTree = "<group>"; };
+		15155E7E139CE92100A8BC0D /* Choreographer.help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Choreographer.help; sourceTree = "<group>"; };
 		151739B50EB3A5F500EABE92 /* TableEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableEditorWindowController.h; sourceTree = "<group>"; };
 		151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableEditorWindowController.m; sourceTree = "<group>"; };
 		151739C30EB3A79B00EABE92 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/TableEditor.xib; sourceTree = "<group>"; };
 		151739C50EB3A79B00EABE92 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RadarEditor.xib; sourceTree = "<group>"; };
 		151739D60EB3AE1C00EABE92 /* EditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorWindowController.h; sourceTree = "<group>"; };
 		151739D70EB3AE1C00EABE92 /* EditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorWindowController.m; sourceTree = "<group>"; };
-		1517F195115E70DE001E7BCD /* ProjectDocument_v0.1.xcdatamodel */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = wrapper.xcdatamodel; path = ProjectDocument_v0.1.xcdatamodel; sourceTree = "<group>"; };
 		1517F485115FAB50001E7BCD /* PlaybackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaybackController.h; sourceTree = "<group>"; };
 		1517F486115FAB50001E7BCD /* PlaybackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaybackController.m; sourceTree = "<group>"; };
 		151B33281163BB74000192F9 /* SettingsMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
@@ -172,7 +173,7 @@
 		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
 		15512E5613267F9700C6D038 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
 		15512E5713267F9700C6D038 /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
-		15512E5813267F9700C6D038 /* AudioEngineMainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AudioEngineMainMenu.xib; sourceTree = "<group>"; };
+		15512E5813267F9700C6D038 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AudioEngineMainMenu.xib; sourceTree = "<group>"; };
 		15512E5913267F9700C6D038 /* debug.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = debug.txt; sourceTree = "<group>"; };
 		15512E5A13267F9700C6D038 /* Doxyfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Doxyfile; sourceTree = "<group>"; };
 		15512E5B13267F9700C6D038 /* juce.tag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = juce.tag; sourceTree = "<group>"; };
@@ -208,7 +209,7 @@
 		15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpeakerSetupChannelStrip.xib; sourceTree = "<group>"; };
 		15512E8613267F9700C6D038 /* SpeakerSetups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetups.h; sourceTree = "<group>"; };
 		15512E8713267F9700C6D038 /* SpeakerSetups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetups.m; sourceTree = "<group>"; };
-		15512E8813267F9700C6D038 /* SpeakerSetupWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpeakerSetupWindow.xib; sourceTree = "<group>"; };
+		15512E8813267F9700C6D038 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SpeakerSetupWindow.xib; sourceTree = "<group>"; };
 		15512E8913267F9700C6D038 /* SpeakerSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupWindowController.h; sourceTree = "<group>"; };
 		15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupWindowController.m; sourceTree = "<group>"; };
 		155724F20DD8909800FA16E2 /* CounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CounterView.h; sourceTree = "<group>"; };
@@ -223,6 +224,7 @@
 		1560817411CECAA00033C628 /* RandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomTrajectory.m; sourceTree = "<group>"; };
 		1562074C1355E9E5006A1F29 /* MeterBridgeChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeChannelStrip.h; sourceTree = "<group>"; };
 		1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeChannelStrip.m; sourceTree = "<group>"; };
+		156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 2.xcdatamodel"; sourceTree = "<group>"; };
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
 		158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryItem.h; sourceTree = "<group>"; };
@@ -291,7 +293,7 @@
 		15EAB2B40FF49A0200A41A79 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Pool.xib; sourceTree = "<group>"; };
 		15EAB2F10FF4A6D300A41A79 /* PoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolViewController.h; sourceTree = "<group>"; };
 		15EAB2F20FF4A6D300A41A79 /* PoolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolViewController.m; sourceTree = "<group>"; };
-		15EBEC8612BF777A00C30D46 /* MarkersWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MarkersWindow.xib; sourceTree = "<group>"; };
+		15EBEC8612BF777A00C30D46 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MarkersWindow.xib; sourceTree = "<group>"; };
 		15EBEC8B12BF78E400C30D46 /* MarkersWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkersWindowController.h; sourceTree = "<group>"; };
 		15EBEC8C12BF78E400C30D46 /* MarkersWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkersWindowController.m; sourceTree = "<group>"; };
 		15ED1F300DDB8420006A2351 /* ToolbarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolbarController.h; sourceTree = "<group>"; };
@@ -303,7 +305,7 @@
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		22A18067137B0C1F00CE3197 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -321,7 +323,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22A18070137B0C2900CE3197 /* libjuce.a in Frameworks */,
+				2214C9B413B3B10700AEC408 /* libjuce.a in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -445,7 +447,7 @@
 			children = (
 				15512E5613267F9700C6D038 /* AudioEngine.h */,
 				15512E5713267F9700C6D038 /* AudioEngine.mm */,
-				15512E5813267F9700C6D038 /* AudioEngineMainMenu.xib */,
+				15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */,
 				15512E5913267F9700C6D038 /* debug.txt */,
 				15512E5A13267F9700C6D038 /* Doxyfile */,
 				15512E5B13267F9700C6D038 /* juce.tag */,
@@ -525,7 +527,7 @@
 				15512E8713267F9700C6D038 /* SpeakerSetups.m */,
 				15512E8913267F9700C6D038 /* SpeakerSetupWindowController.h */,
 				15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */,
-				15512E8813267F9700C6D038 /* SpeakerSetupWindow.xib */,
+				15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */,
 			);
 			path = SpeakerSetup;
 			sourceTree = "<group>";
@@ -646,7 +648,7 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22A18067137B0C1F00CE3197 /* Juce.xcodeproj */,
+				2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */,
 				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
 				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
@@ -749,10 +751,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22A18068137B0C1F00CE3197 /* Products */ = {
+		2214C9AC13B3B0F700AEC408 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				22A1806F137B0C1F00CE3197 /* libjuce.a */,
+				2214C9B313B3B0F700AEC408 /* libjuce.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -801,7 +803,8 @@
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				15EBEC8612BF777A00C30D46 /* MarkersWindow.xib */,
+				15155E7E139CE92100A8BC0D /* Choreographer.help */,
+				15155E54139CE34200A8BC0D /* MarkersWindow.xib */,
 				15A82A37111B952900F31B92 /* images */,
 				15A3FC8C10416364001092FD /* CHProjectDocument.xib */,
 				15EAB2B30FF49A0200A41A79 /* Pool.xib */,
@@ -874,8 +877,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 22A18068137B0C1F00CE3197 /* Products */;
-					ProjectRef = 22A18067137B0C1F00CE3197 /* Juce.xcodeproj */;
+					ProductGroup = 2214C9AC13B3B0F700AEC408 /* Products */;
+					ProjectRef = 2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -886,11 +889,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		22A1806F137B0C1F00CE3197 /* libjuce.a */ = {
+		2214C9B313B3B0F700AEC408 /* libjuce.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libjuce.a;
-			remoteRef = 22A1806E137B0C1F00CE3197 /* PBXContainerItemProxy */;
+			remoteRef = 2214C9B213B3B0F700AEC408 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -917,14 +920,15 @@
 				1597A3BC112EE43800AFCAA9 /* TimelineEditor.xib in Resources */,
 				15D16337116BE3EF00E22B42 /* folder.png in Resources */,
 				15C88D1E11BFC74000130A5E /* choreographer_icons.icns in Resources */,
-				15EBEC8712BF777A00C30D46 /* MarkersWindow.xib in Resources */,
+				15155E55139CE34200A8BC0D /* MarkersWindow.xib in Resources */,
 				15AAAEFB12C22A8C00BF3035 /* choreographer_logo.eps in Resources */,
-				15512E8D13267F9700C6D038 /* AudioEngineMainMenu.xib in Resources */,
+				15155E57139CE35900A8BC0D /* AudioEngineMainMenu.xib in Resources */,
 				15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */,
 				15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */,
 				15512EA313267F9700C6D038 /* SpeakerSetupChannelStrip.xib in Resources */,
-				15512EA513267F9700C6D038 /* SpeakerSetupWindow.xib in Resources */,
+				15155E59139CE37000A8BC0D /* SpeakerSetupWindow.xib in Resources */,
 				157393DD134CB609003FEE5F /* juce.tag in Resources */,
+				15155E98139CE92100A8BC0D /* Choreographer.help in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1016,6 +1020,30 @@
 				089C1660FE840EACC02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		15155E54139CE34200A8BC0D /* MarkersWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				15EBEC8612BF777A00C30D46 /* English */,
+			);
+			name = MarkersWindow.xib;
+			sourceTree = "<group>";
+		};
+		15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				15512E5813267F9700C6D038 /* English */,
+			);
+			name = AudioEngineMainMenu.xib;
+			sourceTree = "<group>";
+		};
+		15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				15512E8813267F9700C6D038 /* English */,
+			);
+			name = SpeakerSetupWindow.xib;
 			sourceTree = "<group>";
 		};
 		151739C20EB3A79B00EABE92 /* TableEditor.xib */ = {
@@ -1170,9 +1198,9 @@
 		1517F14B115E6864001E7BCD /* ProjectDocument.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				1517F195115E70DE001E7BCD /* ProjectDocument_v0.1.xcdatamodel */,
+				156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */,
 			);
-			currentVersion = 1517F195115E70DE001E7BCD /* ProjectDocument_v0.1.xcdatamodel */;
+			currentVersion = 156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */;
 			path = ProjectDocument.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -563,6 +563,7 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 {
 	
 	// DBG(T("AudioSpeakerGainAndRouting: nr of channels = ") + String(info.buffer->getNumChannels()));
+	// DBG(T("AudioSpeakerGainAndRouting::getNextAudioBlock called."));
 
 	if (audioSource != 0)
 	{

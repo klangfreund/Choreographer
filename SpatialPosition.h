@@ -15,6 +15,8 @@
 	float a,e,d;
 }
 
+//@property float a, e, d;
+
 + (SpatialPosition *)position;
 + (SpatialPosition *)positionWithX:(float)x Y:(float)y Z:(float)z;
 

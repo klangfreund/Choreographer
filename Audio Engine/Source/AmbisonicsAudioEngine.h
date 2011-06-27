@@ -97,6 +97,8 @@ public:
 	
 	/** Write the specified interval to a file.
 	 
+	 Please only call this after the arranger has been stopped.
+	 
 	 @param absolutePathToAudioFile	The absolute path to the audio file.
 	 @param bitsPerSample			The desired bit depth.
 	 @param description				For the wav-metadata: description.
@@ -114,7 +116,6 @@ public:
 					  String description,
 					  String originator,
 					  String originatorRef,
-					  int64 timeReferenceSamples,
 					  String codingHistory,
 					  int startSample,
 					  int numberOfSamplesToRead);

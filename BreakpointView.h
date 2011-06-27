@@ -18,13 +18,14 @@
 	Region *owningRegion;
 	
 	NSMutableArray *breakpointArray;
-	id editorSelection;
+	NSMutableSet *selectedBreakpoints;
 	Breakpoint *hit;
 	
 	BOOL isKey; // this breakpoint view is being edited
 
 	NSString *xAxisValueKeypath, *yAxisValueKeypath;
-	unsigned int xAxisMin, xAxisMax;
+	unsigned int xAxisMax; // min is always 0
+	float zoomFactorX;
 	double yAxisMin, yAxisMax;
 	
 	NSColor *backgroundColor, *gridColor;
@@ -40,7 +41,8 @@
 
 @property(retain) NSMutableArray *breakpointArray;
 @property(retain) NSString *xAxisValueKeypath, *yAxisValueKeypath;
-@property unsigned int xAxisMin, xAxisMax;
+@property unsigned int xAxisMax;
+@property float zoomFactorX;
 @property double yAxisMin, yAxisMax;
 @property(retain) NSString *toolTipString;
 

@@ -7,11 +7,12 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TrajectoryItem.h"
 
 
 @interface TrajectoryInspectorWindowController : NSWindowController
 {
-	// the current trajectory item
+	TrajectoryItem *currentTrajectoryItem;
 	id breakpointTrajectoryItem;
 	id rotationTrajectoryItem;
 	id randomTrajectoryItem;

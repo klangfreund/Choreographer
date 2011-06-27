@@ -41,7 +41,9 @@
 	
 	zoomFactor = 0.1;
 
-
+	numOfAreas = 1;
+	
+	
 	// register for notifications
 	[[NSNotificationCenter defaultCenter] addObserver:self
 										  selector:@selector(setZoomFactor:)
@@ -71,14 +73,15 @@
 	[backgroundColor set];
 	NSRectFill(rect);
 	
-	// draw horizontal lines
+	// draw horizontal lines (division into areas)
 	[[NSGraphicsContext currentContext] setShouldAntialias:NO];
 	[lineColor set];
-	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1)];
-	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + HEIGHT_2) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + HEIGHT_2)];
+	if(numOfAreas > 1) [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1)];
+	if(numOfAreas > 2) [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + HEIGHT_2) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + HEIGHT_2)];
 	[lineShadowColor set];
-	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + 1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + 1)];
-	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + HEIGHT_2 + 1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + HEIGHT_2 + 1)];
+	if(numOfAreas > 1) [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + 1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + 1)];
+	if(numOfAreas > 2) [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, HEIGHT_1 + HEIGHT_2 + 1) toPoint:NSMakePoint(rect.origin.x + rect.size.width, HEIGHT_1 + HEIGHT_2 + 1)];
+
 	[tickColor set];
 	[NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, 0) toPoint:NSMakePoint(rect.origin.x + rect.size.width, 0)];
 
@@ -183,13 +186,17 @@
 	float viewStart = rect.origin.x / zoomFactor;
 	int startTime = viewStart - (int)viewStart % increment;
 	int endTime = rect.origin.x / zoomFactor + rect.size.width / zoomFactor;
+	float y = 4;
+	
+	if(numOfAreas > 1) y += HEIGHT_1;
+	if(numOfAreas > 2) y += HEIGHT_2;
 
 	i=startTime;
 	index=0;
 	while(index < NUM_OF_LABELS && i < endTime)
 	{
 		// label
-		[labels[index] setFrame:NSMakeRect(i * zoomFactor + 2 + ARRANGER_OFFSET, 28, 50, 10)];
+		[labels[index] setFrame:NSMakeRect(i * zoomFactor + 2 + ARRANGER_OFFSET, y, 50, 10)];
 		
 
 		type = minSecRulerType;

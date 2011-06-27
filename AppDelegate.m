@@ -187,7 +187,9 @@
 	NSInteger tag;
 	id windowController = [[notification object] windowController];
 	
-	if(windowController == [RadarEditorWindowController sharedRadarEditorWindowController])
+	if(windowController == [currentProjectDocument windowController])
+		tag = 1;
+	else if(windowController == [RadarEditorWindowController sharedRadarEditorWindowController])
 		tag = 2;
 	else if(windowController == [TableEditorWindowController sharedTableEditorWindowController])
 		tag = 3;

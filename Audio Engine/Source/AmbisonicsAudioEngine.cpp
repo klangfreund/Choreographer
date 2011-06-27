@@ -326,11 +326,15 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 										 String description,
 										 String originator,
 										 String originatorRef,
-										 int64 timeReferenceSamples,
 										 String codingHistory,
 										 int startSample,
 										 int numberOfSamplesToRead)
 {
+	/*
+	 Maybe this should be done using a seperate thread.
+	 Take a look at the Juce Demo AudioDemoRecordPage.
+	 */
+	
 	File fileToWriteTo(absolutePathToAudioFile);	
 	// If this file exists, it needs to be deleted.
 	// (Otherwise the bounced audio would be appended to the existing file.)
@@ -338,39 +342,75 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 	
 	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();
 	
-	// Generate the metadataValues for the wav file.
-	Time dateAndTime;
-	dateAndTime.setSystemTimeToThisTime();
-	const StringPairArray metadataValues = WavAudioFormat::createBWAVMetadata(description,
-																			  originator, 
-																			  originatorRef, 
-																			  dateAndTime, 
-																			  timeReferenceSamples, 
-																			  codingHistory);
-	// Set up the audioFormatWriter.
-	WavAudioFormat wavAudioFormat;
-	int qualityOptionIndex = 0; // no compression.
-	AudioFormatWriter* audioFormatWriter = wavAudioFormat.createWriterFor(fileOutputStream, 
-																		  getCurrentSampleRate(), 
-																		  getNumberOfHardwareOutputChannels(), 
-																		  bitsPerSample, 
-																		  metadataValues, 
-																		  qualityOptionIndex);
 	
-	// Remember the current playhead position.
-	int currentPosition = getCurrentPosition();
-	
-	// Write the audio file.
-	setPosition(startSample);	
-	audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
-	bool success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
-												   numberOfSamplesToRead, 
-												   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
-	
-	// Reset the playhead position
-	setPosition(currentPosition);
-	
-	return success;
+	if (getCurrentSampleRate() > 0 && fileOutputStream != 0)
+	{
+		// Generate the metadataValues for the wav file.
+		Time dateAndTime;
+		dateAndTime = Time::getCurrentTime();
+		/*
+		 source: http://www.audiobanter.com/showthread.php?t=18755
+		 "TimeReference This field contains the timecode of the sequence. It is a
+		 64-bit value which contains
+		 the first sample count since midnight. The number of samples per second
+		 depends
+		 on the sample frequency which is defined in the field <nSamplesPerSec> from
+		 the <format chunk>."
+		 */
+		int64 timeReferenceSamples = (dateAndTime.getHours()*3600
+									  + dateAndTime.getMinutes() * 60
+									  + dateAndTime.getSeconds()
+									  + dateAndTime.getMilliseconds() * 0.001)*getCurrentSampleRate();		
+		const StringPairArray metadataValues = WavAudioFormat::createBWAVMetadata(description,
+																				  originator, 
+																				  originatorRef, 
+																				  dateAndTime, 
+																				  timeReferenceSamples, 
+																				  codingHistory);
+		// Set up the audioFormatWriter.
+		WavAudioFormat wavAudioFormat;
+		int qualityOptionIndex = 0; // no compression.
+		ScopedPointer<AudioFormatWriter> audioFormatWriter; 
+		audioFormatWriter = wavAudioFormat.createWriterFor(fileOutputStream, 
+														   getCurrentSampleRate(), 
+														   getNumberOfHardwareOutputChannels(), 
+														   bitsPerSample, 
+														   metadataValues, 
+														   qualityOptionIndex);
+		
+		
+		// Remember the current playhead position. (It's assumed that the playback has been stopped).
+		int currentPosition = getCurrentPosition();
+				
+		// Disconnect from the audioDeviceManager
+		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+		
+		// Jump to the desired position and engage the playback
+		setPosition(startSample);
+		audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
+		start();
+		
+		// Write the audio file.	
+		bool success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
+															   numberOfSamplesToRead, 
+															   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+		
+		stop();
+		// Reconnect with the audioDeviceManager
+		audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+		
+		// Reset the playhead position
+		setPosition(currentPosition);
+		
+		DBG(T("AmbisonicsAudioEngine::bounceToDisc: success = ") + String(success));
+		
+		return success;
+	}
+	else
+	{
+		return false;
+	}
+
 }
 
 bool AmbisonicsAudioEngine::addAepChannel(int aepChannel, double gain, 

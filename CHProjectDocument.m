@@ -12,6 +12,7 @@
 #import "ProjectWindow.h"
 #import "ArrangerView.h"
 #import "ToolbarController.h"
+#import "PlaybackController.h"
 
 @implementation CHProjectDocument
 
@@ -74,6 +75,9 @@
 		[window setFrame:NSRectFromString([projectSettings valueForKey:@"projectWindowFrame"]) display:YES];
 	}
 	
+	[window setExcludedFromWindowsMenu:YES];
+
+	
 	// instantiate and add pool
 	NSView *splitSubview = [[splitView subviews] objectAtIndex:1];
 	float width = [[projectSettings valueForKey:@"poolViewWidth"] floatValue];
@@ -131,8 +135,7 @@
     }
 }
 
-/* support versioning:
-   this method is called whenever core data attempts to load a persistent store
+/* versioning:
 */
 - (BOOL)configurePersistentStoreCoordinatorForURL:(NSURL *)url
 										   ofType:(NSString *)fileType
@@ -140,19 +143,11 @@
 									 storeOptions:(NSDictionary *)storeOptions
 											error:(NSError **)error
 {
-	NSMutableDictionary *newOptions = nil;
-	
-	if(storeOptions)
-	{
-		newOptions = [storeOptions mutableCopy];
-	}
-	else
-	{
-		newOptions = [[NSMutableDictionary alloc] init];
-	}
-	
-	[newOptions setObject:[NSNumber numberWithBool:YES] forKey:NSMigratePersistentStoresAutomaticallyOption];
-	
+
+	NSDictionary *newOptions = [NSDictionary dictionaryWithObjectsAndKeys:
+							 [NSNumber numberWithBool:YES], NSMigratePersistentStoresAutomaticallyOption,
+							 [NSNumber numberWithBool:YES], NSInferMappingModelAutomaticallyOption, nil];
+					
 	BOOL result = [super configurePersistentStoreCoordinatorForURL:url
 															ofType:fileType
 												modelConfiguration:configuration
@@ -163,16 +158,26 @@
 	return result;
 }
 
-//- (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
-//{
+- (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
+{
 //	NSLog(@"CHProjectDocument: can close ");
-//
-//}
+
+	// store window scroll position
+	
+	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.x] forKey:@"arrangerScrollOriginX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.y] forKey:@"arrangerScrollOriginY"];
+
+	
+	[projectSettings setValue:[NSNumber numberWithUnsignedLong:[playbackController locator]] forKey:@"arrangerPlayheadPosition"];
+	
+
+	[super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo]; 
+}
 
 
 - (void)close
 {
-	NSLog(@"CHProjectDocument: close %@", self);
+//	NSLog(@"CHProjectDocument: close %@", self);
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self]; // here, not in dealloc!
 
@@ -212,11 +217,11 @@
 
 - (IBAction)xZoomIn:(id)sender
 {
-	float zoomFactorX = [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
+	float zoomFactorX = [[projectSettings valueForKey:@"arrangerZoomFactorX"] floatValue];
 	zoomFactorX *= 1.2;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"zoomFactorX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
@@ -225,23 +230,23 @@
 
 - (IBAction)xZoomOut:(id)sender
 {
-	float zoomFactorX = [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
+	float zoomFactorX = [[projectSettings valueForKey:@"arrangerZoomFactorX"] floatValue];
 	zoomFactorX /= 1.2;
 	zoomFactorX = zoomFactorX < 0.0001 ? 0.0001 : zoomFactorX;
 
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"zoomFactorX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
 
 - (IBAction)yZoomIn:(id)sender
 {	
-	float zoomFactorY = [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
+	float zoomFactorY = [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
 	zoomFactorY *= 1.2;
 	zoomFactorY = zoomFactorY > 10 ? 10 : zoomFactorY;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"zoomFactorY"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
@@ -250,12 +255,12 @@
 
 - (IBAction)yZoomOut:(id)sender
 {	
-	float zoomFactorY = [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
+	float zoomFactorY = [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
 	zoomFactorY /= 1.2;
 	zoomFactorY = zoomFactorY < 0.1 ? 0.1 : zoomFactorY;
 
 	[[[self managedObjectContext] undoManager] disableUndoRegistration];
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"zoomFactorY"];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
 	[[self managedObjectContext] processPendingChanges];
 	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
@@ -306,12 +311,17 @@
 // -----------------------------------------------------------
 - (float)zoomFactorX
 { 
-	return [[projectSettings valueForKey:@"zoomFactorX"] floatValue];
+	return [[projectSettings valueForKey:@"arrangerZoomFactorX"] floatValue];
 }
 
 - (float)zoomFactorY
 {
-	return [[projectSettings valueForKey:@"zoomFactorY"] floatValue];
+	return [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
+}
+
+- (NSWindowController *)windowController
+{
+	return [[self windowControllers] objectAtIndex:0];
 }
 
 

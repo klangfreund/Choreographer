@@ -49,12 +49,13 @@
 		[bpView setValue:[NSColor blackColor] forKey:@"handleColor"];
 	
 		bpView.xAxisValueKeypath = @"time";
-		bpView.xAxisMin = 0;
-		bpView.xAxisMax = 10000;
+		bpView.zoomFactorX = 0.1;
 		
 		bpView.yAxisMin = -1;
 		bpView.yAxisMax = 1;
 	}
+	
+	zoomFactorX = 0.1;
 }
 
 - (void) dealloc
@@ -66,6 +67,8 @@
 	
 	[super dealloc];
 }
+
+
 
 
 #pragma mark -
@@ -81,10 +84,10 @@
 {
 	// draw background
 	// -----------------------------------------------------------------------------
-	NSColor *backgroundColor	= [NSColor colorWithCalibratedRed: 0.3 green: 0.3 blue: 0.3 alpha: 1];
+	NSColor *backgroundColor = [NSColor colorWithCalibratedRed: 0.3 green: 0.3 blue: 0.3 alpha: 1];
 
 	[backgroundColor set];
-	NSRectFill([self bounds]);
+	NSRectFill([self frame]);
 	
 	// draw content
 	// -----------------------------------------------------------------------------
@@ -113,18 +116,42 @@
 
 - (void)drawBreakpointTrajectory
 {
-	NSRect r = [self frame];
-	r.size.height = 50;
-	r.size.width -= 2;
+	float bpViewMininmumHeight = 100;
+	
+	NSRect r = [[self superview] frame];
+	float bpViewHeight = (r.size.height - 2) / 3;
+//	float bpViewWidth = (r.size.width - ARRANGER_OFFSET + [BreakpointBezierPath handleSize] * 0.5) / zoomFactorX;
+	
+	
+	if(bpViewHeight < bpViewMininmumHeight)
+	{
+		bpViewHeight = bpViewMininmumHeight;
+	}
+
+//	if(bpViewWidth < r.size.width)
+//	{
+//		bpViewWidth = r.size.width;
+//	}
+	
+//	NSLog(@"time: %f", (r.size.width - ARRANGER_OFFSET) / zoomFactorX);
+
+	
+	r = NSMakeRect(0, 0, r.size.width, bpViewHeight * 3 + 2);
+	[self setFrame:r];
+	
+	r.size.height = bpViewHeight;
+	r.size.width -= ARRANGER_OFFSET;
+	r.origin.x += ARRANGER_OFFSET - [BreakpointBezierPath handleSize] * 0.5;
 	
 	for(BreakpointView *bpView in breakpointViews)
 	{
+		bpView.zoomFactorX = zoomFactorX;
 		[bpView setValue:[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] forKey:@"breakpointArray"];
 //		[bpView setUpdateCallbackObject:[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] selector:@selector(archiveData)];
 
 		[bpView drawInRect:r];
 		
-		r.origin.y += 51;
+		r.origin.y += bpViewHeight + 1;
 	}
 }
 
@@ -211,7 +238,7 @@
 - (void)flagsChanged:(NSEvent *)event
 {
 	CHProjectDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-	NSLog(@"timeline editor: flags changed (document %x)", document);
+//	NSLog(@"timeline editor: flags changed (document %x)", document);
 
 	if([event modifierFlags] & NSControlKeyMask)
 		document.keyboardModifierKeys = modifierControl;

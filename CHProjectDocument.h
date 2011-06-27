@@ -15,7 +15,7 @@
 @interface CHProjectDocument : NSPersistentDocument
 {
     NSManagedObject *projectSettings;
-
+	
 	IBOutlet id toolbarController;
 	IBOutlet NSSplitView *splitView;
 	IBOutlet NSTreeController *treeController;
@@ -52,8 +52,8 @@
 // accessors
 - (float)zoomFactorX;
 - (float)zoomFactorY;
-//- (void)setProjectSettings:(id)anything;
 
+- (NSWindowController *)windowController;
 
 // selection management
 - (void)selectionInPoolDidChange;

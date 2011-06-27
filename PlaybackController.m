@@ -211,10 +211,6 @@
 
 - (void)setLoop
 {
-//	NSLog(@"mode:%d bounds:%d %d",  [[projectSettings valueForKey:@"loopMode"] integerValue],
-//									[[projectSettings valueForKey:@"loopRegionStart"] integerValue],
-//									[[projectSettings valueForKey:@"loopRegionEnd"] integerValue]);
-//
 	[loopCounter setLocators];
 	
 	if([[projectSettings valueForKey:@"loopMode"] integerValue] &&

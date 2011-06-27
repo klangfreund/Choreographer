@@ -22,6 +22,7 @@
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 	
 	[super awakeFromNib];
+	numOfAreas = 3;
 }
 
 
@@ -124,10 +125,10 @@
 	[markerPath closePath];
 	
 	[markerColor set];
-	[markerPath fill];
+/*	[markerPath fill];
 	[[NSColor blackColor] set];
 	[markerPath stroke];	
-
+*/
 
 	// ---------------------------------
 	// playback start
@@ -135,7 +136,7 @@
 	x = [[playbackController valueForKey:@"startLocator"] floatValue] * zoomFactor;
 	r = NSMakeRect(x + ARRANGER_OFFSET, 0, 1, HEIGHT_1);
 	[[NSColor redColor] set];
-	[NSBezierPath fillRect:r];	
+	[NSBezierPath fillRect:r];
 }
 	
 

@@ -14,7 +14,7 @@
 {
 	float minSpeed;
 	float maxSpeed;
-	float stability;
+	NSUInteger stability;
 	
 	SpatialPosition *boundingVolumePoint1, *boundingVolumePoint2;
 }

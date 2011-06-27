@@ -21,7 +21,8 @@
 @implementation BreakpointView
 @synthesize xAxisValueKeypath, yAxisValueKeypath;
 @synthesize breakpointArray;
-@synthesize xAxisMin, xAxisMax;
+@synthesize xAxisMax;
+@synthesize zoomFactorX;
 @synthesize yAxisMin, yAxisMax;
 @synthesize toolTipString;
 
@@ -31,6 +32,7 @@
 	if(self = [super init])
 	{
 		isKey = NO;
+		selectedBreakpoints = [[NSMutableSet alloc] init];
 	}
 	return self;
 }
@@ -38,7 +40,7 @@
 - (void)dealloc
 {
 	[gridPath release];
-	
+	[selectedBreakpoints release];
 	[super dealloc];	
 }
 
@@ -48,9 +50,8 @@
 	BreakpointBezierPath *breakpointBezierPath;
 	double xAxisValue, yAxisValue;
 	Breakpoint *bp;
+	double halfHandleSize = [BreakpointBezierPath handleSize] * 0.5;
 	
-
-	editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
 
 	// background
 
@@ -59,10 +60,10 @@
 	
 	if(rect.size.height < [BreakpointBezierPath handleSize] || rect.size.width < [BreakpointBezierPath handleSize]) return;
 	
-	rect = NSInsetRect(rect, [BreakpointBezierPath handleSize], [BreakpointBezierPath handleSize]);
+	//rect = NSInsetRect(rect, [BreakpointBezierPath handleSize], [BreakpointBezierPath handleSize]);
 	frame = rect;
 
-	double xAxisFactor = rect.size.width / (xAxisMax - xAxisMin);
+	double xAxisFactor = zoomFactorX;//rect.size.width / (xAxisMax - xAxisMin);
 	double yAxisFactor = rect.size.height / (yAxisMax - yAxisMin);
 	
 
@@ -77,7 +78,7 @@
 	
 	for(bp in breakpointArray)
 	{
-		xAxisValue = ([[bp valueForKeyPath:xAxisValueKeypath] doubleValue] - xAxisMin) * xAxisFactor;
+		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;		
 		yAxisValue = ([[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - yAxisMin) * yAxisFactor;
 		
 		p2 = NSMakePoint(rect.origin.x + xAxisValue, rect.origin.y + rect.size.height - yAxisValue);
@@ -93,13 +94,20 @@
 
 	for(bp in breakpointArray)
 	{
-		xAxisValue = ([[bp valueForKeyPath:xAxisValueKeypath] doubleValue] - xAxisMin) * xAxisFactor;
+		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;
+		
+		// keep handles inside 
+		if(xAxisValue < halfHandleSize)
+			xAxisValue = halfHandleSize;
+		if(xAxisValue > frame.size.width - halfHandleSize)
+			xAxisValue = frame.size.width - halfHandleSize;
+
 		yAxisValue = ([[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - yAxisMin) * yAxisFactor;
 
 		p1 = NSMakePoint(rect.origin.x + xAxisValue, rect.origin.y + rect.size.height - yAxisValue);
 		breakpointBezierPath = [BreakpointBezierPath breakpointBezierPathWithType:breakpointTypeNormal location:p1];
 		
-		if([editorSelection containsObject:bp])
+		if([selectedBreakpoints containsObject:bp])
 			[[NSColor blackColor] set];
 		else
 			[[NSColor whiteColor] set];
@@ -109,6 +117,7 @@
 		[breakpointBezierPath stroke];
 	}	
 }
+
 
 #pragma mark -
 #pragma mark mouse
@@ -126,10 +135,10 @@
 
 	CHProjectDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
 	
-	double xAxisFactor = frame.size.width / (xAxisMax - xAxisMin);
+	double xAxisFactor = zoomFactorX;
 	double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
 
-	rect.origin.x = (location.x - MOUSE_POINTER_SIZE * 0.5 - frame.origin.x) / xAxisFactor + xAxisMin;
+	rect.origin.x = (location.x - MOUSE_POINTER_SIZE * 0.5 - frame.origin.x) / xAxisFactor;
 	rect.origin.y = (frame.size.height - location.y - MOUSE_POINTER_SIZE * 0.5 + frame.origin.y) / yAxisFactor + yAxisMin;
 	rect.size.width = MOUSE_POINTER_SIZE / xAxisFactor;
 	rect.size.height = MOUSE_POINTER_SIZE / yAxisFactor;
@@ -150,8 +159,8 @@
 
 		// select the new point
 		hit = bp;
-		[editorSelection removeAllObjects];
-		[editorSelection addObject:bp];
+		[selectedBreakpoints removeAllObjects];
+		[selectedBreakpoints addObject:bp];
 		
 		return;
 	}
@@ -166,14 +175,14 @@
 		{
 			if(NSPointInRect(p, rect))
 			{
-				if([editorSelection containsObject:bp])
+				if([selectedBreakpoints containsObject:bp])
 				{
-					[editorSelection removeObject:bp];
+					[selectedBreakpoints removeObject:bp];
 				}
 				else
 				{
 					hit = bp;
-					[editorSelection addObject:bp];
+					[selectedBreakpoints addObject:bp];
 					[self sortBreakpoints];
 				}
 				return;
@@ -185,10 +194,10 @@
 			if(NSPointInRect(p, rect))
 			{
 				hit = bp;
-				if(![editorSelection containsObject:bp])
+				if(![selectedBreakpoints containsObject:bp])
 				{
-					[editorSelection removeAllObjects];
-					[editorSelection addObject:bp];
+					[selectedBreakpoints removeAllObjects];
+					[selectedBreakpoints addObject:bp];
 				}
 				return;
 			}
@@ -201,11 +210,11 @@
 
 - (NSPoint)proposedMouseDrag:(NSPoint)delta
 {
-	if(![editorSelection count] || !isKey) return delta;
+	if(![selectedBreakpoints count] || !isKey) return delta;
 
 	NSPoint tempDelta = delta;
 	
-	double xAxisFactor = frame.size.width / (xAxisMax - xAxisMin);
+	double xAxisFactor = zoomFactorX;
 	double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
 	
 	double xAxisValue;
@@ -214,20 +223,20 @@
 	tempDelta.x /= xAxisFactor; 
 	tempDelta.y /= yAxisFactor;
 	
-	for(Breakpoint *bp in editorSelection)
+	for(Breakpoint *bp in selectedBreakpoints)
 	{
 		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue];
 		yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue];
 
-		if(xAxisValue + tempDelta.x < xAxisMin)
+		if(xAxisValue + tempDelta.x < 0)
 		{
-			tempDelta.x = (float)xAxisMin - xAxisValue;
+			tempDelta.x = 0 - xAxisValue;
 		}
 		if(yAxisValue - tempDelta.y < yAxisMin)
 		{
 			tempDelta.y = yAxisValue - yAxisMin;
 		}
-		if(xAxisValue + tempDelta.x > xAxisMax)
+		if(xAxisValue + tempDelta.x > xAxisMax && xAxisMax > 0)
 		{
 			tempDelta.x = xAxisMax - xAxisValue;
 		}
@@ -245,9 +254,9 @@
 
 - (void)mouseDragged:(NSPoint)delta
 {
-	if(![editorSelection count] || !isKey) return;
+	if(![selectedBreakpoints count] || !isKey) return;
 		
-	double xAxisFactor = frame.size.width / (xAxisMax - xAxisMin);
+	double xAxisFactor = zoomFactorX;
 	double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
 
 	double xAxisValue;
@@ -256,7 +265,7 @@
 	delta.x /= xAxisFactor; 
 	delta.y /= yAxisFactor;
 	
-	for(Breakpoint *bp in editorSelection)
+	for(Breakpoint *bp in selectedBreakpoints)
 	{
 		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] + delta.x;
 		yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - delta.y;
@@ -277,10 +286,6 @@
 - (void)mouseUp:(NSEvent *)event
 {
 	[self performUpdateCallback];
-
-//	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
-//	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];
-//	[[[managedObjectContext undoManager] prepareWithInvocationTarget:self] undoableUpdateView];
 
 	[ToolTip release];
 	isKey = NO;
@@ -303,15 +308,21 @@
 #pragma mark selection
 // -----------------------------------------------------------
 
+- (void)setSelectedBreakpoints:(NSMutableSet *)set
+{
+	[selectedBreakpoints release];
+	selectedBreakpoints = [set retain];
+}
+
 - (void)deselectAll
 {
-	[editorSelection removeAllObjects];
+	[selectedBreakpoints removeAllObjects];
 }
 
 
 - (void)removeSelectedBreakpoints
 {
-	for(Breakpoint *bp in editorSelection)
+	for(Breakpoint *bp in selectedBreakpoints)
 	{
 		[breakpointArray removeObject:bp];
 	}

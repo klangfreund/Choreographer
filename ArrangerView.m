@@ -94,7 +94,8 @@
 	
 	// init zoom factor
 	zoomFactorX = [document zoomFactorX];
-
+	zoomFactorY = [document zoomFactorY];
+	
 	// get stored data
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
 	NSError *error;
@@ -121,6 +122,19 @@
 	
 	[self recalculateArrangerProperties];
 	[self recalculateArrangerSize];
+
+	// init window scroll position
+	NSPoint p = NSMakePoint([[projectSettings valueForKey:@"arrangerScrollOriginX"] floatValue],
+							[[projectSettings valueForKey:@"arrangerScrollOriginY"] floatValue]);
+	
+	[self scrollPoint:p];
+	
+	
+	
+	// init playhead position
+	[playbackController setLocator:[[projectSettings valueForKey:@"arrangerPlayheadPosition"] unsignedLongValue]];
+	
+
 	[self setNeedsDisplay:YES];
 }
 
@@ -296,8 +310,10 @@
 {
 	[xGridPath release];
 	
+	xGridAmount = [[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue];
+
 	float i;
-	float step = zoomFactorX * [[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue];
+	float step = zoomFactorX * xGridAmount;
 	switch([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue])
 	{
 		case 0:
@@ -313,6 +329,7 @@
 				[xGridPath lineToPoint:NSMakePoint(i, [self bounds].size.height)];
 			}
 	}
+
 }
 
 - (void)recalculateArrangerProperties
@@ -412,14 +429,22 @@
 
 	// audio file from finder
 
+	AudioFileID audioFileID;
+	AudioStreamBasicDescription basicDescription;
+
 	if ([[info.draggingPasteboard types] containsObject:NSFilenamesPboardType])
 	{
-
         for(id filePath in [info.draggingPasteboard propertyListForType:NSFilenamesPboardType])
 		{
+			audioFileID = [AudioFile idOfAudioFileAtPath:filePath];
+			basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
+
 			// if any of the proposed files is unreadable
-			// invalidate the drag operation
-			if(![AudioFile idOfAudioFileAtPath:filePath])
+			// or doesn't have the appropriate sampling rate or number of channels
+			// the drag operation is invalidated and aborded
+			if(!audioFileID ||
+			   basicDescription.mSampleRate != [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue] ||
+			   basicDescription.mChannelsPerFrame != 1)
 			{
 				arrangerViewDragAndDropAction = arrangerViewDragInvalid;
 				return NSDragOperationNone;
@@ -527,7 +552,8 @@
 	// - or magnetic grid
 	else if([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] == 2)
 	{
-		insertionPoint.x = ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX) * round(insertionPoint.x / ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX));
+		insertionPoint.x = ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX)
+							* round(insertionPoint.x / ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX));
 	}
 	// on y axis
 	// - by magnetic grid
@@ -605,9 +631,6 @@
 		default:
 			return NO;
 	}
-
-	[document setValue:nil forKey:@"draggedAudioRegions"];
-	[document setValue:nil forKey:@"draggedTrajectories"];
 }
 	
 - (BOOL)performTrajectoryDragOperation:(id <NSDraggingInfo>)info
@@ -642,6 +665,11 @@
 	
 	// notification
 	[document selectionInArrangerDidChange];
+	
+	// clear memory of dragged items
+	[document setValue:nil forKey:@"draggedAudioRegions"];
+	[document setValue:nil forKey:@"draggedTrajectories"];
+
 	
 	[self setNeedsDisplay:YES];
 	return YES;
@@ -687,6 +715,11 @@
 	
 	// notification
 	[document selectionInArrangerDidChange];
+	
+	// clear memory of dragged items
+	[document setValue:nil forKey:@"draggedAudioRegions"];
+	[document setValue:nil forKey:@"draggedTrajectories"];
+
 	
 	[self recalculateArrangerProperties];
 	[self setNeedsDisplay:YES];
@@ -807,8 +840,8 @@
 	else if([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] == 2 && magnetism)
 	{
 		delta.x = ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX)
-					* round((draggingParameter[0] + delta.x) / ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX))
-					- draggingParameter[0] + ARRANGER_OFFSET;
+		* floor((draggingParameter[0] + delta.x) / ([[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue] * zoomFactorX))
+		- draggingParameter[0] + ARRANGER_OFFSET;
 	}
 	if([[projectSettings valueForKey:@"arrangerYGridLines"] integerValue] == 2 && magnetism)
 	{
@@ -884,7 +917,7 @@
 		if(maxExtendRight == -1 || maxExtendRight > extendRight);
 			maxExtendRight = extendRight;		
 	}
-	
+
 	// minimum width is 1
 	if(minWidth - delta.x + delta.y < 1)
 	{
@@ -900,7 +933,7 @@
 	if(delta.y > maxExtendRight)
 		delta.y = maxExtendRight;
 	
-	
+
 	enumerator = [selectedRegions objectEnumerator] ;
 	while ((region = [enumerator nextObject]))
 	{
@@ -1088,7 +1121,6 @@
 
 - (void)flagsChanged:(NSEvent *)event
 {
-//	NSLog(@"ArrangerView flagsChanged");
 	[[self window] invalidateCursorRectsForView:self];
 
 	[super flagsChanged:event];
@@ -1158,24 +1190,27 @@
 
 - (void)nudge:(NSPoint)p
 {
-	[self moveSelectedRegionsBy:p restricted:NO];
-
-	NSEnumerator *enumerator;
-	id aRegion;
-		
-	enumerator = [selectedRegions objectEnumerator];
-	while ((aRegion = [enumerator nextObject]))
+	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
 	{
-		[aRegion updateTimeInModel];
+		// TODO: nudge gain handles
 	}
+	else
+	{
+		[self moveSelectedRegionsBy:p restricted:NO];
+
+		for(id aRegion in selectedRegions)
+		{
+			[aRegion updateTimeInModel];
+		}
 		
-	[self recalculateArrangerProperties];
+		[self recalculateArrangerProperties];
 		
-	// undo
-	if([selectedRegions count] == 1)
-		[[context undoManager] setActionName:@"nudge audio region"];
-	else if([selectedRegions count] > 1)
-		[[context undoManager] setActionName:@"nudge audio regions"];
+		// undo
+		if([selectedRegions count] == 1)
+			[[context undoManager] setActionName:@"nudge audio region"];
+		else if([selectedRegions count] > 1)
+			[[context undoManager] setActionName:@"nudge audio regions"];
+	}
 }
 
 #pragma mark -
@@ -1235,7 +1270,8 @@
 		if([hitAudioRegion valueForKey:@"trajectoryItem"] && NSPointInRect(localPoint, [hitAudioRegion trajectoryFrame]))
 		{
 			[trajectoryContextMenu setModel:[hitAudioRegion valueForKey:@"trajectoryItem"]
-										key:@"durationMode"];
+										key:@"durationMode"
+									  index:0];
 			[NSMenu popUpContextMenu:trajectoryContextMenu withEvent:event forView:self];
 		}
 		else
@@ -1250,6 +1286,14 @@
 
 - (void)mouseDown:(NSEvent *)event
 {
+	// control click  ==  right mouse
+	if([event modifierFlags] & NSControlKeyMask)
+	{
+		[self rightMouseDown:event];
+		return;
+	}
+	
+	
 	/* handle double clicks
 		- open special editors
 		- not yet implemented
@@ -1261,6 +1305,12 @@
 		return;
 	}
 
+	/* on mouse down: check the modifier
+	   (it might have changed while the focus was on another view
+		eg. an context menu)
+	 */
+	
+	[[self window] flagsChanged:event];
 	
 	/* convert the mouse location
 	   and find out if the click hits a region
@@ -1271,27 +1321,26 @@
 	
 	hitAudioRegion = [self pointInRegion:localPoint];
 	
-
 	switch(document.keyboardModifierKeys)
 	{
-		case modifierControl:	
-			if(hitAudioRegion)
-			{
-				if(![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
-				{
-					[self deselectAllRegions];
-					[self deselectAllTrajectories];
-				}
-				[self addRegionToSelection:hitAudioRegion];
-
-				[self setNeedsDisplay:YES]; // before context menu is shown!
-				[NSMenu popUpContextMenu:regionContextMenu withEvent:event forView:self];
-			}
-			else
-			{
-				[NSMenu popUpContextMenu:arrangerContextMenu withEvent:event forView:self];
-			}
-			break;
+//		case modifierControl:	
+//			if(hitAudioRegion)
+//			{
+//				if(![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+//				{
+//					[self deselectAllRegions];
+//					[self deselectAllTrajectories];
+//				}
+//				[self addRegionToSelection:hitAudioRegion];
+//
+//				[self setNeedsDisplay:YES]; // before context menu is shown!
+//				[NSMenu popUpContextMenu:regionContextMenu withEvent:event forView:self];
+//			}
+//			else
+//			{
+//				[NSMenu popUpContextMenu:arrangerContextMenu withEvent:event forView:self];
+//			}
+//			break;
 
 		case modifierNone:		// selection or ordinary dragging
 		case modifierAlt:		// duplicate
@@ -1675,6 +1724,26 @@
 		}
 	}
 	[self setNeedsDisplay:YES];
+}
+
+
+#pragma mark -
+#pragma mark track pad events
+// -----------------------------------------------------------
+
+
+- (void)magnifyWithEvent:(NSEvent *)event
+{
+//	NSLog(@"Magnification value is %f", [event magnification]);
+
+	zoomFactorX *= ([event magnification] + 1.0);
+	
+	[[context undoManager] disableUndoRegistration];
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
+	[context processPendingChanges];
+	[[context undoManager] enableUndoRegistration];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:document];	
 }
 
 

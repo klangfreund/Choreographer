@@ -22,7 +22,7 @@
 #define TIMELINE_EDITOR_AUDIO_HEIGHT 60
 #define TIMELINE_EDITOR_DATA_HEIGHT 60
 
-#define MOUSE_POINTER_SIZE 5			// tolerance for hit detection in graphical breakpoint editors
+#define MOUSE_POINTER_SIZE 10			// tolerance for hit detection in graphical breakpoint editors
 
 
 #define ARRANGER_OFFSET 10		// display below 0

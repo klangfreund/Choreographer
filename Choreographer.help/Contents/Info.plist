@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleIdentifier</key>
+	<string>net.icst.choreographer.help</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>Choreographer</string>
+	<key>CFBundlePackageType</key>
+	<string>BNDL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1</string>
+	<key>CFBundleSignature</key>
+	<string>hbwr</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>HPDBookAccessPath</key>
+	<string>Choreographer.html</string>
+	<key>HPDBookIconPath</key>
+	<string>shared/ChoreographerIcn.png</string>
+	<key>HPDBookIndexPath</key>
+	<string>Choreographer.helpindex</string>
+	<key>HPDBookKBProduct</key>
+	<string>choreographer1</string>
+	<key>HPDBookKBURL</key>
+	<string>http://www.icst.net</string>
+	<key>HPDBookRemoteURL</key>
+	<string>http://www.icst.net</string>
+	<key>HPDBookTitle</key>
+	<string>Choreographer Help</string>
+	<key>HPDBookType</key>
+	<string>3</string>
+	<key>HPDBookTopicListCSSPath</key>
+	<string>styles/topiclist.css</string>
+	<key>HPDBookTopicListTemplatePath</key>
+	<string>styles/topiclist.xquery</string>
+</dict>
+</plist>

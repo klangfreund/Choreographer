@@ -11,9 +11,9 @@
 
 @interface LevelMeterView : NSView
 {
-	IBOutlet id owner;
 	float level;
 	float peakLevel;
+	int	  peakLevelCounter;
 	
 	BOOL isVertical;
 
@@ -31,7 +31,18 @@
 
 @end
 
+@interface LevelMeterPeakView : NSView
+{
+	IBOutlet id owner;
+	float level;
+
+	NSColor *normalColor;
+	NSColor *overloadColor;
+}
+
+- (void)setLevel:(float)dBValue;
+
+@end
 
 @interface DBLabelsView : NSView
-
 @end

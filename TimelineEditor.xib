@@ -3,16 +3,16 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1060</int>
 		<string key="IBDocument.SystemVersion">10J869</string>
-		<string key="IBDocument.InterfaceBuilderVersion">823</string>
+		<string key="IBDocument.InterfaceBuilderVersion">851</string>
 		<string key="IBDocument.AppKitVersion">1038.35</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">823</string>
+			<string key="NS.object.0">851</string>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="3"/>
+			<integer value="1"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -41,7 +41,7 @@
 				<string key="NSWindowTitle">Timeline Editor</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
 				<string key="NSWindowContentMinSize">{300, 200}</string>
 				<object class="NSView" key="NSWindowView" id="82813442">
 					<reference key="NSNextResponder"/>
@@ -69,7 +69,7 @@
 											<int key="NSfFlags">3100</int>
 										</object>
 										<reference key="NSControlView" ref="508893606"/>
-										<object class="NSColor" key="NSBackgroundColor">
+										<object class="NSColor" key="NSBackgroundColor" id="1033056857">
 											<int key="NSColorSpace">6</int>
 											<string key="NSCatalogName">System</string>
 											<string key="NSColorName">textBackgroundColor</string>
@@ -107,23 +107,23 @@
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSCustomView" id="747084322">
 											<reference key="NSNextResponder" ref="813436420"/>
-											<int key="NSvFlags">266</int>
-											<string key="NSFrameSize">{600, 40}</string>
+											<int key="NSvFlags">264</int>
+											<string key="NSFrameSize">{600, 20}</string>
 											<reference key="NSSuperview" ref="813436420"/>
 											<string key="NSClassName">RulerView</string>
 										</object>
 									</object>
-									<string key="NSFrameSize">{600, 40}</string>
+									<string key="NSFrameSize">{600, 20}</string>
 									<reference key="NSSuperview" ref="801673763"/>
 									<reference key="NSNextKeyView" ref="747084322"/>
 									<reference key="NSDocView" ref="747084322"/>
-									<object class="NSColor" key="NSBGColor" id="522695012">
+									<object class="NSColor" key="NSBGColor">
 										<int key="NSColorSpace">6</int>
 										<string key="NSCatalogName">System</string>
 										<string key="NSColorName">controlColor</string>
 										<object class="NSColor" key="NSColor">
 											<int key="NSColorSpace">3</int>
-											<bytes key="NSWhite">MC42NjY2NjY2ODY1AA</bytes>
+											<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
 										</object>
 									</object>
 									<int key="NScvFlags">2</int>
@@ -149,7 +149,7 @@
 									<double key="NSPercent">0.50602412223815918</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{0, 149}, {600, 40}}</string>
+							<string key="NSFrame">{{0, 170}, {600, 20}}</string>
 							<reference key="NSSuperview" ref="82813442"/>
 							<reference key="NSNextKeyView" ref="813436420"/>
 							<int key="NSsFlags">0</int>
@@ -169,45 +169,44 @@
 										<bool key="EncodedWithXMLCoder">YES</bool>
 										<object class="NSCustomView" id="186293804">
 											<reference key="NSNextResponder" ref="423787731"/>
-											<int key="NSvFlags">26</int>
-											<string key="NSFrameSize">{600, 148}</string>
+											<int key="NSvFlags">18</int>
+											<string key="NSFrameSize">{600, 170}</string>
 											<reference key="NSSuperview" ref="423787731"/>
 											<string key="NSClassName">TimelineEditorView</string>
 										</object>
 									</object>
-									<string key="NSFrame">{{1, 1}, {598, 148}}</string>
+									<string key="NSFrameSize">{600, 170}</string>
 									<reference key="NSSuperview" ref="255035819"/>
 									<reference key="NSNextKeyView" ref="186293804"/>
 									<reference key="NSDocView" ref="186293804"/>
-									<reference key="NSBGColor" ref="522695012"/>
-									<int key="NScvFlags">4</int>
+									<reference key="NSBGColor" ref="1033056857"/>
+									<int key="NScvFlags">2</int>
 								</object>
 								<object class="NSScroller" id="4853864">
 									<reference key="NSNextResponder" ref="255035819"/>
 									<int key="NSvFlags">-2147483392</int>
-									<string key="NSFrame">{{584, 1}, {15, 133}}</string>
+									<string key="NSFrame">{{584, 1}, {15, 134}}</string>
 									<reference key="NSSuperview" ref="255035819"/>
 									<reference key="NSTarget" ref="255035819"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSCurValue">1</double>
-									<double key="NSPercent">0.99328857660293579</double>
+									<double key="NSPercent">0.98666667938232422</double>
 								</object>
 								<object class="NSScroller" id="512757155">
 									<reference key="NSNextResponder" ref="255035819"/>
 									<int key="NSvFlags">-2147483392</int>
 									<string key="NSFrame">{{1, 134}, {583, 15}}</string>
 									<reference key="NSSuperview" ref="255035819"/>
-									<bool key="NSEnabled">YES</bool>
 									<int key="NSsFlags">1</int>
 									<reference key="NSTarget" ref="255035819"/>
 									<string key="NSAction">_doScroller:</string>
 									<double key="NSPercent">0.99666666984558105</double>
 								</object>
 							</object>
-							<string key="NSFrame">{{-1, -1}, {600, 150}}</string>
+							<string key="NSFrameSize">{600, 170}</string>
 							<reference key="NSSuperview" ref="82813442"/>
 							<reference key="NSNextKeyView" ref="423787731"/>
-							<int key="NSsFlags">690</int>
+							<int key="NSsFlags">560</int>
 							<reference key="NSVScroller" ref="4853864"/>
 							<reference key="NSHScroller" ref="512757155"/>
 							<reference key="NSContentView" ref="423787731"/>
@@ -218,7 +217,7 @@
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMinSize">{300, 222}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSUserDefaultsController" id="774722253">
 				<bool key="NSSharedInstance">YES</bool>
@@ -250,6 +249,38 @@
 						<reference key="destination" ref="186293804"/>
 					</object>
 					<int key="connectionID">48</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">rulerScrollView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="801673763"/>
+					</object>
+					<int key="connectionID">49</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">arrangerScrollView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="255035819"/>
+					</object>
+					<int key="connectionID">50</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="797306354"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">51</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">controller</string>
+						<reference key="source" ref="186293804"/>
+						<reference key="destination" ref="1001"/>
+					</object>
+					<int key="connectionID">52</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -414,6 +445,7 @@
 					<string>31.IBPluginDependency</string>
 					<string>4.IBPluginDependency</string>
 					<string>4.ImportedFromIB2</string>
+					<string>44.CustomClassName</string>
 					<string>44.IBPluginDependency</string>
 					<string>45.IBPluginDependency</string>
 					<string>46.IBPluginDependency</string>
@@ -422,9 +454,9 @@
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{145, 141}, {600, 219}}</string>
+					<string>{{17, 147}, {600, 219}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{145, 141}, {600, 219}}</string>
+					<string>{{17, 147}, {600, 219}}</string>
 					<boolean value="NO"/>
 					<boolean value="YES"/>
 					<string>{300, 200}</string>
@@ -441,6 +473,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>ArrangerScrollView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -463,11 +496,65 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">48</int>
+			<int key="maxID">52</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">ArrangerScrollView</string>
+					<string key="superclassName">NSScrollView</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>xZoomInButton</string>
+							<string>xZoomOutButton</string>
+							<string>yZoomInButton</string>
+							<string>yZoomOutButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>NSButton</string>
+							<string>NSButton</string>
+							<string>NSButton</string>
+							<string>NSButton</string>
+						</object>
+					</object>
+					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>xZoomInButton</string>
+							<string>xZoomOutButton</string>
+							<string>yZoomInButton</string>
+							<string>yZoomOutButton</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">xZoomInButton</string>
+								<string key="candidateClassName">NSButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">xZoomOutButton</string>
+								<string key="candidateClassName">NSButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">yZoomInButton</string>
+								<string key="candidateClassName">NSButton</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">yZoomOutButton</string>
+								<string key="candidateClassName">NSButton</string>
+							</object>
+						</object>
+					</object>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">ArrangerScrollView.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">ContainerView</string>
 					<string key="superclassName">NSView</string>
@@ -598,14 +685,42 @@
 					<string key="className">TimelineEditorWindowController</string>
 					<string key="superclassName">EditorWindowController</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">view</string>
-						<string key="NS.object.0">TimelineEditorView</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>arrangerScrollView</string>
+							<string>rulerScrollView</string>
+							<string>view</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>ArrangerScrollView</string>
+							<string>RulerScrollView</string>
+							<string>TimelineEditorView</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">view</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">view</string>
-							<string key="candidateClassName">TimelineEditorView</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>arrangerScrollView</string>
+							<string>rulerScrollView</string>
+							<string>view</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBToOneOutletInfo">
+								<string key="name">arrangerScrollView</string>
+								<string key="candidateClassName">ArrangerScrollView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">rulerScrollView</string>
+								<string key="candidateClassName">RulerScrollView</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">view</string>
+								<string key="candidateClassName">TimelineEditorView</string>
+							</object>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

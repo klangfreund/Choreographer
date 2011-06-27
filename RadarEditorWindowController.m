@@ -55,8 +55,9 @@ static RadarEditorWindowController *sharedRadarEditorWindowController = nil;
 }
 
 
-- (void) refreshView
+- (void)refreshView
 {
+//	NSLog(@"Radar Editor refresh view");
 	[radarView setNeedsDisplay:YES];
 }
 

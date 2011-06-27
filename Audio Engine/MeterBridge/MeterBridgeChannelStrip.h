@@ -11,6 +11,7 @@
 
 @interface MeterBridgeChannelStrip : NSObject
 {
+	IBOutlet LevelMeterPeakView *levelMeterPeakView;
 	IBOutlet LevelMeterView *levelMeterView;
 	id meterBridgeWindowController;
 	int channelIndex;

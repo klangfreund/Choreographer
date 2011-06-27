@@ -12,7 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="321"/>
+			<integer value="298"/>
+			<integer value="867"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -160,17 +161,17 @@
 																<object class="NSCustomView" id="428492495">
 																	<reference key="NSNextResponder" ref="131431575"/>
 																	<int key="NSvFlags">284</int>
-																	<string key="NSFrame">{{145, 0}, {1, 400}}</string>
+																	<string key="NSFrame">{{145, 0}, {1, 398}}</string>
 																	<reference key="NSSuperview" ref="131431575"/>
 																	<string key="NSClassName">Playhead</string>
 																</object>
 															</object>
-															<string key="NSFrameSize">{7972, 400}</string>
+															<string key="NSFrameSize">{7972, 398}</string>
 															<reference key="NSSuperview" ref="460791357"/>
 															<string key="NSClassName">ArrangerView</string>
 														</object>
 													</object>
-													<string key="NSFrameSize">{787, 402}</string>
+													<string key="NSFrameSize">{787, 400}</string>
 													<reference key="NSSuperview" ref="874658377"/>
 													<reference key="NSNextKeyView" ref="131431575"/>
 													<reference key="NSDocView" ref="131431575"/>
@@ -188,7 +189,7 @@
 												<object class="NSScroller" id="163841324">
 													<reference key="NSNextResponder" ref="874658377"/>
 													<int key="NSvFlags">256</int>
-													<string key="NSFrame">{{787, 0}, {15, 402}}</string>
+													<string key="NSFrame">{{787, 0}, {15, 400}}</string>
 													<reference key="NSSuperview" ref="874658377"/>
 													<reference key="NSTarget" ref="874658377"/>
 													<string key="NSAction">_doScroller:</string>
@@ -198,7 +199,7 @@
 												<object class="NSScroller" id="945043893">
 													<reference key="NSNextResponder" ref="874658377"/>
 													<int key="NSvFlags">256</int>
-													<string key="NSFrame">{{0, 402}, {787, 15}}</string>
+													<string key="NSFrame">{{0, 400}, {787, 15}}</string>
 													<reference key="NSSuperview" ref="874658377"/>
 													<bool key="NSEnabled">YES</bool>
 													<int key="NSsFlags">1</int>
@@ -207,7 +208,7 @@
 													<double key="NSPercent">0.098720520734786987</double>
 												</object>
 											</object>
-											<string key="NSFrameSize">{802, 417}</string>
+											<string key="NSFrameSize">{802, 415}</string>
 											<reference key="NSSuperview" ref="127152705"/>
 											<reference key="NSNextKeyView" ref="460791357"/>
 											<int key="NSsFlags">176</int>
@@ -516,24 +517,6 @@
 				<string key="NSTitle"/>
 				<object class="NSMutableArray" key="NSMenuItems">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSMenuItem" id="336274923">
-						<reference key="NSMenu" ref="527108822"/>
-						<string key="NSTitle">Region Menu</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="971462003"/>
-						<reference key="NSMixedImage" ref="78410733"/>
-					</object>
-					<object class="NSMenuItem" id="891573476">
-						<reference key="NSMenu" ref="527108822"/>
-						<bool key="NSIsDisabled">YES</bool>
-						<bool key="NSIsSeparator">YES</bool>
-						<string key="NSTitle"/>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="971462003"/>
-						<reference key="NSMixedImage" ref="78410733"/>
-					</object>
 					<object class="NSMenuItem" id="599823825">
 						<reference key="NSMenu" ref="527108822"/>
 						<string key="NSTitle">Add New Trajectory</string>
@@ -583,32 +566,6 @@
 				<string key="NSTitle"/>
 				<object class="NSMutableArray" key="NSMenuItems">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="NSMenuItem" id="234640989">
-						<reference key="NSMenu" ref="49013811"/>
-						<string key="NSTitle">Arranger Menu</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="971462003"/>
-						<reference key="NSMixedImage" ref="78410733"/>
-					</object>
-					<object class="NSMenuItem" id="688585009">
-						<reference key="NSMenu" ref="49013811"/>
-						<string key="NSTitle">Item 2</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="971462003"/>
-						<reference key="NSMixedImage" ref="78410733"/>
-					</object>
-					<object class="NSMenuItem" id="96552370">
-						<reference key="NSMenu" ref="49013811"/>
-						<bool key="NSIsDisabled">YES</bool>
-						<bool key="NSIsSeparator">YES</bool>
-						<string key="NSTitle"/>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="971462003"/>
-						<reference key="NSMixedImage" ref="78410733"/>
-					</object>
 					<object class="NSMenuItem" id="174753110">
 						<reference key="NSMenu" ref="49013811"/>
 						<string key="NSTitle">Nudge X</string>
@@ -939,7 +896,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="542135914">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -948,13 +905,10 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{0, 10}, {290, 50}}</string>
 						<reference key="NSSuperview" ref="542135914"/>
-						<reference key="NSWindow"/>
 						<string key="NSClassName">LoopCounterView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{290, 60}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="435967860">
@@ -1027,7 +981,7 @@
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="679714601">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1036,7 +990,6 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{20, 9}, {38, 26}}</string>
 						<reference key="NSSuperview" ref="679714601"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="987540478">
 							<int key="NSCellFlags">67239424</int>
@@ -1054,8 +1007,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{80, 45}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSSlider" id="386912358">
@@ -1079,10 +1030,6 @@
 				</object>
 			</object>
 			<object class="NSUserDefaultsController" id="1000710356">
-				<object class="NSMutableArray" key="NSDeclaredKeys">
-					<bool key="EncodedWithXMLCoder">YES</bool>
-					<string>isPlaying</string>
-				</object>
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -1354,14 +1301,6 @@
 					<int key="connectionID">866</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">contextRemoveTrajectory:</string>
-						<reference key="source" ref="980173797"/>
-						<reference key="destination" ref="366874754"/>
-					</object>
-					<int key="connectionID">879</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">arrangerContextMenu</string>
 						<reference key="source" ref="131431575"/>
@@ -1384,22 +1323,6 @@
 						<reference key="destination" ref="363597854"/>
 					</object>
 					<int key="connectionID">882</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">contextRemoveTrajectory:</string>
-						<reference key="source" ref="980173797"/>
-						<reference key="destination" ref="923346616"/>
-					</object>
-					<int key="connectionID">884</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">contextRemoveTrajectory:</string>
-						<reference key="source" ref="980173797"/>
-						<reference key="destination" ref="821695811"/>
-					</object>
-					<int key="connectionID">886</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1867,8 +1790,6 @@
 						<reference key="object" ref="527108822"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="336274923"/>
-							<reference ref="891573476"/>
 							<reference ref="599823825"/>
 							<reference ref="629522076"/>
 							<reference ref="735150674"/>
@@ -1879,35 +1800,17 @@
 						<string key="objectName">Region Context Menu</string>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">606</int>
-						<reference key="object" ref="336274923"/>
-						<reference key="parent" ref="527108822"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">609</int>
 						<reference key="object" ref="49013811"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="688585009"/>
-							<reference ref="234640989"/>
 							<reference ref="174753110"/>
-							<reference ref="96552370"/>
 							<reference ref="613660760"/>
 							<reference ref="474966444"/>
 							<reference ref="312614965"/>
 						</object>
 						<reference key="parent" ref="0"/>
 						<string key="objectName">Arranger Context Menu</string>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">611</int>
-						<reference key="object" ref="688585009"/>
-						<reference key="parent" ref="49013811"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">612</int>
-						<reference key="object" ref="234640989"/>
-						<reference key="parent" ref="49013811"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">615</int>
@@ -2007,11 +1910,6 @@
 						<reference key="parent" ref="639479423"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">637</int>
-						<reference key="object" ref="96552370"/>
-						<reference key="parent" ref="49013811"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">638</int>
 						<reference key="object" ref="613660760"/>
 						<reference key="parent" ref="49013811"/>
@@ -2091,11 +1989,6 @@
 						<int key="objectID">647</int>
 						<reference key="object" ref="850370654"/>
 						<reference key="parent" ref="196442103"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">842</int>
-						<reference key="object" ref="891573476"/>
-						<reference key="parent" ref="527108822"/>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">843</int>
@@ -2398,11 +2291,8 @@
 					<string>6.ImportedFromIB2</string>
 					<string>605.IBEditorWindowLastContentRect</string>
 					<string>605.IBPluginDependency</string>
-					<string>606.IBPluginDependency</string>
 					<string>609.IBEditorWindowLastContentRect</string>
 					<string>609.IBPluginDependency</string>
-					<string>611.IBPluginDependency</string>
-					<string>612.IBPluginDependency</string>
 					<string>615.IBPluginDependency</string>
 					<string>616.CustomClassName</string>
 					<string>616.IBEditorWindowLastContentRect</string>
@@ -2433,7 +2323,6 @@
 					<string>633.ImportedFromIB2</string>
 					<string>634.IBPluginDependency</string>
 					<string>634.ImportedFromIB2</string>
-					<string>637.IBPluginDependency</string>
 					<string>638.IBPluginDependency</string>
 					<string>639.IBPluginDependency</string>
 					<string>640.CustomClassName</string>
@@ -2455,7 +2344,6 @@
 					<string>648.ImportedFromIB2</string>
 					<string>649.IBPluginDependency</string>
 					<string>649.ImportedFromIB2</string>
-					<string>842.IBPluginDependency</string>
 					<string>843.IBPluginDependency</string>
 					<string>844.IBPluginDependency</string>
 					<string>845.IBPluginDependency</string>
@@ -2564,9 +2452,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{12, -18}, {1000, 484}}</string>
+					<string>{{12, 4}, {1000, 484}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{12, -18}, {1000, 484}}</string>
+					<string>{{12, 4}, {1000, 484}}</string>
 					<integer value="1"/>
 					<integer value="0"/>
 					<string>{{12, 641}, {1000, 515}}</string>
@@ -2585,12 +2473,9 @@
 					<string>ContainerView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{223, 633}, {200, 123}}</string>
+					<string>{{223, 663}, {200, 93}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{329, 633}, {196, 123}}</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{329, 683}, {196, 73}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>SettingsMenu</string>
@@ -2624,7 +2509,6 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>SettingsMenu</string>
 					<string>{{486, 613}, {129, 63}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2644,7 +2528,6 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2724,7 +2607,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">967</int>
+			<int key="maxID">969</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

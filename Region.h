@@ -44,6 +44,7 @@
 // drawing
 - (void)drawRect:(NSRect)rect;
 - (void)drawGainEnvelope:(NSRect)rect;
+- (void)drawFrame:(NSRect)rect;
 - (NSColor *)color;
 
 // mouse

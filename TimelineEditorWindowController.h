@@ -10,12 +10,17 @@
 #import "CHGlobals.h"
 #import "EditorWindowController.h"
 #import "TimelineEditorView.h"
+#import "RulerScrollView.h"
+#import "ArrangerScrollView.h"
 
 
 @interface TimelineEditorWindowController : EditorWindowController
 {
 	IBOutlet TimelineEditorView *view;
 	TrajectoryType trajectoryType;
+
+	IBOutlet RulerScrollView			*rulerScrollView;
+    IBOutlet ArrangerScrollView			*arrangerScrollView;
 }
 
 + (id)sharedTimelineEditorWindowController;
