@@ -15,10 +15,11 @@
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
 : audioSource (0),
   audioRegionMixer (0),
-  audioDeviceManager (0),
   aepChannelHardwareOutputPairs (),
   aepChannelSettingsAscending (),
   aepChannelSettingsOrderedByActiveHardwareChannels (),
+  aepChannelSettingsOrderedByActiveHardwareChannelsBackup (),
+  numberOfHardwareOutputChannels (0),
   numberOfMutedChannels (0),
   numberOfSoloedChannels (0),
   numberOfChannelsWithActivatedPinkNoise (0),
@@ -35,13 +36,14 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
 	pinkNoiseInfo.numSamples = 0;
 }
 
-AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_, AudioRegionMixer* audioRegionMixer_)
+AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRegionMixer_)
 : audioSource (0),
   audioRegionMixer (audioRegionMixer_),
-  audioDeviceManager (audioDeviceManager_),
   aepChannelHardwareOutputPairs (),
   aepChannelSettingsAscending (),
   aepChannelSettingsOrderedByActiveHardwareChannels (),
+  aepChannelSettingsOrderedByActiveHardwareChannelsBackup (),
+  numberOfHardwareOutputChannels (0),
   numberOfMutedChannels (0),
   numberOfSoloedChannels (0),
   numberOfChannelsWithActivatedPinkNoise (0),
@@ -88,21 +90,14 @@ void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
 	}
 }
 
-void AudioSpeakerGainAndRouting::setAudioDeviceManager(AudioDeviceManager* audioDeviceManager_)
-{
-	audioDeviceManager = audioDeviceManager_;
-}
-
 int AudioSpeakerGainAndRouting::getNumberOfAepChannels()
 {
 	return aepChannelSettingsAscending.size();
 }
 
-int AudioSpeakerGainAndRouting::getNumberOfHardwareOutputChannels()
+void AudioSpeakerGainAndRouting::setNumberOfHardwareOutputChannels(int numberOfHardwareOutputChannels_)
 {
-	AudioIODevice* currentAudioDevice = audioDeviceManager->getCurrentAudioDevice();
-	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
-	return outputChannelNames.size();
+	numberOfHardwareOutputChannels = numberOfHardwareOutputChannels_;
 }
 
 bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool solo, 
@@ -387,7 +382,7 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 			  number of times before calling connectAepChannelWithHardwareOutputChannel."));
 		return;
 	}
-	if (hardwareOutputChannel >= getNumberOfHardwareOutputChannels())
+	if (hardwareOutputChannel >= numberOfHardwareOutputChannels)
 	{
 		DBG(T("Error. The hardwareOutputChannel argument is bigger than the available number of \
 			  hardware device outputs."));
@@ -413,24 +408,31 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 	}
 }
 
-int AudioSpeakerGainAndRouting::enableNewRouting()
+int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDeviceManager)
 {	
 	DBG(T("AudioSpeakerGainAndRouting: enableNewRouting called."));
 	
 	// This section is scope locked.
 	const ScopedLock sl (connectionLock);
 	
+	// The numberOfHardwareOutputChannels should be already correctly set,
+	// but to be on the safe side its set one more time:
+	AudioIODevice* currentAudioDevice = audioDeviceManager->getCurrentAudioDevice();
+		// this points to a object used by the audioDeviceManager, don't delete it!
+	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
+	numberOfHardwareOutputChannels = outputChannelNames.size();
+	
 	// Activate (and deactivate) the hardware device output channels as needed
 	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
 	audioDeviceManager->getAudioDeviceSetup(audioDeviceSetup);
-	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(getNumberOfHardwareOutputChannels()));
+	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(numberOfHardwareOutputChannels));
 	
 	// temp:
 	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
 	
 	// Figure out which hardware outputs will be in use.
 	audioDeviceSetup.outputChannels.clear();
-	for (int i=0; i < getNumberOfHardwareOutputChannels(); i++)
+	for (int i=0; i < numberOfHardwareOutputChannels; i++)
 	{
 		if (aepChannelHardwareOutputPairs.containsHardwareOutputChannel(i))
 		{
@@ -467,6 +469,18 @@ int AudioSpeakerGainAndRouting::enableNewRouting()
 	// The audioSpeakerGainAndRouting will tell the audioRegionMixer
 	// which speaker setting to use on which (active) hardware/buffer
 	// channel.
+	
+	// Set the measuredDecayingValue of all used aep channels to zero.
+	//   (If this would not be done, the vu bar of a disconnected aep channel
+	//   would stay constantly at the last measured value.
+	//   This is not done for the measuredPeakValue, because that value might
+	//   still be of interest.)
+	for (int i=0; i < aepChannelSettingsOrderedByActiveHardwareChannels.size(); i++)
+	{
+		aepChannelSettingsOrderedByActiveHardwareChannels[i]->measuredDecayingValue = 0.0;
+	}
+	
+
 	
 	// Remove all elements from the array (which will be filled with
 	// the most recent routing configuration in the following loop).
@@ -520,7 +534,6 @@ bool AudioSpeakerGainAndRouting::deleteSpeakerPositions(Array<void*> positionOfS
 void AudioSpeakerGainAndRouting::removeAllRoutingsAndAllAepChannels()
 {
 	removeAllRoutings();
-	enableNewRouting();
 	
 	// Clear the first AEP array.
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
@@ -532,6 +545,62 @@ void AudioSpeakerGainAndRouting::removeAllRoutingsAndAllAepChannels()
 	}
 	// And clear the second AEP array. 
 	aepChannelSettingsAscending.clear();	
+}
+
+int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
+{
+	// Only change something, if there is something to change.
+	if (bounceMode_ != bounceMode)
+	{
+		const ScopedLock sl (audioSpeakerGainAndRoutingLock);
+		
+		bounceMode = bounceMode_;
+		
+		// Enable the bounce mode
+		if (bounceMode)
+		{
+			// Backup the regular settings
+			aepChannelSettingsOrderedByActiveHardwareChannelsBackup =
+				aepChannelSettingsOrderedByActiveHardwareChannels;
+			
+			// Get rid of the regular settings
+			aepChannelSettingsOrderedByActiveHardwareChannels.clear();
+			
+			// Use the ascending settings instead
+			aepChannelSettingsOrderedByActiveHardwareChannels = aepChannelSettingsAscending;
+		}
+		
+		// Disable the bounce mode
+		else
+		{
+			// Recover the regular settings
+			aepChannelSettingsOrderedByActiveHardwareChannels =
+				aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+		}
+		
+		
+		// Let the audioRegionMixer know about the new speaker configurations.	
+		double x, y, z;
+		Array<void*> oldPositionOfSpeakers = positionOfSpeakers;
+		Array<void*> newPositionOfSpeakers;
+		positionOfSpeakers = newPositionOfSpeakers;
+		
+		for (int i=0; i < aepChannelSettingsOrderedByActiveHardwareChannels.size(); i++)
+		{
+			x = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getX();
+			y = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getY();
+			z = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getZ();
+			SpeakerPosition* theIthSpeaker = new SpeakerPosition(x,y,z);
+			positionOfSpeakers.add(theIthSpeaker);
+		}
+		
+		audioRegionMixer->setSpeakerPositions(positionOfSpeakers);
+		
+		// delete the content of the oldPositionOfSpeakers
+		deleteSpeakerPositions(oldPositionOfSpeakers);		
+	}
+	
+	return aepChannelSettingsOrderedByActiveHardwareChannels.size();
 }
 
 

@@ -113,8 +113,8 @@ static AudioEngine *sharedAudioEngine = nil;
 	String originator("Sam");
 	String originatorRef("Choreographer");
 	String codingHistory; 
-	int startSample = 22*44100;
-	int numberOfSamplesToRead = 8*44100;
+	int startSample = 10*44100;
+	int numberOfSamplesToRead = 12*44100;
 	ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
 										bitsPerSample, 
 										description, 

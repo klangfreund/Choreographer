@@ -259,7 +259,7 @@ public:
     /** Constructor: Creates an AudioSpeakerGainAndRouting.
 	 */
 	AudioSpeakerGainAndRouting();
-    AudioSpeakerGainAndRouting(AudioDeviceManager* audioDeviceManager_, AudioRegionMixer* audioRegionMixer_);
+    AudioSpeakerGainAndRouting(AudioRegionMixer* audioRegionMixer_);
 	
     /** Destructor. */
     ~AudioSpeakerGainAndRouting();
@@ -274,26 +274,15 @@ public:
 	 @param newSource             The new input source to use. This might be zero.
 	 */
     void setSource (AudioSource* const newAudioRegionMixer);
-	
-	/** Sets the AudioDeviceManager.
-	 
-	 Thanks to the knowledge of the AudioDeviceManager, the AudioSpeakerGainAndRouting
-	 can activate and deactivate hardware output channels.
-	 */
-	void setAudioDeviceManager(AudioDeviceManager* audioDeviceManager_);
 
 	/** Get the number of aep channels with a speaker configuration assigned
 	 to them (by setSpeakerPosition).
 	 */	
 	int getNumberOfAepChannels();
 	
-	/**
-	 Returns the number of output channels of the current
-	 AudioIODevice.
-	 
-	 @return The number of output channels.
+	/** Sets the number of hardware output channels of the current AudioIODevice.
 	 */
-	int getNumberOfHardwareOutputChannels();
+	void setNumberOfHardwareOutputChannels(int numberOfHardwareOutputChannels_);
 	
 	/** Adds a new AEP channel to the array of AEP channels.
 	 
@@ -408,7 +397,7 @@ public:
 	 
 	 @return	The number of active hardware output channels.
 	 */
-	int enableNewRouting();
+	int enableNewRouting(AudioDeviceManager *audioDeviceManager);
 
 	/** Removes all connections between the AEP channels and
 	 the audio hardware output channels as well as all AEP
@@ -420,6 +409,14 @@ public:
 	 */
 	void removeAllRoutingsAndAllAepChannels();
 	
+	/** Puts the AudioSpeakerGainAndRouting object into the bounce mode.
+	 
+	 Only enable this if the object is not called back by a hardware
+	 device! In bounce mode, virtual hardware outputs are generated. The
+	 number of virtual hardware outputs is equal to the number of aep
+	 channels and they are connected one to one with the aep channels.
+	 */
+	int switchToBounceMode(bool bounceMode);
 
     //==============================================================================
     /** Implements the AudioSource method. */
@@ -446,8 +443,7 @@ private:
 	bool deleteSpeakerPositions(Array<void*> positionOfSpeakers_);
 	
 	AudioSource* audioSource;
-	AudioRegionMixer* audioRegionMixer;	
-	AudioDeviceManager* audioDeviceManager;
+	AudioRegionMixer* audioRegionMixer;
 
 	AEPChannelHardwareOutputPairs aepChannelHardwareOutputPairs;
 			///< This object
@@ -460,6 +456,13 @@ private:
 	
 	Array<aepChannelSettings*> aepChannelSettingsAscending;
 	Array<aepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannels;
+	
+	Array<aepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+			///< This backup object is only used by switchToBounceMode().
+	bool bounceMode;
+
+	
+	int numberOfHardwareOutputChannels;
 	
 	int numberOfMutedChannels; 
 	int numberOfSoloedChannels;

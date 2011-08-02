@@ -475,6 +475,9 @@ private:
 	AudioRegionMixer audioRegionMixer;		///< An instance of a new object, manages 
 							///  and mixes audio regions.
 
+	int numberOfHardwareOutputChannels;
+	
+	//TODO: Maybe this is not used anymore
 	Array<void*> positionOfSpeakerMaybeReduced;	///< An instance of a Juce array of void*.
 							///  The void pointers
 							///  need to be typecasted to pointers to

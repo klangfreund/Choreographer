@@ -19,7 +19,8 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioSourcePlayer(),
       audioTransportSource(),
       audioRegionMixer(),
-	  audioSpeakerGainAndRouting(&audioDeviceManager, &audioRegionMixer)
+	  audioSpeakerGainAndRouting(&audioRegionMixer),
+	  numberOfHardwareOutputChannels (0)
 {
 	
 	DBG(T("AmbisonicsAudioEngine: constructor called."));
@@ -107,14 +108,17 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	}
 	
 	
+	// Get the number of hardware output channels:
+	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
+	// this points to a object used by the audioDeviceManager, don't delete it!
+	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
+	numberOfHardwareOutputChannels = outputChannelNames.size();
+	// Let others know about this new number of hardware output channels:
+	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
 	
 	// figure out the number of active output channels:
-	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	    // This points to an object already existing, don't delete it!
-//	const BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
-	int numberOfActiveOutputChannels = (audioIODevice->getActiveOutputChannels()).countNumberOfSetBits();
+	int numberOfActiveOutputChannels = (currentAudioDevice->getActiveOutputChannels()).countNumberOfSetBits();
 
-	
 	// Connect the objects together (for a better understanding, please take a look at
 	// the picture in the AmbisonicsAudioEngine Class Reference in the documentation):
 	audioTransportSource.setSource (&audioRegionMixer,
@@ -207,14 +211,18 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 //	delete audioState;
 //	
 //	ApplicationProperties::getInstance()->getUserSettings()->saveIfNeeded();
-	
+
+	// Get the number of hardware output channels:
+	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
+		// this points to a object used by the audioDeviceManager, don't delete it!
+	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
+	numberOfHardwareOutputChannels = outputChannelNames.size();
+	// Let others know about this new number of hardware output channels:
+	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
 	
 	// figure out the number of active output channels:
-	AudioIODevice* audioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	   // this points to a object used by the audioDeviceManager, don't delete it!
-	BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
-	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
-
+	int numberOfActiveOutputChannels = (currentAudioDevice->getActiveOutputChannels()).countNumberOfSetBits();
+	
 	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
 	audioTransportSource.setSource (&audioRegionMixer,
 									numberOfActiveOutputChannels,
@@ -282,6 +290,8 @@ String AmbisonicsAudioEngine::setAudioDevice(String audioDeviceName)
 	// least something available for audio output.
 	if (errorString.isNotEmpty())
 	{
+		DBG(T("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = ") + errorString);
+		
 		String errorString2;
 		int numInputChannelsNeeded = 256;
 		int numOutputChannelsNeeded = 256;
@@ -292,9 +302,17 @@ String AmbisonicsAudioEngine::setAudioDevice(String audioDeviceName)
 													  selectDefaultDeviceOnFailure);
 		if (errorString2.isNotEmpty())
 		{
-			DBG(T("AmbisonicsAudioEngine::setAudioDevice: audioDeviceManager, initialisation error = ") + errorString);
+			DBG(T("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = ") + errorString2);
 		}
 	}
+	
+	// Get the number of hardware output channels:
+	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
+		// this points to a object used by the audioDeviceManager, don't delete it!
+	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
+	numberOfHardwareOutputChannels = outputChannelNames.size();
+	// Let others know about this new number of hardware output channels:
+	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
 	
 	return errorString;
 }
@@ -313,7 +331,7 @@ double AmbisonicsAudioEngine::getCurrentSampleRate ()
 
 int AmbisonicsAudioEngine::getNumberOfHardwareOutputChannels()
 {
-	return audioSpeakerGainAndRouting.getNumberOfHardwareOutputChannels();
+	return numberOfHardwareOutputChannels;
 }
 
 int AmbisonicsAudioEngine::getNumberOfAepChannels()
@@ -330,11 +348,6 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 										 int startSample,
 										 int numberOfSamplesToRead)
 {
-	/*
-	 Maybe this should be done using a seperate thread.
-	 Take a look at the Juce Demo AudioDemoRecordPage.
-	 */
-	
 	File fileToWriteTo(absolutePathToAudioFile);	
 	// If this file exists, it needs to be deleted.
 	// (Otherwise the bounced audio would be appended to the existing file.)
@@ -344,58 +357,109 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 	
 	
 	if (getCurrentSampleRate() > 0 && fileOutputStream != 0)
-	{
-		// Generate the metadataValues for the wav file.
-		Time dateAndTime;
-		dateAndTime = Time::getCurrentTime();
-		/*
-		 source: http://www.audiobanter.com/showthread.php?t=18755
-		 "TimeReference This field contains the timecode of the sequence. It is a
-		 64-bit value which contains
-		 the first sample count since midnight. The number of samples per second
-		 depends
-		 on the sample frequency which is defined in the field <nSamplesPerSec> from
-		 the <format chunk>."
-		 */
-		int64 timeReferenceSamples = (dateAndTime.getHours()*3600
-									  + dateAndTime.getMinutes() * 60
-									  + dateAndTime.getSeconds()
-									  + dateAndTime.getMilliseconds() * 0.001)*getCurrentSampleRate();		
-		const StringPairArray metadataValues = WavAudioFormat::createBWAVMetadata(description,
-																				  originator, 
-																				  originatorRef, 
-																				  dateAndTime, 
-																				  timeReferenceSamples, 
-																				  codingHistory);
-		// Set up the audioFormatWriter.
-		WavAudioFormat wavAudioFormat;
-		int qualityOptionIndex = 0; // no compression.
-		ScopedPointer<AudioFormatWriter> audioFormatWriter; 
-		audioFormatWriter = wavAudioFormat.createWriterFor(fileOutputStream, 
-														   getCurrentSampleRate(), 
-														   getNumberOfHardwareOutputChannels(), 
-														   bitsPerSample, 
-														   metadataValues, 
-														   qualityOptionIndex);
-		
-		
+	{		
 		// Remember the current playhead position. (It's assumed that the playback has been stopped).
 		int currentPosition = getCurrentPosition();
-				
+		
 		// Disconnect from the audioDeviceManager
 		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
 		
-		// Jump to the desired position and engage the playback
-		setPosition(startSample);
-		audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
-		start();
+		// Put the audioSpeakerGainAndRouting into bounce mode
+		int virtualNumberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(true);
 		
-		// Write the audio file.	
-		bool success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
-															   numberOfSamplesToRead, 
-															   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+		bool success = false; // This will be returned if virtualNumberOfActiveOutputChannels = 0.
 		
-		stop();
+		// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
+		if (virtualNumberOfActiveOutputChannels > 0)
+		{
+			// Generate the metadataValues for the wav file.
+			Time dateAndTime;
+			dateAndTime = Time::getCurrentTime();
+			/*
+			 source: http://www.audiobanter.com/showthread.php?t=18755
+			 "TimeReference This field contains the timecode of the sequence. It is a
+			 64-bit value which contains
+			 the first sample count since midnight. The number of samples per second
+			 depends
+			 on the sample frequency which is defined in the field <nSamplesPerSec> from
+			 the <format chunk>."
+			 */
+			int64 timeReferenceSamples = (dateAndTime.getHours()*3600
+										  + dateAndTime.getMinutes() * 60
+										  + dateAndTime.getSeconds()
+										  + dateAndTime.getMilliseconds() * 0.001)*getCurrentSampleRate();
+			const StringPairArray metadataValues = WavAudioFormat::createBWAVMetadata(description,
+																					  originator, 
+																					  originatorRef, 
+																					  dateAndTime, 
+																					  timeReferenceSamples, 
+																					  codingHistory);
+			
+			// Set up the audioFormatWriter.
+			WavAudioFormat wavAudioFormat;
+			int qualityOptionIndex = 0; // no compression.
+			ScopedPointer<AudioFormatWriter> audioFormatWriter; 
+			audioFormatWriter = wavAudioFormat.createWriterFor(fileOutputStream, 
+															   getCurrentSampleRate(), 
+															   virtualNumberOfActiveOutputChannels, 
+															   bitsPerSample, 
+															   metadataValues, 
+															   qualityOptionIndex);
+			
+			audioTransportSource.setSource (&audioRegionMixer,
+											virtualNumberOfActiveOutputChannels,
+											AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+			
+			
+			
+			// Jump to the desired position and engage the playback
+			audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
+			setPosition(startSample);
+			start();
+			
+			// Write the audio file.	
+			success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
+																   numberOfSamplesToRead, 
+																   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+			
+			
+			// TODO: Try to do this by hand (with some sleeps in between):
+			
+			//		bool AudioFormatWriter::writeFromAudioSource (AudioSource& source, int numSamplesToRead, const int samplesPerBlock)
+			//		{
+			//			AudioSampleBuffer tempBuffer (getNumChannels(), samplesPerBlock);
+			//			
+			//			while (numSamplesToRead > 0)
+			//			{
+			//				const int numToDo = jmin (numSamplesToRead, samplesPerBlock);
+			//				
+			//				AudioSourceChannelInfo info;
+			//				info.buffer = &tempBuffer;
+			//				info.startSample = 0;
+			//				info.numSamples = numToDo;
+			//				info.clearActiveBufferRegion();
+			//				
+			//				source.getNextAudioBlock (info);
+			//				
+			//				if (! writeFromAudioSampleBuffer (tempBuffer, 0, numToDo))
+			//					return false;
+			//				
+			//				numSamplesToRead -= numToDo;
+			//			}
+			//			
+			//			return true;
+			//		}		
+			
+			stop();
+		}
+		
+		// Put the audioSpeakerGainAndRouting into regular mode
+		int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(false);
+		
+		audioTransportSource.setSource (&audioRegionMixer,
+										numberOfActiveOutputChannels,
+										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+		
 		// Reconnect with the audioDeviceManager
 		audioDeviceManager.addAudioCallback(&audioSourcePlayer);
 		
@@ -495,7 +559,7 @@ void AmbisonicsAudioEngine::enableNewRouting()
 	// Since we're quite likely going to change the number of channels
 	// in the audio callback, we have to stop these callbacks.
 	bool wasPlaying = audioTransportSource.isPlaying();
-	int64 currentPosition;
+	int currentPosition;
 	if (wasPlaying)
 	{
 		currentPosition = getCurrentPosition();
@@ -503,10 +567,11 @@ void AmbisonicsAudioEngine::enableNewRouting()
 	}
 	
 	{
-	const ScopedLock sl (lock);
-	audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+		// This section is scope locked.
+		const ScopedLock sl (lock);
+		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
 	
-	int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.enableNewRouting();
+	int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.enableNewRouting(&audioDeviceManager);
 	
 	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
 	if (numberOfActiveOutputChannels > 0)

@@ -53,6 +53,7 @@ bool AudioRegionMixer::addRegion (const int regionID,
 	 // get a format manager and set it up with the basic types (wav and aiff).
 	 AudioFormatManager audioFormatManager;
 	 audioFormatManager.registerBasicFormats();
+		// Currently, this registers the WAV and AIFF formats.
 	
 	 AudioFormatReader* audioFormatReader = audioFormatManager.createReaderFor (audioFile);
 	 // This audioFormatReader will be deleted when the audioFormatReaderSource will
