@@ -91,6 +91,12 @@
 - (void)deleteAllAudioRegions;
 
 
+// Hardware
+
+- (NSArray *)availableAudioDeviceNames;
+- (void)setHardwareOutputDevice:(NSString *)deviceName;
+
+
 //  Speaker Setup
 
 - (void)removeAllSpeakerChannels;

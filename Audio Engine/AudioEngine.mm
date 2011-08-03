@@ -107,14 +107,15 @@ static AudioEngine *sharedAudioEngine = nil;
 	
 	[self stopAudio];
 	
-	String absolutePathToAudioFile("/Users/sam/Desktop/bounce.wav");
+	// String absolutePathToAudioFile("/Users/sam/Desktop/bounce.wav");
+	String absolutePathToAudioFile("/Users/philippekocher/Desktop/bounce.wav");
 	int bitsPerSample = 16;
 	String description("Test bounce");
 	String originator("Sam");
 	String originatorRef("Choreographer");
 	String codingHistory; 
-	int startSample = 10*44100;
-	int numberOfSamplesToRead = 12*44100;
+	int startSample = 0; //22*44100;
+	int numberOfSamplesToRead = 8*44100;
 	ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
 										bitsPerSample, 
 										description, 
@@ -143,7 +144,19 @@ static AudioEngine *sharedAudioEngine = nil;
 	[meterBridgeWindowController showWindow:nil];
 }
 
+//- (BOOL)validateUserInterfaceItem:(id)item
+//{
+//	id document = [[NSDocumentController sharedDocumentController] currentDocument];
+//	
+//	NSLog(@"doc: %@", (document != nil));
+//
+//	if ([item action] == @selector(bounceToDisk:) && (document != nil)) return YES;
+//	
+//	
+//	else return NO;
+//}
 
+	
 #pragma mark -
 #pragma mark auxiliary playback
 // -----------------------------------------------------------
@@ -223,17 +236,6 @@ static AudioEngine *sharedAudioEngine = nil;
 - (unsigned short)numberOfHardwareDeviceOutputChannels
 {
 	return ambisonicsAudioEngine->getNumberOfHardwareOutputChannels();
-}
-
-- (NSString *)nameOfHardwareOutputDevice
-{
-	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
-	
-	int maxBufferSizeBytes = 120;
-	char audioDeviceName[maxBufferSizeBytes];
-	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
-	
-	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
 }
 
 - (double)cpuUsage
@@ -405,6 +407,47 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->setSpacialEnvelopeForRegion(index, spacialEnvelope);
 	// The spacialEnvelope will be deleted by AudioSourceAmbipanning
 }	
+
+
+#pragma mark -
+#pragma mark hardware
+// -----------------------------------------------------------
+
+- (NSArray *)availableAudioDeviceNames
+{
+	NSLog(@"--- available devices...");
+	const StringArray juceStringArray = ambisonicsAudioEngine->getAvailableAudioDeviceNames();
+	NSMutableArray *array = [NSMutableArray new];
+	
+	int maxBufferSizeBytes = 120;
+	char audioDeviceName[maxBufferSizeBytes];
+	
+	for (int i = 0; i < juceStringArray.size(); ++i)
+	{
+		juceStringArray[i].copyToUTF8(audioDeviceName, maxBufferSizeBytes);
+		[array addObject:[NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding]];
+	}
+	
+	return [NSArray arrayWithArray:array];
+	//	return [NSArray arrayWithObjects:@"device 1", @"second device", @"third device", nil];
+}
+
+- (NSString *)nameOfHardwareOutputDevice
+{
+	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
+	
+	int maxBufferSizeBytes = 120;
+	char audioDeviceName[maxBufferSizeBytes];
+	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
+	
+	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
+}
+
+- (void)setHardwareOutputDevice:(NSString *)deviceName
+{
+	String audioDeviceName = [deviceName UTF8String];
+	ambisonicsAudioEngine->setAudioDevice(audioDeviceName);	
+}
 
 
 #pragma mark -

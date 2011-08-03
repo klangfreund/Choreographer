@@ -38,6 +38,8 @@
 	NSTimer *refreshGUITimer;
 }
 
+- (void)setSelectedOutputDeviceIndex:(NSUInteger)index;
+
 - (void)setSelectedIndex:(NSUInteger)index;
 - (void)updateGUI;
 - (void)testNoise:(BOOL)enable channelIndex:(int)index;

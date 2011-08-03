@@ -23,8 +23,8 @@
 	self = [self initWithWindowNibName:@"SpeakerSetupWindow"];
 	if(self)
 	{
-		outputDevices = [[NSArray arrayWithObjects:@"first device", @"second device", @"third device", nil] retain];
-		selectedOutputDeviceIndex = 1;
+		outputDevices = [[[AudioEngine sharedAudioEngine] availableAudioDeviceNames] retain];
+		selectedOutputDeviceIndex = 0;
 		
 		speakerSetups = [[SpeakerSetups alloc] init];
 		[speakerSetups unarchiveData];
@@ -70,6 +70,9 @@
 {
 	[super showWindow:sender];
 	[self run];
+
+	[outputDevices release];
+	outputDevices = [[[AudioEngine sharedAudioEngine] availableAudioDeviceNames] retain];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -84,6 +87,19 @@
 #pragma mark -
 #pragma mark update gui
 // -----------------------------------------------------------
+
+- (void)setSelectedOutputDeviceIndex:(NSUInteger)index
+{
+	if(index != selectedOutputDeviceIndex)
+	{
+		selectedOutputDeviceIndex = index;
+		[[AudioEngine sharedAudioEngine] setHardwareOutputDevice:[outputDevices objectAtIndex:index]];
+
+		// send notification
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
+	}
+}
+
 
 - (void)setSelectedIndex:(NSUInteger)index
 {
