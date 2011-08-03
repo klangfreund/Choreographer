@@ -11,8 +11,6 @@
 		15012D201369313D0000116A /* LevelMeterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15012D1F1369313D0000116A /* LevelMeterView.m */; };
 		150C8947133AB1D1005A585D /* Path.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C8946133AB1D1005A585D /* Path.m */; };
 		15155E55139CE34200A8BC0D /* MarkersWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E54139CE34200A8BC0D /* MarkersWindow.xib */; };
-		15155E57139CE35900A8BC0D /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */; };
-		15155E59139CE37000A8BC0D /* SpeakerSetupWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */; };
 		15155E98139CE92100A8BC0D /* Choreographer.help in Resources */ = {isa = PBXBuildFile; fileRef = 15155E7E139CE92100A8BC0D /* Choreographer.help */; };
 		151739B70EB3A5F500EABE92 /* TableEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */; };
 		151739C60EB3A79B00EABE92 /* TableEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C20EB3A79B00EABE92 /* TableEditor.xib */; };
@@ -33,32 +31,33 @@
 		153F154E0DF6D9530037238D /* RulerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F154D0DF6D9530037238D /* RulerScrollView.m */; };
 		153F178A0DF7293B0037238D /* SelectionRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F17890DF7293B0037238D /* SelectionRectangle.m */; };
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
-		15512E8C13267F9700C6D038 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 15512E5713267F9700C6D038 /* AudioEngine.mm */; };
-		15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */; };
-		15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */; };
-		15512E9313267F9700C6D038 /* MeterBridgeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */; };
-		15512E9513267F9700C6D038 /* AmbisonicsAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6613267F9700C6D038 /* AmbisonicsAudioEngine.cpp */; };
-		15512E9613267F9700C6D038 /* AudioRegionMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6813267F9700C6D038 /* AudioRegionMixer.cpp */; };
-		15512E9713267F9700C6D038 /* AudioSourceAmbipanning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6A13267F9700C6D038 /* AudioSourceAmbipanning.cpp */; };
-		15512E9813267F9700C6D038 /* AudioSourceGainEnvelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6C13267F9700C6D038 /* AudioSourceGainEnvelope.cpp */; };
-		15512E9913267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */; };
-		15512E9B13267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */; };
-		15512E9C13267F9700C6D038 /* AudioTransportSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */; };
-		15512E9D13267F9700C6D038 /* BufferingAudioSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */; };
-		15512E9F13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15512E7C13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp */; };
-		15512EA113267F9700C6D038 /* PatchbayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8213267F9700C6D038 /* PatchbayView.m */; };
-		15512EA213267F9700C6D038 /* SpeakerSetupChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8413267F9700C6D038 /* SpeakerSetupChannelStrip.m */; };
-		15512EA313267F9700C6D038 /* SpeakerSetupChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */; };
-		15512EA413267F9700C6D038 /* SpeakerSetups.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8713267F9700C6D038 /* SpeakerSetups.m */; };
-		15512EA613267F9700C6D038 /* SpeakerSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */; };
 		155724F40DD8909800FA16E2 /* CounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155724F30DD8909800FA16E2 /* CounterView.m */; };
 		155725110DD8919A00FA16E2 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1557250E0DD8919A00FA16E2 /* ContainerView.m */; };
 		155725120DD8919A00FA16E2 /* RulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725100DD8919A00FA16E2 /* RulerView.m */; };
 		1557251A0DD891D800FA16E2 /* ArrangerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725190DD891D800FA16E2 /* ArrangerView.m */; };
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
-		1562074E1355E9E5006A1F29 /* MeterBridgeChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
-		157393DD134CB609003FEE5F /* juce.tag in Resources */ = {isa = PBXBuildFile; fileRef = 15512E5B13267F9700C6D038 /* juce.tag */; };
+		1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */; };
+		1586A9A013B3B45100262B02 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */; };
+		1586A9A213B3B45100262B02 /* MeterBridgeChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A89E13B3B45100262B02 /* MeterBridgeChannelStrip.m */; };
+		1586A9A313B3B45100262B02 /* MeterBridgeChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A89F13B3B45100262B02 /* MeterBridgeChannelStrip.xib */; };
+		1586A9A413B3B45100262B02 /* MeterBridgeWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A8A013B3B45100262B02 /* MeterBridgeWindow.xib */; };
+		1586A9A513B3B45100262B02 /* MeterBridgeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8A213B3B45100262B02 /* MeterBridgeWindowController.m */; };
+		1586A9A713B3B45100262B02 /* AmbisonicsAudioEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */; };
+		1586A9A813B3B45100262B02 /* AudioRegionMixer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */; };
+		1586A9A913B3B45100262B02 /* AudioSourceAmbipanning.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8A913B3B45100262B02 /* AudioSourceAmbipanning.cpp */; };
+		1586A9AA13B3B45100262B02 /* AudioSourceGainEnvelope.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8AB13B3B45100262B02 /* AudioSourceGainEnvelope.cpp */; };
+		1586A9AB13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */; };
+		1586A9AE13B3B45100262B02 /* AudioTransportSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8B413B3B45100262B02 /* AudioTransportSourceMod.cpp */; };
+		1586A9AF13B3B45100262B02 /* BufferingAudioSourceMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8B613B3B45100262B02 /* BufferingAudioSourceMod.cpp */; };
+		1586A9B113B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */; };
+		1586A9B313B3B45100262B02 /* SpeakerSetupWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A8BF13B3B45100262B02 /* SpeakerSetupWindow.xib */; };
+		1586A9B413B3B45100262B02 /* PatchbayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C213B3B45100262B02 /* PatchbayView.m */; };
+		1586A9B513B3B45100262B02 /* SpeakerSetupChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C413B3B45100262B02 /* SpeakerSetupChannelStrip.m */; };
+		1586A9B613B3B45100262B02 /* SpeakerSetupChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A8C513B3B45100262B02 /* SpeakerSetupChannelStrip.xib */; };
+		1586A9B713B3B45100262B02 /* SpeakerSetups.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C713B3B45100262B02 /* SpeakerSetups.m */; };
+		1586A9B813B3B45100262B02 /* SpeakerSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C913B3B45100262B02 /* SpeakerSetupWindowController.m */; };
+		1586A9E313B3B76100262B02 /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */; };
 		158E9D7C0EAE3D7800435D25 /* TrajectoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */; };
 		158E9F0A0EAE6C4A00435D25 /* Breakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9F090EAE6C4A00435D25 /* Breakpoint.m */; };
 		15979422133D3E49006FCFE6 /* MainCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15979421133D3E49006FCFE6 /* MainCounterView.m */; };
@@ -108,7 +107,7 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		2214C9B413B3B10700AEC408 /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2214C9B313B3B0F700AEC408 /* libjuce.a */; };
+		22394E7913E9814F005B681B /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22394E7813E98142005B681B /* libjuce.a */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -117,11 +116,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2214C9B213B3B0F700AEC408 /* PBXContainerItemProxy */ = {
+		22394E7713E98142005B681B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */;
+			containerPortal = 22394E7013E98142005B681B /* Juce.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 389351359BA78C682E1931A6;
+			remoteGlobalIDString = 389351359BA78C682E1931A6 /* libjuce.a */;
 			remoteInfo = Juce;
 		};
 /* End PBXContainerItemProxy section */
@@ -171,47 +170,6 @@
 		153F17890DF7293B0037238D /* SelectionRectangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionRectangle.m; sourceTree = "<group>"; };
 		15509AE11047F96900E0AEF0 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
-		15512E5613267F9700C6D038 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
-		15512E5713267F9700C6D038 /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
-		15512E5813267F9700C6D038 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AudioEngineMainMenu.xib; sourceTree = "<group>"; };
-		15512E5913267F9700C6D038 /* debug.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = debug.txt; sourceTree = "<group>"; };
-		15512E5A13267F9700C6D038 /* Doxyfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Doxyfile; sourceTree = "<group>"; };
-		15512E5B13267F9700C6D038 /* juce.tag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = juce.tag; sourceTree = "<group>"; };
-		15512E5D13267F9700C6D038 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
-		15512E5E13267F9700C6D038 /* JuceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuceHeader.h; sourceTree = "<group>"; };
-		15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeterBridgeChannelStrip.xib; sourceTree = "<group>"; };
-		15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeterBridgeWindow.xib; sourceTree = "<group>"; };
-		15512E6213267F9700C6D038 /* MeterBridgeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeWindowController.h; sourceTree = "<group>"; };
-		15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeWindowController.m; sourceTree = "<group>"; };
-		15512E6413267F9700C6D038 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		15512E6613267F9700C6D038 /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; };
-		15512E6713267F9700C6D038 /* AmbisonicsAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbisonicsAudioEngine.h; sourceTree = "<group>"; };
-		15512E6813267F9700C6D038 /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioRegionMixer.cpp; sourceTree = "<group>"; };
-		15512E6913267F9700C6D038 /* AudioRegionMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegionMixer.h; sourceTree = "<group>"; };
-		15512E6A13267F9700C6D038 /* AudioSourceAmbipanning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceAmbipanning.cpp; sourceTree = "<group>"; };
-		15512E6B13267F9700C6D038 /* AudioSourceAmbipanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceAmbipanning.h; sourceTree = "<group>"; };
-		15512E6C13267F9700C6D038 /* AudioSourceGainEnvelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceGainEnvelope.cpp; sourceTree = "<group>"; };
-		15512E6D13267F9700C6D038 /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
-		15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
-		15512E6F13267F9700C6D038 /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
-		15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
-		15512E7513267F9700C6D038 /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
-		15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
-		15512E7713267F9700C6D038 /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
-		15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
-		15512E7913267F9700C6D038 /* BufferingAudioSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferingAudioSourceMod.h; sourceTree = "<group>"; };
-		15512E7C13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
-		15512E7D13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
-		15512E8113267F9700C6D038 /* PatchbayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatchbayView.h; sourceTree = "<group>"; };
-		15512E8213267F9700C6D038 /* PatchbayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatchbayView.m; sourceTree = "<group>"; };
-		15512E8313267F9700C6D038 /* SpeakerSetupChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupChannelStrip.h; sourceTree = "<group>"; };
-		15512E8413267F9700C6D038 /* SpeakerSetupChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupChannelStrip.m; sourceTree = "<group>"; };
-		15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpeakerSetupChannelStrip.xib; sourceTree = "<group>"; };
-		15512E8613267F9700C6D038 /* SpeakerSetups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetups.h; sourceTree = "<group>"; };
-		15512E8713267F9700C6D038 /* SpeakerSetups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetups.m; sourceTree = "<group>"; };
-		15512E8813267F9700C6D038 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SpeakerSetupWindow.xib; sourceTree = "<group>"; };
-		15512E8913267F9700C6D038 /* SpeakerSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupWindowController.h; sourceTree = "<group>"; };
-		15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupWindowController.m; sourceTree = "<group>"; };
 		155724F20DD8909800FA16E2 /* CounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CounterView.h; sourceTree = "<group>"; };
 		155724F30DD8909800FA16E2 /* CounterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CounterView.m; sourceTree = "<group>"; };
 		1557250D0DD8919A00FA16E2 /* ContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerView.h; sourceTree = "<group>"; };
@@ -222,11 +180,56 @@
 		155725190DD891D800FA16E2 /* ArrangerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerView.m; sourceTree = "<group>"; };
 		1560817311CECAA00033C628 /* RandomTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomTrajectory.h; sourceTree = "<group>"; };
 		1560817411CECAA00033C628 /* RandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomTrajectory.m; sourceTree = "<group>"; };
-		1562074C1355E9E5006A1F29 /* MeterBridgeChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeChannelStrip.h; sourceTree = "<group>"; };
-		1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeChannelStrip.m; sourceTree = "<group>"; };
 		156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 2.xcdatamodel"; sourceTree = "<group>"; };
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
+		1586A7BE13B3B45100262B02 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
+		1586A7BF13B3B45100262B02 /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
+		1586A89713B3B45100262B02 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AudioEngineMainMenu.xib; sourceTree = "<group>"; };
+		1586A89813B3B45100262B02 /* juce.tag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = juce.tag; sourceTree = "<group>"; };
+		1586A89A13B3B45100262B02 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
+		1586A89B13B3B45100262B02 /* JuceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuceHeader.h; sourceTree = "<group>"; };
+		1586A89D13B3B45100262B02 /* MeterBridgeChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeChannelStrip.h; sourceTree = "<group>"; };
+		1586A89E13B3B45100262B02 /* MeterBridgeChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeChannelStrip.m; sourceTree = "<group>"; };
+		1586A89F13B3B45100262B02 /* MeterBridgeChannelStrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeterBridgeChannelStrip.xib; sourceTree = "<group>"; };
+		1586A8A013B3B45100262B02 /* MeterBridgeWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MeterBridgeWindow.xib; sourceTree = "<group>"; };
+		1586A8A113B3B45100262B02 /* MeterBridgeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeWindowController.h; sourceTree = "<group>"; };
+		1586A8A213B3B45100262B02 /* MeterBridgeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeWindowController.m; sourceTree = "<group>"; };
+		1586A8A313B3B45100262B02 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
+		1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; };
+		1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbisonicsAudioEngine.h; sourceTree = "<group>"; };
+		1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioRegionMixer.cpp; sourceTree = "<group>"; };
+		1586A8A813B3B45100262B02 /* AudioRegionMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegionMixer.h; sourceTree = "<group>"; };
+		1586A8A913B3B45100262B02 /* AudioSourceAmbipanning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceAmbipanning.cpp; sourceTree = "<group>"; };
+		1586A8AA13B3B45100262B02 /* AudioSourceAmbipanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceAmbipanning.h; sourceTree = "<group>"; };
+		1586A8AB13B3B45100262B02 /* AudioSourceGainEnvelope.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceGainEnvelope.cpp; sourceTree = "<group>"; };
+		1586A8AC13B3B45100262B02 /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
+		1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
+		1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
+		1586A8B013B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "AudioDeviceSelectorComponentMod copy.cpp"; sourceTree = "<group>"; };
+		1586A8B113B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AudioDeviceSelectorComponentMod copy.h"; sourceTree = "<group>"; };
+		1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
+		1586A8B313B3B45100262B02 /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
+		1586A8B413B3B45100262B02 /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
+		1586A8B513B3B45100262B02 /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
+		1586A8B613B3B45100262B02 /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
+		1586A8B713B3B45100262B02 /* BufferingAudioSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BufferingAudioSourceMod.h; sourceTree = "<group>"; };
+		1586A8B813B3B45100262B02 /* juce_PositionableResamplingAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = juce_PositionableResamplingAudioSource.cpp; sourceTree = "<group>"; };
+		1586A8B913B3B45100262B02 /* juce_PositionableResamplingAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_PositionableResamplingAudioSource.h; sourceTree = "<group>"; };
+		1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
+		1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
+		1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; };
+		1586A8BD13B3B45100262B02 /* SpeakerTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerTestComponent.h; sourceTree = "<group>"; };
+		1586A8C013B3B45100262B02 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SpeakerSetupWindow.xib; sourceTree = "<group>"; };
+		1586A8C113B3B45100262B02 /* PatchbayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatchbayView.h; sourceTree = "<group>"; };
+		1586A8C213B3B45100262B02 /* PatchbayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatchbayView.m; sourceTree = "<group>"; };
+		1586A8C313B3B45100262B02 /* SpeakerSetupChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupChannelStrip.h; sourceTree = "<group>"; };
+		1586A8C413B3B45100262B02 /* SpeakerSetupChannelStrip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupChannelStrip.m; sourceTree = "<group>"; };
+		1586A8C513B3B45100262B02 /* SpeakerSetupChannelStrip.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpeakerSetupChannelStrip.xib; sourceTree = "<group>"; };
+		1586A8C613B3B45100262B02 /* SpeakerSetups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetups.h; sourceTree = "<group>"; };
+		1586A8C713B3B45100262B02 /* SpeakerSetups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetups.m; sourceTree = "<group>"; };
+		1586A8C813B3B45100262B02 /* SpeakerSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupWindowController.h; sourceTree = "<group>"; };
+		1586A8C913B3B45100262B02 /* SpeakerSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupWindowController.m; sourceTree = "<group>"; };
 		158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryItem.h; sourceTree = "<group>"; };
 		158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrajectoryItem.m; sourceTree = "<group>"; };
 		158E9F080EAE6C4A00435D25 /* Breakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
@@ -305,7 +308,7 @@
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		22394E7013E98142005B681B /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -323,7 +326,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2214C9B413B3B10700AEC408 /* libjuce.a in Frameworks */,
+				22394E7913E9814F005B681B /* libjuce.a in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -442,96 +445,6 @@
 			name = Misc;
 			sourceTree = "<group>";
 		};
-		15512E5413267F9700C6D038 /* Audio Engine */ = {
-			isa = PBXGroup;
-			children = (
-				15512E5613267F9700C6D038 /* AudioEngine.h */,
-				15512E5713267F9700C6D038 /* AudioEngine.mm */,
-				15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */,
-				15512E5913267F9700C6D038 /* debug.txt */,
-				15512E5A13267F9700C6D038 /* Doxyfile */,
-				15512E5B13267F9700C6D038 /* juce.tag */,
-				15512E5C13267F9700C6D038 /* JuceLibraryCode */,
-				15512E6413267F9700C6D038 /* README.txt */,
-				15512E6513267F9700C6D038 /* Source */,
-				15512E8013267F9700C6D038 /* SpeakerSetup */,
-				15512E5F13267F9700C6D038 /* MeterBridge */,
-			);
-			path = "Audio Engine";
-			sourceTree = "<group>";
-		};
-		15512E5C13267F9700C6D038 /* JuceLibraryCode */ = {
-			isa = PBXGroup;
-			children = (
-				15512E5D13267F9700C6D038 /* AppConfig.h */,
-				15512E5E13267F9700C6D038 /* JuceHeader.h */,
-			);
-			path = JuceLibraryCode;
-			sourceTree = "<group>";
-		};
-		15512E5F13267F9700C6D038 /* MeterBridge */ = {
-			isa = PBXGroup;
-			children = (
-				1562074C1355E9E5006A1F29 /* MeterBridgeChannelStrip.h */,
-				1562074D1355E9E5006A1F29 /* MeterBridgeChannelStrip.m */,
-				15512E6013267F9700C6D038 /* MeterBridgeChannelStrip.xib */,
-				15512E6213267F9700C6D038 /* MeterBridgeWindowController.h */,
-				15512E6313267F9700C6D038 /* MeterBridgeWindowController.m */,
-				15512E6113267F9700C6D038 /* MeterBridgeWindow.xib */,
-			);
-			path = MeterBridge;
-			sourceTree = "<group>";
-		};
-		15512E6513267F9700C6D038 /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				15512E6613267F9700C6D038 /* AmbisonicsAudioEngine.cpp */,
-				15512E6713267F9700C6D038 /* AmbisonicsAudioEngine.h */,
-				15512E6813267F9700C6D038 /* AudioRegionMixer.cpp */,
-				15512E6913267F9700C6D038 /* AudioRegionMixer.h */,
-				15512E6A13267F9700C6D038 /* AudioSourceAmbipanning.cpp */,
-				15512E6B13267F9700C6D038 /* AudioSourceAmbipanning.h */,
-				15512E6C13267F9700C6D038 /* AudioSourceGainEnvelope.cpp */,
-				15512E6D13267F9700C6D038 /* AudioSourceGainEnvelope.h */,
-				15512E6E13267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp */,
-				15512E6F13267F9700C6D038 /* AudioSpeakerGainAndRouting.h */,
-				15512E7113267F9700C6D038 /* modified Juce Classes */,
-				15512E7C13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp */,
-				15512E7D13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.h */,
-			);
-			path = Source;
-			sourceTree = "<group>";
-		};
-		15512E7113267F9700C6D038 /* modified Juce Classes */ = {
-			isa = PBXGroup;
-			children = (
-				15512E7413267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp */,
-				15512E7513267F9700C6D038 /* AudioDeviceSelectorComponentMod.h */,
-				15512E7613267F9700C6D038 /* AudioTransportSourceMod.cpp */,
-				15512E7713267F9700C6D038 /* AudioTransportSourceMod.h */,
-				15512E7813267F9700C6D038 /* BufferingAudioSourceMod.cpp */,
-				15512E7913267F9700C6D038 /* BufferingAudioSourceMod.h */,
-			);
-			path = "modified Juce Classes";
-			sourceTree = "<group>";
-		};
-		15512E8013267F9700C6D038 /* SpeakerSetup */ = {
-			isa = PBXGroup;
-			children = (
-				15512E8113267F9700C6D038 /* PatchbayView.h */,
-				15512E8213267F9700C6D038 /* PatchbayView.m */,
-				15512E8313267F9700C6D038 /* SpeakerSetupChannelStrip.h */,
-				15512E8413267F9700C6D038 /* SpeakerSetupChannelStrip.m */,
-				15512E8513267F9700C6D038 /* SpeakerSetupChannelStrip.xib */,
-				15512E8613267F9700C6D038 /* SpeakerSetups.h */,
-				15512E8713267F9700C6D038 /* SpeakerSetups.m */,
-				15512E8913267F9700C6D038 /* SpeakerSetupWindowController.h */,
-				15512E8A13267F9700C6D038 /* SpeakerSetupWindowController.m */,
-				15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */,
-			);
-			path = SpeakerSetup;
-			sourceTree = "<group>";
-		};
 		155724CE0DD88E7B00FA16E2 /* ProjectDocument */ = {
 			isa = PBXGroup;
 			children = (
@@ -570,6 +483,100 @@
 				15C95F961113218F0083EC3A /* ArrangerScrollView.m */,
 			);
 			name = Arranger;
+			sourceTree = "<group>";
+		};
+		1586A7BB13B3B45100262B02 /* Audio Engine */ = {
+			isa = PBXGroup;
+			children = (
+				1586A7BE13B3B45100262B02 /* AudioEngine.h */,
+				1586A7BF13B3B45100262B02 /* AudioEngine.mm */,
+				1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */,
+				1586A89813B3B45100262B02 /* juce.tag */,
+				1586A89913B3B45100262B02 /* JuceLibraryCode */,
+				1586A89C13B3B45100262B02 /* MeterBridge */,
+				1586A8A313B3B45100262B02 /* README.txt */,
+				1586A8A413B3B45100262B02 /* Source */,
+				1586A8BE13B3B45100262B02 /* SpeakerSetup */,
+			);
+			path = "Audio Engine";
+			sourceTree = "<group>";
+		};
+		1586A89913B3B45100262B02 /* JuceLibraryCode */ = {
+			isa = PBXGroup;
+			children = (
+				1586A89A13B3B45100262B02 /* AppConfig.h */,
+				1586A89B13B3B45100262B02 /* JuceHeader.h */,
+			);
+			path = JuceLibraryCode;
+			sourceTree = "<group>";
+		};
+		1586A89C13B3B45100262B02 /* MeterBridge */ = {
+			isa = PBXGroup;
+			children = (
+				1586A89D13B3B45100262B02 /* MeterBridgeChannelStrip.h */,
+				1586A89E13B3B45100262B02 /* MeterBridgeChannelStrip.m */,
+				1586A89F13B3B45100262B02 /* MeterBridgeChannelStrip.xib */,
+				1586A8A013B3B45100262B02 /* MeterBridgeWindow.xib */,
+				1586A8A113B3B45100262B02 /* MeterBridgeWindowController.h */,
+				1586A8A213B3B45100262B02 /* MeterBridgeWindowController.m */,
+			);
+			path = MeterBridge;
+			sourceTree = "<group>";
+		};
+		1586A8A413B3B45100262B02 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */,
+				1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */,
+				1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */,
+				1586A8A813B3B45100262B02 /* AudioRegionMixer.h */,
+				1586A8A913B3B45100262B02 /* AudioSourceAmbipanning.cpp */,
+				1586A8AA13B3B45100262B02 /* AudioSourceAmbipanning.h */,
+				1586A8AB13B3B45100262B02 /* AudioSourceGainEnvelope.cpp */,
+				1586A8AC13B3B45100262B02 /* AudioSourceGainEnvelope.h */,
+				1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */,
+				1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */,
+				1586A8AF13B3B45100262B02 /* modified Juce Classes */,
+				1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */,
+				1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */,
+				1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */,
+				1586A8BD13B3B45100262B02 /* SpeakerTestComponent.h */,
+			);
+			path = Source;
+			sourceTree = "<group>";
+		};
+		1586A8AF13B3B45100262B02 /* modified Juce Classes */ = {
+			isa = PBXGroup;
+			children = (
+				1586A8B013B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.cpp */,
+				1586A8B113B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.h */,
+				1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */,
+				1586A8B313B3B45100262B02 /* AudioDeviceSelectorComponentMod.h */,
+				1586A8B413B3B45100262B02 /* AudioTransportSourceMod.cpp */,
+				1586A8B513B3B45100262B02 /* AudioTransportSourceMod.h */,
+				1586A8B613B3B45100262B02 /* BufferingAudioSourceMod.cpp */,
+				1586A8B713B3B45100262B02 /* BufferingAudioSourceMod.h */,
+				1586A8B813B3B45100262B02 /* juce_PositionableResamplingAudioSource.cpp */,
+				1586A8B913B3B45100262B02 /* juce_PositionableResamplingAudioSource.h */,
+			);
+			path = "modified Juce Classes";
+			sourceTree = "<group>";
+		};
+		1586A8BE13B3B45100262B02 /* SpeakerSetup */ = {
+			isa = PBXGroup;
+			children = (
+				1586A8BF13B3B45100262B02 /* SpeakerSetupWindow.xib */,
+				1586A8C113B3B45100262B02 /* PatchbayView.h */,
+				1586A8C213B3B45100262B02 /* PatchbayView.m */,
+				1586A8C313B3B45100262B02 /* SpeakerSetupChannelStrip.h */,
+				1586A8C413B3B45100262B02 /* SpeakerSetupChannelStrip.m */,
+				1586A8C513B3B45100262B02 /* SpeakerSetupChannelStrip.xib */,
+				1586A8C613B3B45100262B02 /* SpeakerSetups.h */,
+				1586A8C713B3B45100262B02 /* SpeakerSetups.m */,
+				1586A8C813B3B45100262B02 /* SpeakerSetupWindowController.h */,
+				1586A8C913B3B45100262B02 /* SpeakerSetupWindowController.m */,
+			);
+			path = SpeakerSetup;
 			sourceTree = "<group>";
 		};
 		158E9C8E0EAE2E4600435D25 /* Other Windows */ = {
@@ -648,7 +655,7 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */,
+				22394E7013E98142005B681B /* Juce.xcodeproj */,
 				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
 				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
@@ -751,10 +758,10 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		2214C9AC13B3B0F700AEC408 /* Products */ = {
+		22394E7113E98142005B681B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2214C9B313B3B0F700AEC408 /* libjuce.a */,
+				22394E7813E98142005B681B /* libjuce.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -763,7 +770,7 @@
 			isa = PBXGroup;
 			children = (
 				151525B00DDAFE8900BB5114 /* CHGlobals.h */,
-				15512E5413267F9700C6D038 /* Audio Engine */,
+				1586A7BB13B3B45100262B02 /* Audio Engine */,
 				E1B74B1A0667B4A90069E3BA /* Models */,
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
@@ -877,8 +884,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 2214C9AC13B3B0F700AEC408 /* Products */;
-					ProjectRef = 2214C9AB13B3B0F700AEC408 /* Juce.xcodeproj */;
+					ProductGroup = 22394E7113E98142005B681B /* Products */;
+					ProjectRef = 22394E7013E98142005B681B /* Juce.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -889,11 +896,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		2214C9B313B3B0F700AEC408 /* libjuce.a */ = {
+		22394E7813E98142005B681B /* libjuce.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libjuce.a;
-			remoteRef = 2214C9B213B3B0F700AEC408 /* PBXContainerItemProxy */;
+			remoteRef = 22394E7713E98142005B681B /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -922,13 +929,12 @@
 				15C88D1E11BFC74000130A5E /* choreographer_icons.icns in Resources */,
 				15155E55139CE34200A8BC0D /* MarkersWindow.xib in Resources */,
 				15AAAEFB12C22A8C00BF3035 /* choreographer_logo.eps in Resources */,
-				15155E57139CE35900A8BC0D /* AudioEngineMainMenu.xib in Resources */,
-				15512E9113267F9700C6D038 /* MeterBridgeChannelStrip.xib in Resources */,
-				15512E9213267F9700C6D038 /* MeterBridgeWindow.xib in Resources */,
-				15512EA313267F9700C6D038 /* SpeakerSetupChannelStrip.xib in Resources */,
-				15155E59139CE37000A8BC0D /* SpeakerSetupWindow.xib in Resources */,
-				157393DD134CB609003FEE5F /* juce.tag in Resources */,
 				15155E98139CE92100A8BC0D /* Choreographer.help in Resources */,
+				1586A9A013B3B45100262B02 /* AudioEngineMainMenu.xib in Resources */,
+				1586A9A313B3B45100262B02 /* MeterBridgeChannelStrip.xib in Resources */,
+				1586A9A413B3B45100262B02 /* MeterBridgeWindow.xib in Resources */,
+				1586A9B313B3B45100262B02 /* SpeakerSetupWindow.xib in Resources */,
+				1586A9B613B3B45100262B02 /* SpeakerSetupChannelStrip.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -988,26 +994,26 @@
 				1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */,
 				15E48AEA1296E36F0058DDDD /* TrajectoryInspectorWindowController.m in Sources */,
 				15EBEC8D12BF78E400C30D46 /* MarkersWindowController.m in Sources */,
-				15512E8C13267F9700C6D038 /* AudioEngine.mm in Sources */,
-				15512E9313267F9700C6D038 /* MeterBridgeWindowController.m in Sources */,
-				15512E9513267F9700C6D038 /* AmbisonicsAudioEngine.cpp in Sources */,
-				15512E9613267F9700C6D038 /* AudioRegionMixer.cpp in Sources */,
-				15512E9713267F9700C6D038 /* AudioSourceAmbipanning.cpp in Sources */,
-				15512E9813267F9700C6D038 /* AudioSourceGainEnvelope.cpp in Sources */,
-				15512E9913267F9700C6D038 /* AudioSpeakerGainAndRouting.cpp in Sources */,
-				15512E9B13267F9700C6D038 /* AudioDeviceSelectorComponentMod.cpp in Sources */,
-				15512E9C13267F9700C6D038 /* AudioTransportSourceMod.cpp in Sources */,
-				15512E9D13267F9700C6D038 /* BufferingAudioSourceMod.cpp in Sources */,
-				15512E9F13267F9700C6D038 /* PinkNoiseGeneratorAudioSource.cpp in Sources */,
-				15512EA113267F9700C6D038 /* PatchbayView.m in Sources */,
-				15512EA213267F9700C6D038 /* SpeakerSetupChannelStrip.m in Sources */,
-				15512EA413267F9700C6D038 /* SpeakerSetups.m in Sources */,
-				15512EA613267F9700C6D038 /* SpeakerSetupWindowController.m in Sources */,
 				150C8947133AB1D1005A585D /* Path.m in Sources */,
 				15979422133D3E49006FCFE6 /* MainCounterView.m in Sources */,
 				159794C3133D5269006FCFE6 /* LoopCounterView.m in Sources */,
-				1562074E1355E9E5006A1F29 /* MeterBridgeChannelStrip.m in Sources */,
 				15012D201369313D0000116A /* LevelMeterView.m in Sources */,
+				1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */,
+				1586A9A213B3B45100262B02 /* MeterBridgeChannelStrip.m in Sources */,
+				1586A9A513B3B45100262B02 /* MeterBridgeWindowController.m in Sources */,
+				1586A9A713B3B45100262B02 /* AmbisonicsAudioEngine.cpp in Sources */,
+				1586A9A813B3B45100262B02 /* AudioRegionMixer.cpp in Sources */,
+				1586A9A913B3B45100262B02 /* AudioSourceAmbipanning.cpp in Sources */,
+				1586A9AA13B3B45100262B02 /* AudioSourceGainEnvelope.cpp in Sources */,
+				1586A9AB13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp in Sources */,
+				1586A9AE13B3B45100262B02 /* AudioTransportSourceMod.cpp in Sources */,
+				1586A9AF13B3B45100262B02 /* BufferingAudioSourceMod.cpp in Sources */,
+				1586A9B113B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp in Sources */,
+				1586A9B413B3B45100262B02 /* PatchbayView.m in Sources */,
+				1586A9B513B3B45100262B02 /* SpeakerSetupChannelStrip.m in Sources */,
+				1586A9B713B3B45100262B02 /* SpeakerSetups.m in Sources */,
+				1586A9B813B3B45100262B02 /* SpeakerSetupWindowController.m in Sources */,
+				1586A9E313B3B76100262B02 /* AudioDeviceSelectorComponentMod.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1030,22 +1036,6 @@
 			name = MarkersWindow.xib;
 			sourceTree = "<group>";
 		};
-		15155E56139CE35900A8BC0D /* AudioEngineMainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				15512E5813267F9700C6D038 /* English */,
-			);
-			name = AudioEngineMainMenu.xib;
-			sourceTree = "<group>";
-		};
-		15155E58139CE37000A8BC0D /* SpeakerSetupWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				15512E8813267F9700C6D038 /* English */,
-			);
-			name = SpeakerSetupWindow.xib;
-			sourceTree = "<group>";
-		};
 		151739C20EB3A79B00EABE92 /* TableEditor.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1060,6 +1050,22 @@
 				151739C50EB3A79B00EABE92 /* English */,
 			);
 			name = RadarEditor.xib;
+			sourceTree = "<group>";
+		};
+		1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1586A89713B3B45100262B02 /* English */,
+			);
+			name = AudioEngineMainMenu.xib;
+			sourceTree = "<group>";
+		};
+		1586A8BF13B3B45100262B02 /* SpeakerSetupWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1586A8C013B3B45100262B02 /* English */,
+			);
+			name = SpeakerSetupWindow.xib;
 			sourceTree = "<group>";
 		};
 		15A3FC8C10416364001092FD /* CHProjectDocument.xib */ = {
