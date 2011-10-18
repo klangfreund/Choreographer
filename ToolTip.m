@@ -42,7 +42,7 @@ static ToolTip	*sharedToolTip = nil;
 
 - (id)init
 {    
-   if(self = [super init])
+   if((self = [super init]))
    {
         // These size are not really important, just the relation between the two...
         NSRect	contentRect		= {{ 300, 100 },{ 100, 20 }};

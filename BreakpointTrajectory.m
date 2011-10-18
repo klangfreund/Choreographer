@@ -15,14 +15,16 @@
 
 - (id)init
 {
-	if(self = [super init])
+	if((self = [super init]))
 	{
 		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setPosition:[SpatialPosition positionWithX:0 Y:0 Z:0]];
 		[bp setTime:0];
 		[bp setBreakpointType:breakpointTypeInitial];
+        [bp setTimeEditable:NO];
 		
-		breakpointArray = [[NSMutableArray arrayWithObject:bp] retain];
+		positionBreakpointArray = [[BreakpointArray alloc] init];
+        [positionBreakpointArray addBreakpoint:bp];
 	}
 	return self;	
 }
@@ -30,7 +32,7 @@
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    breakpointArray = [[coder decodeObjectForKey:@"breakpointArray"] retain];
+    positionBreakpointArray = [[coder decodeObjectForKey:@"posBpArray"] retain];
 	
 	return self;
 }
@@ -38,19 +40,19 @@
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [super encodeWithCoder:coder];
-    [coder encodeObject:breakpointArray forKey:@"breakpointArray"];
+    [coder encodeObject:positionBreakpointArray forKey:@"posBpArray"];
 }
 
 - (void)dealloc
 {
-	[breakpointArray release];
+	[positionBreakpointArray release];
 	[super dealloc];
 }
 
 
-- (NSArray *)linkedBreakpoints
+- (NSArray *)positionBreakpoints
 {
-	return breakpointArray;
+	return positionBreakpointArray.breakpoints;
 }
 
 
@@ -59,10 +61,16 @@
 #pragma mark accessor
 // -----------------------------------------------------------
 
-- (NSUInteger)duration
+- (NSUInteger)trajectoryDuration
 {
-	return [[breakpointArray lastObject] time];
+	return [[positionBreakpointArray lastObject] time];
 }
+
+- (void)setTrajectoryDuration:(NSUInteger)val
+{
+    NSLog(@"set duration");
+}
+
 
 #pragma mark -
 #pragma mark actions
@@ -72,8 +80,8 @@
 {
 	if(time == -1)
 	{
-		if([breakpointArray count] > 0)
-			time = [[breakpointArray lastObject] time] + 1000;
+		if([positionBreakpointArray count] > 0)
+			time = [[positionBreakpointArray lastObject] time] + 1000;
 		else time = 1000;
 	}
 	
@@ -84,29 +92,20 @@
 	[bp setTime:time];
 	[bp setBreakpointType:breakpointTypeNormal];
 	
-	[breakpointArray addObject:bp];	
+	[positionBreakpointArray addBreakpoint:bp];	
 	
 	[trajectoryItem updateModel];
 }
 
 - (void)removeBreakpoint:(id)bp
 {
-	if([breakpointArray indexOfObject:bp] == 0) // first breakpoint can't be removed
-		NSBeep();
-	else
-		[breakpointArray removeObject:bp];
+	[positionBreakpointArray removeBreakpoint:bp];
 }
 
-- (void)sortBreakpoints
-{
-	NSArray *breakpointsArraySorted;
-	
-	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
-	breakpointsArraySorted = [breakpointArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	
-	[breakpointArray removeAllObjects];
-	[breakpointArray addObjectsFromArray:breakpointsArraySorted];
-}
+//- (void)sortBreakpoints
+//{
+//	[positionBreakpointArray sort];
+//}
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
 {
@@ -122,7 +121,7 @@
 		tempArray = [[[NSMutableArray alloc] init] autorelease];
 		double scalingFactor = (double)dur / originalDur;
 			  
-		for(bp in breakpointArray)
+		for(bp in positionBreakpointArray)
 		{	
 			scaledBp = [bp copy];
 			scaledBp.time = bp.time * scalingFactor;
@@ -132,15 +131,15 @@
 	}
 	else if(mode == durationModeOriginal)
 	{
-		tempArray = [breakpointArray mutableCopy];
+		tempArray = [positionBreakpointArray mutableCopy];
 	}
 	else if(mode == durationModeLoop)
 	{
 		tempArray = [[[NSMutableArray alloc] init] autorelease];
-		count = [breakpointArray count];
+		count = [positionBreakpointArray count];
 		while (time < dur)
 		{
-			bp = [[breakpointArray objectAtIndex:(i++ % count)] copy];
+			bp = [[positionBreakpointArray objectAtIndex:(i++ % count)] copy];
 			if(bp.time == 0 && i != 1) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
 			{
 				timeOffset += originalDur;
@@ -161,10 +160,10 @@
 	else if(mode == durationModePalindrome)
 	{
 		tempArray = [[[NSMutableArray alloc] init] autorelease];
-		count = [breakpointArray count];
+		count = [positionBreakpointArray count];
 		while (time < dur)
 		{
-			bp = [[breakpointArray objectAtIndex:(i % count)] copy];
+			bp = [[positionBreakpointArray objectAtIndex:(i % count)] copy];
 			if(bp.time == 0 && direction != 0) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
 			{
 				timeOffset += originalDur;
@@ -187,7 +186,6 @@
 			
 			bp.time = time;
 			
-			NSLog(@"time = %d", time);
 			i += direction == 0 ? 1 : -1;
 			
 			[tempArray addObject:bp];

@@ -29,7 +29,11 @@ static TimelineEditorWindowController *sharedTimelineEditorWindowController = ni
 	{
 		[self setWindowFrameAutosaveName:@"TimelineEditor"];
 		
-		trajectoryType = notSet;
+        // init zoom factor
+        float zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];
+        
+        if(zoomFactorX == 0)
+            [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:1.0] forKey:@"timelineEditorZoomFactorX"];
     }
     return self;
 }
@@ -54,40 +58,77 @@ static TimelineEditorWindowController *sharedTimelineEditorWindowController = ni
 	[self flagsChanged:nil];  // to "reset" the modifier keys...
 }
 
+
+- (void)windowDidResignKey:(NSNotification *)notification
+{
+	for(BreakpointView *bpView in [view valueForKey:@"breakpointViews"])
+	{
+		[bpView setIsKey:NO];	
+	}
+
+	[view setNeedsDisplay:YES];
+}
+
 - (void)refreshView
 {
-//	NSLog(@"Timeline Editor refresh view");
+    if(![[self window] isVisible]) return;
+    
+	NSLog(@"Timeline Editor refresh view");
 
-	TrajectoryItem *trajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+	TrajectoryItem *tempTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	
-	TrajectoryType tempTrajectoryType = [[trajectory valueForKey:@"trajectoryType"] intValue];
-	if (trajectoryType != tempTrajectoryType)
+	if (trajectory != tempTrajectory)
 	{
-		trajectoryType = tempTrajectoryType;
-		[self adjustView];
+		trajectory = tempTrajectory;
+        [view setupSubviews];
 	} 
 	
 	[view setNeedsDisplay:YES];
 }
 
-- (void)adjustView
-{
-//	NSRect frame = [timelineView frame];
-//	
-//	frame.origin.y = [[[timelineView superview] superview] frame].size.height - 3 * TIMELINE_EDITOR_DATA_HEIGHT;
-//	frame.size.height = 3 * TIMELINE_EDITOR_DATA_HEIGHT;
-//	[timelineView setFrame:frame];
-//	
-//	frame.size.height = TIMELINE_EDITOR_DATA_HEIGHT;
-//	frame.origin.y = 2 * TIMELINE_EDITOR_DATA_HEIGHT; 
-//	[subview1 setFrame:frame];
-//	
-//	frame.origin.y = TIMELINE_EDITOR_DATA_HEIGHT;
-//	[subview2 setFrame:frame];
-//	
-//	frame.origin.y = 0;
-//	[subview3 setFrame:frame];
-}
 
+#pragma mark -
+#pragma mark actions
+// -----------------------------------------------------------
+
+- (IBAction)xZoomIn:(id)sender
+{
+	float zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];
+	zoomFactorX *= 1.2;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"timelineEditorZoomFactorX"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"timelineEditorZoomFactorDidChange" object:self];	
+}
+     
+- (IBAction)xZoomOut:(id)sender
+{
+	float zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];
+
+    zoomFactorX /= 1.2;
+    zoomFactorX = zoomFactorX < 0.0001 ? 0.0001 : zoomFactorX;
+    
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"timelineEditorZoomFactorX"];
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"timelineEditorZoomFactorDidChange" object:self];	
+}
+ 
+ - (IBAction)yZoomIn:(id)sender
+{	
+    //	float zoomFactorY = [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
+//    zoomFactorY *= 1.2;
+//    zoomFactorY = zoomFactorY > 10 ? 10 : zoomFactorY;
+//    
+//    [self setNeedsDisplay:YES];
+}
+     
+ - (IBAction)yZoomOut:(id)sender
+{	
+    //	float zoomFactorY = [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
+//    zoomFactorY /= 1.2;
+//    zoomFactorY = zoomFactorY < 0.1 ? 0.1 : zoomFactorY;
+//    
+//    [self setNeedsDisplay:YES];
+}
 
 @end

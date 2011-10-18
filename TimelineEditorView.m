@@ -8,12 +8,12 @@
 
 #import "TimelineEditorView.h"
 #import "CHProjectDocument.h"
-#import "CHGlobals.h"
 #import "EditorContent.h"
 #import "Breakpoint.h"
 #import "BreakpointBezierPath.h"
 #import "ToolTip.h"
 #import "SelectionRectangle.h"
+#import "SpatialPosition.h"
 
 
 @implementation TimelineEditorView
@@ -28,39 +28,97 @@
 	
 	// initialize breakpoint views
 	BreakpointView *breakpointView1 = [[[BreakpointView alloc] init] autorelease];
-	breakpointView1.yAxisValueKeypath = @"x";
-	breakpointView1.toolTipString = @"time: %0.0f x: %0.2f";
-
 	BreakpointView *breakpointView2 = [[[BreakpointView alloc] init] autorelease];
-	breakpointView2.yAxisValueKeypath = @"y";
-	breakpointView2.toolTipString = @"time: %0.0f y: %0.2f";
-
 	BreakpointView *breakpointView3 = [[[BreakpointView alloc] init] autorelease];
-	breakpointView3.yAxisValueKeypath = @"z";
-	breakpointView3.toolTipString = @"time: %0.0f z: %0.2f";
 
 	breakpointViews = [[NSArray arrayWithObjects:breakpointView1, breakpointView2, breakpointView3, nil] retain];
 	
 	for(BreakpointView *bpView in breakpointViews)
 	{
 		[bpView setValue:self forKey:@"owningRegion"];
-		[bpView setValue:[[NSColor whiteColor] colorWithAlphaComponent:0.25] forKey:@"backgroundColor"];
+		[bpView setValue:[[NSColor whiteColor] colorWithAlphaComponent:0.15] forKey:@"backgroundColor"];
+		[bpView setValue:[[NSColor whiteColor] colorWithAlphaComponent:0.3] forKey:@"keyBackgroundColor"];
 		[bpView setValue:[NSColor blackColor] forKey:@"lineColor"];
 		[bpView setValue:[NSColor blackColor] forKey:@"handleColor"];
 	
 		bpView.xAxisValueKeypath = @"time";
-		bpView.zoomFactorX = 0.1;
-		
-		bpView.yAxisMin = -1;
+		bpView.zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];	
+
+        bpView.yAxisMin = -1;
 		bpView.yAxisMax = 1;
-	}
+    }
+    
+    numOfBreakpointViews = 0;
 	
-	zoomFactorX = 0.1;
+	// register for notifications
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(redraw)
+                                                 name:@"timelineEditorZoomFactorDidChange" object:nil];		
 }
+
+- (void)setupSubviews
+{
+    BreakpointView *breakpointView;
+    TrajectoryItem *trajectoryItem = [[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory"];
+    Trajectory *trajectory = [trajectoryItem valueForKey:@"trajectory"];
+	TrajectoryType trajectoryType = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.trajectoryType"] intValue];
+    
+    switch(trajectoryType)
+    {
+        case breakpointType:
+            breakpointView = [breakpointViews objectAtIndex:0];
+            breakpointView.breakpointArray = [trajectory positionBreakpointArray];
+            breakpointView.yAxisValueKeypath = @"x";
+            breakpointView.toolTipString = @"time: %0.0f x: %0.2f";
+            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            breakpointView.breakpointDescriptor = nil;
+            breakpointView.yAxisMin = -1;
+            breakpointView.yAxisMax = 1;
+
+            
+            breakpointView = [breakpointViews objectAtIndex:1];
+            breakpointView.breakpointArray = [trajectory positionBreakpointArray];
+            breakpointView.yAxisValueKeypath = @"y";
+            breakpointView.toolTipString = @"time: %0.0f y: %0.2f";
+            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+
+            breakpointView = [breakpointViews objectAtIndex:2];
+            breakpointView.breakpointArray = [trajectory positionBreakpointArray];
+            breakpointView.yAxisValueKeypath = @"z";
+            breakpointView.toolTipString = @"time: %0.0f z: %0.2f";
+            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            
+            numOfBreakpointViews = 3;
+            
+            break;
+            
+        case rotationType:
+            breakpointView = [breakpointViews objectAtIndex:0];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            breakpointView.breakpointDescriptor = @"Speed";
+            breakpointView.yAxisMin = -100;
+            breakpointView.yAxisMax = 100;
+            
+            numOfBreakpointViews = 1;
+            
+            break;
+            
+        default:
+            numOfBreakpointViews = 0;
+            break;
+           
+    }
+}
+
 
 - (void) dealloc
 {
 	NSLog(@"RadarEditorView: dealloc");
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[breakpointViews release];
 	[originalPosition release];
@@ -93,71 +151,72 @@
 	// -----------------------------------------------------------------------------
 	
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
-	editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
 
-	if(displayMode == regionDisplayMode)
+    if(displayMode == regionDisplayMode)
 	{
 		return;
 	}
-	else if(displayMode == trajectoryDisplayMode)
-	{
-		switch([[trajectory valueForKey:@"trajectoryType"] intValue])
-		{
-			case breakpointType:
-				[self drawBreakpointTrajectory];
-				break;
-			case rotationType:
-			case randomType:
-				[self drawAutomatedTrajectory];
-				break;
-		}
-	}
-}
 
-- (void)drawBreakpointTrajectory
-{
-	float bpViewMininmumHeight = 100;
-	
-	NSRect r = [[self superview] frame];
-	float bpViewHeight = (r.size.height - 2) / 3;
-//	float bpViewWidth = (r.size.width - ARRANGER_OFFSET + [BreakpointBezierPath handleSize] * 0.5) / zoomFactorX;
-	
-	
-	if(bpViewHeight < bpViewMininmumHeight)
-	{
-		bpViewHeight = bpViewMininmumHeight;
-	}
-
-//	if(bpViewWidth < r.size.width)
-//	{
-//		bpViewWidth = r.size.width;
-//	}
-	
-//	NSLog(@"time: %f", (r.size.width - ARRANGER_OFFSET) / zoomFactorX);
-
-	
-	r = NSMakeRect(0, 0, r.size.width, bpViewHeight * 3 + 2);
-	[self setFrame:r];
-	
-	r.size.height = bpViewHeight;
-	r.size.width -= ARRANGER_OFFSET;
-	r.origin.x += ARRANGER_OFFSET - [BreakpointBezierPath handleSize] * 0.5;
-	
+    editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
+    
 	for(BreakpointView *bpView in breakpointViews)
 	{
-		bpView.zoomFactorX = zoomFactorX;
-		[bpView setValue:[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] forKey:@"breakpointArray"];
-//		[bpView setUpdateCallbackObject:[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] selector:@selector(archiveData)];
+        [bpView setSelectedBreakpoints:editorSelection];
+    }
 
-		[bpView drawInRect:r];
-		
-		r.origin.y += bpViewHeight + 1;
-	}
+	if(displayMode == trajectoryDisplayMode)
+    {
+        float bpViewMininmumHeight = 100;
+        
+        NSRect r = [[self superview] bounds];
+
+        // height
+        float bpViewHeight = (r.size.height - 2) / 3;
+        
+        if(bpViewHeight < bpViewMininmumHeight)
+        {
+            bpViewHeight = bpViewMininmumHeight;
+        }
+        
+        // width
+        float zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];	
+        NSUInteger time = [[[[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] positionBreakpoints] lastObject] valueForKey:@"time"] unsignedLongValue];
+        float bpViewWidth = time * zoomFactorX + ARRANGER_OFFSET + [BreakpointBezierPath handleSize];
+        
+        if(bpViewWidth < r.size.width)
+        {
+            bpViewWidth = r.size.width;
+        }
+        
+        r = NSMakeRect(0, 0, bpViewWidth, bpViewHeight * 3 + 2);
+        [self setFrame:r];
+        
+        r.size.height = bpViewHeight;
+        r.size.width -= ARRANGER_OFFSET;
+        r.origin.x += ARRANGER_OFFSET;
+        
+        int i;
+        for(i=0;i<numOfBreakpointViews;i++)
+        {
+            BreakpointView *bpView = [breakpointViews objectAtIndex:i];
+            
+            bpView.zoomFactorX = zoomFactorX;
+
+            [bpView drawInRect:r];
+            
+            r.origin.y += bpViewHeight + 1;
+        }
+    }
 }
 
+//- (void)drawAutomatedTrajectory;
+//{}
 
-- (void)drawAutomatedTrajectory;
-{}
+- (void)redraw
+{
+    [self setNeedsDisplay:YES];
+}
+
 
 
 #pragma mark -
@@ -182,13 +241,9 @@
 		[bpView mouseDown:localPoint];
 	}
 
-	[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] updateModel];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
+//	[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] updateModel];
 }
-
-//- (NSPoint)proposedMouseDrag:(NSPoint)delta
-//{
-//	return [gainBreakpointView proposedMouseDrag:delta];
-//}
 
 - (void)mouseDragged:(NSEvent *)event
 {
@@ -238,8 +293,8 @@
 - (void)flagsChanged:(NSEvent *)event
 {
 	CHProjectDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-//	NSLog(@"timeline editor: flags changed (document %x)", document);
-
+    //	NSLog(@"timeline editor: flags changed (document %x)", document);
+    
 	if([event modifierFlags] & NSControlKeyMask)
 		document.keyboardModifierKeys = modifierControl;
 	else if([event modifierFlags] & NSShiftKeyMask && !([event modifierFlags] & NSControlKeyMask) && !([event modifierFlags] & NSAlternateKeyMask) && !([event modifierFlags] & NSCommandKeyMask))
@@ -258,47 +313,80 @@
 }	
 
 
+- (void)keyDown:(NSEvent *)event
+{
+	unsigned short keyCode = [event keyCode];
+	NSLog(@"Timeline Editor key code: %d", keyCode);
+    	
+	BOOL update = NO;
+    
+	switch (keyCode)
+	{
+		case 51:	// BACKSPACE
+		case 117:	// DELETE
+            
+            [[EditorContent sharedEditorContent] deleteSelectedPoints];
+			break;
+
+		case 123:	// ARROW keys
+		case 124:
+		case 125:
+		case 126:
+			[self nudge:event];
+			update = YES;
+			break;
+			
+			
+		default:
+			[[[[[[NSDocumentController sharedDocumentController] currentDocument] windowControllers] objectAtIndex:0] window] keyDown:event];
+	}
+	
+	if(update)
+	{
+		[[EditorContent sharedEditorContent] updateModelForSelectedPoints];
+	}
+    
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
+}
+
+- (void)nudge:(NSEvent *)event
+{
+	unsigned short keyCode = [event keyCode];
+	
+	float nudgeUnit = 0.01;//[[NSUserDefaults standardUserDefaults] integerForKey:@"radarEditorNudgeUnit"] * 0.001;
+	float nudgeTime = 100; // [[NSUserDefaults standardUserDefaults] integerForKey:@"radarEditorNudgeAngle"] * 0.1;
+    
+    
+    switch (keyCode)
+    {
+        case 123:	// ARROW left
+            [self moveSelectedPointsBy:NSMakePoint(-nudgeTime, 0)];
+            break;
+        case 124:	// ARROW right
+            [self moveSelectedPointsBy:NSMakePoint(nudgeTime, 0)];
+            break;
+        case 125:	// ARROW down
+            [self moveSelectedPointsBy:NSMakePoint(0, -nudgeUnit)];
+            break;
+        case 126:	// ARROW up
+            [self moveSelectedPointsBy:NSMakePoint(0, nudgeUnit)];
+            break;
+    }
+}
+
+
 #pragma mark -
 #pragma mark editing
 // -----------------------------------------------------------
 
-- (BOOL)moveSelectedPointsBy:(NSPoint)delta
+- (void)moveSelectedPointsBy:(NSPoint)delta
 {
-//	Position *pos;
-//	BOOL inside = YES;
-//	
-//	NSEnumerator *enumerator;
-//	id item; 
-//	
-//	enumerator = [editorSelection objectEnumerator];
-//	while ((item = [enumerator nextObject]))
-//	{
-//		pos = [item valueForKey:@"position"];
-//		
-//		if([pos x] + delta.x < -1 || [pos x] + delta.x > 1 ||
-//		   activeAreaOfDisplay == 0 &&
-//		   ([pos y] + delta.y < -1 || [pos y] + delta.y > 1) ||
-//		   activeAreaOfDisplay == 1 &&
-//		   ([pos z] + delta.y < -1 || [pos z] + delta.y > 1))
-//			inside = NO;
-//	}
-//	
-//	if(!inside) return NO;
-//	
-//	enumerator = [editorSelection objectEnumerator];
-//	while ((item = [enumerator nextObject]))
-//	{
-//		pos = [item valueForKey:@"position"];
-//		
-//		[pos setX:[pos x] + delta.x];
-//		if(activeAreaOfDisplay == 0)
-//			[pos setY:[pos y] + delta.y];
-//		else
-//			[pos setZ:[pos z] + delta.y];
-//	}
-//	
-	return YES;
+	for(BreakpointView *bpView in breakpointViews)
+	{
+		[bpView moveSelectedPointsBy:delta];	
+	}
 }
+
 
 - (void)setSelectedPointsTo:(SpatialPosition *)pos
 {
@@ -318,6 +406,8 @@
 // -----------------------------------------------------------
 - (NSPoint)makePoint:(float)coordinate time:(unsigned long)time
 {	
+	float zoomFactorX = [[[NSUserDefaults standardUserDefaults] valueForKey:@"timelineEditorZoomFactorX"] floatValue];
+
 	return NSMakePoint(time * zoomFactorX, coordinate * TIMELINE_EDITOR_DATA_HEIGHT * 0.45 + TIMELINE_EDITOR_DATA_HEIGHT * 0.5);
 }
 

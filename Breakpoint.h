@@ -18,6 +18,7 @@ typedef enum _BreakpointType
 	breakpointTypeAudioRegion,
 	breakpointTypeCentre,
 	breakpointTypeAuxiliary,
+    breakpointTypeValue,
 } BreakpointType;
 
 
@@ -26,14 +27,21 @@ typedef enum _BreakpointType
 {
 	BreakpointType breakpointType;
 	NSUInteger time;
+    bool hasTime;
+    bool timeEditable;
 	float value;
 	SpatialPosition *position;
+    NSString *descriptor;
 }
 
 @property BreakpointType breakpointType;
+@property bool hasTime;
+@property bool timeEditable;
+@property (retain) NSString *descriptor;
 
-//+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val;
++ (Breakpoint *)breakpointWithTime:(long)t value:(float)val;
 + (Breakpoint *)breakpointWithTime:(NSUInteger)t position:(SpatialPosition *)pos;
++ (Breakpoint *)breakpointWithPosition:(SpatialPosition *)pos;
 
 // accessors
 

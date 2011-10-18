@@ -68,7 +68,9 @@ private:
     int position;
 	
 	/** The value at the specified position */
-    float value;	
+    float value;
+	
+	JUCE_LEAK_DETECTOR (AudioEnvelopePoint);
 };
 
 //==============================================================================
@@ -99,6 +101,9 @@ public:
 			return 0;
 		}
 	}
+	
+private:
+	JUCE_LEAK_DETECTOR (AudioEnvelopePointComparator)
 };
 
 //==============================================================================
@@ -189,6 +194,8 @@ private:
 	int numberOfRemainingSamples;
 	
 	CriticalSection callbackLock;
+	
+	JUCE_LEAK_DETECTOR (AudioSourceGainEnvelope);
 };
 
 

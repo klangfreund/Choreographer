@@ -34,15 +34,4 @@
 	levelMeterView.level = [[AudioEngine sharedAudioEngine] volumeLevel:channelIndex];
 }
 
-
-// text field delegate method
-// remove fokus when user hits return/enter
-//- (void)controlTextDidEndEditing:(NSNotification *)notification
-//{
-//	NSLog(@"controlTextDidEndEditing");
-//	[[[notification object] window] performSelectorOnMainThread:@selector(makeFirstResponder:) withObject:nil waitUntilDone:NO];
-//}	
-	
-	
-
 @end

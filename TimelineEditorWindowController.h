@@ -17,7 +17,7 @@
 @interface TimelineEditorWindowController : EditorWindowController
 {
 	IBOutlet TimelineEditorView *view;
-	TrajectoryType trajectoryType;
+	TrajectoryItem *trajectory;
 
 	IBOutlet RulerScrollView			*rulerScrollView;
     IBOutlet ArrangerScrollView			*arrangerScrollView;
@@ -26,6 +26,12 @@
 + (id)sharedTimelineEditorWindowController;
 
 - (void)refreshView;
-- (void)adjustView;
+
+// actions
+- (IBAction)xZoomIn:(id)sender;
+- (IBAction)xZoomOut:(id)sender;
+- (IBAction)yZoomIn:(id)sender;
+- (IBAction)yZoomOut:(id)sender;
+
 
 @end

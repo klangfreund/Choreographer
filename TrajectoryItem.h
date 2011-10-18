@@ -23,24 +23,19 @@
 - (void)setTrajectoryType:(TrajectoryType)type;
 
 // breakpoints/handles for visualisation
-- (NSArray *)linkedBreakpointArray;
-- (NSArray *)linkedBreakpointArrayWithInitialPosition:(SpatialPosition *)pos;
-- (NSArray *)additionalPositions;
-- (NSString *)additionalPositionName:(id)item;
+- (NSArray *)positionBreakpoints;
+- (NSArray *)positionBreakpointsWithInitialPosition:(SpatialPosition *)pos;
+- (NSArray *)parameterBreakpoints;
 - (SpatialPosition *)namePosition;
 
-//- (NSEnumerator *)breakpointEnumerator;
-//- (id)trajectoryAttributeForKey:(NSString *)key;
-
 // breakpoints for audio playback
-- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur;
-
+- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode;
 - (void)updateModel;
 - (void)undoableUpdate;
 
 
 - (NSString *)trajectoryTypeString;
-- (NSString*)name;
+- (NSString *)name;
 
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 - (void)sortBreakpoints;

@@ -49,7 +49,7 @@
 @implementation ImageAndTextCell
 
 - (id)init {
-    if (self = [super init]) {
+    if ((self = [super init])) {
         [self setLineBreakMode:NSLineBreakByTruncatingTail];
         [self setSelectable:YES];
     }

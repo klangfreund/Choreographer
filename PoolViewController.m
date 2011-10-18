@@ -26,6 +26,8 @@
 	PoolViewController *instance = [[[self alloc] initWithNibName:@"Pool" bundle:nil] autorelease];
 	[instance setValue:document forKey:@"document"];
 	
+	[instance setValue:[[document valueForKey:@"projectSettings"] retain] forKey:@"projectSettings"];
+	
 	return instance;
 }
 
@@ -41,7 +43,6 @@
 - (void)awakeFromNib
 {
 	// get stored settings
-	projectSettings = [[document valueForKey:@"projectSettings"] retain];
 	[tabControl setSelectedSegment:[[projectSettings valueForKey:@"poolSelectedTab"] intValue]];	
 	[tabView selectTabViewItemAtIndex:[[projectSettings valueForKey:@"poolSelectedTab"] intValue]];
 	
@@ -62,6 +63,14 @@
 
 	// initialise context menu
 	[dropOrderMenu setModel:projectSettings key:@"poolDropOrder"];
+    
+    // init array controllers
+    [trajectoryArrayController setFilterPredicate:[NSPredicate predicateWithFormat:@"type == %@", CHTrajectoryType]];
+    NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
+    [trajectoryArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+    [audioItemArrayController setFilterPredicate:[NSPredicate predicateWithFormat:@"type == %@", CHAudioItemType]];
+    sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
+    [audioItemArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 	
 	// register for drag and drop
     [userOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, CHTrajectoryType, CHFolderType, NSFilenamesPboardType, nil]];
@@ -82,19 +91,19 @@
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 }
 
-- (void)setup
-{
-	// get stored data
-	NSManagedObjectContext *context = [document managedObjectContext];
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-	NSError *error;
-	
-	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:context];
-	
-	[request setEntity:entityDescription];
-	[request setReturnsObjectsAsFaults:NO];
-	[context executeFetchRequest:request error:&error];
-}	
+//- (void)setup
+//{
+//	// get stored data
+//	NSManagedObjectContext *context = [document managedObjectContext];
+//	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+//	NSError *error;
+//	
+//	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:context];
+//	
+//	[request setEntity:entityDescription];
+//	[request setReturnsObjectsAsFaults:NO];
+//	[context executeFetchRequest:request error:&error];
+//}	
 
 
 #pragma mark -
@@ -210,7 +219,7 @@
 	}
 	
 	
-	while (node = [nodeEnumerator nextObject])
+	while ((node = [nodeEnumerator nextObject]))
 	{
 		if ([self recursivelyDeleteNode:node])
 			dirty = YES;
@@ -485,7 +494,7 @@
 	{
 		nodeEnumerator = [[node mutableSetValueForKeyPath:@"children"] objectEnumerator];
 		
-		while (subnode = [nodeEnumerator nextObject])
+		while ((subnode = [nodeEnumerator nextObject]))
 		{
 			BOOL flag = [self recursivelyDeleteNode:subnode];
 			
@@ -618,7 +627,7 @@
 	AudioRegion *region;
 	NSMutableSet *selectedAudioItems = [[[NSMutableSet alloc] init] autorelease];
 	
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		if([region isKindOfClass:[AudioRegion class]])
 		   [selectedAudioItems addObject:[region valueForKey:@"audioItem"]];
@@ -629,7 +638,7 @@
 	enumerator = [arrangedObjects objectEnumerator];
 	NSManagedObject *node;
 	
-	while(node = [enumerator nextObject])
+	while((node = [enumerator nextObject]))
 	{
 		if([selectedAudioItems containsObject:[node valueForKey:@"item"]])
 		{
@@ -751,7 +760,7 @@
 }
 
 - (void)tableView:(NSTableView *)aTableView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tc row:(NSInteger)row
-{
+{    
 	ImageAndTextCell *imageAndTextCell = (ImageAndTextCell *)cell;
 	NSImage *image = [NSImage imageNamed:[tc identifier]];
 	[imageAndTextCell setImage:image];
@@ -808,7 +817,7 @@
 	NSMutableArray *tempAudioArray = [[[NSMutableArray alloc] init] autorelease];
 	NSMutableArray *tempTrajectoryArray = [[[NSMutableArray alloc] init] autorelease];
  
-	while (item = [enumerator nextObject])
+	while ((item = [enumerator nextObject]))
 	{
 		if([[[item representedObject] valueForKey:@"type"] isEqualToString:CHAudioItemType])
 			[tempAudioArray addObject:[item representedObject]];
@@ -1014,19 +1023,19 @@
 
 @implementation AudioItemArrayController
 
-- (BOOL)fetchWithRequest:(NSFetchRequest *)fetchRequest merge:(BOOL)merge error:(NSError **)error
-{
-	NSLog(@"a fetchWithRequest");
-    // set predicate
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type == %@", CHAudioItemType];
-    [fetchRequest setPredicate:predicate];
-
-	// set sort descriptor
-	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-    
-	return [super fetchWithRequest:fetchRequest merge:merge error:error];
-}
+//- (BOOL)fetchWithRequest:(NSFetchRequest *)fetchRequest merge:(BOOL)merge error:(NSError **)error
+//{
+//	NSLog(@"a fetchWithRequest");
+//    // set predicate
+//	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type == %@", CHAudioItemType];
+//    [fetchRequest setPredicate:predicate];
+//
+//	// set sort descriptor
+//	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//    
+//	return [super fetchWithRequest:fetchRequest merge:merge error:error];
+//}
 
 - (BOOL)tableView:(NSTableView *)table writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
@@ -1054,19 +1063,19 @@
 
 @implementation TrajectoryArrayController
 
-- (BOOL)fetchWithRequest:(NSFetchRequest *)fetchRequest merge:(BOOL)merge error:(NSError **)error
-{
-	NSLog(@"t fetchWithRequest");
-    // set predicate
-	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type == %@", CHTrajectoryType];
-    [fetchRequest setPredicate:predicate];
-
-	// set sort descriptor
-	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-
-    return [super fetchWithRequest:fetchRequest merge:merge error:error];
-}
+//- (BOOL)fetchWithRequest:(NSFetchRequest *)fetchRequest merge:(BOOL)merge error:(NSError **)error
+//{
+//	NSLog(@"t fetchWithRequest");
+//    // set predicate
+//	NSPredicate *predicate = [NSPredicate predicateWithFormat:@"type == %@", CHTrajectoryType];
+//    [fetchRequest setPredicate:predicate];
+//
+//	// set sort descriptor
+//	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//
+//    return [super fetchWithRequest:fetchRequest merge:merge error:error];
+//}
 
 - (BOOL)tableView:(NSTableView *)table writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {

@@ -58,6 +58,8 @@ private:
 
     PinkNoiseGeneratorAudioSource (const PinkNoiseGeneratorAudioSource&);
     PinkNoiseGeneratorAudioSource& operator= (const PinkNoiseGeneratorAudioSource&);
+	
+	JUCE_LEAK_DETECTOR (PinkNoiseGeneratorAudioSource);
 };
 
 END_JUCE_NAMESPACE

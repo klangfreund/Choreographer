@@ -42,7 +42,7 @@
 
 + (PoolViewController *)poolViewControllerForDocument:(NSPersistentDocument *)document;
 
-- (void)setup;
+//- (void)setup;
 
 // IB actions
 - (IBAction)poolAddFolder:(id)sender;

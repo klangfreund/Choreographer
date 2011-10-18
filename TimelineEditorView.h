@@ -7,6 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "CHGlobals.h"
 #import "BreakpointView.h"
 
 @interface TimelineEditorView : NSView
@@ -14,14 +15,14 @@
 	id controller;
 	
 	NSArray *breakpointViews;
+    NSUInteger numOfBreakpointViews;
 
 	int coordinateMode, gridMode, viewMode;
 
-	float zoomFactorX;
 	float nudgeAmount;
 	
 	// data from Editor Content
-	id trajectory;
+//	id trajectory;
 	NSString *selector;
 	id editorSelection;
 		
@@ -30,21 +31,24 @@
 	NSPoint storedEventLocation;
 	NSPoint draggingOrigin;
 	id originalPosition;
-	BOOL dirty;
-	
-	// selection
-	BOOL showSelectionRectangle;
 }
 
+- (void)setupSubviews;
+
 // drawing
-- (void)drawBreakpointTrajectory;
-- (void)drawAutomatedTrajectory;
+//- (void)drawBreakpointTrajectory;
+//- (void)drawAutomatedTrajectory;
+- (void)redraw;
 
 // editing
-- (BOOL)moveSelectedPointsBy:(NSPoint)delta;
+- (void)moveSelectedPointsBy:(NSPoint)delta;
 - (void)setSelectedPointsTo:(SpatialPosition *)pos;
+
+// keyboard events
+- (void)nudge:(NSEvent *)event;
 
 // utility
 - (NSPoint)makePoint:(float)coordinate time:(unsigned long)time;
+
 
 @end

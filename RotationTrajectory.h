@@ -8,18 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Trajectory.h"
+#import "BreakpointArray.h"
 
 
 @interface RotationTrajectory : Trajectory
 {
-	SpatialPosition	*rotationCentre;
-	float			speed;
+    Breakpoint *rotationCentre;
+    Breakpoint *initialPosition;
+    Breakpoint *initialSpeed;
 }
 
 // accessors
-- (void)setSpeed:(float)val;
+- (void)setInitialSpeed:(float)val;
 
-//- (void)initialPosition:(SpatialPosition *)pos;
-//- (void)rotationCentre:(SpatialPosition *)pos;
 
 @end

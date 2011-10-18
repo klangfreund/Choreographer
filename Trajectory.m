@@ -14,6 +14,9 @@
 
 @implementation Trajectory
 
+@synthesize positionBreakpointArray;
+@synthesize parameterBreakpointArray;
+
 + (Trajectory *)trajectoryOfType:(int)trajectoryType forItem:(id)trajectoryItem
 {
 	Trajectory *trajectory = nil;
@@ -41,30 +44,37 @@
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    self = [super init];
-//    duration = [[coder decodeObjectForKey:@"duration"] unsignedLongValue];
-	
+    self = [super init];	
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
- //   [coder encodeObject:[NSNumber numberWithUnsignedLong:duration] forKey:@"duration"];
+}
+
+// breakpoints for visualisation
+- (NSArray *)positionBreakpoints { return nil; }
+
+- (NSArray *)parameterBreakpoints
+{
+    return parameterBreakpointArray.breakpoints;
 }
 
 
+- (void)sortBreakpoints
+{
+	[positionBreakpointArray sort];
+	[parameterBreakpointArray sort];
+}
 
-// breakpoints for visualisation
-- (NSArray *)linkedBreakpoints { return nil; }
-- (NSArray *)additionalPositions { return nil; }
-- (NSString *)additionalPositionName:(id)item { return @"add..."; }
-
-
-- (void)sortBreakpoints {}
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode { return nil; }
 
 - (id)trajectoryAttributeForKey:(NSString *)key { return [self valueForKey:key]; }
 
+
+#pragma mark -
+#pragma mark actions
+// -----------------------------------------------------------------------------
 
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 {

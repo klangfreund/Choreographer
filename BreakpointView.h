@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Breakpoint.h"
+#import "BreakpointArray.h"
 
 @class Region;
 
@@ -17,18 +18,23 @@
 	NSRect frame;
 	Region *owningRegion;
 	
-	NSMutableArray *breakpointArray;
+	BreakpointArray *breakpointArray;
 	NSMutableSet *selectedBreakpoints;
 	Breakpoint *hit;
+
+	BOOL showSelectionRectangle;
+	NSMutableSet *tempEditorSelection;
 	
 	BOOL isKey; // this breakpoint view is being edited
 
 	NSString *xAxisValueKeypath, *yAxisValueKeypath;
+    NSString *breakpointDescriptor;
 	unsigned int xAxisMax; // min is always 0
 	float zoomFactorX;
 	double yAxisMin, yAxisMax;
 	
-	NSColor *backgroundColor, *gridColor;
+	NSColor *backgroundColor, *keyBackgroundColor;
+	NSColor *gridColor;
 	NSColor *lineColor, *handleColor;
 
 	NSBezierPath *gridPath;
@@ -37,14 +43,17 @@
 	
 	id callbackObject;
 	SEL callbackSelector;
+	BOOL dirty;
 }
 
-@property(retain) NSMutableArray *breakpointArray;
+@property(retain) BreakpointArray *breakpointArray;
 @property(retain) NSString *xAxisValueKeypath, *yAxisValueKeypath;
+@property(retain) NSString *breakpointDescriptor;
 @property unsigned int xAxisMax;
 @property float zoomFactorX;
 @property double yAxisMin, yAxisMax;
 @property(retain) NSString *toolTipString;
+@property BOOL isKey;
 
 
 - (void)drawInRect:(NSRect)rect;
@@ -57,8 +66,14 @@
 
 - (void)setUpdateCallbackObject:(id)obj selector:(SEL)selector;
 - (void)performUpdateCallback;
+
 // selection
+- (void)setSelectedBreakpoints:(NSMutableSet *)set;
 - (void)deselectAll;
+
+// editing
+- (void)moveSelectedPointsBy:(NSPoint)delta;
+
 
 //- (void)addBreakpoint;
 //- (void)removeBreakpoint;

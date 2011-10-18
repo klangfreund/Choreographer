@@ -9,6 +9,80 @@
 
 #include "AudioSourceAmbipanning.h"
 
+SpeakerPosition::SpeakerPosition()
+:   x(0.0),
+    y(1.0),
+    z(0.0)
+{
+}
+
+SpeakerPosition::SpeakerPosition (double x_, double y_, double z_)
+:   x(x_),
+    y(y_),
+    z(z_)
+{
+}
+
+SpeakerPosition::SpeakerPosition (const SpeakerPosition& other)
+:   x(other.x),
+    y(other.y),
+    z(other.z)
+{
+}
+
+SpeakerPosition::~SpeakerPosition ()
+{
+}
+
+const SpeakerPosition& SpeakerPosition::operator= (const SpeakerPosition& other)
+{
+    
+    x = other.x;
+    y = other.y;
+    z = other.z;
+    
+    return *this;
+}
+
+
+void SpeakerPosition::setX (double x_)
+{
+    x = x_;
+}
+
+void SpeakerPosition::setY (double y_)
+{
+    y = y_;
+}
+
+void SpeakerPosition::setZ (double z_)
+{
+    z = z_;
+}
+
+void SpeakerPosition::setXYZ (double x_, double y_, double z_)
+{
+    x = x_;
+    y = y_;
+    z = z_;
+}
+
+double SpeakerPosition::getX ()
+{
+    return x;
+}
+
+double SpeakerPosition::getY ()
+{
+    return y;
+}
+
+double SpeakerPosition::getZ ()
+{
+    return z;
+}
+
+
 AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFormatReader,
 												double sampleRateOfTheAudioDevice)
     : monoBuffer (1,0),
@@ -384,9 +458,9 @@ void AudioSourceAmbipanning::setNumberOfSpeakers(int numberOfSpeakers_)
 
 void AudioSourceAmbipanning::setPositionOfSpeakers(Array<void*> positionOfSpeaker_)
 {	
-	// Deallocation of memory needs to be done at another place, since
-	// all AudioSourceAmbipanning objects refere to the same memory location
-	// for this.
+	// Deallocation of the memory needs to be done by the caller, since
+	// the elements of positionOfSpeaker point to memory that was allocated
+	// outside of this scope.
 	
 	positionOfSpeaker = positionOfSpeaker_;
 }

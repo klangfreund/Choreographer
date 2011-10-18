@@ -7,25 +7,27 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "Breakpoint.h"
+#import "BreakpointArray.h"
 #import "Trajectory.h"
 
 
 @interface Trajectory : NSObject <NSCoding>
 {
 	id trajectoryItem;
-//	unsigned long duration;
-
-	SpatialPosition	*initialPosition;
+	BreakpointArray *positionBreakpointArray;
+	BreakpointArray *parameterBreakpointArray;
 }
+
+@property (retain) BreakpointArray *positionBreakpointArray;
+@property (retain) BreakpointArray *parameterBreakpointArray;
 
 + (Trajectory *)trajectoryOfType:(int)trajectoryType forItem:(id)trajectoryItem;
 
 // breakpoints for visualisation
-- (NSArray *)linkedBreakpoints;
-- (NSArray *)additionalPositions;
-- (NSString *)additionalPositionName:(id)item;
+- (NSArray *)positionBreakpoints;
+- (NSArray *)parameterBreakpoints;
 
+// actions
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 - (void)removeBreakpoint:(id)bp;
 

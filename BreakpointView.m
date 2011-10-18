@@ -10,6 +10,7 @@
 #import "BreakpointBezierPath.h"
 #import "CHProjectDocument.h"
 #import "CHGlobals.h"
+#import "SelectionRectangle.h"
 #import "EditorContent.h"
 #import "ToolTip.h"
 #import "Region.h"
@@ -20,19 +21,23 @@
 
 @implementation BreakpointView
 @synthesize xAxisValueKeypath, yAxisValueKeypath;
+@synthesize breakpointDescriptor;
 @synthesize breakpointArray;
 @synthesize xAxisMax;
 @synthesize zoomFactorX;
 @synthesize yAxisMin, yAxisMax;
 @synthesize toolTipString;
-
+@synthesize isKey;
 
 - (id)init
 {
-	if(self = [super init])
+	self = [super init];
+    if(self)
 	{
 		isKey = NO;
+        dirty = NO;
 		selectedBreakpoints = [[NSMutableSet alloc] init];
+        showSelectionRectangle = NO;
 	}
 	return self;
 }
@@ -50,20 +55,23 @@
 	BreakpointBezierPath *breakpointBezierPath;
 	double xAxisValue, yAxisValue;
 	Breakpoint *bp;
-	double halfHandleSize = [BreakpointBezierPath handleSize] * 0.5;
+//	double halfHandleSize = [BreakpointBezierPath handleSize] * 0.5;
 	
 
 	// background
 
-	[backgroundColor set];
+	if(isKey && keyBackgroundColor)
+        [keyBackgroundColor set];
+    else
+        [backgroundColor set];
+    
 	[[NSBezierPath bezierPathWithRoundedRect:rect xRadius:5 yRadius:5] fill];
 	
 	if(rect.size.height < [BreakpointBezierPath handleSize] || rect.size.width < [BreakpointBezierPath handleSize]) return;
 	
-	//rect = NSInsetRect(rect, [BreakpointBezierPath handleSize], [BreakpointBezierPath handleSize]);
 	frame = rect;
 
-	double xAxisFactor = zoomFactorX;//rect.size.width / (xAxisMax - xAxisMin);
+	double xAxisFactor = zoomFactorX;
 	double yAxisFactor = rect.size.height / (yAxisMax - yAxisMin);
 	
 
@@ -71,17 +79,17 @@
 
 	[lineColor set];
 	
-	bp = [breakpointArray objectAtIndex:0];
-	yAxisValue = ([[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - yAxisMin) * yAxisFactor;
-
-	p1 = NSMakePoint(rect.origin.x, rect.origin.y + rect.size.height - yAxisValue);
+    p1 = NSMakePoint(rect.origin.x, -1);
 	
 	for(bp in breakpointArray)
 	{
-		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;		
+        if(breakpointDescriptor && ![breakpointDescriptor isEqualToString:[bp descriptor]]) continue;
+		
+        xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;		
 		yAxisValue = ([[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - yAxisMin) * yAxisFactor;
 		
 		p2 = NSMakePoint(rect.origin.x + xAxisValue, rect.origin.y + rect.size.height - yAxisValue);
+        if(p1.y == -1) p1.y = p2.y; // first point
 		[NSBezierPath strokeLineFromPoint:p1 toPoint:p2];
 		p1 = p2;
 	}
@@ -94,18 +102,20 @@
 
 	for(bp in breakpointArray)
 	{
-		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;
+        if(breakpointDescriptor && ![breakpointDescriptor isEqualToString:[bp descriptor]]) continue;
+
+        xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor;
 		
 		// keep handles inside 
-		if(xAxisValue < halfHandleSize)
-			xAxisValue = halfHandleSize;
-		if(xAxisValue > frame.size.width - halfHandleSize)
-			xAxisValue = frame.size.width - halfHandleSize;
+//		if(xAxisValue < halfHandleSize)
+//			xAxisValue = halfHandleSize;
+//		if(xAxisValue > frame.size.width - halfHandleSize)
+//			xAxisValue = frame.size.width - halfHandleSize;
 
 		yAxisValue = ([[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - yAxisMin) * yAxisFactor;
 
 		p1 = NSMakePoint(rect.origin.x + xAxisValue, rect.origin.y + rect.size.height - yAxisValue);
-		breakpointBezierPath = [BreakpointBezierPath breakpointBezierPathWithType:breakpointTypeNormal location:p1];
+		breakpointBezierPath = [BreakpointBezierPath breakpointBezierPathWithType:bp.breakpointType location:p1];
 		
 		if([selectedBreakpoints containsObject:bp])
 			[[NSColor blackColor] set];
@@ -127,11 +137,14 @@
 {
 	// return if location is not inside view
 	if(location.y < frame.origin.y || location.y > frame.origin.y + frame.size.height)
-		return;
+    {
+        isKey = NO;
+        return;
+    }
 	
 	NSRect rect;
 	NSPoint p;
-	id bp;
+	Breakpoint *bp;
 
 	CHProjectDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
 	
@@ -149,24 +162,36 @@
 	// COMMAND click adds new point
 	if(document.keyboardModifierKeys == modifierCommand)
 	{
-		bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setValue:[NSNumber numberWithFloat:rect.origin.x] forKey:xAxisValueKeypath];
-		[bp setValue:[NSNumber numberWithFloat:rect.origin.y] forKey:yAxisValueKeypath];
-		[bp setBreakpointType:breakpointTypeNormal];
+        bp = [[[Breakpoint alloc] init] autorelease];
+        [bp setDescriptor:breakpointDescriptor];
+        [bp setValue:[NSNumber numberWithFloat:rect.origin.x] forKey:xAxisValueKeypath];
+        [bp setValue:[NSNumber numberWithFloat:rect.origin.y] forKey:yAxisValueKeypath];
 
-		[breakpointArray addObject:bp];
-		[self sortBreakpoints];
+        if([yAxisValueKeypath isEqualToString:@"value"])
+        {
+            [bp setBreakpointType:breakpointTypeValue];        
+        }
+        else
+        {
+            [bp setBreakpointType:breakpointTypeNormal];
+        }
+        
+		[breakpointArray addBreakpoint:bp];
 
 		// select the new point
 		hit = bp;
 		[selectedBreakpoints removeAllObjects];
 		[selectedBreakpoints addObject:bp];
 		
+		dirty = YES;
+
 		return;
 	}
 		
 	for(bp in breakpointArray)
 	{
+        if(breakpointDescriptor && ![breakpointDescriptor isEqualToString:[bp descriptor]]) continue;
+
 		p.x = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue];
 		p.y = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue];
 
@@ -204,8 +229,17 @@
 		}		
 	}
 	
-	// no hit
-	[self deselectAll];
+	// no hit:
+	// shift not pressed - deselect all handles
+	if(document.keyboardModifierKeys != modifierShift)
+	{
+        [self deselectAll];
+	}
+    
+	// start selection rectangle
+	//[tempEditorSelection setSet:editorSelection];
+	[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:location forView:[owningRegion valueForKey:@"superview"]];
+	showSelectionRectangle = YES;
 }
 
 - (NSPoint)proposedMouseDrag:(NSPoint)delta
@@ -254,41 +288,86 @@
 
 - (void)mouseDragged:(NSPoint)delta
 {
-	if(![selectedBreakpoints count] || !isKey) return;
+    if(!isKey) return;
+    
+	if(!showSelectionRectangle && [selectedBreakpoints count])
+    {
+        // continue dragging handles
 		
-	double xAxisFactor = zoomFactorX;
-	double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
+        double xAxisFactor = zoomFactorX;
+        double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
 
-	double xAxisValue;
-	double yAxisValue;
+        NSUInteger xAxisValue;
+        double yAxisValue;
 
-	delta.x /= xAxisFactor; 
-	delta.y /= yAxisFactor;
-	
-	for(Breakpoint *bp in selectedBreakpoints)
-	{
-		xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] + delta.x;
-		yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - delta.y;
-		
-		[bp setValue:[NSNumber numberWithDouble:xAxisValue] forKey:xAxisValueKeypath];
-		[bp setValue:[NSNumber numberWithDouble:yAxisValue] forKey:yAxisValueKeypath];
-	}
-	
-	[self sortBreakpoints];
+        delta.x /= xAxisFactor; 
+        delta.y /= yAxisFactor;
+        
+        for(Breakpoint *bp in selectedBreakpoints)
+        {
+            xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] unsignedLongLongValue] + delta.x;
+            yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - delta.y;
+            
+            [bp setValue:[NSNumber numberWithUnsignedLongLong:xAxisValue] forKey:xAxisValueKeypath];
+            [bp setValue:[NSNumber numberWithDouble:yAxisValue] forKey:yAxisValueKeypath];
+        }
+        
+        [self sortBreakpoints];
 
+        dirty = YES;
 
-	[[ToolTip sharedToolTip] setString:	[NSString stringWithFormat:toolTipString, 
-										[[hit valueForKeyPath:xAxisValueKeypath] doubleValue],
-										[[hit valueForKeyPath:yAxisValueKeypath] doubleValue]]
-								inView: [owningRegion valueForKey:@"superview"]];
+        [[ToolTip sharedToolTip] setString:	[NSString stringWithFormat:toolTipString, 
+                                            [[hit valueForKeyPath:xAxisValueKeypath] doubleValue],
+                                            [[hit valueForKeyPath:yAxisValueKeypath] doubleValue]]
+                                    inView: [owningRegion valueForKey:@"superview"]];
+    }
+    else if(showSelectionRectangle)
+    {
+    	// selection rectangle
+		[[SelectionRectangle sharedSelectionRectangle] setCurrentMouseDelta:delta];
+        NSRect selectionRect = [[SelectionRectangle sharedSelectionRectangle] frame];
+        
+        double xAxisFactor = zoomFactorX;
+        double yAxisFactor = frame.size.height / (yAxisMax - yAxisMin);
+
+       // SpatialPosition *pos;
+        NSPoint p;
+
+        for(Breakpoint *bp in breakpointArray)
+        {			
+            if(breakpointDescriptor && ![breakpointDescriptor isEqualToString:[bp descriptor]]) continue;
+
+			//pos = [bp valueForKey:@"position"];
+            p.x = [[bp valueForKeyPath:xAxisValueKeypath] doubleValue] * xAxisFactor + frame.origin.x;
+            p.y = (yAxisMax - [[bp valueForKeyPath:yAxisValueKeypath] doubleValue]) * yAxisFactor + frame.origin.y;
+			
+			if(NSPointInRect(p, selectionRect))
+			{
+				[selectedBreakpoints addObject:bp];
+				[tempEditorSelection removeObject:bp];
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
+			}
+			else if(![tempEditorSelection containsObject:bp])
+			{
+				[selectedBreakpoints removeObject:bp];
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
+			}
+		}
+    }
 }
 
 - (void)mouseUp:(NSEvent *)event
 {
-	[self performUpdateCallback];
+	if(dirty)
+	{
+		dirty = NO;
+        [self performUpdateCallback];
+    }
 
 	[ToolTip release];
-	isKey = NO;
+
+	[SelectionRectangle release];
+	showSelectionRectangle = NO;
 }
 
 
@@ -324,24 +403,53 @@
 {
 	for(Breakpoint *bp in selectedBreakpoints)
 	{
-		[breakpointArray removeObject:bp];
+		[breakpointArray removeBreakpoint:bp];
 	}
 	
 	[self performUpdateCallback];
-//	[owningRegion archiveData];	
 }
 
 
 - (void)sortBreakpoints
 {
-	NSArray *breakpointsArraySorted;
-	
-	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
-	breakpointsArraySorted = [breakpointArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-		
-	[breakpointArray removeAllObjects];
-
-	[breakpointArray addObjectsFromArray:breakpointsArraySorted];
+	[breakpointArray sort];
 }
+
+#pragma mark -
+#pragma mark editing
+// -----------------------------------------------------------
+
+- (void)moveSelectedPointsBy:(NSPoint)delta
+{
+    if(!isKey) return;
+
+	NSUInteger xAxisValue;
+    double yAxisValue;
+	BOOL inside = YES;
+    
+	for(Breakpoint *bp in selectedBreakpoints)
+	{
+        xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] unsignedLongLongValue] + delta.x;
+        yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] - delta.y;
+		
+		if(xAxisValue + delta.x < 0 ||
+           yAxisValue + delta.y < yAxisMin || yAxisValue + delta.y > yAxisMax)
+			inside = NO;
+	}
+	
+	if(!inside) return;
+	
+	for(Breakpoint *bp in selectedBreakpoints)
+	{
+        xAxisValue = [[bp valueForKeyPath:xAxisValueKeypath] unsignedLongLongValue] + delta.x;
+        yAxisValue = [[bp valueForKeyPath:yAxisValueKeypath] doubleValue] + delta.y;
+        
+        [bp setValue:[NSNumber numberWithUnsignedLongLong:xAxisValue] forKey:xAxisValueKeypath];
+        [bp setValue:[NSNumber numberWithDouble:yAxisValue] forKey:yAxisValueKeypath];
+	}
+	
+	return;
+}
+
 
 @end

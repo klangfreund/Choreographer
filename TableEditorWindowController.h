@@ -18,8 +18,10 @@
 
 + (id)sharedTableEditorWindowController;
 
-//- (int)newPoint;
 - (void)refreshView;
+
+// menu actions
+- (IBAction)addBreakpoint:(id)sender;
 
 // table view setting values
 - (void)breakpointTrajectory:(id)trajectory setValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(int)row;

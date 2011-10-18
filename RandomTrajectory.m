@@ -14,13 +14,25 @@
 
 - (id)init
 {
-	if(self = [super init])
+	self = [super init];
+    if(self)
 	{
-		initialPosition = [[SpatialPosition positionWithX:0.0 Y:0 Z:0] retain];
-		boundingVolumePoint1 = [[SpatialPosition positionWithX:-0.5 Y:-0.5 Z:0] retain];
-		boundingVolumePoint2 = [[SpatialPosition positionWithX:0.5 Y:0.5 Z:0.5] retain];
-		minSpeed = 0.1;
-		maxSpeed = 0.2;
+		initialPosition = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0 Y:0 Z:0]] retain];
+        [initialPosition setDescriptor:@"Init"];
+		boundingVolumePoint1 = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:-0.5 Y:-0.5 Z:0]] retain];
+        [boundingVolumePoint1 setDescriptor:@"pt1"];
+		boundingVolumePoint2 = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.5 Y:0.5 Z:0.5]] retain];
+        [boundingVolumePoint2 setDescriptor:@"pt2"];
+		initialMinSpeed = [[Breakpoint breakpointWithTime:0 value:0.1] retain];
+        [initialMinSpeed setDescriptor:@"minSpeed"];
+        [initialMinSpeed setTimeEditable:NO];
+		initialMaxSpeed = [[Breakpoint breakpointWithTime:0 value:0.2] retain];
+        [initialMaxSpeed setDescriptor:@"maxSpeed"];
+        [initialMaxSpeed setTimeEditable:NO];
+
+        
+        parameterBreakpointArray = [[NSMutableArray arrayWithObjects:initialPosition, boundingVolumePoint1, boundingVolumePoint2, initialMinSpeed, initialMaxSpeed, nil] retain];
+
 		stability = 1000;
 	}
 	return self;	
@@ -29,26 +41,31 @@
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    initialPosition = [[coder decodeObjectForKey:@"initialPosition"] retain];
-    boundingVolumePoint1 = [[coder decodeObjectForKey:@"boundingVolumePoint1"] retain];
-    boundingVolumePoint2 = [[coder decodeObjectForKey:@"boundingVolumePoint2"] retain];
-    minSpeed = [[coder decodeObjectForKey:@"minSpeed"] floatValue];
-    maxSpeed = [[coder decodeObjectForKey:@"maxSpeed"] floatValue];
-    stability = [[coder decodeObjectForKey:@"stability"] unsignedLongValue];
+    parameterBreakpointArray = [[coder decodeObjectForKey:@"parameterBreakpointArray"] retain];
+    
+    for(Breakpoint *bp in parameterBreakpointArray)
+    {
+        if([[bp descriptor] isEqualToString:@"Init"])
+            initialPosition = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"pt1"])
+            boundingVolumePoint1 = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"pt2"])
+            boundingVolumePoint2 = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"minSpeed"] && [bp time] == 0)
+            initialMinSpeed = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"maxSpeed"] && [bp time] == 0)
+            initialMaxSpeed = [bp retain];
+    }
+
+    stability = 1000;
 	
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-	NSLog(@"encode with coder");
     [super encodeWithCoder:coder];
-    [coder encodeObject:initialPosition forKey:@"initialPosition"];
-    [coder encodeObject:boundingVolumePoint1 forKey:@"boundingVolumePoint1"];
-    [coder encodeObject:boundingVolumePoint2 forKey:@"boundingVolumePoint2"];
-    [coder encodeObject:[NSNumber numberWithFloat:minSpeed] forKey:@"minSpeed"];
-    [coder encodeObject:[NSNumber numberWithFloat:maxSpeed] forKey:@"maxSpeed"];
-    [coder encodeObject:[NSNumber numberWithUnsignedLong:stability] forKey:@"stability"];
+    [coder encodeObject:parameterBreakpointArray forKey:@"parameterBreakpointArray"];
 }
 
 - (void)dealloc
@@ -56,33 +73,11 @@
 	[initialPosition release];
 	[boundingVolumePoint1 release];
 	[boundingVolumePoint1 release];
+    [initialMinSpeed release];
+    [initialMaxSpeed release];
+    
 	[super dealloc];
 }
-
-
-- (NSArray *)additionalPositions
-{
-	if(!initialPosition || !boundingVolumePoint1 || !boundingVolumePoint2) return nil;
-	
-	if(![[trajectoryItem valueForKey:@"adaptiveInitialPosition"] boolValue])
-	{
-		return [NSArray arrayWithObjects:boundingVolumePoint1, boundingVolumePoint2, initialPosition, nil];
-	}
-	else
-	{
-		return [NSArray arrayWithObjects:boundingVolumePoint1, boundingVolumePoint2, nil];
-	}
-}
-
-- (NSString *)additionalPositionName:(id)item
-{
-	if(item == initialPosition) return @"init";
-	if(item == boundingVolumePoint1) return @"pt1";
-	if(item == boundingVolumePoint2) return @"pt2";
-	
-	return @"--";
-}
-
 
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
@@ -103,6 +98,9 @@
 	
 	Breakpoint *bp;
 	SpatialPosition *tempPosition;
+    
+    float minSpeed = [initialMinSpeed value];
+    float maxSpeed = [initialMaxSpeed value];
 	
 	if(pos)
 		tempPosition = [pos copy];

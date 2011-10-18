@@ -170,19 +170,18 @@ void AudioRegionMixer::removeAllRegions ()
 {
 	DBG(T("AudioRegionMixer: removeAllRegions called."));
 	
-	Array<void*> regionsCopy;
-	regionsCopy = regions;
+	const ScopedLock sl (lock);
 	
-	for (int i = regionsCopy.size(); --i >= 0;)
+	// Deallocate memory...
+	for (int i = 0; i < regions.size(); i++)
 	{
-		AudioRegion* audioRegionToDelete = (AudioRegion*)regionsCopy[i];
+		AudioRegion* audioRegionToDelete = (AudioRegion*)regions[i];
 		delete audioRegionToDelete->audioSourceAmbipanning;
 		delete audioRegionToDelete;
 	}
 	
-	// debug stuff, since I don't know yet why to operate on a copy
-	int debugDummy = regions.size();
-	debugDummy++;
+	// ... and remove the pointers.
+	regions.clear();
 }
 
 bool AudioRegionMixer::setGainEnvelopeForRegion (const int regionID, Array<void*> gainEnvelope)
@@ -248,7 +247,7 @@ void AudioRegionMixer::setSpeakerPositions (Array<void*> positionOfSpeaker)
 	const ScopedLock sl (lock); // without this scope lock, getNextAudioBlock(..) of
 	  // AudioSourceAmbipanning might wanna set array elements outside of the size of
 	  // these arrays
-	AudioSourceAmbipanning::setPositionOfSpeakers (positionOfSpeaker);	
+	AudioSourceAmbipanning::setPositionOfSpeakers (positionOfSpeaker);
 	AudioSourceAmbipanning::setNumberOfSpeakers (positionOfSpeaker.size());	
 	// inform all regions about the change
 	for (int i = 0; i < regions.size() && positionOfSpeaker.size(); i++)

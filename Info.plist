@@ -25,6 +25,10 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleHelpBookFolder</key>
+	<string>Choreographer.help</string>
+	<key>CFBundleHelpBookName</key>
+	<string>Choreographer Help</string>
 	<key>CFBundleIconFile</key>
 	<string>choreographer_icons.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -36,7 +40,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>alpha 3</string>
+	<string>alpha 4</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
@@ -45,10 +49,6 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
-	<key>CFBundleHelpBookFolder</key>
-	<string>Choreographer.help</string>
-	<key>CFBundleHelpBookName</key>
-	<string>Choreographer Help</string>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>

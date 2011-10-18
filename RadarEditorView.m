@@ -41,6 +41,8 @@
 	gridMode = 0;
 	draggingOrigin.x = -1;
 
+    tempEditorSelection = [[NSMutableSet alloc] init];
+
 	// colors
 	backgroundColor		= [[NSColor colorWithCalibratedRed: 0.3 green: 0.3 blue: 0.3 alpha: 1] retain];
 	circleColor			= [[NSColor colorWithCalibratedRed: 0.85 green: 0.85 blue: 0.85 alpha: 1.0] retain];  
@@ -68,6 +70,8 @@
 {
 	NSLog(@"RadarEditorView: dealloc");
 	
+	[tempEditorSelection release];
+
 	[originalPosition release];
 	[gridPath release];
 	
@@ -166,6 +170,8 @@
 
 - (void)drawRegionPositions:(NSRect)rect
 {
+    NSLog(@"draw region position.....");
+
 	RadarPoint		regionPositionHandle;
 	NSString		*string;												
 	SpatialPosition	*pos;
@@ -186,9 +192,10 @@
 		regionPositionHandle = [self makePointX:[[pos valueForKey:@"x"] floatValue] Y:[[pos valueForKey:@"y"] floatValue] Z:[[pos valueForKey:@"z"] floatValue]];
 		
 		// draw the trajecory associated with this region
-		if([region valueForKey:@"trajectoryItem"])
+        TrajectoryItem *trajectoryItem = [region valueForKey:@"trajectoryItem"];
+		if(trajectoryItem)
 		{
-			[self drawLinkedBreakpoints:[region valueForKey:@"trajectoryItem"] forRegion:region];
+			[self drawPositionBreakpoints:[region valueForKey:@"trajectoryItem"] forRegion:region];
 			[self drawAdditionalShapes:[region valueForKey:@"trajectoryItem"] forRegion:region];
 			[self drawAdditionalHandles:[region valueForKey:@"trajectoryItem"]];
 		}
@@ -199,17 +206,17 @@
 
 		if([editorSelection containsObject:region])
 			[handleFillColorSelected set];
-//		else if(![trajectoryItem adaptiveInitialPosition])
-//			[handleFillColorNonEditable set];
+		else if(![[trajectoryItem valueForKey:@"adaptiveInitialPosition"] boolValue])
+			[handleFillColorNonEditable set];
 		else
 			[handleFillColorEditable set];				
 
 		[regionPositionPathXY fill];
 		DRAW_XZ([regionPositionPathXZ fill]);
 
-//		if(![trajectoryItem adaptiveInitialPosition])
-//			[handleFrameColorNonEditable set];
-//		else
+		if(![[trajectoryItem valueForKey:@"adaptiveInitialPosition"] boolValue])
+			[handleFrameColorNonEditable set];
+		else
 			[handleFrameColorEditable set];
 
 		[regionPositionPathXY stroke];
@@ -228,9 +235,9 @@
 	// reverse: first trajectory (= editable) is drawn last, i.e. frontmost
 	id trajectoryItem;
 	
-	while(trajectoryItem = [trajectoryEnumerator nextObject])
+	while((trajectoryItem = [trajectoryEnumerator nextObject]))
 	{
-		[self drawLinkedBreakpoints:trajectoryItem forRegion:nil];
+		[self drawPositionBreakpoints:trajectoryItem forRegion:nil];
 		[self drawAdditionalShapes:trajectoryItem forRegion: nil];
 		[self drawAdditionalHandles:trajectoryItem];
 
@@ -258,7 +265,7 @@
 
 
 
-- (void)drawLinkedBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region
+- (void)drawPositionBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region
 {
 	Breakpoint *breakpoint;
 	BreakpointBezierPath *handleBezierPathXY, *handleBezierPathXZ;
@@ -272,7 +279,7 @@
 	else
 		[lineColorNonEditable set];
 
-	for(breakpoint in [trajectory linkedBreakpointArrayWithInitialPosition:[region valueForKey:@"position"]])
+	for(breakpoint in [trajectory positionBreakpointsWithInitialPosition:[region valueForKey:@"position"]])
 	{
 		if(p1.x == -2)
 		{
@@ -290,7 +297,7 @@
 	
 	// draw breakpoint handles
 
-	for(breakpoint in [trajectory linkedBreakpointArrayWithInitialPosition:[region valueForKey:@"position"]])
+	for(breakpoint in [trajectory positionBreakpointsWithInitialPosition:[region valueForKey:@"position"]])
 	{
 		p1 = [self makePointX:[breakpoint x] Y:[breakpoint y] Z:[breakpoint z]];
 	
@@ -321,15 +328,22 @@
 {
 	RadarPoint p1;
 	BreakpointBezierPath *breakpointBezierPathXY, *breakpointBezierPathXZ;
+    Breakpoint* bp;
+    SpatialPosition *pos;
 	
-	for(id position in [trajectory additionalPositions])
+	for(bp in [trajectory valueForKeyPath:@"parameterBreakpoints"])
 	{
-		p1 = [self makePointX:[position x] Y:[position y] Z:[position z]];
+        if([bp breakpointType] == breakpointTypeValue ||
+           [[bp descriptor] isEqualToString:@"Init"] && [[trajectory valueForKey:@"adaptiveInitialPosition"] boolValue]) continue;
+        
+		pos = [bp position];
+
+        p1 = [self makePointX:[pos x] Y:[pos y] Z:[pos z]];
 		
 		breakpointBezierPathXY = [BreakpointBezierPath breakpointBezierPathWithType:breakpointTypeAuxiliary location:NSMakePoint(p1.x, p1.y1)];
 		breakpointBezierPathXZ = [BreakpointBezierPath breakpointBezierPathWithType:breakpointTypeAuxiliary location:NSMakePoint(p1.x, p1.y2)];
 		
-		if([editorSelection containsObject:position])
+		if([editorSelection containsObject:bp])
 			[handleFillColorSelected set];
 		else if(trajectory == editableTrajectory)
 			[handleFillColorEditable set];
@@ -364,12 +378,12 @@
 		case rotationType:
 			rotationPath = [NSBezierPath bezierPath];
 			
-			centre = [[trajectoryItem additionalPositions] objectAtIndex:0];
+			centre = [trajectoryItem valueForKeyPath:@"trajectory.rotationCentre.position"];
 			cp = [self makePointX:[centre x] Y:[centre y] Z:[centre z]];									  
 			
 			if(![[trajectoryItem valueForKey:@"adaptiveInitialPosition"] boolValue])
 			{
-				position = [[trajectoryItem additionalPositions] objectAtIndex:1];
+				position = [trajectoryItem valueForKeyPath:@"trajectory.initialPosition.position"];
 				radius = pow(pow([centre x] - [position x],2)+pow([centre y] - [position y],2), 0.5) * (radarSize - 10) * 0.5;
 				[rotationPath appendBezierPathWithArcWithCenter:NSMakePoint(cp.x, cp.y1) radius:radius startAngle:0 endAngle:360];
 			}
@@ -397,10 +411,10 @@
 
 	
 		case randomType:
-			position = [[trajectoryItem additionalPositions] objectAtIndex:0];
+			position = [trajectoryItem valueForKeyPath:@"trajectory.boundingVolumePoint1.position"];
 			pt1 = [self makePointX:[position x] Y:[position y] Z:[position z]];									  
 
-			position = [[trajectoryItem additionalPositions] objectAtIndex:1];
+			position = [trajectoryItem valueForKeyPath:@"trajectory.boundingVolumePoint2.position"];
 			pt2 = [self makePointX:[position x] Y:[position y] Z:[position z]];									  
 
 			NSRect r = NSMakeRect(pt1.x, pt1.y1, pt2.x - pt1.x, pt2.y1 - pt1.y1);
@@ -802,7 +816,7 @@
 - (void)selectAll:(id)sender
 {
 	[editorSelection removeAllObjects];
-	[editorSelection addObjectsFromArray:[editableTrajectory linkedBreakpointArray]];
+	[editorSelection addObjectsFromArray:[editableTrajectory positionBreakpoints]];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
 }
@@ -886,18 +900,6 @@
 }
 
 
-- (void)setSelectedPointsTo:(SpatialPosition *)pos
-{
-	NSEnumerator *enumerator;
-	id item;
-	
-	enumerator = [editorSelection objectEnumerator];
-	while ((item = [enumerator nextObject]))
-	{
-		[item setValue:pos forKey:@"position"];
-	}
-}
-
 #pragma mark -
 #pragma mark mouse events
 // -----------------------------------------------------------
@@ -913,8 +915,6 @@
 {
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	if(displayMode == noDisplayMode) return;
-	
-	id tempEditorSelection = [controller valueForKey:@"tempEditorSelection"];
 
 	SpatialPosition *showToolTip = nil;
 									   			 				   
@@ -994,8 +994,8 @@
 	else if(displayMode == trajectoryDisplayMode)
 	{
 		NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
-		[tempArray addObjectsFromArray:[editableTrajectory linkedBreakpointArray]];
-		[tempArray addObjectsFromArray:[editableTrajectory additionalPositions]];
+		[tempArray addObjectsFromArray:[editableTrajectory positionBreakpoints]];
+		[tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
 		
 		
 		// COMMAND click sets new point
@@ -1005,9 +1005,12 @@
 			[editableTrajectory addBreakpointAtPosition:newPos time:-1];
 		}
 
-		for(id breakpoint in tempArray)
+		for(Breakpoint* breakpoint in tempArray)
 		{
-			p.x = [breakpoint x];
+			if(![breakpoint position] ||
+               [[breakpoint descriptor] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue]) continue;
+            
+            p.x = [breakpoint x];
 			p.y = activeAreaOfDisplay == 0 ? [breakpoint y] : [breakpoint z];
 			
 			// ALT click opens alternativeTimelinePanel
@@ -1114,7 +1117,6 @@
 - (void)mouseDragged:(NSEvent *)event
 {	
 	id showToolTip;
-	id tempEditorSelection = [controller valueForKey:@"tempEditorSelection"];
 
 	NSPoint eventLocationInView = [self convertPoint:[event locationInWindow] fromView:nil];
 
@@ -1179,16 +1181,20 @@
 		else
 		{
 			NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
-			[tempArray addObjectsFromArray:[editableTrajectory linkedBreakpointArray]];
-			[tempArray addObjectsFromArray:[editableTrajectory additionalPositions]];
+			[tempArray addObjectsFromArray:[editableTrajectory positionBreakpoints]];
+			[tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
 
 			enumerator = [tempArray objectEnumerator];
 		}
 		
-		while (item = [enumerator nextObject])
+		while ((item = [enumerator nextObject]))
 		{			
+            if(displayMode == trajectoryDisplayMode &&
+               ([item breakpointType] == breakpointTypeValue || [[item valueForKey:@"descriptor"] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue])) continue;
+
 			pos = [item valueForKey:@"position"];
-			p1 = NSMakePoint(([pos x] + 1) * (radarSize - 10) * 0.5 + 5,
+
+            p1 = NSMakePoint(([pos x] + 1) * (radarSize - 10) * 0.5 + 5,
 							 ([pos y] + 1) * (radarSize - 10) * 0.5 + radarSize + offset + 5);
 			p2.x = p1.x;
 			p2.y = ([pos z] + 1) * (radarSize - 10) * 0.5 + offset + 5;
@@ -1206,7 +1212,6 @@
 			}
 		}
 		
-
 		[self setNeedsDisplay:YES];
 	}
 }
@@ -1220,16 +1225,15 @@
     return YES;
 }
 
-- (BOOL)becomeFirstResponder
-{
-	printf("\nRadarView -- becomeFirstResponder...");
-	return YES;
-}
+//- (BOOL)becomeFirstResponder
+//{
+//	return YES;
+//}
 
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-//	printf("\nRadar key code: %d", keyCode);
+	NSLog(@"Radar key code: %d", keyCode);
 
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	activeAreaOfDisplay = (([event modifierFlags] & NSShiftKeyMask) == 0) ? 0 : 1;
@@ -1243,8 +1247,7 @@
 		
 			if(displayMode == regionDisplayMode)
 			{
-				[self setSelectedPointsTo:[SpatialPosition positionWithX:0 Y:0 Z:0]];
-				[[EditorContent sharedEditorContent] updateModelForSelectedPoints];
+				[[EditorContent sharedEditorContent] setSelectedPointsTo:[SpatialPosition positionWithX:0 Y:0 Z:0]];
 			}
 			else if(displayMode == trajectoryDisplayMode)
 			{

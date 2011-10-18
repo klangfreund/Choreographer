@@ -58,15 +58,23 @@ static SelectionRectangle	*sharedSelectionRectangle = nil;
 - (void)setCurrentMousePosition:(NSPoint)pt
 {
 	selectionRectEnd = pt;
-
+        
 	float selectionWidth = abs(selectionRectEnd.x - selectionRectStart.x);
 	float selectionHeight = abs(selectionRectEnd.y - selectionRectStart.y);
 	float selectionStartX = selectionRectStart.x < selectionRectEnd.x ? selectionRectStart.x : selectionRectEnd.x;
 	float selectionStartY = selectionRectStart.y < selectionRectEnd.y ? selectionRectStart.y : selectionRectEnd.y;
-
+    
 	[self setFrame:NSMakeRect(selectionStartX, selectionStartY, selectionWidth, selectionHeight)];
-
+    
 	[self setNeedsDisplay:YES];
+}
+
+- (void)setCurrentMouseDelta:(NSPoint)delta
+{    
+	selectionRectEnd.x += delta.x;
+	selectionRectEnd.y += delta.y;
+
+	[self setCurrentMousePosition:selectionRectEnd];
 }
 
 @end

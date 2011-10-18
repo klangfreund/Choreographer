@@ -28,7 +28,7 @@
 
 @property float dbGain;
 @property BOOL solo, mute;
-@property (assign) SpatialPosition *position;
+@property (retain) SpatialPosition *position;
 @property int hardwareDeviceOutputChannel;
 
 

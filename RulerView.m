@@ -39,15 +39,9 @@
 	
 	[self setFrame:r];
 	
-	zoomFactor = 0.1;
+	zoomFactor = 0.0;
 
 	numOfAreas = 1;
-	
-	
-	// register for notifications
-	[[NSNotificationCenter defaultCenter] addObserver:self
-										  selector:@selector(setZoomFactor:)
-										  name:@"arrangerViewZoomFactorDidChange" object:nil];		
 }
 
 - (void) dealloc

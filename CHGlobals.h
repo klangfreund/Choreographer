@@ -6,8 +6,6 @@
 //  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
-//#define CHOREOGRAPHER_VERSION @"Version: alpha 1"
-
 
 // types for drag and drop
 #define CHAudioItemType @"audio"

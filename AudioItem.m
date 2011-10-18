@@ -16,13 +16,13 @@
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
-	NSLog(@"AudioItem %x awakeFromInsert", self);
+//    NSLog(@"AudioItem %@ awakeFromInsert", self);
 }
 
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	NSLog(@"AudioItem awakeFromFetch, path: %@", [self valueForKeyPath:@"audioFile.relativeFilePath"]);
+    //	NSLog(@"AudioItem awakeFromFetch, path: %@", [self valueForKeyPath:@"audioFile.relativeFilePath"]);
 }
 
 - (void)dealloc

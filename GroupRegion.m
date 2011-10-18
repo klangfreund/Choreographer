@@ -15,7 +15,7 @@
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
-	NSLog(@"GroupRegion %x awakeFromInsert", self);
+	NSLog(@"GroupRegion %@ awakeFromInsert", self);
 
 	duration = 0;
 	height = 0;
@@ -24,7 +24,7 @@
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	NSLog(@"GroupRegion %x awakeFromFetch", self);
+	NSLog(@"GroupRegion %@ awakeFromFetch", self);
 
 	duration = 0;
 	height = 0;
@@ -50,10 +50,7 @@
 {
 //	NSLog(@"group %@: recalc frame (duration %d height %d)", self, duration, height);
 	if(duration == 0) // duration + height have never been calculated...
-	{
-		NSEnumerator *enumerator = [[self valueForKey:@"childRegions"] objectEnumerator];
-		Region *region;
-		
+	{		
 		NSUInteger regionStartTime;
 		NSUInteger startTime = NSUIntegerMax;
 		
@@ -66,7 +63,7 @@
 		
 		height = AUDIO_BLOCK_HEIGHT;
 		
-		while(region = [enumerator nextObject])
+		for(Region *region in [self valueForKey:@"childRegions"])
 		{
 			regionStartTime = [[region valueForKey:@"startTime"] unsignedIntValue];
 			regionEndTime = [[region valueForKeyPath:@"duration"] unsignedIntValue] + regionStartTime;
@@ -108,11 +105,12 @@
 {
 	[playbackBreakpointArray release];
 	
-	playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:nil duration:[[self duration] longValue]] retain];
+	int mode = [[self valueForKey:@"trajectoryDurationMode"] intValue];
+	playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:nil duration:[[self duration] longValue] mode:mode] retain];
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])
 	{
-		NSLog(@"group region %x playback breakpoints to be modulated", self);
+		NSLog(@"group region %@ playback breakpoints to be modulated", self);
 	}
 
 	for(Region *child in [self valueForKey:@"childRegions"])

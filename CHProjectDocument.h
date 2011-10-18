@@ -15,13 +15,15 @@
 @interface CHProjectDocument : NSPersistentDocument
 {
     NSManagedObject *projectSettings;
-	
+
 	IBOutlet id toolbarController;
 	IBOutlet NSSplitView *splitView;
 	IBOutlet NSTreeController *treeController;
 	IBOutlet ArrangerView *arrangerView;
 	IBOutlet id playbackController;
-
+	IBOutlet id bounceToDiskController;
+	IBOutlet NSTextField *projectSampleRateTextField;
+	
 	PoolViewController *poolViewController;
 	
 	NSArray *draggedAudioRegions;
@@ -29,6 +31,7 @@
 	
 	Modifiers keyboardModifierKeys;
 }
+
 @property (assign) PoolViewController *poolViewController;
 @property Modifiers keyboardModifierKeys;
 
@@ -36,6 +39,7 @@
 
 
 // actions (menu)
+- (IBAction)bounceToDisk:(id)sender;
 - (IBAction)xZoomIn:(id)sender;
 - (IBAction)xZoomOut:(id)sender;
 - (IBAction)yZoomIn:(id)sender;
@@ -52,8 +56,9 @@
 // accessors
 - (float)zoomFactorX;
 - (float)zoomFactorY;
+- (void)setProjectSampleRate:(NSUInteger)val;
 
-- (NSWindowController *)windowController;
+//- (NSWindowController *)windowController;
 
 // selection management
 - (void)selectionInPoolDidChange;
@@ -62,9 +67,5 @@
 
 // notifications
 //- (void)undoNotification:(NSNotification *)notification;
-
-//...
-//- (void)refreshPoolViews;
-
 
 @end

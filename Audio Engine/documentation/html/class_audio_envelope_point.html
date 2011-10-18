@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -58,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <h1>AudioEnvelopePoint Class Reference</h1>  </div>
@@ -85,6 +90,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPositionAndValue</
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68bf17b10fd247e6c85adbe2de5db96c"></a><!-- doxytag: member="AudioEnvelopePoint::getValue" ref="a68bf17b10fd247e6c85adbe2de5db96c" args="()" -->
 float&#160;</td><td class="memItemRight" valign="bottom"><b>getValue</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a29bd3958c41eead55780a78c30eb35fc"></a><!-- doxytag: member="AudioEnvelopePoint::AudioEnvelopePoint" ref="a29bd3958c41eead55780a78c30eb35fc" args="(int position_, float value_)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>AudioEnvelopePoint</b> (int position_, float value_)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ac40056a747324949e40cd0d8c7d729"></a><!-- doxytag: member="AudioEnvelopePoint::setPosition" ref="a7ac40056a747324949e40cd0d8c7d729" args="(const int &amp;position_)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPosition</b> (const int &amp;position_)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae887352b8826e710afc75871635e41f3"></a><!-- doxytag: member="AudioEnvelopePoint::setValue" ref="ae887352b8826e710afc75871635e41f3" args="(const float &amp;value_)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setValue</b> (const float &amp;value_)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af8ecf5ffcb468f48271b50501219e744"></a><!-- doxytag: member="AudioEnvelopePoint::setPositionAndValue" ref="af8ecf5ffcb468f48271b50501219e744" args="(const int &amp;position_, const float &amp;value_)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setPositionAndValue</b> (const int &amp;position_, const float &amp;value_)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5d0b4bd0e79f31c686c4f49e2b825cf0"></a><!-- doxytag: member="AudioEnvelopePoint::getPosition" ref="a5d0b4bd0e79f31c686c4f49e2b825cf0" args="()" -->
+int&#160;</td><td class="memItemRight" valign="bottom"><b>getPosition</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a68bf17b10fd247e6c85adbe2de5db96c"></a><!-- doxytag: member="AudioEnvelopePoint::getValue" ref="a68bf17b10fd247e6c85adbe2de5db96c" args="()" -->
+float&#160;</td><td class="memItemRight" valign="bottom"><b>getValue</b> ()</td></tr>
+<tr><td colspan="2"><h2><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a173a7990faec46f840c755f4b12377d2"></a><!-- doxytag: member="AudioEnvelopePoint::JUCE_LEAK_DETECTOR" ref="a173a7990faec46f840c755f4b12377d2" args="(AudioEnvelopePoint)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>JUCE_LEAK_DETECTOR</b> (<a class="el" href="class_audio_envelope_point.html">AudioEnvelopePoint</a>)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_audio_envelope_point.html#ad05ad292b26a53e3bc03676d2022d550">position</a></td></tr>
@@ -111,8 +132,9 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Source/<a class="el" href="_audio_source_gain_envelope_8h_source.html">AudioSourceGainEnvelope.h</a></li>
+<li>Source_from_Philippe/<a class="el" href="from___philippe_2_audio_source_gain_envelope_8h_source.html">AudioSourceGainEnvelope.h</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -120,7 +142,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -129,7 +151,7 @@ float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:06 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

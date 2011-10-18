@@ -25,9 +25,6 @@
 											 selector:@selector(updateContent:)
 												 name:@"updateEditors" object:nil];
 										  
-
-	tempEditorSelection = [[NSMutableSet alloc] init];
-	
 	[[self window] setExcludedFromWindowsMenu:YES];
 	
 	[self updateContent:nil];
@@ -37,7 +34,6 @@
 {
 	NSLog(@"EditorWindowController: dealloc");
 	
-	[tempEditorSelection release];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 	[super dealloc];
 }	
@@ -49,6 +45,16 @@
 	return [[[NSDocumentController sharedDocumentController] currentDocument] undoManager];
 }
 
+- (void)showWindow:(id)sender
+{
+	[super showWindow:sender];
+	[self updateContent:nil];
+}
+
+//- (void)windowWillClose:(NSNotification *)notification
+//{
+//}
+
 - (void)updateContent:(NSNotification *)notification
 {
 	NSString *info = [[EditorContent sharedEditorContent] valueForKey:@"infoString"];
@@ -57,6 +63,8 @@
 	if([notification object] != self)
 		[self refreshView];
 }
+
+
 
 // abstract method
 - (void)refreshView{}

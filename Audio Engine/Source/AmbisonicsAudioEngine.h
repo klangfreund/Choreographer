@@ -124,7 +124,7 @@ public:
 	 
 	 If the specified channel is already there, this operation aborts.	 
 	 If n := aepChannel and m := array.size < n-1, then additional channels
-	 betwenn the m'th channel and the n'th channel are added with the initial
+	 between the m'th channel and the n'th channel are added with the initial
 	 values [gain = 1.0, solo = FALSE, mute = FALSE, activatePinkNoise = FALSE,
 	 x = 0.0, y = 1.0, z = 0.0]
 	 */
@@ -491,7 +491,9 @@ private:
 							///  AmbisonicsAudioEngine::setSpeakerPositions.
 	
 	/** Used for scope locking in enableNewRouting. */
-    CriticalSection lock;	
+    CriticalSection lock;
+	
+	JUCE_LEAK_DETECTOR (AmbisonicsAudioEngine);
 };
 
 #endif // __AMBISONICS_AUDIO_ENGINE

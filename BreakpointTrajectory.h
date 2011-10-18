@@ -8,13 +8,17 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Trajectory.h"
+#import "BreakpointArray.h"
 
 
 @interface BreakpointTrajectory : Trajectory
 {
-	NSMutableArray *breakpointArray;
 }
 
-// accessor
-- (NSUInteger)duration;
+@property NSUInteger trajectoryDuration;
+
+// accessors
+- (NSUInteger)trajectoryDuration;
+- (void)setTrajectoryDuration:(NSUInteger)val;
+
 @end

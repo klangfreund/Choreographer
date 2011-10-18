@@ -33,6 +33,10 @@
 
 + (NSArray *)allowedFileTypes;
 
+// accessor
+- (AudioFileID)audioFileID;
+- (void)setAudioFileID:(AudioFileID)fileID;
+
 - (NSString *)filePathString;
 - (BOOL)openAudioFile;
 - (void)reopenAudioFile;

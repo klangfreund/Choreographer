@@ -21,6 +21,9 @@
 											 selector:@selector(update:)
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(setZoomFactor:)
+                                                 name:@"arrangerViewZoomFactorDidChange" object:nil];		
 	[super awakeFromNib];
 	numOfAreas = 3;
 }
@@ -277,27 +280,32 @@
 	NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
 
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
-	localPoint.x -= ARRANGER_OFFSET;
+    localPoint.x = localPoint.x < ARRANGER_OFFSET ? ARRANGER_OFFSET : localPoint.x;
+	NSUInteger proposedLocator = (localPoint.x - ARRANGER_OFFSET) / zoomFactor;
 	
 	NSUInteger loopRegionStart = [[projectSettings valueForKey:@"loopRegionStart"] integerValue];
 	NSUInteger loopRegionEnd = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue];
 
 	if(mouseDraggingAction == rulerDragLoopRegionEnd)
-	{
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionEnd"];
-		
-		if(loopRegionEnd < loopRegionStart)
+	{		
+		if(proposedLocator >= loopRegionStart)
 		{
-			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionStart] forKey:@"loopRegionEnd"];
+            [projectSettings setValue:[NSNumber numberWithUnsignedInt:proposedLocator] forKey:@"loopRegionEnd"];
+		}
+        else
+		{
+            [projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionStart] forKey:@"loopRegionEnd"];
 		}
 	}
 	else if(mouseDraggingAction == rulerDragLoopRegionStart)
 	{
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionStart"];
-
-		if(loopRegionStart > loopRegionEnd)
+		if(proposedLocator <= loopRegionEnd)
 		{
-			[projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionEnd] forKey:@"loopRegionStart"];
+            [projectSettings setValue:[NSNumber numberWithUnsignedInt:proposedLocator] forKey:@"loopRegionStart"];
+		}
+        else
+		{
+            [projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionEnd] forKey:@"loopRegionStart"];
 		}
 	}
 	

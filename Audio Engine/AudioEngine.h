@@ -38,7 +38,6 @@
 - (void)setup;
 
 // Menu (UI Actions)
-- (void)bounceToDisk;
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
@@ -56,6 +55,8 @@
 
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end;
 - (void)unsetLoop;
+
+- (void)bounceToDisk:(NSURL *)URL start:(unsigned long)start end:(unsigned long)end;
 
 
 // Getter

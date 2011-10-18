@@ -19,23 +19,22 @@
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
-	NSLog(@"TrajectoryItem %x awakeFromInsert", self);
+//	NSLog(@"TrajectoryItem %@ awakeFromInsert", self);
 }
 
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	NSLog(@"TrajectoryItem %x awakeFromFetch", self);
+//	NSLog(@"TrajectoryItem %@ awakeFromFetch", self);
 
 	[self unarchiveData];
 }
-
 
 - (void)dealloc
 {
 	[trajectory release];
 
-	NSLog(@"TrajectoryItem %x dealloc", self);
+	NSLog(@"TrajectoryItem %@ dealloc", self);
 	[super dealloc];
 }
 
@@ -62,16 +61,16 @@
 #pragma mark breakpoints for visualisation
 // -----------------------------------------------------------
 
-- (NSArray *)linkedBreakpointArray
+- (NSArray *)positionBreakpoints
 {
-	return [self linkedBreakpointArrayWithInitialPosition:nil];
+	return [self positionBreakpointsWithInitialPosition:nil];
 }
 	
 	
-- (NSArray *)linkedBreakpointArrayWithInitialPosition:(SpatialPosition *)pos
+- (NSArray *)positionBreakpointsWithInitialPosition:(SpatialPosition *)pos
 {
 	if(![[self valueForKey:@"adaptiveInitialPosition"] boolValue])
-		return [trajectory linkedBreakpoints];
+		return [trajectory positionBreakpoints];
 	
 	// adaptive initial breakpoint
 	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
@@ -89,22 +88,18 @@
 		[bp setBreakpointType:breakpointTypeAdaptiveInitial];
 	}
 	
-	NSMutableArray *tempArray = [[trajectory linkedBreakpoints] mutableCopy];
+	NSMutableArray *tempArray = [[trajectory positionBreakpoints] mutableCopy];
 	
 	[tempArray replaceObjectAtIndex:0 withObject:bp];
 	
 	return tempArray;
 }
 
-- (NSArray *)additionalPositions
+- (NSArray *)parameterBreakpoints;
 {
-	return [trajectory additionalPositions];
+    return [trajectory parameterBreakpoints];
 }
 
-- (NSString *)additionalPositionName:(id)item
-{
-	return [trajectory additionalPositionName:item];
-}
 
 - (SpatialPosition *)namePosition
 {
@@ -116,7 +111,7 @@
 		switch([self trajectoryType])
 		{
 			case 0:
-				return [(SpatialPosition *)[[trajectory valueForKey:@"breakpointArray"] objectAtIndex:0] position];
+				return [(SpatialPosition *)[[trajectory valueForKeyPath:@"positionBreakpoints"] objectAtIndex:0] position];
 			case 1:
 				return [trajectory valueForKey:@"initialPosition"];
 			case 2:
@@ -151,10 +146,8 @@
 #pragma mark breakpoints for audio playback
 // -----------------------------------------------------------
 
-- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur
-{
-	int mode = [[self valueForKey:@"durationMode"] intValue];
-	
+- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
+{	
 	if([[self valueForKey:@"adaptiveInitialPosition"] boolValue])
 		return [trajectory playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:dur mode:mode];
 	else
@@ -174,14 +167,14 @@
 - (void)updateModel
 {
 	// synchronize trajectory data
-	NSLog(@"Trajectory item %x: updateModel", self);
+	// NSLog(@"Trajectory item %@: updateModel", self);
 	
 	// (re)calcalate duration
 	if(trajectoryType == breakpointType)
 	{
-		[self setValue:[trajectory valueForKey:@"duration"] forKey:@"duration"];
+		[self setValue:[trajectory valueForKey:@"trajectoryDuration"] forKey:@"duration"];
 	}
-	
+	    
 	// store actual data in model
 	[self archiveData];
 	
@@ -202,6 +195,7 @@
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time
 {
 	[trajectory addBreakpointAtPosition:pos time:time];
+    [self updateModel];
 }
 
 

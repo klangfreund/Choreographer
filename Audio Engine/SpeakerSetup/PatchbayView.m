@@ -200,6 +200,10 @@
 
 - (void)mouseDown:(NSEvent *)event
 {
+	// on mouse down, remove focus from all text fields
+	//[[self window] performSelectorOnMainThread:@selector(makeFirstResponder:) withObject:nil waitUntilDone:NO];
+	[[self window] performSelectorOnMainThread:@selector(makeFirstResponder:) withObject:self waitUntilDone:NO];
+	
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	draggingCurrentPosition = localPoint;
 
@@ -330,6 +334,15 @@
 {
     return YES;
 }
+
+- (BOOL)resignFirstResponder
+{
+	selectedPatchCord = -1;
+	[self setNeedsDisplay:YES];
+	
+	return YES;
+}
+
 
 - (void)keyDown:(NSEvent *)event
 {

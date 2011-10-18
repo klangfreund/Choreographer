@@ -18,5 +18,6 @@
 + (void)release;
 - (void)addRectangleWithOrigin:(NSPoint)pt forView:(NSView *)view;
 - (void)setCurrentMousePosition:(NSPoint)pt;
+- (void)setCurrentMouseDelta:(NSPoint)delta;
 
 @end

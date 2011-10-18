@@ -13,9 +13,9 @@
 @interface TrajectoryInspectorWindowController : NSWindowController
 {
 	TrajectoryItem *currentTrajectoryItem;
-	id breakpointTrajectoryItem;
-	id rotationTrajectoryItem;
-	id randomTrajectoryItem;
+//	id breakpointTrajectoryItem;
+//	id rotationTrajectoryItem;
+//	id randomTrajectoryItem;
 
 	IBOutlet NSView *breakpointInspectorView;
 	IBOutlet NSView *rotationInspectorView;

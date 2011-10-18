@@ -38,12 +38,11 @@
 		// accessory view (project sample rate)
 		[self setValue:[NSNumber numberWithInt:44100] forKey:@"projectSampleRate"];
 		[savePanel setAccessoryView:openPanelAccessoryView];
-
+		
 		if([savePanel runModal] == NSOKButton)
 		{
 			[[NSDocumentController sharedDocumentController] newDocument:sender];
-			
-			[currentProjectDocument setValue:[NSNumber numberWithInt:projectSampleRate] forKeyPath:@"projectSettings.projectSampleRate"];
+			[currentProjectDocument setValue:[NSNumber numberWithInt:projectSampleRate] forKeyPath:@"projectSampleRate"];
 			
 			// currentProjectDocument has been set in the ProjectDocuments init method
 			[currentProjectDocument saveToURL:[savePanel URL]
@@ -130,6 +129,14 @@
 
 
 
+    // show editor windows as stored in preferences
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"radarEditorVisible"])
+        [[RadarEditorWindowController sharedRadarEditorWindowController] showWindow:nil];
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"tableEditorVisible"])
+        [[TableEditorWindowController sharedTableEditorWindowController] showWindow:nil];
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"timelineEditorVisible"])
+        [[TimelineEditorWindowController sharedTimelineEditorWindowController] showWindow:nil];
+
 	[startupSplashWindow orderOut:nil];
 }
 
@@ -187,7 +194,7 @@
 	NSInteger tag;
 	id windowController = [[notification object] windowController];
 	
-	if(windowController == [currentProjectDocument windowController])
+	if(windowController == [[currentProjectDocument windowControllers] objectAtIndex:0])//[currentProjectDocument windowController])
 		tag = 1;
 	else if(windowController == [RadarEditorWindowController sharedRadarEditorWindowController])
 		tag = 2;
@@ -195,6 +202,8 @@
 		tag = 3;
 	else if(windowController == [TimelineEditorWindowController sharedTimelineEditorWindowController])
 		tag = 4;
+	else if(windowController == [MarkersWindowController sharedMarkersWindowController])
+		tag = 5;
 	else
 		return;
 	

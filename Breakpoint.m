@@ -11,15 +11,20 @@
 
 @implementation Breakpoint
 
-//+ (Breakpoint *)breakpointWithTime:(long)t value:(float)val
-//{
-//	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
-//	
-//	[bp setTime:t];
-//	[bp setValue:val];
-//	
-//	return bp;
-//}
+@synthesize hasTime;
+@synthesize timeEditable;
+@synthesize descriptor;
+
++ (Breakpoint *)breakpointWithTime:(long)t value:(float)val
+{
+	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
+	
+	[bp setTime:t];
+	[bp setValue:val];
+    [bp setBreakpointType:breakpointTypeValue];
+	
+	return bp;
+}
 
 + (Breakpoint *)breakpointWithTime:(NSUInteger)t position:(SpatialPosition *)pos
 {
@@ -28,9 +33,18 @@
 	[bp setTime:t];
 	[bp setPosition:pos];
 	
-	return bp;
-	
+	return bp;	
 }
+
++ (Breakpoint *)breakpointWithPosition:(SpatialPosition *)pos
+{
+	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
+	
+	[bp setPosition:pos];
+	
+	return bp;	
+}
+
 
 
 - (Breakpoint *)copy
@@ -47,12 +61,15 @@
 
 - (id)init
 {
-	if (self = [super init])
+    self = [super init];
+	if (self)
 	{
-		breakpointType = breakpointTypeNone;
+		position = [[SpatialPosition alloc] init];
+        breakpointType = breakpointTypeNone;
 		time = 0;
 		value = 0;
-		position = [[SpatialPosition alloc] init];
+        hasTime = NO;
+        timeEditable = YES;
     }
     return self;
 }
@@ -80,7 +97,11 @@
 
 - (void)setTime:(NSUInteger)val
 {
-	time = val > 0 ? val : 0;
+    if(timeEditable)
+    {
+        hasTime = YES;
+        time = val;
+    }
 }
 
 - (NSUInteger)time {return time;}
@@ -124,6 +145,9 @@
     time = [coder decodeInt32ForKey:@"time"];
     value = [coder decodeFloatForKey:@"val"];
     position = [[coder decodeObjectForKey:@"pos"] retain];
+    hasTime = [coder decodeBoolForKey:@"has_time"];
+    timeEditable = [coder decodeBoolForKey:@"time_edit"];
+    descriptor = [[coder decodeObjectForKey:@"descr"] retain];
     return self;
 }
 
@@ -133,6 +157,9 @@
     [coder encodeInt32:time forKey:@"time"];
     [coder encodeFloat:value forKey:@"val"];
 	[coder encodeObject:position forKey:@"pos"];
+    [coder encodeBool:hasTime forKey:@"has_time"];
+    [coder encodeBool:timeEditable forKey:@"time_edit"];
+    [coder encodeObject:descriptor forKey:@"descr"];
 }
 
 @end

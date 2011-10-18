@@ -13,8 +13,6 @@
 @interface EditorWindowController : NSWindowController
 {
 	IBOutlet NSTextField	*infoTextField;
-
-	NSMutableSet *tempEditorSelection;
 }
 
 // notifications

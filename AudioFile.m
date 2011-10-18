@@ -8,12 +8,10 @@
 
 #import "AudioFile.h"
 #import "ProgressPanel.h"
-#import "Path.h"
 
 
 @implementation AudioFile
 
-@synthesize audioFileID;
 
 #pragma mark -
 #pragma mark class methods
@@ -104,13 +102,13 @@
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
-	NSLog(@"AudioFile %x awakeFromInsert", self);
+	//NSLog(@"AudioFile %x awakeFromInsert", self);
 }
 
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
+	//NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
 	[self reopenAudioFile];
 }
 
@@ -120,6 +118,21 @@
 	[super dealloc];
 	[waveformImage dealloc];
 }
+
+#pragma mark -
+#pragma mark accessors
+
+- (AudioFileID)audioFileID
+{
+    if(audioFileID) return audioFileID;
+    
+	audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
+    return audioFileID;
+}
+
+- (void)setAudioFileID:(AudioFileID)fileID
+{}
+
 
 #pragma mark -
 #pragma mark file
@@ -161,7 +174,10 @@
 										 defaultButton:@"Can't import"
 									   alternateButton:nil
 										   otherButton:nil
-							 informativeTextWithFormat:[NSString stringWithFormat:@"%@ doesn't have the appropriate sample rate", [self filePathString]]];
+							 informativeTextWithFormat:[NSString stringWithFormat:@"%@ doesn't have the appropriate sample rate (%d instead of %d)",
+                                                        [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue],
+                                                         [self filePathString],
+                                                        basicDescription.mSampleRate]];
 		
 		// show alert in a modal dialog
 		[alert runModal];

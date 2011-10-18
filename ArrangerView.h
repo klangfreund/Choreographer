@@ -160,7 +160,6 @@ typedef enum _ArrangerViewDragAndDropAction
 - (IBAction)repeat:(id)sender;
 - (IBAction)trim:(id)sender;
 - (IBAction)split:(id)sender;
-- (IBAction)heal:(id)sender;
 
 // context menu actions
 - (IBAction)contextAddNewTrajectory:(id)sender;

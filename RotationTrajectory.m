@@ -14,11 +14,21 @@
 
 - (id)init
 {
-	if(self = [super init])
+    self = [super init];
+	if(self)
 	{
-		rotationCentre = [[SpatialPosition positionWithX:0 Y:0 Z:0] retain];
-		initialPosition = [[SpatialPosition positionWithX:0.5 Y:0 Z:0] retain];
-		speed = 10;
+		initialPosition = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.5 Y:0 Z:0]] retain];
+        [initialPosition setDescriptor:@"Init"];
+		rotationCentre = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.0 Y:0 Z:0]] retain];
+        [rotationCentre setDescriptor:@"Center"];
+		initialSpeed = [[Breakpoint breakpointWithTime:0 value:10] retain];
+        [initialSpeed setDescriptor:@"Speed"];
+        [initialSpeed setTimeEditable:NO];
+        
+        parameterBreakpointArray = [[BreakpointArray alloc] init];
+        [parameterBreakpointArray addBreakpoint:initialPosition];
+        [parameterBreakpointArray addBreakpoint:rotationCentre];
+        [parameterBreakpointArray addBreakpoint:initialSpeed];
 	}
 	return self;	
 }
@@ -26,56 +36,51 @@
 - (id)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
-    initialPosition = [[coder decodeObjectForKey:@"initialPosition"] retain];
-    rotationCentre = [[coder decodeObjectForKey:@"centre"] retain];
-    speed = [[coder decodeObjectForKey:@"speed"] floatValue];
-	
+    parameterBreakpointArray = [[coder decodeObjectForKey:@"parameterBreakpointArray"] retain];
+
+    for(Breakpoint *bp in parameterBreakpointArray)
+    {
+        if([[bp descriptor] isEqualToString:@"Center"])
+            rotationCentre = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"Init"])
+            initialPosition = [bp retain];
+        else if([[bp descriptor] isEqualToString:@"Speed"] && [bp time] == 0)
+            initialSpeed = [bp retain];
+    }
+
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
     [super encodeWithCoder:coder];
-    [coder encodeObject:initialPosition forKey:@"initialPosition"];
-    [coder encodeObject:rotationCentre forKey:@"centre"];
-    [coder encodeObject:[NSNumber numberWithFloat:speed] forKey:@"speed"];
+    [coder encodeObject:parameterBreakpointArray forKey:@"parameterBreakpointArray"];
 }
 
 - (void)dealloc
 {
-	[initialPosition release];
-	[rotationCentre release];
+    [rotationCentre release];
+    [initialPosition release];
+    [initialSpeed release];
+    [parameterBreakpointArray release];
 	[super dealloc];
 }
 
-- (void)setSpeed:(float)val
+- (void)setInitialSpeed:(float)val
 {
-	speed = val;
+    [initialSpeed setValue:val];
 	[trajectoryItem archiveData];
 }
 
-- (NSArray *)additionalPositions
-{
-	if(!initialPosition || !rotationCentre) return nil;
-	
-	if(![[trajectoryItem valueForKey:@"adaptiveInitialPosition"] boolValue])
-	{
-		return [NSArray arrayWithObjects:rotationCentre, initialPosition, nil];
-	}
-	else
-	{
-		return [NSArray arrayWithObjects:rotationCentre, nil];
-	}
-}
-
-- (NSString *)additionalPositionName:(id)item
-{
-	if(item == initialPosition) return @"init";
-	if(item == rotationCentre) return @"centre";
-	
-	return @"--";
-}
-
+//- (NSArray *)additionalPositions
+//{
+//    return nil;
+//}
+//
+//- (NSString *)additionalPositionName:(id)item
+//{
+//	return @"- nil -";
+//}
 
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
@@ -83,16 +88,21 @@
 	NSUInteger originalDur = [[trajectoryItem valueForKey:@"duration"] unsignedLongValue];
 	NSUInteger duration;
 	NSUInteger time = 0;
-	int timeIncrement = 1000. / fabs(speed);
-	int azimuthIncrement = speed > 0 ? 1 : -1;
 	
 	Breakpoint *bp;
-	SpatialPosition *tempPosition;
+	SpatialPosition *startPosition, *tempPosition;
+    
+    BreakpointArray *speedBreakpoints = [parameterBreakpointArray filteredBreakpointArrayUsingDescriptor:@"Speed"];
+    float speed;
+    int timeIncrement;
+	int azimuthIncrement;
 
 	if(pos)
-		tempPosition = [pos copy];
+		startPosition = [pos copy];
 	else
-		tempPosition = [[initialPosition position] copy];
+		startPosition = [[initialPosition position] copy];
+    
+    tempPosition = [startPosition copy];
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 
@@ -112,8 +122,17 @@
 		[bp setPosition:[tempPosition copy]];
 		[bp setTime:time];
 		[tempArray addObject:bp];
-		
-		if(mode == durationModePalindrome && (time % originalDur) == 0 && time != 0)
+        
+        speed = [speedBreakpoints interpolatedValueAtTime:time];
+		timeIncrement = 1000. / fabs(speed);
+        azimuthIncrement = speed > 0 ? 1 : -1;
+        
+		if(mode == durationModeLoop && (time % originalDur) < timeIncrement && time > timeIncrement)
+        {
+            [tempPosition setA:[startPosition a]];
+            time -= (time % originalDur);
+        }
+        else if(mode == durationModePalindrome && (time % originalDur) < timeIncrement && time > timeIncrement)
 			azimuthIncrement *= -1;
 		
 		time += timeIncrement;

@@ -18,10 +18,9 @@
 {
 	ArrangerView *superview;
 	
-    NSManagedObject *trajectoryItem;
     NSManagedObject *projectSettings;
 
-	NSMutableArray *gainBreakpointArray;
+	BreakpointArray *gainBreakpointArray;
 	BreakpointView *gainBreakpointView;
 
 	NSRect frame;
@@ -62,7 +61,7 @@
 //- (void)undoableRefreshView;
 
 // gain
-- (void)setGainBreakpointArray:(NSArray *)array;
+//- (void)setGainBreakpointArray:(NSArray *)array;
 - (void)removeSelectedGainBreakpoints;
 
 // abstract methods

@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 <div class="header">
@@ -79,259 +83,276 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00019"></a>00019 <span class="comment">//==============================================================================</span>
 <a name="l00023"></a><a class="code" href="structaep_channel_settings.html">00023</a> <span class="comment"></span><span class="keyword">struct </span>JUCE_API <a class="code" href="structaep_channel_settings.html" title="Contains the AEP audio channel settings.">aepChannelSettings</a>
 <a name="l00024"></a>00024 {
-<a name="l00027"></a><a class="code" href="structaep_channel_settings.html#a51fe231b739610d9c0c7ce3ef1b9085f">00027</a>         <span class="keywordtype">double</span> <a class="code" href="structaep_channel_settings.html#a51fe231b739610d9c0c7ce3ef1b9085f" title="The gain of the AEP channel.">gain</a>;
-<a name="l00028"></a>00028         
-<a name="l00031"></a><a class="code" href="structaep_channel_settings.html#a3ca0d13f5e9b60b9ca4b09f886f1078c">00031</a>         <span class="keywordtype">double</span> <a class="code" href="structaep_channel_settings.html#a3ca0d13f5e9b60b9ca4b09f886f1078c" title="Used to apply a gain ramp in the getNextAudioBlock.">lastGain</a>;
-<a name="l00032"></a>00032         
-<a name="l00038"></a><a class="code" href="structaep_channel_settings.html#a70315fcaa403ab4f02b01fcb24cfdddd">00038</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a70315fcaa403ab4f02b01fcb24cfdddd" title="Engages the solo.">solo</a>;
-<a name="l00039"></a>00039         
-<a name="l00042"></a><a class="code" href="structaep_channel_settings.html#a191db4baf1d17e7559bc297fcfbb85cb">00042</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a191db4baf1d17e7559bc297fcfbb85cb" title="Engages the mute.">mute</a>;
-<a name="l00043"></a>00043         
-<a name="l00046"></a><a class="code" href="structaep_channel_settings.html#a0963ad46fdc141bb693ae7c75e8076ce">00046</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a0963ad46fdc141bb693ae7c75e8076ce" title="Activates the pink noise generator on this AEP channel.">activatePinkNoise</a>;
-<a name="l00047"></a>00047         
-<a name="l00050"></a><a class="code" href="structaep_channel_settings.html#a5a816333d77ff94402d6fcd8eaa9c96c">00050</a>         <a class="code" href="class_speaker_position.html" title="Describes a point in space in cartesian coordinates.">SpeakerPosition</a> <a class="code" href="structaep_channel_settings.html#a5a816333d77ff94402d6fcd8eaa9c96c" title="Specifies the speaker position in space in cartesian coordinates.">speakerPosition</a>;
-<a name="l00051"></a>00051         
-<a name="l00058"></a><a class="code" href="structaep_channel_settings.html#ae1b8dfa1ce58fc23370bdbc2294311bd">00058</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#ae1b8dfa1ce58fc23370bdbc2294311bd" title="Enables the measurement of the samples that are sent to the audio driver.">enableMeasurement</a>;
-<a name="l00059"></a>00059         
-<a name="l00065"></a><a class="code" href="structaep_channel_settings.html#a84e65056d2d8e3ae27343e0bcd4ab15d">00065</a>         <span class="keywordtype">float</span> <a class="code" href="structaep_channel_settings.html#a84e65056d2d8e3ae27343e0bcd4ab15d" title="If enableOutputMeasurement is set, the root mean square with a fall off is stored in this variable...">measuredDecayingValue</a>;
-<a name="l00066"></a>00066 
-<a name="l00072"></a><a class="code" href="structaep_channel_settings.html#abbef5f9346f9dff7cd12c80e15a8be28">00072</a>         <span class="keywordtype">float</span> <a class="code" href="structaep_channel_settings.html#abbef5f9346f9dff7cd12c80e15a8be28" title="If enableOutputMeasurement is set, the peak value is stored in this variable.">measuredPeakValue</a>;
-<a name="l00073"></a>00073 };
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075 <span class="comment">//==============================================================================</span>
-<a name="l00080"></a><a class="code" href="structaep_channel_hardware_output_pair.html">00080</a> <span class="comment"></span><span class="keyword">struct </span>JUCE_API  <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>
-<a name="l00081"></a>00081 {       
-<a name="l00085"></a><a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d">00085</a>     <span class="keywordtype">int</span> <a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d" title="The AEP audio channel.">aepChannel</a>;
-<a name="l00086"></a>00086         
-<a name="l00090"></a><a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06">00090</a>     <span class="keywordtype">int</span> <a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06" title="The (physical) hardware output channel.">hardwareOutputChannel</a>;
-<a name="l00091"></a>00091 };
-<a name="l00092"></a>00092 
-<a name="l00097"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html">00097</a> <span class="keyword">class </span>JUCE_API  <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>
-<a name="l00098"></a>00098 {
-<a name="l00099"></a>00099 <span class="keyword">public</span>:
-<a name="l00100"></a>00100         <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>()
-<a name="l00101"></a>00101         : pairs()
-<a name="l00102"></a>00102         {
-<a name="l00103"></a>00103         }
-<a name="l00104"></a>00104         
-<a name="l00105"></a>00105         ~<a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>()
-<a name="l00106"></a>00106         {
-<a name="l00107"></a>00107                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++)
-<a name="l00108"></a>00108                 {
-<a name="l00109"></a>00109                         <span class="keyword">delete</span> pairs[i];
-<a name="l00110"></a>00110                 }
+<a name="l00025"></a>00025 <span class="keyword">public</span>:
+<a name="l00028"></a><a class="code" href="structaep_channel_settings.html#a51fe231b739610d9c0c7ce3ef1b9085f">00028</a>         <span class="keywordtype">double</span> <a class="code" href="structaep_channel_settings.html#a51fe231b739610d9c0c7ce3ef1b9085f" title="The gain of the AEP channel.">gain</a>;
+<a name="l00029"></a>00029         
+<a name="l00032"></a><a class="code" href="structaep_channel_settings.html#a3ca0d13f5e9b60b9ca4b09f886f1078c">00032</a>         <span class="keywordtype">double</span> <a class="code" href="structaep_channel_settings.html#a3ca0d13f5e9b60b9ca4b09f886f1078c" title="Used to apply a gain ramp in the getNextAudioBlock.">lastGain</a>;
+<a name="l00033"></a>00033         
+<a name="l00039"></a><a class="code" href="structaep_channel_settings.html#a70315fcaa403ab4f02b01fcb24cfdddd">00039</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a70315fcaa403ab4f02b01fcb24cfdddd" title="Engages the solo.">solo</a>;
+<a name="l00040"></a>00040         
+<a name="l00043"></a><a class="code" href="structaep_channel_settings.html#a191db4baf1d17e7559bc297fcfbb85cb">00043</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a191db4baf1d17e7559bc297fcfbb85cb" title="Engages the mute.">mute</a>;
+<a name="l00044"></a>00044         
+<a name="l00047"></a><a class="code" href="structaep_channel_settings.html#a0963ad46fdc141bb693ae7c75e8076ce">00047</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#a0963ad46fdc141bb693ae7c75e8076ce" title="Activates the pink noise generator on this AEP channel.">activatePinkNoise</a>;
+<a name="l00048"></a>00048         
+<a name="l00051"></a><a class="code" href="structaep_channel_settings.html#a5a816333d77ff94402d6fcd8eaa9c96c">00051</a>         <a class="code" href="class_speaker_position.html" title="Describes a point in space in cartesian coordinates.">SpeakerPosition</a> <a class="code" href="structaep_channel_settings.html#a5a816333d77ff94402d6fcd8eaa9c96c" title="Specifies the speaker position in space in cartesian coordinates.">speakerPosition</a>;
+<a name="l00052"></a>00052         
+<a name="l00059"></a><a class="code" href="structaep_channel_settings.html#ae1b8dfa1ce58fc23370bdbc2294311bd">00059</a>         <span class="keywordtype">bool</span> <a class="code" href="structaep_channel_settings.html#ae1b8dfa1ce58fc23370bdbc2294311bd" title="Enables the measurement of the samples that are sent to the audio driver.">enableMeasurement</a>;
+<a name="l00060"></a>00060         
+<a name="l00066"></a><a class="code" href="structaep_channel_settings.html#a84e65056d2d8e3ae27343e0bcd4ab15d">00066</a>         <span class="keywordtype">float</span> <a class="code" href="structaep_channel_settings.html#a84e65056d2d8e3ae27343e0bcd4ab15d" title="If enableOutputMeasurement is set, the root mean square with a fall off is stored in this variable...">measuredDecayingValue</a>;
+<a name="l00067"></a>00067 
+<a name="l00073"></a><a class="code" href="structaep_channel_settings.html#abbef5f9346f9dff7cd12c80e15a8be28">00073</a>         <span class="keywordtype">float</span> <a class="code" href="structaep_channel_settings.html#abbef5f9346f9dff7cd12c80e15a8be28" title="If enableOutputMeasurement is set, the peak value is stored in this variable.">measuredPeakValue</a>;
+<a name="l00074"></a>00074         
+<a name="l00075"></a>00075 <span class="keyword">private</span>:
+<a name="l00076"></a>00076         JUCE_LEAK_DETECTOR (<a class="code" href="structaep_channel_settings.html" title="Contains the AEP audio channel settings.">aepChannelSettings</a>);
+<a name="l00077"></a>00077 };
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079 <span class="comment">//==============================================================================</span>
+<a name="l00084"></a><a class="code" href="structaep_channel_hardware_output_pair.html">00084</a> <span class="comment"></span><span class="keyword">struct </span>JUCE_API  <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>
+<a name="l00085"></a>00085 {
+<a name="l00086"></a>00086 <span class="keyword">public</span>:
+<a name="l00090"></a><a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d">00090</a>     <span class="keywordtype">int</span> <a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d" title="The AEP audio channel.">aepChannel</a>;
+<a name="l00091"></a>00091         
+<a name="l00095"></a><a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06">00095</a>     <span class="keywordtype">int</span> <a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06" title="The (physical) hardware output channel.">hardwareOutputChannel</a>;
+<a name="l00096"></a>00096         
+<a name="l00097"></a>00097 <span class="keyword">private</span>:
+<a name="l00098"></a>00098         JUCE_LEAK_DETECTOR (<a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>);
+<a name="l00099"></a>00099 };
+<a name="l00100"></a>00100 
+<a name="l00105"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html">00105</a> <span class="keyword">class </span>JUCE_API  <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>
+<a name="l00106"></a>00106 {
+<a name="l00107"></a>00107 <span class="keyword">public</span>:
+<a name="l00108"></a>00108         <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>()
+<a name="l00109"></a>00109         : pairs()
+<a name="l00110"></a>00110         {
 <a name="l00111"></a>00111         }
 <a name="l00112"></a>00112         
-<a name="l00113"></a>00113         
-<a name="l00120"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aa2cbdfcdd0868dc5bc76a1d8be1b61e1">00120</a>         <span class="keywordtype">void</span> deletePairIfItContainsAEPChannel(<span class="keywordtype">int</span> aepChannel)
-<a name="l00121"></a>00121         {
-<a name="l00122"></a>00122                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
-<a name="l00123"></a>00123                 {
-<a name="l00124"></a>00124                         <span class="keywordflow">if</span> (pairs[i]-&gt;aepChannel == aepChannel)
-<a name="l00125"></a>00125                         <span class="comment">// A pair that contains the given aepChannel was found.</span>
-<a name="l00126"></a>00126                         {
-<a name="l00127"></a>00127                                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* theRemovedPair;
-<a name="l00128"></a>00128                                 theRemovedPair = pairs.remove(i);
-<a name="l00129"></a>00129                                 <span class="keyword">delete</span> theRemovedPair;
-<a name="l00130"></a>00130                                 <span class="keywordflow">return</span>;
-<a name="l00131"></a>00131                         }
-<a name="l00132"></a>00132                 }
-<a name="l00133"></a>00133         }
-<a name="l00134"></a>00134         
-<a name="l00141"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#ad68d2712f120fd8ccb6d64fc9be136be">00141</a>         <span class="keywordtype">void</span> deletePairIfItContainsHardwareOutputChannel(<span class="keywordtype">int</span> hardwareOutputChannel)
-<a name="l00142"></a>00142         {
-<a name="l00143"></a>00143                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
-<a name="l00144"></a>00144                 {
-<a name="l00145"></a>00145                         <span class="keywordflow">if</span> (pairs[i]-&gt;hardwareOutputChannel == hardwareOutputChannel)
-<a name="l00146"></a>00146                         <span class="comment">// A pair that contains the given aepChannel was found.</span>
-<a name="l00147"></a>00147                         {
-<a name="l00148"></a>00148                                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* theRemovedPair;
-<a name="l00149"></a>00149                                 theRemovedPair = pairs.remove(i);
-<a name="l00150"></a>00150                                 <span class="keyword">delete</span> theRemovedPair;
-<a name="l00151"></a>00151                                 <span class="keywordflow">return</span>;
-<a name="l00152"></a>00152                         }
-<a name="l00153"></a>00153                 }
-<a name="l00154"></a>00154         }
-<a name="l00155"></a>00155         
-<a name="l00162"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aabe774ab321f9119bca07fe621bafc57">00162</a>         <span class="keywordtype">void</span> add(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">int</span> hardwareOutputChannel)
-<a name="l00163"></a>00163         {
-<a name="l00164"></a>00164                 deletePairIfItContainsAEPChannel(aepChannel);
-<a name="l00165"></a>00165                 deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
-<a name="l00166"></a>00166                 
-<a name="l00167"></a>00167                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* newPair = <span class="keyword">new</span> <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>;
-<a name="l00168"></a>00168                 newPair-&gt;<a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d" title="The AEP audio channel.">aepChannel</a> = aepChannel;
-<a name="l00169"></a>00169                 newPair-&gt;<a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06" title="The (physical) hardware output channel.">hardwareOutputChannel</a> = hardwareOutputChannel;
-<a name="l00170"></a>00170                 
-<a name="l00171"></a>00171                 <span class="keywordflow">if</span> (pairs.size() == 0)
-<a name="l00172"></a>00172                         <span class="comment">// if the array pairs is empty.</span>
-<a name="l00173"></a>00173                 {
-<a name="l00174"></a>00174                         pairs.add(newPair);
-<a name="l00175"></a>00175                         <span class="keywordflow">return</span>;
-<a name="l00176"></a>00176                 }
-<a name="l00177"></a>00177 <span class="comment">//              if (hardwareOutputChannel &lt; pairs[0]-&gt;hardwareOutputChannel)</span>
-<a name="l00178"></a>00178 <span class="comment">//                      // if the new pair has the smallest hardwareOutputChennel,</span>
-<a name="l00179"></a>00179 <span class="comment">//                      // it will be the new leading element.</span>
-<a name="l00180"></a>00180 <span class="comment">//              {</span>
-<a name="l00181"></a>00181 <span class="comment">//                      pairs.insert(0, newPair);</span>
-<a name="l00182"></a>00182 <span class="comment">//                      return;</span>
-<a name="l00183"></a>00183 <span class="comment">//              }</span>
-<a name="l00184"></a>00184                 <span class="keywordtype">int</span> i = 0;
-<a name="l00185"></a>00185                 <span class="keywordflow">while</span> (i &lt; pairs.size())
-<a name="l00186"></a>00186                 {
-<a name="l00187"></a>00187                         <span class="keywordflow">if</span> (hardwareOutputChannel &lt; pairs[i]-&gt;hardwareOutputChannel)
-<a name="l00188"></a>00188                         {
-<a name="l00189"></a>00189                                 <span class="keywordflow">break</span>;
-<a name="l00190"></a>00190                         }
-<a name="l00191"></a>00191                         i++;
-<a name="l00192"></a>00192                 }
-<a name="l00193"></a>00193                 <span class="comment">// either pairs[i-1].hardwareOutputChannel &lt;= hardwareOutputChannel &lt; </span>
-<a name="l00194"></a>00194             <span class="comment">// pairs[i].hardwareOutputChannel, or i-1 is the index of the last</span>
-<a name="l00195"></a>00195                 <span class="comment">// pair in the array pairs and newPair will be the new last pair in</span>
-<a name="l00196"></a>00196                 <span class="comment">// pairs.</span>
-<a name="l00197"></a>00197                 pairs.insert(i, newPair);
-<a name="l00198"></a>00198         }
-<a name="l00199"></a>00199         
-<a name="l00202"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#af58a1c8f2edd40c3c3f96a943524599b">00202</a>         <span class="keywordtype">bool</span> containsAEPChannel(<span class="keywordtype">int</span> aepChannel)
-<a name="l00203"></a>00203         {
-<a name="l00204"></a>00204                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
-<a name="l00205"></a>00205                 {
-<a name="l00206"></a>00206                         <span class="keywordflow">if</span> (pairs[i]-&gt;aepChannel == aepChannel) 
-<a name="l00207"></a>00207                         {
-<a name="l00208"></a>00208                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00209"></a>00209                         }
-<a name="l00210"></a>00210                 }
-<a name="l00211"></a>00211                 <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00212"></a>00212         }
-<a name="l00213"></a>00213         
-<a name="l00216"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aea0631a4b8bdc6dee7f99143c0b9dd0b">00216</a>         <span class="keywordtype">bool</span> containsHardwareOutputChannel(<span class="keywordtype">int</span> hardwareOutputChannel)
-<a name="l00217"></a>00217         {
-<a name="l00218"></a>00218                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
-<a name="l00219"></a>00219                 {
-<a name="l00220"></a>00220                         <span class="keywordflow">if</span> (pairs[i]-&gt;hardwareOutputChannel == hardwareOutputChannel) 
-<a name="l00221"></a>00221                         {
-<a name="l00222"></a>00222                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00223"></a>00223                         }
-<a name="l00224"></a>00224                 }
-<a name="l00225"></a>00225                 <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00226"></a>00226         }
-<a name="l00227"></a>00227         
-<a name="l00228"></a>00228         <span class="keywordtype">int</span> size()
-<a name="l00229"></a>00229         {
-<a name="l00230"></a>00230                 <span class="keywordflow">return</span> pairs.size();
-<a name="l00231"></a>00231         }
-<a name="l00232"></a>00232         
-<a name="l00233"></a>00233         <span class="keywordtype">void</span> clear()
-<a name="l00234"></a>00234         {
-<a name="l00235"></a>00235                 pairs.clear();
-<a name="l00236"></a>00236         }
-<a name="l00237"></a>00237         
-<a name="l00238"></a>00238         <span class="keywordtype">int</span> getAepChannel(<span class="keywordtype">int</span> positionOfPairInArray)
-<a name="l00239"></a>00239         {
-<a name="l00240"></a>00240                 <span class="keywordflow">return</span> pairs[positionOfPairInArray]-&gt;aepChannel;
-<a name="l00241"></a>00241         }
-<a name="l00242"></a>00242         
-<a name="l00243"></a>00243 <span class="keyword">private</span>:
-<a name="l00244"></a>00244         Array&lt;aepChannelHardwareOutputPair*&gt; pairs;
-<a name="l00245"></a>00245 };
-<a name="l00246"></a>00246         
-<a name="l00247"></a>00247 
-<a name="l00248"></a>00248 <span class="comment">//==============================================================================</span>
-<a name="l00249"></a>00249 <span class="comment">//==============================================================================</span>
-<a name="l00255"></a><a class="code" href="class_audio_speaker_gain_and_routing.html">00255</a> <span class="comment"></span><span class="keyword">class </span>JUCE_API  <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>  : <span class="keyword">public</span> AudioSource
-<a name="l00256"></a>00256 {
-<a name="l00257"></a>00257 <span class="keyword">public</span>:
-<a name="l00258"></a>00258     <span class="comment">//==============================================================================</span>
-<a name="l00261"></a>00261 <span class="comment"></span>        <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>();
-<a name="l00262"></a>00262     <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>(AudioDeviceManager* audioDeviceManager_, <a class="code" href="class_audio_region_mixer.html" title="A PositionableAudioSource that keeps track of AudioRegion s and mixes them together.">AudioRegionMixer</a>* audioRegionMixer_);
-<a name="l00263"></a>00263         
-<a name="l00265"></a>00265     ~<a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>();
-<a name="l00266"></a>00266     
-<a name="l00267"></a>00267                 
+<a name="l00113"></a>00113         ~<a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>()
+<a name="l00114"></a>00114         {
+<a name="l00115"></a>00115                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++)
+<a name="l00116"></a>00116                 {
+<a name="l00117"></a>00117                         <span class="keyword">delete</span> pairs[i];
+<a name="l00118"></a>00118                 }
+<a name="l00119"></a>00119         }
+<a name="l00120"></a>00120         
+<a name="l00121"></a>00121         
+<a name="l00128"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aa2cbdfcdd0868dc5bc76a1d8be1b61e1">00128</a>         <span class="keywordtype">void</span> deletePairIfItContainsAEPChannel(<span class="keywordtype">int</span> aepChannel)
+<a name="l00129"></a>00129         {
+<a name="l00130"></a>00130                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
+<a name="l00131"></a>00131                 {
+<a name="l00132"></a>00132                         <span class="keywordflow">if</span> (pairs[i]-&gt;aepChannel == aepChannel)
+<a name="l00133"></a>00133                         <span class="comment">// A pair that contains the given aepChannel was found.</span>
+<a name="l00134"></a>00134                         {
+<a name="l00135"></a>00135                                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* theRemovedPair;
+<a name="l00136"></a>00136                                 theRemovedPair = pairs.remove(i);
+<a name="l00137"></a>00137                                 <span class="keyword">delete</span> theRemovedPair;
+<a name="l00138"></a>00138                                 <span class="keywordflow">return</span>;
+<a name="l00139"></a>00139                         }
+<a name="l00140"></a>00140                 }
+<a name="l00141"></a>00141         }
+<a name="l00142"></a>00142         
+<a name="l00149"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#ad68d2712f120fd8ccb6d64fc9be136be">00149</a>         <span class="keywordtype">void</span> deletePairIfItContainsHardwareOutputChannel(<span class="keywordtype">int</span> hardwareOutputChannel)
+<a name="l00150"></a>00150         {
+<a name="l00151"></a>00151                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
+<a name="l00152"></a>00152                 {
+<a name="l00153"></a>00153                         <span class="keywordflow">if</span> (pairs[i]-&gt;hardwareOutputChannel == hardwareOutputChannel)
+<a name="l00154"></a>00154                         <span class="comment">// A pair that contains the given aepChannel was found.</span>
+<a name="l00155"></a>00155                         {
+<a name="l00156"></a>00156                                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* theRemovedPair;
+<a name="l00157"></a>00157                                 theRemovedPair = pairs.remove(i);
+<a name="l00158"></a>00158                                 <span class="keyword">delete</span> theRemovedPair;
+<a name="l00159"></a>00159                                 <span class="keywordflow">return</span>;
+<a name="l00160"></a>00160                         }
+<a name="l00161"></a>00161                 }
+<a name="l00162"></a>00162         }
+<a name="l00163"></a>00163         
+<a name="l00170"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aabe774ab321f9119bca07fe621bafc57">00170</a>         <span class="keywordtype">void</span> add(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">int</span> hardwareOutputChannel)
+<a name="l00171"></a>00171         {
+<a name="l00172"></a>00172                 deletePairIfItContainsAEPChannel(aepChannel);
+<a name="l00173"></a>00173                 deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
+<a name="l00174"></a>00174                 
+<a name="l00175"></a>00175                 <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>* newPair = <span class="keyword">new</span> <a class="code" href="structaep_channel_hardware_output_pair.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">aepChannelHardwareOutputPair</a>;
+<a name="l00176"></a>00176                 newPair-&gt;<a class="code" href="structaep_channel_hardware_output_pair.html#ad0f2f1029ddaff2677275684cccd5a6d" title="The AEP audio channel.">aepChannel</a> = aepChannel;
+<a name="l00177"></a>00177                 newPair-&gt;<a class="code" href="structaep_channel_hardware_output_pair.html#aba94bbaf2db6aab558c486b3091e6a06" title="The (physical) hardware output channel.">hardwareOutputChannel</a> = hardwareOutputChannel;
+<a name="l00178"></a>00178                 
+<a name="l00179"></a>00179                 <span class="keywordflow">if</span> (pairs.size() == 0)
+<a name="l00180"></a>00180                         <span class="comment">// if the array pairs is empty.</span>
+<a name="l00181"></a>00181                 {
+<a name="l00182"></a>00182                         pairs.add(newPair);
+<a name="l00183"></a>00183                         <span class="keywordflow">return</span>;
+<a name="l00184"></a>00184                 }
+<a name="l00185"></a>00185 <span class="comment">//              if (hardwareOutputChannel &lt; pairs[0]-&gt;hardwareOutputChannel)</span>
+<a name="l00186"></a>00186 <span class="comment">//                      // if the new pair has the smallest hardwareOutputChennel,</span>
+<a name="l00187"></a>00187 <span class="comment">//                      // it will be the new leading element.</span>
+<a name="l00188"></a>00188 <span class="comment">//              {</span>
+<a name="l00189"></a>00189 <span class="comment">//                      pairs.insert(0, newPair);</span>
+<a name="l00190"></a>00190 <span class="comment">//                      return;</span>
+<a name="l00191"></a>00191 <span class="comment">//              }</span>
+<a name="l00192"></a>00192                 <span class="keywordtype">int</span> i = 0;
+<a name="l00193"></a>00193                 <span class="keywordflow">while</span> (i &lt; pairs.size())
+<a name="l00194"></a>00194                 {
+<a name="l00195"></a>00195                         <span class="keywordflow">if</span> (hardwareOutputChannel &lt; pairs[i]-&gt;hardwareOutputChannel)
+<a name="l00196"></a>00196                         {
+<a name="l00197"></a>00197                                 <span class="keywordflow">break</span>;
+<a name="l00198"></a>00198                         }
+<a name="l00199"></a>00199                         i++;
+<a name="l00200"></a>00200                 }
+<a name="l00201"></a>00201                 <span class="comment">// either pairs[i-1].hardwareOutputChannel &lt;= hardwareOutputChannel &lt; </span>
+<a name="l00202"></a>00202             <span class="comment">// pairs[i].hardwareOutputChannel, or i-1 is the index of the last</span>
+<a name="l00203"></a>00203                 <span class="comment">// pair in the array pairs and newPair will be the new last pair in</span>
+<a name="l00204"></a>00204                 <span class="comment">// pairs.</span>
+<a name="l00205"></a>00205                 pairs.insert(i, newPair);
+<a name="l00206"></a>00206         }
+<a name="l00207"></a>00207         
+<a name="l00210"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#af58a1c8f2edd40c3c3f96a943524599b">00210</a>         <span class="keywordtype">bool</span> containsAEPChannel(<span class="keywordtype">int</span> aepChannel)
+<a name="l00211"></a>00211         {
+<a name="l00212"></a>00212                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
+<a name="l00213"></a>00213                 {
+<a name="l00214"></a>00214                         <span class="keywordflow">if</span> (pairs[i]-&gt;aepChannel == aepChannel) 
+<a name="l00215"></a>00215                         {
+<a name="l00216"></a>00216                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00217"></a>00217                         }
+<a name="l00218"></a>00218                 }
+<a name="l00219"></a>00219                 <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00220"></a>00220         }
+<a name="l00221"></a>00221         
+<a name="l00224"></a><a class="code" href="class_a_e_p_channel_hardware_output_pairs.html#aea0631a4b8bdc6dee7f99143c0b9dd0b">00224</a>         <span class="keywordtype">bool</span> containsHardwareOutputChannel(<span class="keywordtype">int</span> hardwareOutputChannel)
+<a name="l00225"></a>00225         {
+<a name="l00226"></a>00226                 <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;pairs.size(); i++) 
+<a name="l00227"></a>00227                 {
+<a name="l00228"></a>00228                         <span class="keywordflow">if</span> (pairs[i]-&gt;hardwareOutputChannel == hardwareOutputChannel) 
+<a name="l00229"></a>00229                         {
+<a name="l00230"></a>00230                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00231"></a>00231                         }
+<a name="l00232"></a>00232                 }
+<a name="l00233"></a>00233                 <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00234"></a>00234         }
+<a name="l00235"></a>00235         
+<a name="l00236"></a>00236         <span class="keywordtype">int</span> size()
+<a name="l00237"></a>00237         {
+<a name="l00238"></a>00238                 <span class="keywordflow">return</span> pairs.size();
+<a name="l00239"></a>00239         }
+<a name="l00240"></a>00240         
+<a name="l00241"></a>00241         <span class="keywordtype">void</span> clear()
+<a name="l00242"></a>00242         {
+<a name="l00243"></a>00243                 pairs.clear();
+<a name="l00244"></a>00244         }
+<a name="l00245"></a>00245         
+<a name="l00246"></a>00246         <span class="keywordtype">int</span> getAepChannel(<span class="keywordtype">int</span> positionOfPairInArray)
+<a name="l00247"></a>00247         {
+<a name="l00248"></a>00248                 <span class="keywordflow">return</span> pairs[positionOfPairInArray]-&gt;aepChannel;
+<a name="l00249"></a>00249         }
+<a name="l00250"></a>00250         
+<a name="l00251"></a>00251 <span class="keyword">private</span>:
+<a name="l00252"></a>00252         <a class="code" href="class_array.html">Array&lt;aepChannelHardwareOutputPair*&gt;</a> pairs;
+<a name="l00253"></a>00253         
+<a name="l00254"></a>00254         JUCE_LEAK_DETECTOR (<a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a>);
+<a name="l00255"></a>00255 };
+<a name="l00256"></a>00256         
+<a name="l00257"></a>00257 
+<a name="l00258"></a>00258 <span class="comment">//==============================================================================</span>
+<a name="l00259"></a>00259 <span class="comment">//==============================================================================</span>
+<a name="l00265"></a><a class="code" href="class_audio_speaker_gain_and_routing.html">00265</a> <span class="comment"></span><span class="keyword">class </span>JUCE_API  <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>  : <span class="keyword">public</span> <a class="code" href="class_audio_source.html" title="Base class for objects that can produce a continuous stream of audio.">AudioSource</a>
+<a name="l00266"></a>00266 {
+<a name="l00267"></a>00267 <span class="keyword">public</span>:
 <a name="l00268"></a>00268     <span class="comment">//==============================================================================</span>
-<a name="l00276"></a>00276 <span class="comment"></span>    <span class="keywordtype">void</span> setSource (AudioSource* <span class="keyword">const</span> newAudioRegionMixer);
-<a name="l00277"></a>00277         
-<a name="l00283"></a>00283         <span class="keywordtype">void</span> setAudioDeviceManager(AudioDeviceManager* audioDeviceManager_);
-<a name="l00284"></a>00284 
-<a name="l00288"></a>00288         <span class="keywordtype">int</span> getNumberOfAepChannels();
-<a name="l00289"></a>00289         
-<a name="l00296"></a>00296         <span class="keywordtype">int</span> getNumberOfHardwareOutputChannels();
-<a name="l00297"></a>00297         
-<a name="l00306"></a>00306         <span class="keywordtype">bool</span> addAepChannel(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> gain, <span class="keywordtype">bool</span> solo, <span class="keywordtype">bool</span> mute,
-<a name="l00307"></a>00307                                            <span class="keywordtype">bool</span> activatePinkNoise, <span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> z);
-<a name="l00308"></a>00308         
-<a name="l00313"></a>00313         <span class="keywordtype">bool</span> removeAepChannel(<span class="keywordtype">int</span> aepChannel);
-<a name="l00314"></a>00314         
-<a name="l00325"></a>00325         <span class="keywordtype">bool</span> setSpeakerPosition(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> z);
-<a name="l00326"></a>00326         
-<a name="l00329"></a>00329         <span class="keywordtype">bool</span> setGain(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> gain);
-<a name="l00330"></a>00330 
-<a name="l00337"></a>00337         <span class="keywordtype">bool</span> setSolo(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
-<a name="l00338"></a>00338 
-<a name="l00341"></a>00341         <span class="keywordtype">bool</span> setMute(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
-<a name="l00342"></a>00342 
-<a name="l00345"></a>00345         <span class="keywordtype">bool</span> activatePinkNoise(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
-<a name="l00346"></a>00346         
-<a name="l00349"></a>00349         <span class="keywordtype">bool</span> enableMeasurement(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
-<a name="l00350"></a>00350 
-<a name="l00353"></a>00353         <span class="keywordtype">bool</span> resetMeasuredPeakValue(<span class="keywordtype">int</span> aepChannel);
-<a name="l00354"></a>00354 
-<a name="l00360"></a>00360         <span class="keywordtype">float</span> getMeasuredDecayingValue(<span class="keywordtype">int</span> aepChannel);
-<a name="l00361"></a>00361 
-<a name="l00367"></a>00367         <span class="keywordtype">float</span> getMeasuredPeakValue(<span class="keywordtype">int</span> aepChannel);
-<a name="l00368"></a>00368         
-<a name="l00369"></a>00369         
-<a name="l00385"></a>00385         <span class="keywordtype">void</span> setNewRouting(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">int</span> hardwareOutputChannel);
-<a name="l00386"></a>00386 
-<a name="l00392"></a>00392         <span class="keywordtype">void</span> removeAllRoutings();
-<a name="l00393"></a>00393         
-<a name="l00404"></a>00404         <span class="keywordtype">int</span> enableNewRouting();
-<a name="l00405"></a>00405 
-<a name="l00414"></a>00414         <span class="keywordtype">void</span> removeAllRoutingsAndAllAepChannels();
-<a name="l00415"></a>00415         
-<a name="l00416"></a>00416 
-<a name="l00417"></a>00417     <span class="comment">//==============================================================================</span>
-<a name="l00419"></a>00419 <span class="comment"></span>    <span class="keywordtype">void</span> prepareToPlay (<span class="keywordtype">int</span> samplesPerBlockExpected, <span class="keywordtype">double</span> sampleRate);
-<a name="l00420"></a>00420         
-<a name="l00422"></a>00422     <span class="keywordtype">void</span> releaseResources();
-<a name="l00423"></a>00423         
-<a name="l00425"></a>00425     <span class="keywordtype">void</span> getNextAudioBlock (<span class="keyword">const</span> AudioSourceChannelInfo&amp; info);
-<a name="l00426"></a>00426         
-<a name="l00427"></a>00427     <span class="comment">//==============================================================================</span>
-<a name="l00428"></a>00428 
-<a name="l00429"></a>00429         
-<a name="l00430"></a>00430 <span class="keyword">private</span>:
-<a name="l00437"></a>00437         <span class="keywordtype">bool</span> aepChannelIsConnectedWithActiveHardwareChannel(<span class="keywordtype">int</span> aepChannel);
-<a name="l00438"></a>00438         
-<a name="l00439"></a>00439         <span class="keywordtype">bool</span> deleteSpeakerPositions(Array&lt;void*&gt; positionOfSpeakers_);
+<a name="l00271"></a>00271 <span class="comment"></span>        <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>();
+<a name="l00272"></a>00272     <a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>(<a class="code" href="class_audio_region_mixer.html" title="A PositionableAudioSource that keeps track of AudioRegion s and mixes them together.">AudioRegionMixer</a>* audioRegionMixer_);
+<a name="l00273"></a>00273         
+<a name="l00275"></a>00275     ~<a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>();
+<a name="l00276"></a>00276     
+<a name="l00277"></a>00277                 
+<a name="l00278"></a>00278     <span class="comment">//==============================================================================</span>
+<a name="l00286"></a>00286 <span class="comment"></span>    <span class="keywordtype">void</span> setSource (<a class="code" href="class_audio_source.html" title="Base class for objects that can produce a continuous stream of audio.">AudioSource</a>* <span class="keyword">const</span> newAudioRegionMixer);
+<a name="l00287"></a>00287 
+<a name="l00291"></a>00291         <span class="keywordtype">int</span> getNumberOfAepChannels();
+<a name="l00292"></a>00292         
+<a name="l00295"></a>00295         <span class="keywordtype">void</span> setNumberOfHardwareOutputChannels(<span class="keywordtype">int</span> numberOfHardwareOutputChannels_);
+<a name="l00296"></a>00296         
+<a name="l00305"></a>00305         <span class="keywordtype">bool</span> addAepChannel(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> gain, <span class="keywordtype">bool</span> solo, <span class="keywordtype">bool</span> mute,
+<a name="l00306"></a>00306                                            <span class="keywordtype">bool</span> activatePinkNoise, <span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> z);
+<a name="l00307"></a>00307         
+<a name="l00312"></a>00312         <span class="keywordtype">bool</span> removeAepChannel(<span class="keywordtype">int</span> aepChannel);
+<a name="l00313"></a>00313         
+<a name="l00324"></a>00324         <span class="keywordtype">bool</span> setSpeakerPosition(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y, <span class="keywordtype">double</span> z);
+<a name="l00325"></a>00325         
+<a name="l00328"></a>00328         <span class="keywordtype">bool</span> setGain(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">double</span> gain);
+<a name="l00329"></a>00329 
+<a name="l00336"></a>00336         <span class="keywordtype">bool</span> setSolo(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
+<a name="l00337"></a>00337 
+<a name="l00340"></a>00340         <span class="keywordtype">bool</span> setMute(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
+<a name="l00341"></a>00341 
+<a name="l00344"></a>00344         <span class="keywordtype">bool</span> activatePinkNoise(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
+<a name="l00345"></a>00345         
+<a name="l00351"></a>00351         <span class="keywordtype">void</span> setAmplitudeOfPinkNoiseGenerator(<span class="keyword">const</span> <span class="keywordtype">double</span> newAmplitude_);
+<a name="l00352"></a>00352                                                                                   
+<a name="l00355"></a>00355         <span class="keywordtype">bool</span> enableMeasurement(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">bool</span> enable);
+<a name="l00356"></a>00356 
+<a name="l00359"></a>00359         <span class="keywordtype">bool</span> resetMeasuredPeakValue(<span class="keywordtype">int</span> aepChannel);
+<a name="l00360"></a>00360 
+<a name="l00366"></a>00366         <span class="keywordtype">float</span> getMeasuredDecayingValue(<span class="keywordtype">int</span> aepChannel);
+<a name="l00367"></a>00367 
+<a name="l00373"></a>00373         <span class="keywordtype">float</span> getMeasuredPeakValue(<span class="keywordtype">int</span> aepChannel);
+<a name="l00374"></a>00374         
+<a name="l00375"></a>00375         
+<a name="l00391"></a>00391         <span class="keywordtype">void</span> setNewRouting(<span class="keywordtype">int</span> aepChannel, <span class="keywordtype">int</span> hardwareOutputChannel);
+<a name="l00392"></a>00392 
+<a name="l00398"></a>00398         <span class="keywordtype">void</span> removeAllRoutings();
+<a name="l00399"></a>00399         
+<a name="l00410"></a>00410         <span class="keywordtype">int</span> enableNewRouting(<a class="code" href="class_audio_device_manager.html" title="Manages the state of some audio and midi i/o devices.">AudioDeviceManager</a> *audioDeviceManager);
+<a name="l00411"></a>00411 
+<a name="l00420"></a>00420         <span class="keywordtype">void</span> removeAllRoutingsAndAllAepChannels();
+<a name="l00421"></a>00421         
+<a name="l00429"></a>00429         <span class="keywordtype">int</span> switchToBounceMode(<span class="keywordtype">bool</span> bounceMode);
+<a name="l00430"></a>00430 
+<a name="l00431"></a>00431     <span class="comment">//==============================================================================</span>
+<a name="l00433"></a>00433 <span class="comment"></span>    <span class="keywordtype">void</span> <a class="code" href="class_audio_source.html#a653279dbd167f70e318fd280681dbddf" title="Tells the source to prepare for playing.">prepareToPlay</a> (<span class="keywordtype">int</span> samplesPerBlockExpected, <span class="keywordtype">double</span> sampleRate);
+<a name="l00434"></a>00434         
+<a name="l00436"></a>00436     <span class="keywordtype">void</span> <a class="code" href="class_audio_source.html#a7823bf0f1c43333eed41664c7994f290" title="Allows the source to release anything it no longer needs after playback has stopped.">releaseResources</a>();
+<a name="l00437"></a>00437         
+<a name="l00439"></a>00439     <span class="keywordtype">void</span> <a class="code" href="class_audio_source.html#a36fc2484ead8fb8dc03be57d09dd5735" title="Called repeatedly to fetch subsequent blocks of audio data.">getNextAudioBlock</a> (<span class="keyword">const</span> <a class="code" href="struct_audio_source_channel_info.html" title="Used by AudioSource::getNextAudioBlock().">AudioSourceChannelInfo</a>&amp; info);
 <a name="l00440"></a>00440         
-<a name="l00441"></a>00441         AudioSource* audioSource;
-<a name="l00442"></a>00442         <a class="code" href="class_audio_region_mixer.html" title="A PositionableAudioSource that keeps track of AudioRegion s and mixes them together.">AudioRegionMixer</a>* audioRegionMixer;     
-<a name="l00443"></a>00443         AudioDeviceManager* audioDeviceManager;
-<a name="l00444"></a>00444 
-<a name="l00445"></a>00445         <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a> aepChannelHardwareOutputPairs;
+<a name="l00441"></a>00441     <span class="comment">//==============================================================================</span>
+<a name="l00442"></a>00442 
+<a name="l00443"></a>00443         
+<a name="l00444"></a>00444 <span class="keyword">private</span>:
+<a name="l00451"></a>00451         <span class="keywordtype">bool</span> aepChannelIsConnectedWithActiveHardwareChannel(<span class="keywordtype">int</span> aepChannel);
 <a name="l00452"></a>00452         
-<a name="l00453"></a>00453         
-<a name="l00454"></a>00454         Array&lt;aepChannelSettings*&gt; aepChannelSettingsAscending;
-<a name="l00455"></a>00455         Array&lt;aepChannelSettings*&gt; aepChannelSettingsOrderedByActiveHardwareChannels;
-<a name="l00456"></a>00456         
-<a name="l00457"></a>00457         <span class="keywordtype">int</span> numberOfMutedChannels; 
-<a name="l00458"></a>00458         <span class="keywordtype">int</span> numberOfSoloedChannels;
-<a name="l00459"></a>00459         <span class="keywordtype">int</span> numberOfChannelsWithActivatedPinkNoise;
-<a name="l00460"></a>00460         <span class="keywordtype">int</span> numberOfChannelsWithEnabledMeasurement;
-<a name="l00461"></a>00461         
-<a name="l00462"></a>00462         Array&lt;void*&gt; positionOfSpeakers;
+<a name="l00453"></a>00453         <span class="keywordtype">bool</span> deleteSpeakerPositions(<a class="code" href="class_array.html">Array&lt;void*&gt;</a> positionOfSpeakers_);
+<a name="l00454"></a>00454         
+<a name="l00455"></a>00455         <a class="code" href="class_audio_source.html" title="Base class for objects that can produce a continuous stream of audio.">AudioSource</a>* audioSource;
+<a name="l00456"></a>00456         <a class="code" href="class_audio_region_mixer.html" title="A PositionableAudioSource that keeps track of AudioRegion s and mixes them together.">AudioRegionMixer</a>* audioRegionMixer;
+<a name="l00457"></a>00457 
+<a name="l00458"></a>00458         <a class="code" href="class_a_e_p_channel_hardware_output_pairs.html" title="Represents a connection between an AEP audio channel and a physical output of the audio hardware...">AEPChannelHardwareOutputPairs</a> aepChannelHardwareOutputPairs;
+<a name="l00465"></a>00465         
 <a name="l00466"></a>00466         
-<a name="l00467"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#a498a4456337cbc08a81bc4cf78065367">00467</a>         AudioSampleBuffer <a class="code" href="class_audio_speaker_gain_and_routing.html#a498a4456337cbc08a81bc4cf78065367" title="Used in getNextAudioBlock .">pinkNoiseBuffer</a>;  
-<a name="l00468"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#ac767c3a7affd1abade504bcdb6e2f788">00468</a>         AudioSourceChannelInfo <a class="code" href="class_audio_speaker_gain_and_routing.html#ac767c3a7affd1abade504bcdb6e2f788" title="Used in getNextAudioBlock .">pinkNoiseInfo</a>; 
-<a name="l00469"></a>00469         <a class="code" href="class_pink_noise_generator_audio_source.html" title="An AudioSource that generates correlated pink noise.">PinkNoiseGeneratorAudioSource</a> pinkNoiseGeneratorAudioSource;
-<a name="l00470"></a>00470         
-<a name="l00471"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#a73f4d008e7d1712a3f223b208dc41a52">00471</a>         CriticalSection <a class="code" href="class_audio_speaker_gain_and_routing.html#a73f4d008e7d1712a3f223b208dc41a52" title="Used in enableNewRouting .">connectionLock</a>; 
-<a name="l00472"></a>00472         CriticalSection audioSpeakerGainAndRoutingLock;
+<a name="l00467"></a>00467         <a class="code" href="class_array.html">Array&lt;aepChannelSettings*&gt;</a> aepChannelSettingsAscending;
+<a name="l00468"></a>00468         <a class="code" href="class_array.html">Array&lt;aepChannelSettings*&gt;</a> aepChannelSettingsOrderedByActiveHardwareChannels;
+<a name="l00469"></a>00469         
+<a name="l00470"></a>00470         <a class="code" href="class_array.html">Array&lt;aepChannelSettings*&gt;</a> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+<a name="l00472"></a>00472         <span class="keywordtype">bool</span> bounceMode;
 <a name="l00473"></a>00473 
-<a name="l00474"></a>00474 };
-<a name="l00475"></a>00475 
-<a name="l00476"></a>00476 
-<a name="l00477"></a>00477 <span class="preprocessor">#endif   // __AUDIOSPEAKERGAINANDROUTING_HEADER__</span>
+<a name="l00474"></a>00474         
+<a name="l00475"></a>00475         <span class="keywordtype">int</span> numberOfHardwareOutputChannels;
+<a name="l00476"></a>00476         
+<a name="l00477"></a>00477         <span class="keywordtype">int</span> numberOfMutedChannels; 
+<a name="l00478"></a>00478         <span class="keywordtype">int</span> numberOfSoloedChannels;
+<a name="l00479"></a>00479         <span class="keywordtype">int</span> numberOfChannelsWithActivatedPinkNoise;
+<a name="l00480"></a>00480         <span class="keywordtype">int</span> numberOfChannelsWithEnabledMeasurement;
+<a name="l00481"></a>00481         
+<a name="l00482"></a>00482         <a class="code" href="class_array.html">Array&lt;void*&gt;</a> positionOfSpeakers;
+<a name="l00486"></a>00486         
+<a name="l00487"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#a498a4456337cbc08a81bc4cf78065367">00487</a>         <a class="code" href="class_audio_sample_buffer.html" title="A multi-channel buffer of 32-bit floating point audio samples.">AudioSampleBuffer</a> <a class="code" href="class_audio_speaker_gain_and_routing.html#a498a4456337cbc08a81bc4cf78065367" title="Used in getNextAudioBlock .">pinkNoiseBuffer</a>;  
+<a name="l00488"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#ac767c3a7affd1abade504bcdb6e2f788">00488</a>         <a class="code" href="struct_audio_source_channel_info.html" title="Used by AudioSource::getNextAudioBlock().">AudioSourceChannelInfo</a> <a class="code" href="class_audio_speaker_gain_and_routing.html#ac767c3a7affd1abade504bcdb6e2f788" title="Used in getNextAudioBlock .">pinkNoiseInfo</a>; 
+<a name="l00489"></a>00489         <a class="code" href="class_pink_noise_generator_audio_source.html" title="An AudioSource that generates correlated pink noise.">PinkNoiseGeneratorAudioSource</a> pinkNoiseGeneratorAudioSource;
+<a name="l00490"></a>00490         
+<a name="l00491"></a><a class="code" href="class_audio_speaker_gain_and_routing.html#a73f4d008e7d1712a3f223b208dc41a52">00491</a>         <a class="code" href="class_critical_section.html" title="A mutex class.">CriticalSection</a> <a class="code" href="class_audio_speaker_gain_and_routing.html#a73f4d008e7d1712a3f223b208dc41a52" title="Used in enableNewRouting .">connectionLock</a>; 
+<a name="l00492"></a>00492         <a class="code" href="class_critical_section.html" title="A mutex class.">CriticalSection</a> audioSpeakerGainAndRoutingLock;
+<a name="l00493"></a>00493 
+<a name="l00494"></a>00494         JUCE_LEAK_DETECTOR (<a class="code" href="class_audio_speaker_gain_and_routing.html" title="A PositionableAudioSource that ...">AudioSpeakerGainAndRouting</a>);
+<a name="l00495"></a>00495 };
+<a name="l00496"></a>00496 
+<a name="l00497"></a>00497 
+<a name="l00498"></a>00498 <span class="preprocessor">#endif   // __AUDIOSPEAKERGAINANDROUTING_HEADER__</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -339,7 +360,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -348,7 +369,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:03 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

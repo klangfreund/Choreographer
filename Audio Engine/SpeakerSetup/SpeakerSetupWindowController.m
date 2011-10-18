@@ -130,7 +130,7 @@
 
 	[speakerSetupChannelStripControllers release];
 	
-	NSArray *subviews = [[patchbayView subviews] copy];
+	NSArray *subviews = [[[patchbayView subviews] copy] autorelease];
 	for(NSView *view in subviews)
 	{
 		[view removeFromSuperview];
@@ -158,7 +158,7 @@
 	
 	// add the speaker channels
 
-	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"SpeakerSetupChannelStrip" bundle:nil] ;
+	NSNib* nib = [[[NSNib alloc] initWithNibNamed:@"SpeakerSetupChannelStrip" bundle:nil] autorelease];
 	
 	NSRect r = [patchbayView frame];
 	id item;

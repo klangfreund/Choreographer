@@ -66,7 +66,7 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-//	NSLog(@"ProjectWindow key code: %d ", keyCode);
+	NSLog(@"ProjectWindow key code: %d ", keyCode);
 	
 //	short num = -1;
 	

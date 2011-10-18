@@ -12,11 +12,11 @@
 
 @interface RandomTrajectory : Trajectory
 {
-	float minSpeed;
-	float maxSpeed;
 	NSUInteger stability;
 	
-	SpatialPosition *boundingVolumePoint1, *boundingVolumePoint2;
+    Breakpoint *initialPosition;
+	Breakpoint *boundingVolumePoint1, *boundingVolumePoint2;
+    Breakpoint *initialMinSpeed, *initialMaxSpeed;
 }
 
 @end

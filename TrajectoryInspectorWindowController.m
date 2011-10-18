@@ -35,22 +35,22 @@ static TrajectoryInspectorWindowController *sharedTrajectoryInspectorWindowContr
 
 - (void)showInspectorForTrajectoryItem:(id)item
 {
-	[self showWindow:nil];
+    [self showWindow:nil];
 	
-	currentTrajectoryItem = item;
+	[self setValue:item forKey:@"currentTrajectoryItem"];
 	
 	switch ([[item valueForKey:@"trajectoryType"] intValue])
 	{
 		case 0:
-			[self setValue:item forKey:@"breakpointTrajectoryItem"];
+//			[self setValue:item forKey:@"breakpointTrajectoryItem"];
 			[[self window] setContentView:breakpointInspectorView];
 			break;
 		case 1:
-			[self setValue:item forKey:@"rotationTrajectoryItem"];
+//			[self setValue:item forKey:@"rotationTrajectoryItem"];
 			[[self window] setContentView:rotationInspectorView];
 			break;
 		case 2:
-			[self setValue:item forKey:@"randomTrajectoryItem"];
+//			[self setValue:item forKey:@"randomTrajectoryItem"];
 			[[self window] setContentView:randomInspectorView];
 			break;
 	}

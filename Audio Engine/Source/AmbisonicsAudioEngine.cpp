@@ -149,13 +149,16 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	
 // destructor
 AmbisonicsAudioEngine::~AmbisonicsAudioEngine ()
-{
+{	
+	DBG(T("AmbisonicsAudioEngine: destructor called."));
+	
 	audioTransportSource.setSource (0, 1);
     audioSourcePlayer.setSource (0);
 	audioDeviceManager.removeAudioCallback (&audioSourcePlayer);
+	audioDeviceManager.closeAudioDevice();
 	
-	// close settings file
-    ApplicationProperties::getInstance()->closeFiles();
+	// close setting file
+    //ApplicationProperties::getInstance()->closeFiles();
 	
 }
 	
@@ -228,8 +231,8 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 									numberOfActiveOutputChannels,
 									2048); // tells it to buffer this many samples ahead (choose a value >1024)
 	
-	// audioTransportSource.setSource(..) puts the playhead to 0. This will put it to the
-	// last position:
+	// audioTransportSource.setSource(..) puts the playhead to 0. This will 
+	// put it back to the current position:
 	setPosition(currentPosition);
 	
 	// Temp
@@ -623,8 +626,7 @@ int AmbisonicsAudioEngine::getCurrentPosition()
 
 void AmbisonicsAudioEngine::setPosition(int positionInSamples)
 {
-	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	double sampleRateOfTheAudioDevice = currentAudioIODevice->getCurrentSampleRate();
+	double sampleRateOfTheAudioDevice = getCurrentSampleRate();
 	double positionInSeconds = (double)positionInSamples/sampleRateOfTheAudioDevice;
 	audioTransportSource.setPosition(positionInSeconds);
 }

@@ -1,3 +1,10 @@
+
+----------------------------------------------------------
+THE FOLLOWING PROCEDURE IS OBSOLETE AND NOT NEEDED ANYMORE
+(Since juce_amalgamated is now included)
+----------------------------------------------------------
+
+
 how to get and install juce
 ---------------------------
 

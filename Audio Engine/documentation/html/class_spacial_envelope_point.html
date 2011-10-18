@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -58,6 +62,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a>  </div>
   <div class="headertitle">
 <h1>SpacialEnvelopePoint Class Reference</h1>  </div>
@@ -97,6 +102,34 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the spacial y-coordinate.  <a href="#af927e0b53f40ae6c538bf5f117711a6e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a30ed48c8b354ae769a688f743f5c03c9">getZ</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the spacial z-coordinate.  <a href="#a30ed48c8b354ae769a688f743f5c03c9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a45d78c2255c8cb92503127cca0f0f11f">SpacialEnvelopePoint</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="#a45d78c2255c8cb92503127cca0f0f11f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#ade0fd253b2f912365079653b6881f87c">SpacialEnvelopePoint</a> (int position_, double x_, double y_, double z_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with a non-trivial initialisation.  <a href="#ade0fd253b2f912365079653b6881f87c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#abd759e15b7ae769505c118852a07fd48">~SpacialEnvelopePoint</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#abd759e15b7ae769505c118852a07fd48"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#aca4f4a8b46c24ac8e7552d890921b766">setPosition</a> (const int &amp;position_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new position in time (in samples).  <a href="#aca4f4a8b46c24ac8e7552d890921b766"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#ab994e2032b83f78dc12bcbf2f34e51ab">setX</a> (const double &amp;x_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new x-coordinate in space.  <a href="#ab994e2032b83f78dc12bcbf2f34e51ab"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a4938ca385d71df5c6fea9a5fcacd42ef">setY</a> (const double &amp;y_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new y-coordinate in space.  <a href="#a4938ca385d71df5c6fea9a5fcacd42ef"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a503ef2cab346acdd18b46d9de89c0b3d">setZ</a> (const double &amp;z_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets a new z-coordinate in space.  <a href="#a503ef2cab346acdd18b46d9de89c0b3d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a4ab2ef0b7126d5028bd70ea1d1edf970">setPositionAndValue</a> (const int &amp;position_, const double &amp;x_, const double &amp;y_, const double &amp;z_)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the position in time and the coordinates in space.  <a href="#a4ab2ef0b7126d5028bd70ea1d1edf970"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a7041f16fa9bc90247c9721ae0f009739">getPosition</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the position in time.  <a href="#a7041f16fa9bc90247c9721ae0f009739"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a4cd89a6578372f236c984ae6010f5972">getX</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the spacial x-coordinate.  <a href="#a4cd89a6578372f236c984ae6010f5972"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#af927e0b53f40ae6c538bf5f117711a6e">getY</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the spacial y-coordinate.  <a href="#af927e0b53f40ae6c538bf5f117711a6e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a30ed48c8b354ae769a688f743f5c03c9">getZ</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the spacial z-coordinate.  <a href="#a30ed48c8b354ae769a688f743f5c03c9"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afdd4161e13bc53643407a48dd0777d8b"></a><!-- doxytag: member="SpacialEnvelopePoint::JUCE_LEAK_DETECTOR" ref="afdd4161e13bc53643407a48dd0777d8b" args="(SpacialEnvelopePoint)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>JUCE_LEAK_DETECTOR</b> (<a class="el" href="class_spacial_envelope_point.html">SpacialEnvelopePoint</a>)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point.html#a870ce1b638f957c1b87712086b2d5464">position</a></td></tr>
@@ -110,8 +143,86 @@ Private Attributes</h2></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Describes a point in space at a certain time. </p>
-<p>Used by <a class="el" href="class_audio_source_ambipanning.html#a2aa2ea36e7eb61c9c62788bf11628374" title="TODO.">AudioSourceAmbipanning::spacialEnvelope</a>, by <a class="el" href="class_audio_source_ambipanning.html#a62830d46842c9c81c46b795674572b0b" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a> and by the argument newSpacialEnvelope of <a class="el" href="class_audio_source_ambipanning.html#aa6d8686698ca1e88d7fd298c117af7a6" title="TODO.">AudioSourceAmbipanning::setSpacialEnvelope</a>. </p>
+<p>Used by <a class="el" href="class_audio_source_ambipanning.html#ac77b75ebb0a9c099bf89cea4b0050ca2" title="TODO.">AudioSourceAmbipanning::spacialEnvelope</a>, by <a class="el" href="class_audio_source_ambipanning.html#adceba7e5ff4ab65987bcb9e5ab5d0060" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a> and by the argument newSpacialEnvelope of <a class="el" href="class_audio_source_ambipanning.html#aa6d8686698ca1e88d7fd298c117af7a6" title="TODO.">AudioSourceAmbipanning::setSpacialEnvelope</a>. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a45d78c2255c8cb92503127cca0f0f11f"></a><!-- doxytag: member="SpacialEnvelopePoint::SpacialEnvelopePoint" ref="a45d78c2255c8cb92503127cca0f0f11f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpacialEnvelopePoint::SpacialEnvelopePoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Default constructor. </p>
+<p>Sets <a class="el" href="class_spacial_envelope_point.html#a870ce1b638f957c1b87712086b2d5464" title="The position in time (in samples).">SpacialEnvelopePoint::position</a> = 0, <a class="el" href="class_spacial_envelope_point.html#a134f6c3f013dccd020241e5fe58a56b8" title="The x-coordinate in space.">SpacialEnvelopePoint::x</a> = 0.0, <a class="el" href="class_spacial_envelope_point.html#a14048604d964b847988ed3c354d5db19" title="The y-coordinate in space.">SpacialEnvelopePoint::y</a> = 0.0, <a class="el" href="class_spacial_envelope_point.html#ae63d55556b3cdbe739d496fad1eef92f" title="The z-coordinate in space.">SpacialEnvelopePoint::z</a> = 0.0. </p>
+
+</div>
+</div>
+<a class="anchor" id="ade0fd253b2f912365079653b6881f87c"></a><!-- doxytag: member="SpacialEnvelopePoint::SpacialEnvelopePoint" ref="ade0fd253b2f912365079653b6881f87c" args="(int position_, double x_, double y_, double z_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpacialEnvelopePoint::SpacialEnvelopePoint </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>position_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>z_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Constructor with a non-trivial initialisation. </p>
+
+</div>
+</div>
+<a class="anchor" id="abd759e15b7ae769505c118852a07fd48"></a><!-- doxytag: member="SpacialEnvelopePoint::~SpacialEnvelopePoint" ref="abd759e15b7ae769505c118852a07fd48" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpacialEnvelopePoint::~SpacialEnvelopePoint </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
 <a class="anchor" id="a45d78c2255c8cb92503127cca0f0f11f"></a><!-- doxytag: member="SpacialEnvelopePoint::SpacialEnvelopePoint" ref="a45d78c2255c8cb92503127cca0f0f11f" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -210,6 +321,44 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a7041f16fa9bc90247c9721ae0f009739"></a><!-- doxytag: member="SpacialEnvelopePoint::getPosition" ref="a7041f16fa9bc90247c9721ae0f009739" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpacialEnvelopePoint::getPosition </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Gets the position in time. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The position in time (in samples). </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a4cd89a6578372f236c984ae6010f5972"></a><!-- doxytag: member="SpacialEnvelopePoint::getX" ref="a4cd89a6578372f236c984ae6010f5972" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double SpacialEnvelopePoint::getX </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Gets the spacial x-coordinate. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The spacial x-coordinate. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a4cd89a6578372f236c984ae6010f5972"></a><!-- doxytag: member="SpacialEnvelopePoint::getX" ref="a4cd89a6578372f236c984ae6010f5972" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -248,6 +397,25 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="af927e0b53f40ae6c538bf5f117711a6e"></a><!-- doxytag: member="SpacialEnvelopePoint::getY" ref="af927e0b53f40ae6c538bf5f117711a6e" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double SpacialEnvelopePoint::getY </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Gets the spacial y-coordinate. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The spacial y-coordinate. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a30ed48c8b354ae769a688f743f5c03c9"></a><!-- doxytag: member="SpacialEnvelopePoint::getZ" ref="a30ed48c8b354ae769a688f743f5c03c9" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -264,6 +432,44 @@ Private Attributes</h2></td></tr>
 
 <p>Gets the spacial z-coordinate. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>The spacial z-coordinate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a30ed48c8b354ae769a688f743f5c03c9"></a><!-- doxytag: member="SpacialEnvelopePoint::getZ" ref="a30ed48c8b354ae769a688f743f5c03c9" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double SpacialEnvelopePoint::getZ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Gets the spacial z-coordinate. </p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>The spacial z-coordinate. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aca4f4a8b46c24ac8e7552d890921b766"></a><!-- doxytag: member="SpacialEnvelopePoint::setPosition" ref="aca4f4a8b46c24ac8e7552d890921b766" args="(const int &amp;position_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpacialEnvelopePoint::setPosition </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>position_</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets a new position in time (in samples). </p>
 
 </div>
 </div>
@@ -327,6 +533,66 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a4ab2ef0b7126d5028bd70ea1d1edf970"></a><!-- doxytag: member="SpacialEnvelopePoint::setPositionAndValue" ref="a4ab2ef0b7126d5028bd70ea1d1edf970" args="(const int &amp;position_, const double &amp;x_, const double &amp;y_, const double &amp;z_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpacialEnvelopePoint::setPositionAndValue </td>
+          <td>(</td>
+          <td class="paramtype">const int &amp;&#160;</td>
+          <td class="paramname"><em>position_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>x_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>y_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>z_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets the position in time and the coordinates in space. </p>
+
+</div>
+</div>
+<a class="anchor" id="ab994e2032b83f78dc12bcbf2f34e51ab"></a><!-- doxytag: member="SpacialEnvelopePoint::setX" ref="ab994e2032b83f78dc12bcbf2f34e51ab" args="(const double &amp;x_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpacialEnvelopePoint::setX </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>x_</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets a new x-coordinate in space. </p>
+
+</div>
+</div>
 <a class="anchor" id="ab994e2032b83f78dc12bcbf2f34e51ab"></a><!-- doxytag: member="SpacialEnvelopePoint::setX" ref="ab994e2032b83f78dc12bcbf2f34e51ab" args="(const double &amp;x_)" -->
 <div class="memitem">
 <div class="memproto">
@@ -362,6 +628,44 @@ Private Attributes</h2></td></tr>
 <div class="memdoc">
 
 <p>Sets a new y-coordinate in space. </p>
+
+</div>
+</div>
+<a class="anchor" id="a4938ca385d71df5c6fea9a5fcacd42ef"></a><!-- doxytag: member="SpacialEnvelopePoint::setY" ref="a4938ca385d71df5c6fea9a5fcacd42ef" args="(const double &amp;y_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpacialEnvelopePoint::setY </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>y_</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets a new y-coordinate in space. </p>
+
+</div>
+</div>
+<a class="anchor" id="a503ef2cab346acdd18b46d9de89c0b3d"></a><!-- doxytag: member="SpacialEnvelopePoint::setZ" ref="a503ef2cab346acdd18b46d9de89c0b3d" args="(const double &amp;z_)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SpacialEnvelopePoint::setZ </td>
+          <td>(</td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>z_</em></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Sets a new z-coordinate in space. </p>
 
 </div>
 </div>
@@ -445,8 +749,9 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Source/<a class="el" href="_audio_source_ambipanning_8h_source.html">AudioSourceAmbipanning.h</a></li>
+<li>Source_from_Philippe/<a class="el" href="from___philippe_2_audio_source_ambipanning_8h_source.html">AudioSourceAmbipanning.h</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -454,7 +759,7 @@ Private Attributes</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -463,7 +768,7 @@ Private Attributes</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:16 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

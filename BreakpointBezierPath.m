@@ -25,6 +25,7 @@
 			
 		case breakpointTypeNormal:
 		case breakpointTypeCentre:
+		case breakpointTypeValue:
 			r = NSMakeRect(loc.x - HANDLE_SIZE * 0.75, loc.y - HANDLE_SIZE * 0.75, HANDLE_SIZE * 1.5, HANDLE_SIZE * 1.5);
 			return (BreakpointBezierPath *)[NSBezierPath bezierPathWithRect:r];		
 			

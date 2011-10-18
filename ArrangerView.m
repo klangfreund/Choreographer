@@ -112,7 +112,7 @@
 		
 	NSEnumerator *enumerator = [audioRegions objectEnumerator];
 	Region *region;
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		// set superview for all regions
 		[region setValue:self forKey:@"superview"];
@@ -189,8 +189,8 @@
 	NSRectFill([self bounds]);
 	
 	// grid
-	if([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] == 0 && xGridPath
-	   || [[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] != 0 && !xGridPath
+	if(([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] == 0 && xGridPath)
+	   || ([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue] != 0 && !xGridPath)
 	   || xGridAmount != [[projectSettings valueForKey:@"arrangerXGridAmount"] integerValue])
 	{
 		[self recalculateXGridPath];
@@ -210,8 +210,8 @@
 		[xGridPath stroke];
 	}
 
-	if([[projectSettings valueForKey:@"arrangerYGridLines"] integerValue] == 0 && yGridPath
-	   || [[projectSettings valueForKey:@"arrangerYGridLines"] integerValue] != 0 && !yGridPath)
+	if(([[projectSettings valueForKey:@"arrangerYGridLines"] integerValue] == 0 && yGridPath)
+	   || ([[projectSettings valueForKey:@"arrangerYGridLines"] integerValue] != 0 && !yGridPath))
 	{
 		[self recalculateYGridPath];
 	}	
@@ -234,7 +234,7 @@
     NSEnumerator *enumerator = [audioRegions objectEnumerator];
 	Region *region;
 	
-    while (region = [enumerator nextObject])
+    while ((region = [enumerator nextObject]))
 	{
         if ([self needsToDrawRect:[region frame]])
 		{
@@ -246,7 +246,7 @@
     enumerator = [placeholderRegions objectEnumerator];
 	PlaceholderRegion *placeholderRegion;
 	
-    while (placeholderRegion = [enumerator nextObject])
+    while ((placeholderRegion = [enumerator nextObject]))
 	{
 		[placeholderRegion draw];
     }	
@@ -339,10 +339,7 @@
 	
 	[arrangerTabStops removeAllIndexes];
 	
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
-	
-	while (region = [enumerator nextObject])
+	for(Region *region in audioRegions)
 	{		
 		value = ([region frame].origin.x - ARRANGER_OFFSET) / zoomFactorX;			
 		[arrangerTabStops addIndex:value];
@@ -505,7 +502,7 @@
 	Region *region = [self pointInRegion:localPoint];
 	
 	if(!region || // or when mouse moves directly from one region to another:
-		[placeholderRegions count] && [[placeholderRegions objectAtIndex:0] frame].origin.x != [region frame].origin.x)
+		([placeholderRegions count] && [[placeholderRegions objectAtIndex:0] frame].origin.x != [region frame].origin.x))
 	{
 		for(Region *rg in placeholderRegions)
 		{
@@ -568,7 +565,7 @@
 	PlaceholderRegion *placeholderRegion;
 	NSPoint maxPoint = NSMakePoint(0, 0);
  
-	while (placeholderRegion = [enumerator nextObject])
+	while ((placeholderRegion = [enumerator nextObject]))
 	{
 		r.size.width = [placeholderRegion frame].size.width;
 		r.size.height = [placeholderRegion frame].size.height;
@@ -766,7 +763,7 @@
 	Region *region;
 	int zIndex;
 	
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		zIndex = [audioRegions indexOfObject:region];
 		[region setValue:[NSNumber numberWithInt:zIndex] forKey:@"zIndexInArranger"];
@@ -914,7 +911,7 @@
 
 		// find max possible extension to the right
 		extendRight = [[region valueForKeyPath:@"audioItem.audioFile.duration"] unsignedLongValue] * zoomFactorX - width - offset;
-		if(maxExtendRight == -1 || maxExtendRight > extendRight);
+		if(maxExtendRight == -1 || maxExtendRight > extendRight)
 			maxExtendRight = extendRight;		
 	}
 
@@ -984,7 +981,7 @@
     NSEnumerator *enumerator = [[region valueForKey:@"childRegions"] objectEnumerator];
 	Region *child;
 		
-    while (child = [enumerator nextObject])
+    while ((child = [enumerator nextObject]))
 	{
 		[self recursivelyDeleteRegions:child];
     }
@@ -1094,7 +1091,7 @@
 		NSEnumerator *enumerator = [[originalRegion valueForKey:@"childRegions"] objectEnumerator];
 		Region *region;
 		
-		while (region = [enumerator nextObject])
+		while ((region = [enumerator nextObject]))
 		{
 			[(GroupRegion *)newRegion addChildRegion:[self makeCopyOf:region]];
 		}
@@ -1248,7 +1245,7 @@
 	NSEnumerator *enumerator = [audioRegions reverseObjectEnumerator]; // reverse = frontmost first
 	Region *region;
 	
-	while (region = [enumerator nextObject])
+	while ((region = [enumerator nextObject]))
 	{
 		if (NSPointInRect(point, [region frame]))
 		{
@@ -1269,8 +1266,8 @@
 	{
 		if([hitAudioRegion valueForKey:@"trajectoryItem"] && NSPointInRect(localPoint, [hitAudioRegion trajectoryFrame]))
 		{
-			[trajectoryContextMenu setModel:[hitAudioRegion valueForKey:@"trajectoryItem"]
-										key:@"durationMode"
+			[trajectoryContextMenu setModel:hitAudioRegion
+										key:@"trajectoryDurationMode"
 									  index:0];
 			[NSMenu popUpContextMenu:trajectoryContextMenu withEvent:event forView:self];
 		}
@@ -1374,6 +1371,9 @@
 			[self addRegionToSelection:hitAudioRegion];
 			dragging = 1;
 			break;
+            
+        default:
+            break;
 	}
 
 
@@ -1402,6 +1402,9 @@
 					[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
 				}
 				break;
+                
+            default:
+                break;
 		}
 		
 		// notification
@@ -1432,6 +1435,9 @@
 					[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
 				}
 				break;
+                
+            default:
+                break;
 		}
 
 		// pass the mouse event
@@ -1698,7 +1704,7 @@
 	id region;
 	NSRect r;
 
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		if([region valueForKey:@"parentRegion"])
 			continue;
@@ -1770,7 +1776,7 @@
 	NSEnumerator *enumerator = [audioRegions objectEnumerator];
 	Region *region;
  
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		[region setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
 		[selectedRegions addObject:region];
@@ -1804,7 +1810,7 @@
 	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	id aRegion;
  
-	while(aRegion = [enumerator nextObject])
+	while((aRegion = [enumerator nextObject]))
 	{
 		[aRegion setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 	}
@@ -1865,7 +1871,7 @@
 	NSEnumerator *enumerator = [selectedTrajectories objectEnumerator];
 	id aRegion;
  
-	while(aRegion = [enumerator nextObject])
+	while((aRegion = [enumerator nextObject]))
 	{
 		[aRegion setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 	}
@@ -2177,7 +2183,7 @@
 	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	Region *region0, *region1, *region2;
 	
-	while(region0 = [enumerator nextObject])
+	while((region0 = [enumerator nextObject]))
 	{
 		r = [region0 frame];
 		intersection = NSIntersectionRect(r, marqueeRect);
@@ -2237,7 +2243,7 @@
 	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	id aRegion, region1;
 	
-	while(aRegion = [enumerator nextObject])
+	while((aRegion = [enumerator nextObject]))
 	{
 		r = [aRegion frame];
 		if(NSIntersectsRect(r, marqueeRect))
@@ -2327,17 +2333,13 @@
 	}
 }
 
-- (IBAction)heal:(id)sender
-{}
-
-
 - (void)bringToFront:(id)sender
 {
 	NSMutableArray *temp = [NSMutableArray arrayWithArray:audioRegions];
 	NSEnumerator *enumerator = [audioRegions objectEnumerator];
 	Region *region;
 	
-	while (region = [enumerator nextObject])
+	while ((region = [enumerator nextObject]))
 	{
 		if([selectedRegions containsObject:region])
 		{
@@ -2359,7 +2361,7 @@
 	NSEnumerator *enumerator = [audioRegions reverseObjectEnumerator];
 	Region *region;
 	
-	while (region = [enumerator nextObject])
+	while ((region = [enumerator nextObject]))
 	{
 		if([selectedRegions containsObject:region])
 		{
@@ -2629,7 +2631,7 @@
 	
 	NSEnumerator *enumerator = [audioRegions objectEnumerator];
 	Region *region;
-	while(region = [enumerator nextObject])
+	while((region = [enumerator nextObject]))
 	{
 		// set superview for all regions
 		[region setValue:self forKey:@"superview"];

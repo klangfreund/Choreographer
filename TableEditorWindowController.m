@@ -35,27 +35,26 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
     return self;
 }
 
-
-- (void) refreshView
+- (void)refreshView
 {
 //	NSLog(@"Table Editor refresh view");
 	
 	[tableEditorView reloadData];
 	
 	// hide name column for trajectories
-	NSTableColumn *column = [tableEditorView tableColumnWithIdentifier:@"name"];
+//	NSTableColumn *column = [tableEditorView tableColumnWithIdentifier:@"name"];
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
-	
-	if(displayMode == regionDisplayMode)
-	{
-		[column setHidden:NO];
-		[column setEditable:NO];
-	}
-	else
-	{
-		[column setHidden:YES];
-		[column setEditable:NO];
-	}
+//	
+//	if(displayMode == regionDisplayMode)
+//	{
+//		[column setHidden:NO];
+//		[column setEditable:NO];
+//	}
+//	else
+//	{
+//		[column setHidden:YES];
+//		[column setEditable:NO];
+//	}
 
 	// selection
 	NSMutableIndexSet *rowIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
@@ -69,13 +68,42 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			[rowIndexes addIndex:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] indexOfObject:item] + 1];
 		else if(displayMode == trajectoryDisplayMode)
 		{
-			NSInteger index = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArray] indexOfObject:item];
+            TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+            NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
+            [tempArray addObjectsFromArray:editableTrajectory.positionBreakpoints];
+            [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
+			NSInteger index = [tempArray indexOfObject:item];
 			if(index != NSNotFound)
 				[rowIndexes addIndex:index + 1];
 		}
 	}		
 	[tableEditorView selectRowIndexes:rowIndexes byExtendingSelection:NO];
 }
+
+#pragma mark -
+#pragma mark menu actions
+// -----------------------------------------------------------
+
+
+- (IBAction)addBreakpoint:(id)sender
+{
+    SpatialPosition *newPos = [SpatialPosition positionWithX:0 Y:0 Z:0];
+    [[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] addBreakpointAtPosition:newPos time:-1];
+}
+
+- (BOOL)validateUserInterfaceItem:(id)item
+{
+	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
+    
+	if ([item action] == @selector(addBreakpoint:) && displayMode == trajectoryDisplayMode)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
+
 
 #pragma mark -
 #pragma mark NSTableView - delegate methods
@@ -92,23 +120,30 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 	int i = [selectedIndices firstIndex];
 	
-	if(i == 0 ||
-	   !editableTrajectory ||
-	   displayMode == trajectoryDisplayMode && [[editableTrajectory valueForKey:@"trajectoryType"] intValue] != breakpointType)
-		return;
+//	if(i == 0) return;
+//	   !editableTrajectory ||
+//	   displayMode == trajectoryDisplayMode && [[editableTrajectory valueForKey:@"trajectoryType"] intValue] != breakpointType)
+//		return;
 		
-	while(i != NSNotFound)
-	{
-		if(displayMode == regionDisplayMode)
-		{
-			[editorSelection addObject:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] objectAtIndex:i - 1]];
-		}
-		else if(displayMode == trajectoryDisplayMode)
-		{
-			[editorSelection addObject:[[editableTrajectory linkedBreakpointArray] objectAtIndex:i - 1]];
-		}
-		
-		i = [selectedIndices indexGreaterThanIndex:i];
+    if(displayMode == regionDisplayMode)
+    {
+        while(i != NSNotFound)
+        {
+            [editorSelection addObject:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] objectAtIndex:i - 1]];
+            i = [selectedIndices indexGreaterThanIndex:i];
+        }
+    }
+    else if(displayMode == trajectoryDisplayMode)
+    {
+        NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
+        [tempArray addObjectsFromArray:[editableTrajectory positionBreakpoints]];
+        [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
+
+        while(i != NSNotFound)
+        {
+			[editorSelection addObject:[tempArray objectAtIndex:i - 1]];
+            i = [selectedIndices indexGreaterThanIndex:i];
+		}		
 	}
 
 	// update views
@@ -153,10 +188,10 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 				return (row != 0);
 				break;
 			case rotationType:
-				return (row != 0 && row != 3);
+				return (row != 0);
 				break;
 			case randomType:
-				return (row != 0 && row != 4);
+				return (row != 0);
 				break;
 		}
 	}
@@ -183,17 +218,13 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 		sum = 0;
 		
 		// linked breakpoints (if any) plus title row
-		n = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.linkedBreakpointArray"] count];
+		n = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.positionBreakpoints"] count];
 		if(n) sum += n + 1;
 			
 		// additional positions (if any) plus title row
-		n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] additionalPositions] count];
+		n = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.parameterBreakpoints"] count];
 		if(n) sum += n + 1;
-		
-		// meta parameter (if any) plus title row
-	//	n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] additionalPositions] count];
-			
-			
+
 		return sum;
 	}
 	else return 0;
@@ -217,7 +248,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 	{
 		if(row == 0)
 		{
-			if ([[tc identifier] isEqualToString:@"name"]) return @"Region";
+			if ([[tc identifier] isEqualToString:@"type"]) return @"Region";
 			else if ([[tc identifier] isEqualToString:@"time"]) return @"Time";
 			else return [tc identifier];
 		}
@@ -234,7 +265,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 				pos = [[displayedRegions objectAtIndex:row] valueForKey:@"position"];
 			}
 
-			if ([[tc identifier] isEqualToString:@"name"])
+			if ([[tc identifier] isEqualToString:@"type"])
 				return [NSString stringWithFormat:@"%@", [[displayedRegions objectAtIndex:row] valueForKeyPath:@"audioItem.node.name"]];
 			else if ([[tc identifier] isEqualToString:@"time"])
 				return [NSString stringWithFormat:@"%0.3f", [[[displayedRegions objectAtIndex:row] valueForKey:@"startTime"] unsignedLongValue] * 0.001];
@@ -245,22 +276,27 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 	{
 		sum = 0;
 		// linked breakpoints (if any) plus title row
-		n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] linkedBreakpointArrayWithInitialPosition:nil] count];
+		n = [[editableTrajectory positionBreakpointsWithInitialPosition:nil] count];
 		if(n)
 		{
 			if(row == sum)
 			{
-				if ([[tc identifier] isEqualToString:@"time"]) return @"Time";
+                if ([[tc identifier] isEqualToString:@"type"]) return @"Breakpoints";
+				else if ([[tc identifier] isEqualToString:@"time"]) return @"Time";
 				else return [tc identifier];
 			}
-			else
+			else if(row <= sum + n)
 			{
 				row -= sum + 1;
 				
-				id breakpoint = [[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row];
-				if ([[tc identifier] isEqualToString:@"time"])
+				Breakpoint* breakpoint = [[editableTrajectory positionBreakpointsWithInitialPosition:nil] objectAtIndex:row];
+				if ([[tc identifier] isEqualToString:@"type"])
+                {
+                    return @"";
+                }
+                else if ([[tc identifier] isEqualToString:@"time"])
 				{
-					return [NSString stringWithFormat:@"%d", [[breakpoint valueForKey:@"time"] unsignedLongValue]];
+					return [NSString stringWithFormat:@"%d", [breakpoint time]];
 				}
 				else
 				{
@@ -274,35 +310,45 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 		}
 
 		// additional positions (if any) plus title row
-		n = [[[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] additionalPositions] count];
+		n = [[editableTrajectory parameterBreakpoints] count];
 		if(n)
 		{			
 			if(row == sum)
 			{
-				if ([[tc identifier] isEqualToString:@"time"]) return @"*";
-				else return [tc identifier];
+				return [tc identifier];
 			}
-			else
+			else if(row <= n + sum)
 			{
 				row -= sum + 1;
 				
-				id position = [[editableTrajectory additionalPositions] objectAtIndex:row];
-				if ([[tc identifier] isEqualToString:@"time"])
+				Breakpoint* breakpoint = [[editableTrajectory parameterBreakpoints] objectAtIndex:row];
+				if ([[tc identifier] isEqualToString:@"type"])
 				{
-					return [editableTrajectory additionalPositionName:position];
+					return [breakpoint descriptor];
+				}
+				else if ([[tc identifier] isEqualToString:@"time"])
+				{
+					if([breakpoint hasTime])
+                       return [NSString stringWithFormat:@"%d", [breakpoint time]];
+                    else
+                       return @"-";
 				}
 				else
 				{
-					return [NSString stringWithFormat:@"%0.3f", [[position valueForKey:[tc identifier]] doubleValue]];
+                    if([[breakpoint descriptor] isEqualToString:@"Init"] &&
+                       [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue])
+                        return @">";
+                    else if([breakpoint breakpointType] != breakpointTypeValue)
+                        return [NSString stringWithFormat:@"%0.3f", [[[breakpoint position] valueForKey:[tc identifier]] doubleValue]];
+                    else if([[tc identifier] isEqualToString:@"x"])
+                        return [NSString stringWithFormat:@"%0.3f", [breakpoint value]];
+                    else
+                        return @"";
 				}
 			}
 
 			sum += n + 1;
 		}
-		
-		
-		
-		
 		
 //		switch([[editableTrajectory valueForKey:@"trajectoryType"] intValue])
 //		{
@@ -377,7 +423,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 //	{
 //		row--;
 //		
-//		id breakpoint = [[trajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row];
+//		id breakpoint = [[trajectory positionBreakpointsWithInitialPosition:nil] objectAtIndex:row];
 //		if ([[tc identifier] isEqualToString:@"time"])
 //		{
 //			return [NSNumber numberWithUnsignedLong:[[breakpoint valueForKey:@"time"] unsignedLongValue]];
@@ -411,12 +457,12 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			if([objectValue integerValue] < 1 ||	// time cannot be negative
 				row == 0)							// time is unchangeable for first brekpoint
 				return;
-			[[[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row] setTime:[objectValue integerValue]];
+			[[[editableTrajectory positionBreakpointsWithInitialPosition:nil] objectAtIndex:row] setTime:[objectValue integerValue]];
 			[editableTrajectory sortBreakpoints];
 		}
 		else
 		{
-			[[[editableTrajectory linkedBreakpointArrayWithInitialPosition:nil] objectAtIndex:row] setValue:objectValue forKey:[tc identifier]];
+			[[[editableTrajectory positionBreakpointsWithInitialPosition:nil] objectAtIndex:row] setValue:objectValue forKey:[tc identifier]];
 		}	
 
 		[editableTrajectory updateModel];	
@@ -427,20 +473,20 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 	TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	
-	switch(row)
-	{
-		case 1:
-			[[editableTrajectory valueForKeyPath:@"trajectory.rotationCentre"] setValue:objectValue forKey:[tc identifier]];
-			break;
-			
-		case 2:
-			[[editableTrajectory valueForKeyPath:@"trajectory.initialPosition"] setValue:objectValue forKey:[tc identifier]];
-			break;
-			
-		default:
-			break;
-	}
+    NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
+    [tempArray addObjectsFromArray:[editableTrajectory positionBreakpoints]];
+    [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
+    
+    Breakpoint* bp = [tempArray objectAtIndex:row - 1];
 
+    if ([[tc identifier] isEqualToString:@"time"])
+        [bp setTime:[objectValue integerValue]];
+    else if([bp breakpointType] != breakpointTypeValue)
+        [bp setValue:objectValue forKey:[tc identifier]];
+    else if([[tc identifier] isEqualToString:@"x"])
+        [bp setValue:objectValue forKey:@"value"];
+
+    [editableTrajectory sortBreakpoints];
 	[editableTrajectory updateModel];	
 }
 

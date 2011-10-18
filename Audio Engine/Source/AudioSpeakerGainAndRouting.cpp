@@ -12,13 +12,183 @@
 #define INITIAL_PINK_NOISE_BUFFER_SIZE 4096
 
 //==============================================================================
+AepChannelSettings::AepChannelSettings()
+:   gain(0.0),
+    lastGain(0.0),
+    solo(false),
+    mute(false),
+    pinkNoise(false),
+    speakerPosition(),
+    measurementEnabled(false),
+    measuredDecayingValue(0.0),
+    measuredPeakValue(0.0)
+{
+}
+
+AepChannelSettings::AepChannelSettings(const double& gain_,
+                                       const SpeakerPosition& speakerPosition_)
+:   gain(gain_),
+    lastGain(gain_),
+    solo(false),
+    mute(false),
+    pinkNoise(false),
+    speakerPosition(speakerPosition_),
+    measurementEnabled(false),
+    measuredDecayingValue(0.0),
+    measuredPeakValue(0.0)
+{
+}
+
+AepChannelSettings::AepChannelSettings(const double& gain_,
+                                       const bool& solo_,
+                                       const bool& mute_,
+                                       const bool& pinkNoise_,
+                                       const double& x_,
+                                       const double& y_,
+                                       const double& z_)
+:   gain(gain_),
+    lastGain(gain_),
+    solo(solo_),
+    mute(mute_),
+    pinkNoise(pinkNoise_),
+    speakerPosition(x_, y_, z_),
+    measurementEnabled(false),
+    measuredDecayingValue(0.0),
+    measuredPeakValue(0.0)
+{
+}
+
+AepChannelSettings::AepChannelSettings(const AepChannelSettings& other)
+:   gain(other.gain),
+    lastGain(other.lastGain),
+    solo(other.solo),
+    mute(other.mute),
+    pinkNoise(other.pinkNoise),
+    speakerPosition(other.speakerPosition),
+    measurementEnabled(other.measurementEnabled),
+    measuredDecayingValue(other.measuredDecayingValue),
+    measuredPeakValue(other.measuredPeakValue)
+{
+}
+
+const AepChannelSettings& AepChannelSettings::operator=(const AepChannelSettings& other)
+{
+    gain = other.gain;
+    lastGain = other.lastGain;
+    solo = other.solo;
+    mute = other.mute;
+    pinkNoise = other.pinkNoise;
+    speakerPosition = other.speakerPosition;
+    measurementEnabled = other.measurementEnabled;
+    measuredDecayingValue = other.measuredDecayingValue;
+    measuredPeakValue = other.measuredPeakValue;
+    
+    return *this;
+}
+
+void AepChannelSettings::setGain(const double& gain_)
+{
+    gain = gain_;
+}
+
+void AepChannelSettings::setLastGain(const double& lastGain_)
+{
+    lastGain = lastGain_;
+}
+
+void AepChannelSettings::setSolo(const bool& engageSolo)
+{
+    solo = engageSolo;
+}
+
+void AepChannelSettings::setMute(const bool& engageMute)
+{
+    mute = engageMute;
+}
+
+void AepChannelSettings::activatePinkNoise(const bool& turnPinkNoiseOn)
+{
+    pinkNoise = turnPinkNoiseOn;
+}
+
+void AepChannelSettings::setSpeakerPosition(const SpeakerPosition& speakerPosition_)
+{
+    speakerPosition = speakerPosition_;
+}
+
+void AepChannelSettings::setSpeakerPosition(const double& x,
+                                            const double& y,
+                                            const double& z)
+{
+    speakerPosition.setXYZ(x, y, z);
+}
+
+void AepChannelSettings::enableMeasurement(const bool& turnMeasurementOn)
+{
+    measurementEnabled = turnMeasurementOn;
+}
+
+void AepChannelSettings::setMeasuredDecayingValue(const double& measurement)
+{
+    measuredDecayingValue = measurement;
+}
+
+void AepChannelSettings::setMeasuredPeakValue(const double& measurement)
+{
+    measuredPeakValue = measurement;
+}
+
+double AepChannelSettings::getGain()
+{
+    return gain;
+}
+
+double AepChannelSettings::getLastGain()
+{
+    return lastGain;
+}
+
+bool AepChannelSettings::getSoloStatus()
+{
+    return solo;
+}
+
+bool AepChannelSettings::getMuteStatus()
+{
+    return mute;
+}
+
+bool AepChannelSettings::getPinkNoiseStatus()
+{
+    return pinkNoise;
+}
+
+const SpeakerPosition& AepChannelSettings::getSpeakerPosition()
+{
+    return speakerPosition;
+}
+
+bool AepChannelSettings::getMeasurementStatus()
+{
+    return measurementEnabled;
+}
+
+double AepChannelSettings::getMeasuredDecayingValue()
+{
+    return measuredDecayingValue;
+}
+
+double AepChannelSettings::getMeasuredPeakValue()
+{
+    return measuredPeakValue;
+}
+
+
+//==============================================================================
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
 : audioSource (0),
   audioRegionMixer (0),
   aepChannelHardwareOutputPairs (),
-  aepChannelSettingsAscending (),
-  aepChannelSettingsOrderedByActiveHardwareChannels (),
-  aepChannelSettingsOrderedByActiveHardwareChannelsBackup (),
   numberOfHardwareOutputChannels (0),
   numberOfMutedChannels (0),
   numberOfSoloedChannels (0),
@@ -40,9 +210,6 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRe
 : audioSource (0),
   audioRegionMixer (audioRegionMixer_),
   aepChannelHardwareOutputPairs (),
-  aepChannelSettingsAscending (),
-  aepChannelSettingsOrderedByActiveHardwareChannels (),
-  aepChannelSettingsOrderedByActiveHardwareChannelsBackup (),
   numberOfHardwareOutputChannels (0),
   numberOfMutedChannels (0),
   numberOfSoloedChannels (0),
@@ -122,33 +289,19 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 	// Add missing aepChannels - if there needs to be any.
 	while (aepChannelSettingsAscending.size() < aepChannel)
 	{
-		aepChannelSettings* defaultAepChannelSettings = new aepChannelSettings;
-		defaultAepChannelSettings->gain = 0.0;
-		defaultAepChannelSettings->lastGain = 0.0;
-		defaultAepChannelSettings->solo = FALSE;
-		defaultAepChannelSettings->mute = FALSE;
-		defaultAepChannelSettings->activatePinkNoise = FALSE;
-		defaultAepChannelSettings->speakerPosition.setXYZ(0.0, 1.0, 0.0);
-		defaultAepChannelSettings->enableMeasurement = FALSE;
-		defaultAepChannelSettings->measuredDecayingValue = 0.0f;
-		defaultAepChannelSettings->measuredPeakValue = 0.0f;
-		
-		aepChannelSettingsAscending.add(defaultAepChannelSettings);
+        // Add an aepChannel with the default values from its default constructor
+        // (and from the def. constructor of speakerPosition).
+		aepChannelSettingsAscending.add(AepChannelSettings());
 	}
 	
-	// Add the specified AEP channel
-	aepChannelSettings* specifiedAepChannelSettings = new aepChannelSettings;
-	specifiedAepChannelSettings->gain = gain;
-	specifiedAepChannelSettings->lastGain = gain;
-	specifiedAepChannelSettings->solo = solo;
-	specifiedAepChannelSettings->mute = mute;
-	specifiedAepChannelSettings->activatePinkNoise = activatePinkNoise;
-	specifiedAepChannelSettings->speakerPosition.setXYZ(x, y, z);
-	specifiedAepChannelSettings->enableMeasurement = FALSE;
-	specifiedAepChannelSettings->measuredDecayingValue = 0.0f;
-	specifiedAepChannelSettings->measuredPeakValue = 0.0f;
-	
-	aepChannelSettingsAscending.add(specifiedAepChannelSettings);
+	// Add the specified AEP channel.
+    aepChannelSettingsAscending.add(AepChannelSettings(gain,
+                                                       solo,
+                                                       mute,
+                                                       activatePinkNoise,
+                                                       x,
+                                                       y,
+                                                       z));
 	
 	return true;
 }
@@ -166,7 +319,7 @@ bool AudioSpeakerGainAndRouting::setSpeakerPosition(int aepChannel, double x, do
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsAscending.size() -1.
 		return false;
 	}
-	aepChannelSettingsAscending[aepChannel]->speakerPosition.setXYZ(x, y, z);
+	aepChannelSettingsAscending[aepChannel].setSpeakerPosition(x, y, z);
 	return true;
 }
 
@@ -180,7 +333,7 @@ bool AudioSpeakerGainAndRouting::setGain(int aepChannel, double gain)
 		return false;
 	}
 		
-	aepChannelSettingsAscending[aepChannel]->gain = gain;
+	aepChannelSettingsAscending[aepChannel].setGain(gain);
 	return true;
 }
 
@@ -198,7 +351,7 @@ bool AudioSpeakerGainAndRouting::setSolo(int aepChannel, bool enable)
 		// Only do something, if there is a change to made.
 		// (Otherwise the counter numberOfSoloedChannels wouldn't
 		// be accurate)
-		if (aepChannelSettingsAscending[aepChannel]->solo != enable)
+		if (aepChannelSettingsAscending[aepChannel].getSoloStatus() != enable)
 		{
 			if (enable)
 			{
@@ -208,7 +361,7 @@ bool AudioSpeakerGainAndRouting::setSolo(int aepChannel, bool enable)
 			{
 				numberOfSoloedChannels--;
 			}
-			aepChannelSettingsAscending[aepChannel]->solo = enable;
+			aepChannelSettingsAscending[aepChannel].setSolo(enable);
 		}
 		
 		DBG(T("AudioSpeakerGainAndRouting: setSolo called. numberOfSoloedChannels = ") + String(numberOfSoloedChannels));
@@ -231,7 +384,7 @@ bool AudioSpeakerGainAndRouting::setMute(int aepChannel, bool enable)
 		// Only do something, if there is a change to made.
 		// (Otherwise the counter numberOfMutedChannels wouldn't
 		// be accurate)
-		if (aepChannelSettingsAscending[aepChannel]->mute != enable)
+		if (aepChannelSettingsAscending[aepChannel].getMuteStatus() != enable)
 		{
 			if (enable)
 			{
@@ -241,7 +394,7 @@ bool AudioSpeakerGainAndRouting::setMute(int aepChannel, bool enable)
 			{
 				numberOfMutedChannels--;
 			}
-			aepChannelSettingsAscending[aepChannel]->mute = enable;
+			aepChannelSettingsAscending[aepChannel].setMute(enable);
 		}
 		return true;
 	}
@@ -260,9 +413,9 @@ bool AudioSpeakerGainAndRouting::activatePinkNoise(int aepChannel, bool enable)
 		const ScopedLock sl (audioSpeakerGainAndRoutingLock);
 		
 		// Only do something, if there is a change to made.
-		// (Otherwise the counter numberOfMutedChannels wouldn't
+		// (Otherwise the counter numberOfChannelsWithActivatedPinkNoise wouldn't
 		// be accurate)
-		if (aepChannelSettingsAscending[aepChannel]->activatePinkNoise != enable)
+		if (aepChannelSettingsAscending[aepChannel].getPinkNoiseStatus() != enable)
 		{
 			if (enable)
 			{
@@ -272,8 +425,8 @@ bool AudioSpeakerGainAndRouting::activatePinkNoise(int aepChannel, bool enable)
 			{
 				numberOfChannelsWithActivatedPinkNoise--;
 			}
-			aepChannelSettingsAscending[aepChannel]->activatePinkNoise = enable;
-		}
+			aepChannelSettingsAscending[aepChannel].activatePinkNoise(enable);
+        }		
 		return true;
 	}
 }
@@ -297,9 +450,9 @@ bool AudioSpeakerGainAndRouting::enableMeasurement(int aepChannel, bool enable)
 		const ScopedLock sl (audioSpeakerGainAndRoutingLock);
 		
 		// Only do something, if there is a change to made.
-		// (Otherwise the counter numberOfMutedChannels wouldn't
+		// (Otherwise the counter numberOfChannelsWithEnabledMeasurement wouldn't
 		// be accurate)
-		if (aepChannelSettingsAscending[aepChannel]->enableMeasurement != enable)
+		if (aepChannelSettingsAscending[aepChannel].getMeasurementStatus() != enable)
 		{
 			if (enable)
 			{
@@ -309,7 +462,7 @@ bool AudioSpeakerGainAndRouting::enableMeasurement(int aepChannel, bool enable)
 			{
 				numberOfChannelsWithEnabledMeasurement--;
 			}
-			aepChannelSettingsAscending[aepChannel]->enableMeasurement = enable;
+			aepChannelSettingsAscending[aepChannel].enableMeasurement(enable);
 		}
 		return true;
 	}
@@ -325,7 +478,7 @@ bool AudioSpeakerGainAndRouting::resetMeasuredPeakValue(int aepChannel)
 	}
 	else
 	{
-		aepChannelSettingsAscending[aepChannel]->measuredPeakValue = 0.0f;
+		aepChannelSettingsAscending[aepChannel].setMeasuredPeakValue(0.0);
 		return true;
 	}
 }
@@ -340,7 +493,7 @@ float AudioSpeakerGainAndRouting::getMeasuredDecayingValue(int aepChannel)
 	}
 	else
 	{
-		return aepChannelSettingsAscending[aepChannel]->measuredDecayingValue;
+		return aepChannelSettingsAscending[aepChannel].getMeasuredDecayingValue();
 	}
 }
 
@@ -354,7 +507,7 @@ float AudioSpeakerGainAndRouting::getMeasuredPeakValue(int aepChannel)
 	}
 	else
 	{
-		return aepChannelSettingsAscending[aepChannel]->measuredPeakValue;
+		return aepChannelSettingsAscending[aepChannel].getMeasuredPeakValue();
 	}
 }
 
@@ -472,12 +625,12 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 	
 	// Set the measuredDecayingValue of all used aep channels to zero.
 	//   (If this would not be done, the vu bar of a disconnected aep channel
-	//   would stay constantly at the last measured value.
+	//   would stay constant at the last measured value.
 	//   This is not done for the measuredPeakValue, because that value might
 	//   still be of interest.)
 	for (int i=0; i < aepChannelSettingsOrderedByActiveHardwareChannels.size(); i++)
 	{
-		aepChannelSettingsOrderedByActiveHardwareChannels[i]->measuredDecayingValue = 0.0;
+		aepChannelSettingsOrderedByActiveHardwareChannels[i].setMeasuredDecayingValue(0.0);
 	}
 	
 
@@ -486,7 +639,6 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 	// the most recent routing configuration in the following loop).
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
 	
-	double x, y, z;
 	Array<void*> oldPositionOfSpeakers = positionOfSpeakers;
 	Array<void*> newPositionOfSpeakers;
 	positionOfSpeakers = newPositionOfSpeakers;
@@ -504,10 +656,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		    aepChannelSettingsAscending[AepChannelConnectedWithTheIthActiveHardwareOutput]);
 		
 		// Fill the newPositionOfSpeakers array.
-		x = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getX();
-		y = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getY();
-		z = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getZ();
-		SpeakerPosition* theIthSpeaker = new SpeakerPosition(x,y,z);
+		SpeakerPosition* theIthSpeaker = new SpeakerPosition(aepChannelSettingsOrderedByActiveHardwareChannels[i].getSpeakerPosition());
 		positionOfSpeakers.add(theIthSpeaker);
 	}
 	
@@ -528,6 +677,7 @@ bool AudioSpeakerGainAndRouting::deleteSpeakerPositions(Array<void*> positionOfS
 		SpeakerPosition* speakerPositionToDelete = (SpeakerPosition*)positionOfSpeakers_[i];
 		delete speakerPositionToDelete;
 	}
+	positionOfSpeakers_.clear();
 	return true;
 }
 
@@ -535,16 +685,10 @@ void AudioSpeakerGainAndRouting::removeAllRoutingsAndAllAepChannels()
 {
 	removeAllRoutings();
 	
-	// Clear the first AEP array.
+	// Clear the AEP arrays.
+    aepChannelSettingsAscending.clear();
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
-	
-	// Delete the ressources.
-	for (int i=0; i < aepChannelSettingsAscending.size(); i++)
-	{
-		delete aepChannelSettingsAscending[i];
-	}
-	// And clear the second AEP array. 
-	aepChannelSettingsAscending.clear();	
+    aepChannelSettingsOrderedByActiveHardwareChannelsBackup.clear();	
 }
 
 int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
@@ -576,21 +720,19 @@ int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
 			// Recover the regular settings
 			aepChannelSettingsOrderedByActiveHardwareChannels =
 				aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+			
+			aepChannelSettingsOrderedByActiveHardwareChannelsBackup.clear();
 		}
 		
 		
-		// Let the audioRegionMixer know about the new speaker configurations.	
-		double x, y, z;
+		// Let the audioRegionMixer know about the new speaker configurations.
 		Array<void*> oldPositionOfSpeakers = positionOfSpeakers;
 		Array<void*> newPositionOfSpeakers;
 		positionOfSpeakers = newPositionOfSpeakers;
 		
 		for (int i=0; i < aepChannelSettingsOrderedByActiveHardwareChannels.size(); i++)
 		{
-			x = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getX();
-			y = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getY();
-			z = aepChannelSettingsOrderedByActiveHardwareChannels[i]->speakerPosition.getZ();
-			SpeakerPosition* theIthSpeaker = new SpeakerPosition(x,y,z);
+			SpeakerPosition* theIthSpeaker = new SpeakerPosition(aepChannelSettingsOrderedByActiveHardwareChannels[i].getSpeakerPosition());
 			positionOfSpeakers.add(theIthSpeaker);
 		}
 		
@@ -671,7 +813,7 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			for (int n = 0; n < nrOfActiveHWChannels; n++)
 			{
 				// Add the pink noise to the channels that wants it.
-				if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->activatePinkNoise)
+				if (aepChannelSettingsOrderedByActiveHardwareChannels[n].getPinkNoiseStatus())
 				{
 					info.buffer->addFrom(n, info.startSample, 
 										 pinkNoiseBuffer, 0, info.startSample, info.numSamples);
@@ -686,10 +828,10 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			for (int n = 0; n < nrOfActiveHWChannels; n++)
 			{
 				info.buffer->applyGainRamp(n, info.startSample, info.numSamples,
-					aepChannelSettingsOrderedByActiveHardwareChannels[n]->lastGain,
-				    aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain);
+                    aepChannelSettingsOrderedByActiveHardwareChannels[n].getLastGain(),
+                    aepChannelSettingsOrderedByActiveHardwareChannels[n].getGain());
 				
-				aepChannelSettingsOrderedByActiveHardwareChannels[n]->lastGain = aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain;
+				aepChannelSettingsOrderedByActiveHardwareChannels[n].setLastGain(aepChannelSettingsOrderedByActiveHardwareChannels[n].getGain());
 			}
 		}
 		else
@@ -705,10 +847,10 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				// affect any channel anymore.
 				for (int n = 0; n < nrOfActiveHWChannels; n++)
 				{
-					if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->solo)
+					if (aepChannelSettingsOrderedByActiveHardwareChannels[n].getSoloStatus())
 					{
 						info.buffer->applyGain(n, info.startSample, info.numSamples, 
-					        aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain);
+					        aepChannelSettingsOrderedByActiveHardwareChannels[n].getGain());
 					}
 					else
 					{
@@ -723,14 +865,14 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				// ----
 				for (int n = 0; n < nrOfActiveHWChannels; n++)
 				{
-					if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->mute)
+					if (aepChannelSettingsOrderedByActiveHardwareChannels[n].getMuteStatus())
 					{
 						info.buffer->clear(n, info.startSample, info.numSamples);
 					}
 					else
 					{
 						info.buffer->applyGain(n, info.startSample, info.numSamples, 
-							aepChannelSettingsOrderedByActiveHardwareChannels[n]->gain);
+							aepChannelSettingsOrderedByActiveHardwareChannels[n].getGain());
 					}
 				}				
 			}
@@ -740,14 +882,14 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 		// -----------
 		if (numberOfChannelsWithEnabledMeasurement != 0)
 		{
-			float sample = 0;
+			float sample = 0.0;
 			const double decayFactor = 0.99992;
 			for (int n = 0; n < nrOfActiveHWChannels; n++)
 			{
-				if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->enableMeasurement)
+				if (aepChannelSettingsOrderedByActiveHardwareChannels[n].getMeasurementStatus())
 				{
-					float decayingValue = aepChannelSettingsOrderedByActiveHardwareChannels[n]->measuredDecayingValue;
-					float peakValue = aepChannelSettingsOrderedByActiveHardwareChannels[n]->measuredPeakValue;
+					float decayingValue = aepChannelSettingsOrderedByActiveHardwareChannels[n].getMeasuredDecayingValue();
+					float peakValue = aepChannelSettingsOrderedByActiveHardwareChannels[n].getMeasuredPeakValue();
 					for (int i = 0; i < info.numSamples; ++i)
 					{
 						sample = std::abs( *info.buffer->getSampleData (n, info.startSample + i));
@@ -761,15 +903,15 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 						}
 						else
 						{
-							decayingValue = 0;
+							decayingValue = 0.0;
 						}
 						
 						if (sample > peakValue) {
 							peakValue = sample;
 						}
 					}
-					aepChannelSettingsOrderedByActiveHardwareChannels[n]->measuredDecayingValue = decayingValue;
-					aepChannelSettingsOrderedByActiveHardwareChannels[n]->measuredPeakValue = peakValue;
+					aepChannelSettingsOrderedByActiveHardwareChannels[n].setMeasuredDecayingValue(decayingValue);
+                    aepChannelSettingsOrderedByActiveHardwareChannels[n].setMeasuredPeakValue(peakValue);
 				}
 			}
 			

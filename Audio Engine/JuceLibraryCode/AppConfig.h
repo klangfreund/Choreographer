@@ -12,7 +12,7 @@
 */
 
 // IMPORTANT: Enable this for the Release configuration only:
-//#define NDEBUG 1
+// #define NDEBUG 1
 // IMPORTANT: Enable this for the Debug configuration only:
 #define DEBUG 1
 

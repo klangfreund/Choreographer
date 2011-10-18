@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,19 +54,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
 </div>
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a>  </div>
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a>  </div>
   <div class="headertitle">
 <h1>SpacialEnvelopePointComparator Class Reference</h1>  </div>
 </div>
 <div class="contents">
 <!-- doxytag: class="SpacialEnvelopePointComparator" -->
-<p>This comparator is needed for the sort function of <a class="el" href="class_audio_source_ambipanning.html#a62830d46842c9c81c46b795674572b0b" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a>.  
+<p>This comparator is needed for the sort function of <a class="el" href="class_audio_source_ambipanning.html#adceba7e5ff4ab65987bcb9e5ab5d0060" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a>.  
 <a href="#_details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_audio_source_ambipanning_8h_source.html">AudioSourceAmbipanning.h</a>&gt;</code></p>
@@ -76,11 +81,37 @@ Public Member Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#ae306331f3bc2d5d39e32a56060a66b1d"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point_comparator.html#a4e8f8fbc79ec7bdf89eee32666003368">compareElements</a> (void *first, void *second) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two elements of type void*, that are actually pointers to <a class="el" href="class_spacial_envelope_point.html" title="Describes a point in space at a certain time.">SpacialEnvelopePoint</a> after typecasting.  <a href="#a4e8f8fbc79ec7bdf89eee32666003368"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point_comparator.html#ae306331f3bc2d5d39e32a56060a66b1d">SpacialEnvelopePointComparator</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#ae306331f3bc2d5d39e32a56060a66b1d"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_spacial_envelope_point_comparator.html#a4e8f8fbc79ec7bdf89eee32666003368">compareElements</a> (void *first, void *second) const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two elements of type void*, that are actually pointers to <a class="el" href="class_spacial_envelope_point.html" title="Describes a point in space at a certain time.">SpacialEnvelopePoint</a> after typecasting.  <a href="#a4e8f8fbc79ec7bdf89eee32666003368"></a><br/></td></tr>
+<tr><td colspan="2"><h2><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e60f3ed284fba0057e245026097cd4d"></a><!-- doxytag: member="SpacialEnvelopePointComparator::JUCE_LEAK_DETECTOR" ref="a5e60f3ed284fba0057e245026097cd4d" args="(SpacialEnvelopePointComparator)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>JUCE_LEAK_DETECTOR</b> (<a class="el" href="class_spacial_envelope_point_comparator.html">SpacialEnvelopePointComparator</a>)</td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>This comparator is needed for the sort function of <a class="el" href="class_audio_source_ambipanning.html#a62830d46842c9c81c46b795674572b0b" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a>. </p>
+<div class="textblock"><p>This comparator is needed for the sort function of <a class="el" href="class_audio_source_ambipanning.html#adceba7e5ff4ab65987bcb9e5ab5d0060" title="This is used by AudioSourceAmbipanning::setSpacialEnvelope and by AudioSourceAmbipanning::getNextAudi...">AudioSourceAmbipanning::newSpacialEnvelope</a>. </p>
 <p>The sort function is called in <a class="el" href="class_audio_source_ambipanning.html#aa6d8686698ca1e88d7fd298c117af7a6" title="TODO.">AudioSourceAmbipanning::setSpacialEnvelope</a>. </p>
 </div><hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="ae306331f3bc2d5d39e32a56060a66b1d"></a><!-- doxytag: member="SpacialEnvelopePointComparator::SpacialEnvelopePointComparator" ref="ae306331f3bc2d5d39e32a56060a66b1d" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpacialEnvelopePointComparator::SpacialEnvelopePointComparator </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Constructor. </p>
+
+</div>
+</div>
 <a class="anchor" id="ae306331f3bc2d5d39e32a56060a66b1d"></a><!-- doxytag: member="SpacialEnvelopePointComparator::SpacialEnvelopePointComparator" ref="ae306331f3bc2d5d39e32a56060a66b1d" args="()" -->
 <div class="memitem">
 <div class="memproto">
@@ -145,8 +176,54 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<a class="anchor" id="a4e8f8fbc79ec7bdf89eee32666003368"></a><!-- doxytag: member="SpacialEnvelopePointComparator::compareElements" ref="a4e8f8fbc79ec7bdf89eee32666003368" args="(void *first, void *second) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SpacialEnvelopePointComparator::compareElements </td>
+          <td>(</td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>second</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const<code> [inline]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Compares two elements of type void*, that are actually pointers to <a class="el" href="class_spacial_envelope_point.html" title="Describes a point in space at a certain time.">SpacialEnvelopePoint</a> after typecasting. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>The first element to compare. </td></tr>
+    <tr><td class="paramname">second</td><td>The second element to compare.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd><ul>
+<li>
+-1, if ((SpacialEnvelopePoint*)first)-&gt;getPosition() &lt; ((SpacialEnvelopePoint*)second)-&gt;getPosition(). </li>
+<li>
+0, if ((SpacialEnvelopePoint*)first)-&gt;getPosition() = ((SpacialEnvelopePoint*)second)-&gt;getPosition(). </li>
+<li>
+1, if ((SpacialEnvelopePoint*)first)-&gt;getPosition() &gt; ((SpacialEnvelopePoint*)second)-&gt;getPosition(). </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Source/<a class="el" href="_audio_source_ambipanning_8h_source.html">AudioSourceAmbipanning.h</a></li>
+<li>Source_from_Philippe/<a class="el" href="from___philippe_2_audio_source_ambipanning_8h_source.html">AudioSourceAmbipanning.h</a></li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -154,7 +231,7 @@ Public Member Functions</h2></td></tr>
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -163,7 +240,7 @@ Public Member Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:16 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

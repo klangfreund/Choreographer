@@ -42,7 +42,7 @@
 
 - (void)dealloc
 {
-	NSLog(@"AudioRegion %x dealloc", self);
+	NSLog(@"AudioRegion %@ dealloc", self);
 	[position release];
 	[playbackBreakpointArray release];
 	[super dealloc];
@@ -82,7 +82,10 @@
 	NSString *label;
 	
 	if((AudioFile *)[[self valueForKeyPath:@"audioItem.audioFile"] audioFileID])
+    {
 		label = [NSString stringWithString:[self valueForKeyPath:@"audioItem.node.name"]];
+        // TODO truncate string to match width of region
+    }
 	else
 		label = [NSString stringWithFormat:@"---%@",[self valueForKeyPath:@"audioItem.node.name"]];
 	
@@ -117,14 +120,17 @@
 						 fraction:opacity];
 	}
 	
-	// draw gain rubberband
+
+    [super drawFrame:rect]; // before gain
+
+    
+    // draw gain rubberband
 	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
 	{
 		[self drawGainEnvelope:rect];
 	}
 	
 
-	[super drawFrame:rect];
 }
 
 
@@ -148,6 +154,7 @@
 }
 
 
+
 #pragma mark -
 #pragma mark breakpoints/handles for visualisation
 // -----------------------------------------------------------
@@ -159,13 +166,13 @@
 
 - (SpatialPosition *)regionPosition
 {
-	if(![self valueForKey:@"trajectoryItem"])
+	if([self valueForKey:@"trajectoryItem"] && ![[self valueForKeyPath:@"trajectoryItem.adaptiveInitialPosition"] boolValue])
 	{
-		return position;
+		return [playbackBreakpointArray objectAtIndex:0];
 	}
 	else
 	{
-		return [playbackBreakpointArray objectAtIndex:0];
+		return position;
 	}
 }
 	   
@@ -258,7 +265,7 @@
 
 - (void)calculatePositionBreakpoints
 {
-	NSLog(@"audio region %x --- calculate position breakpoints", self);
+//	NSLog(@"audio region %@ --- calculate position breakpoints", self);
 
 	[playbackBreakpointArray release];
 	tempBp1 = tempBp2 = nil;
@@ -273,7 +280,8 @@
 	}
 	else
 	{
-		playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue]] retain];		
+        int mode = [[self valueForKey:@"trajectoryDurationMode"] intValue];
+		playbackBreakpointArray = [[[self valueForKey:@"trajectoryItem"] playbackBreakpointArrayWithInitialPosition:position duration:[[self duration] longValue] mode:mode] retain];		
 	}
 
 	if([self valueForKey:@"parentRegion"] && [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"])

@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
       <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
     </ul>
   </div>
@@ -64,7 +68,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h1>SharedBufferingAudioSourceModThread Class Reference</h1>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="SharedBufferingAudioSourceModThread" -->
+<!-- doxytag: class="SharedBufferingAudioSourceModThread" --><!-- doxytag: inherits="DeletedAtShutdown,Thread,Timer,DeletedAtShutdown,Thread,Timer" --><div class="dynheader">
+Inheritance diagram for SharedBufferingAudioSourceModThread:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="class_shared_buffering_audio_source_mod_thread.png" usemap="#SharedBufferingAudioSourceModThread_map" alt=""/>
+  <map id="SharedBufferingAudioSourceModThread_map" name="SharedBufferingAudioSourceModThread_map">
+<area href="class_deleted_at_shutdown.html" alt="DeletedAtShutdown" shape="rect" coords="0,0,244,24"/>
+<area href="class_thread.html" alt="Thread" shape="rect" coords="254,0,498,24"/>
+<area href="class_timer.html" alt="Timer" shape="rect" coords="508,0,752,24"/>
+<area href="class_deleted_at_shutdown.html" alt="DeletedAtShutdown" shape="rect" coords="762,0,1006,24"/>
+<area href="class_thread.html" alt="Thread" shape="rect" coords="1016,0,1260,24"/>
+<area href="class_timer.html" alt="Timer" shape="rect" coords="1270,0,1514,24"/>
+</map>
+ </div></div>
+
 <p><a href="class_shared_buffering_audio_source_mod_thread-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
@@ -73,23 +91,121 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>juce_DeclareSingleton</b> (<a class="el" href="class_shared_buffering_audio_source_mod_thread.html">SharedBufferingAudioSourceModThread</a>, false) void addSource(<a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> *source)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a881ef74a5872d840d0d06fc6617d2fc1"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::removeSource" ref="a881ef74a5872d840d0d06fc6617d2fc1" args="(BufferingAudioSourceMod *source)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>removeSource</b> (<a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> *source)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6856b2c58b156ee48e2e775c2845e07"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::juce_DeclareSingleton" ref="af6856b2c58b156ee48e2e775c2845e07" args="(SharedBufferingAudioSourceModThread, false) void addSource(BufferingAudioSourceMod *source)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>juce_DeclareSingleton</b> (<a class="el" href="class_shared_buffering_audio_source_mod_thread.html">SharedBufferingAudioSourceModThread</a>, false) void addSource(<a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> *source)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a881ef74a5872d840d0d06fc6617d2fc1"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::removeSource" ref="a881ef74a5872d840d0d06fc6617d2fc1" args="(BufferingAudioSourceMod *source)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>removeSource</b> (<a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> *source)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a45fe6731a9015f9bc2dea7c55b5e89fe"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::run" ref="a45fe6731a9015f9bc2dea7c55b5e89fe" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>run</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a15506fea1419130ada6919c32fea85c5"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::timerCallback" ref="a15506fea1419130ada6919c32fea85c5" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>timerCallback</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a45fe6731a9015f9bc2dea7c55b5e89fe">run</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be implemented to perform the thread's actual code.  <a href="#a45fe6731a9015f9bc2dea7c55b5e89fe"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a15506fea1419130ada6919c32fea85c5">timerCallback</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The user-defined callback routine that actually gets called periodically.  <a href="#a15506fea1419130ada6919c32fea85c5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e3310e3188f2a26075a2174f4e4a016"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::JUCE_DECLARE_NON_COPYABLE" ref="a7e3310e3188f2a26075a2174f4e4a016" args="(SharedBufferingAudioSourceModThread)" -->
+&#160;</td><td class="memItemRight" valign="bottom"><b>JUCE_DECLARE_NON_COPYABLE</b> (<a class="el" href="class_shared_buffering_audio_source_mod_thread.html">SharedBufferingAudioSourceModThread</a>)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a45fe6731a9015f9bc2dea7c55b5e89fe">run</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Must be implemented to perform the thread's actual code.  <a href="#a45fe6731a9015f9bc2dea7c55b5e89fe"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a15506fea1419130ada6919c32fea85c5">timerCallback</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The user-defined callback routine that actually gets called periodically.  <a href="#a15506fea1419130ada6919c32fea85c5"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7e3310e3188f2a26075a2174f4e4a016"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::JUCE_DECLARE_NON_COPYABLE" ref="a7e3310e3188f2a26075a2174f4e4a016" args="(SharedBufferingAudioSourceModThread)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>JUCE_DECLARE_NON_COPYABLE</b> (<a class="el" href="class_shared_buffering_audio_source_mod_thread.html">SharedBufferingAudioSourceModThread</a>)</td></tr>
 <tr><td colspan="2"><h2><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4f81204daa041c344e81a00e8b130cfc"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::sources" ref="a4f81204daa041c344e81a00e8b130cfc" args="" -->
-Array&lt; <a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>sources</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0e99ab22aa7893629d1bdcf1d2244d22"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::sources" ref="a0e99ab22aa7893629d1bdcf1d2244d22" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="class_buffering_audio_source_mod.html">BufferingAudioSourceMod</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>sources</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63c8db578bb3d88513b332e0384840af"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::lock" ref="a63c8db578bb3d88513b332e0384840af" args="" -->
-CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>lock</b></td></tr>
+<a class="el" href="class_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>lock</b></td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following file:<ul>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a45fe6731a9015f9bc2dea7c55b5e89fe"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::run" ref="a45fe6731a9015f9bc2dea7c55b5e89fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SharedBufferingAudioSourceModThread::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Must be implemented to perform the thread's actual code. </p>
+<p>Remember that the thread must regularly check the <a class="el" href="class_thread.html#a0a8fdce313d3c0db6c5adbb78c4352b4" title="Checks whether the thread has been told to stop running.">threadShouldExit()</a> method whilst running, and if this returns true it should return from the <a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a45fe6731a9015f9bc2dea7c55b5e89fe" title="Must be implemented to perform the thread&#39;s actual code.">run()</a> method as soon as possible to avoid being forcibly killed.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="class_thread.html#a0a8fdce313d3c0db6c5adbb78c4352b4" title="Checks whether the thread has been told to stop running.">threadShouldExit</a>, <a class="el" href="class_thread.html#a5502205d727c00752f95af27a063d983" title="Starts the thread running.">startThread</a> </dd></dl>
+
+<p>Implements <a class="el" href="class_thread.html#aae90dfabab3e1776cf01a26e7ee3a620">Thread</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a45fe6731a9015f9bc2dea7c55b5e89fe"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::run" ref="a45fe6731a9015f9bc2dea7c55b5e89fe" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SharedBufferingAudioSourceModThread::run </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Must be implemented to perform the thread's actual code. </p>
+<p>Remember that the thread must regularly check the <a class="el" href="class_thread.html#a0a8fdce313d3c0db6c5adbb78c4352b4" title="Checks whether the thread has been told to stop running.">threadShouldExit()</a> method whilst running, and if this returns true it should return from the <a class="el" href="class_shared_buffering_audio_source_mod_thread.html#a45fe6731a9015f9bc2dea7c55b5e89fe" title="Must be implemented to perform the thread&#39;s actual code.">run()</a> method as soon as possible to avoid being forcibly killed.</p>
+<dl class="see"><dt><b>See also:</b></dt><dd><a class="el" href="class_thread.html#a0a8fdce313d3c0db6c5adbb78c4352b4" title="Checks whether the thread has been told to stop running.">threadShouldExit</a>, <a class="el" href="class_thread.html#a5502205d727c00752f95af27a063d983" title="Starts the thread running.">startThread</a> </dd></dl>
+
+<p>Implements <a class="el" href="class_thread.html#aae90dfabab3e1776cf01a26e7ee3a620">Thread</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15506fea1419130ada6919c32fea85c5"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::timerCallback" ref="a15506fea1419130ada6919c32fea85c5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SharedBufferingAudioSourceModThread::timerCallback </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The user-defined callback routine that actually gets called periodically. </p>
+<p>It's perfectly ok to call <a class="el" href="class_timer.html#a3b1a51ac348c56a55fcef4570214f057" title="Starts the timer and sets the length of interval required.">startTimer()</a> or <a class="el" href="class_timer.html#ab918b8c1f80bf1de92dd1a5878f498bd" title="Stops the timer.">stopTimer()</a> from within this callback to change the subsequent intervals. </p>
+
+<p>Implements <a class="el" href="class_timer.html#a8adc40ca0fb4170737ba12e30481b9d8">Timer</a>.</p>
+
+</div>
+</div>
+<a class="anchor" id="a15506fea1419130ada6919c32fea85c5"></a><!-- doxytag: member="SharedBufferingAudioSourceModThread::timerCallback" ref="a15506fea1419130ada6919c32fea85c5" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void SharedBufferingAudioSourceModThread::timerCallback </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [inline, private, virtual]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The user-defined callback routine that actually gets called periodically. </p>
+<p>It's perfectly ok to call <a class="el" href="class_timer.html#a3b1a51ac348c56a55fcef4570214f057" title="Starts the timer and sets the length of interval required.">startTimer()</a> or <a class="el" href="class_timer.html#ab918b8c1f80bf1de92dd1a5878f498bd" title="Stops the timer.">stopTimer()</a> from within this callback to change the subsequent intervals. </p>
+
+<p>Implements <a class="el" href="class_timer.html#a8adc40ca0fb4170737ba12e30481b9d8">Timer</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li>Source/modified Juce Classes/BufferingAudioSourceMod.cpp</li>
+<li>Source_from_Philippe/modified Juce Classes/BufferingAudioSourceMod.cpp</li>
 </ul>
 </div>
 <!--- window showing the filter options -->
@@ -97,7 +213,7 @@ CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>lock</b></
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -106,7 +222,7 @@ CriticalSection&#160;</td><td class="memItemRight" valign="bottom"><b>lock</b></
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:16 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

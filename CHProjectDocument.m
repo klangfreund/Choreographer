@@ -92,7 +92,7 @@
 	poolViewController = [[PoolViewController poolViewControllerForDocument:self] retain];
 	[[poolViewController view] setFrame:r];
 	[splitSubview addSubview:[poolViewController view]];
-	[poolViewController setup];
+//	[poolViewController setup];
 	
 	// setup arranger view (rebuild from data model)
 	[arrangerView setup];
@@ -112,6 +112,7 @@
 
 - (void)setup
 {
+	NSLog(@"Project setup");
 	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     NSError *fetchError = nil;
@@ -133,6 +134,8 @@
 	{
         [self presentError:fetchError];
     }
+	
+	[self setProjectSampleRate:[[projectSettings valueForKey:@"projectSampleRate"] intValue]];
 }
 
 /* versioning:
@@ -154,7 +157,7 @@
 													  storeOptions:newOptions
 															 error:error];
 	
-	[newOptions release];
+//	[newOptions release];
 	return result;
 }
 
@@ -162,14 +165,17 @@
 {
 //	NSLog(@"CHProjectDocument: can close ");
 
-	// store window scroll position
-	
+	// store window scroll position	
 	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.x] forKey:@"arrangerScrollOriginX"];
 	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.y] forKey:@"arrangerScrollOriginY"];
 
+	// stop playback and store playhead position
+	[[AudioEngine sharedAudioEngine] stopAudio];
+//	[projectSettings setValue:[NSNumber numberWithUnsignedLong:[playbackController locator]] forKey:@"arrangerPlayheadPosition"];
+	[projectSettings setValue:[NSNumber numberWithUnsignedLong:0] forKey:@"arrangerPlayheadPosition"];
 	
-	[projectSettings setValue:[NSNumber numberWithUnsignedLong:[playbackController locator]] forKey:@"arrangerPlayheadPosition"];
-	
+	// empty the engine's schedule
+	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
 
 	[super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo]; 
 }
@@ -187,8 +193,10 @@
 	}
 	
 	[arrangerView close];
+	[[NSApplication sharedApplication] setValue:nil forKeyPath:@"delegate.currentProjectDocument"];
 	[super close];
 }
+
 
 //- (void)saveDocument:(id)sender
 //{
@@ -196,10 +204,21 @@
 //}
 
 
-- (void)revertDocumentToSaved:(id)sender
+//- (void)revertDocumentToSaved:(id)sender
+//{
+//	NSLog(@"CHProjectDocument: revert %@", self);
+//	[super revertDocumentToSaved:sender];
+//}
+
+- (BOOL)revertToContentsOfURL:(NSURL *)inAbsoluteURL ofType:(NSString *)inTypeName error:(NSError **)outError
 {
-	NSLog(@"CHProjectDocument: revert %@", self);
-	[super revertDocumentToSaved:sender];
+	NSLog(@"CHProjectDocument: revert to %@ of type %@", inAbsoluteURL, inTypeName);
+	
+	// manual implementation of the revert process
+	[self close];
+	[[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:inAbsoluteURL display:YES error:outError];
+
+	return YES;
 }
 
 - (void)dealloc
@@ -214,6 +233,11 @@
 #pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
+
+- (IBAction)bounceToDisk:(id)sender
+{
+	[bounceToDiskController bounceToDisk:self];
+}
 
 - (IBAction)xZoomIn:(id)sender
 {
@@ -319,12 +343,6 @@
 	return [[projectSettings valueForKey:@"arrangerZoomFactorY"] floatValue];
 }
 
-- (NSWindowController *)windowController
-{
-	return [[self windowControllers] objectAtIndex:0];
-}
-
-
 // If the document exists on disk, return the file name. Otherwise return the default ("Untitled Project").
 // This is used for the window title and for the default name when saving. 
 
@@ -338,6 +356,14 @@
 	{
         return [[super displayName] stringByReplacingOccurrencesOfString:@"Untitled" withString:@"Untitled Project"];
 	}
+}
+
+- (void)setProjectSampleRate:(NSUInteger)val
+{
+	if (val != [[projectSettings valueForKey:@"projectSampleRate"] intValue])
+		[projectSettings setValue:[NSNumber numberWithInt:val] forKey:@"projectSampleRate"];
+	
+	[projectSampleRateTextField setStringValue:[NSString stringWithFormat:@"%d Hz", [[projectSettings valueForKey:@"projectSampleRate"] longValue]]];
 }
 
 
@@ -378,17 +404,6 @@
 		[[EditorContent sharedEditorContent] synchronizeWithArranger:nil pool:nil];
 	}
 }
-
-#pragma mark -
-#pragma mark ...
-// -----------------------------------------------------------
-
-//- (void)refreshPoolViews
-//{
-//	// sent by arranger when a new audio item (duplicate) has been created 
-//	[poolViewController refresh];	
-//}
-
 
 #pragma mark -
 #pragma mark window delegate methods

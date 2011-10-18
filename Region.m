@@ -28,7 +28,7 @@
 //	NSLog(@"Region %x awakeFromInsert", self);
 
 	[self commonAwake];
-	gainBreakpointArray = [[NSMutableArray alloc] init];
+	gainBreakpointArray = [[BreakpointArray alloc] init];
 	[gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
 
 	frame = NSMakeRect(0, 0, 0, 0);
@@ -40,7 +40,8 @@
 	bp = [[[Breakpoint alloc] init] autorelease];
 	[bp setValue:0];
 	[bp setTime:0];
-	[gainBreakpointArray addObject:bp];	
+	[bp setBreakpointType:breakpointTypeNormal];
+	[gainBreakpointArray addBreakpoint:bp];	
 	
 	[self archiveData];
 }
@@ -82,13 +83,13 @@
 
 - (void)dealloc
 {
-	NSLog(@"Region %x dealloc", self);
+	NSLog(@"Region %@ dealloc", self);
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[projectSettings release];	
 
 	[gainBreakpointArray release];
-	[BreakpointView release];
+	[gainBreakpointView release];
 
 	[super dealloc];
 }
@@ -163,10 +164,9 @@
 	}
 	
 	// draw child regions
-	NSEnumerator *enumerator = [[self valueForKey:@"childRegions"] objectEnumerator];
 	Region *region;
 
-	while (region = [enumerator nextObject])
+	for(region in [self valueForKey:@"childRegions"])
 	{
 		[region drawRect:rect];
 	}
@@ -212,7 +212,7 @@
 
 		trajectoryFrame = trajectoryRect;
 		
-		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] != durationModeScaled)
+		if([[self valueForKeyPath:@"trajectoryDurationMode"] intValue] != durationModeScaled)
 		{
 			trajectoryRect.size.width = [[self valueForKeyPath:@"trajectoryItem.duration"] unsignedIntValue] * zoomFactorX;
 		}
@@ -235,8 +235,8 @@
 		
 		// draw loop
 
-		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] == durationModeLoop ||
-		   [[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] == durationModePalindrome)
+		if([[self valueForKeyPath:@"trajectoryDurationMode"] intValue] == durationModeLoop ||
+		   [[self valueForKeyPath:@"trajectoryDurationMode"] intValue] == durationModePalindrome)
 		{
 			NSRect loopFrame = trajectoryFrame;
 			
@@ -250,7 +250,7 @@
 
 		// draw triangle if trajectory is longer then audio region
 
-		if([[self valueForKeyPath:@"trajectoryItem.durationMode"] intValue] != durationModeScaled &&
+		if([[self valueForKeyPath:@"trajectoryDurationMode"] intValue] != durationModeScaled &&
 		   [[self valueForKeyPath:@"trajectoryItem.duration"] unsignedIntValue] > [[self valueForKey:@"duration"] unsignedIntValue])
 		{
 			trajectoryRect.size.width = frame.size.width - 8;
@@ -399,11 +399,8 @@
 	frame.origin.x += deltaX;
 	frame.origin.y += deltaY;
 	
-	// move child views too
-    NSEnumerator *enumerator = [[self valueForKey:@"childRegions"] objectEnumerator];
-	Region *region;
-	
-    while (region = [enumerator nextObject])
+	// move child views too	
+    for(Region *region in [self valueForKey:@"childRegions"])
 	{
 		[region moveByDeltaX:deltaX deltaY:deltaY];
     }
@@ -421,7 +418,7 @@
 {
 	NSLog(@"Region: updateGainEnvelope ---------------");
 	
-	NSMutableArray *tempArray = [gainBreakpointArray mutableCopy];
+	NSMutableArray *tempArray = [gainBreakpointArray.breakpoints mutableCopy];
 	
 //	float lastValue = [(Breakpoint *)[gainBreakpointArray objectAtIndex:0] value];
 	for(Breakpoint* bp in tempArray)
@@ -429,7 +426,7 @@
 		if(bp.time < contentOffset / zoomFactorX ||
 		   bp.time > contentOffset / zoomFactorX + frame.size.width / zoomFactorX)
 		{
-			[gainBreakpointArray removeObject:bp];
+			[gainBreakpointArray removeBreakpoint:bp];
 		}
 		else
 		{
@@ -444,7 +441,7 @@
 		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setValue:0];
 		[bp setTime:0];
-		[gainBreakpointArray addObject:bp];	
+		[gainBreakpointArray addBreakpoint:bp];	
 	}
 	
 	[self archiveData];
@@ -465,10 +462,7 @@
 	}
 	
 	// synchronize children
-    NSEnumerator *enumerator = [[self valueForKey:@"childRegions"] objectEnumerator];
-	Region *region;
-	
-    while (region = [enumerator nextObject])
+    for(Region *region in [self valueForKey:@"childRegions"])
 	{
 		[region updateTimeInModel];
     }
@@ -491,16 +485,16 @@
 #pragma mark gain envelope
 // -----------------------------------------------------------
 
-- (void)setGainBreakpointArray:(NSArray *)array
-{
-	if(gainBreakpointArray != array)
-	{
-		[gainBreakpointArray release];
-		gainBreakpointArray = [array retain];
-		
-		[gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
-	}
-}
+//- (void)setGainBreakpointArray:(NSArray *)array
+//{
+//	if(gainBreakpointArray != array)
+//	{
+//		[gainBreakpointArray release];
+//		gainBreakpointArray = [array retain];
+//		
+//		[gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
+//	}
+//}
 
 - (void)removeSelectedGainBreakpoints
 {
@@ -513,7 +507,7 @@
 		bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setValue:0];
 		[bp setTime:0];
-		[gainBreakpointArray addObject:bp];	
+		[gainBreakpointArray addBreakpoint:bp];	
 	}
 }
 

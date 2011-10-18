@@ -30,7 +30,8 @@
 
 - (id)init
 {    
-	if(self = [super init])
+    self = [super init];
+	if(self)
 	{
 		x = y = z = 0;
 		a = e = d = 0;

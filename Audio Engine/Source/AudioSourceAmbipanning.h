@@ -132,6 +132,7 @@ private:
     /** The z-coordinate in space. */
     double z;
 	
+	JUCE_LEAK_DETECTOR (SpacialEnvelopePoint);
 };
 
 //==============================================================================
@@ -178,6 +179,9 @@ public:
 			return 0;
 		}
 	}
+	
+private:
+	JUCE_LEAK_DETECTOR (SpacialEnvelopePointComparator);
 };
 
 //==============================================================================
@@ -193,78 +197,54 @@ public:
 class JUCE_API  SpeakerPosition
 {
 public:
-	SpeakerPosition()
-	{
-		x = 0.0;
-		y = 1.0;
-		z = 0.0;
-	}
+	SpeakerPosition();
 	
 	/** Constructor.
 	 @param x_ x-coordinate in space.
 	 @param y_ y-coordinate in space.
 	 @param z_ z-coordinate in space.
 	 */
-	SpeakerPosition (double x_, double y_, double z_)
-	{
-		x = x_;
-		y = y_;
-		z = z_;
-	}
+	SpeakerPosition (double x_, double y_, double z_);
+    
+    SpeakerPosition (const SpeakerPosition& other);
 	
 	/** Destructor. */
-	~SpeakerPosition ()
-	{
-	}
+	~SpeakerPosition ();
+    
+    /** The assignment operator.
+     
+     @param other   The source object from the right hand side.
+     @return        This object to allow a=b=c like semantics.
+     */
+    const SpeakerPosition& operator= (const SpeakerPosition& other);
 	
 	/** Sets the x-coordinate in space. */
-	void setX (double x_)
-	{
-		x = x_;
-	}
+	void setX (double x_);
 	
 	/** Sets the y-coordinate in space. */
-	void setY (double y_)
-	{
-		y = y_;
-	}
+	void setY (double y_);
 	
 	/** Sets the z-coordinate in space. */
-	void setZ (double z_)
-	{
-		z = z_;
-	}
+	void setZ (double z_);
 	
 	/** Sets the x-, y- and z-coordinate in space. */
-	void setXYZ (double x_, double y_, double z_)
-	{
-		x = x_;
-		y = y_;
-		z = z_;
-	}
+	void setXYZ (double x_, double y_, double z_);
 	
 	/** Gets the x-coordinate in space. */
-	double getX ()
-	{
-		return x;
-	}
-	
+	double getX ();
+    
 	/** Gets the y-coordinate in space. */
-	double getY ()
-	{
-		return y;
-	}
+	double getY ();
 	
 	/** Gets the z-coordinate in space. */
-	double getZ ()
-	{
-		return z;
-	}
+	double getZ ();
 	
 private:
 	double x;
 	double y;
 	double z;
+	
+	JUCE_LEAK_DETECTOR (SpeakerPosition);
 };
 
 //==============================================================================
@@ -492,6 +472,8 @@ private:
 	int numberOfRemainingSamples;
 	
 	CriticalSection callbackLock;
+	
+	JUCE_LEAK_DETECTOR (AudioSourceAmbipanning);
 };
 
 

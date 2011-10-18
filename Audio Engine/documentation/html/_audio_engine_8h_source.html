@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 <div class="header">
@@ -73,7 +77,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00013"></a>00013 <span class="preprocessor">#import &quot;MeterBridgeWindowController.h&quot;</span>
 <a name="l00014"></a>00014 
 <a name="l00015"></a>00015 <span class="preprocessor">#ifdef __cplusplus</span>
-<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#include &quot;AmbisonicsAudioEngine.h&quot;</span>
+<a name="l00016"></a>00016 <span class="preprocessor"></span><span class="preprocessor">#include &quot;Source/AmbisonicsAudioEngine.h&quot;</span>
 <a name="l00017"></a>00017 <span class="preprocessor">#endif</span>
 <a name="l00018"></a>00018 <span class="preprocessor"></span>
 <a name="l00019"></a><a class="code" href="interface_audio_engine.html">00019</a> <span class="keyword">@interface </span><a class="code" href="interface_audio_engine.html">AudioEngine</a> : NSObject
@@ -87,96 +91,109 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00027"></a>00027         
 <a name="l00028"></a>00028         IBOutlet NSMenu *menu;
 <a name="l00029"></a>00029 
-<a name="l00030"></a>00030         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> regionIndex;
-<a name="l00031"></a>00031         
-<a name="l00032"></a>00032         BOOL isPlaying;
-<a name="l00033"></a>00033 }
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035 + (<a class="code" href="interface_audio_engine.html">AudioEngine</a> *)sharedAudioEngine;
-<a name="l00036"></a>00036 
-<a name="l00037"></a>00037 - (void)setup;
-<a name="l00038"></a>00038 
-<a name="l00039"></a>00039 <span class="comment">// Menu (UI Actions)</span>
-<a name="l00040"></a>00040 - (IBAction)showHardwareSetup:(<span class="keywordtype">id</span>)sender;
-<a name="l00041"></a>00041 - (IBAction)showSpeakerSetup:(<span class="keywordtype">id</span>)sender;
-<a name="l00042"></a>00042 - (IBAction)showMeterBridge:(<span class="keywordtype">id</span>)sender;
-<a name="l00043"></a>00043 
+<a name="l00030"></a>00030         BOOL isPlaying;
+<a name="l00031"></a>00031 
+<a name="l00032"></a>00032         NSUInteger regionIndex;
+<a name="l00033"></a>00033         NSUInteger volumeLevelMeasurementClientCount;
+<a name="l00034"></a>00034 }
+<a name="l00035"></a>00035 
+<a name="l00036"></a>00036 + (<a class="code" href="interface_audio_engine.html">AudioEngine</a> *)sharedAudioEngine;
+<a name="l00037"></a>00037 
+<a name="l00038"></a>00038 - (void)setup;
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040 <span class="comment">// Menu (UI Actions)</span>
+<a name="l00041"></a>00041 - (IBAction)showHardwareSetup:(<span class="keywordtype">id</span>)sender;
+<a name="l00042"></a>00042 - (IBAction)showSpeakerSetup:(<span class="keywordtype">id</span>)sender;
+<a name="l00043"></a>00043 - (IBAction)showMeterBridge:(<span class="keywordtype">id</span>)sender;
 <a name="l00044"></a>00044 
-<a name="l00045"></a>00045 <span class="comment">// Auxiliary Playback</span>
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047 - (void)audioRegionPreview:(<span class="keywordtype">id</span>)region;
-<a name="l00048"></a>00048 - (void)testNoise:(BOOL)enable forChannelatIndex:(NSUInteger)index;
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050 <span class="comment">// Transport</span>
-<a name="l00051"></a>00051 
-<a name="l00052"></a>00052 - (void)startAudio:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)playbackLocation;
-<a name="l00053"></a>00053 - (void)stopAudio;
-<a name="l00054"></a>00054 
-<a name="l00055"></a>00055 - (void)setLoopStart:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)start end:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)end;
-<a name="l00056"></a>00056 - (void)unsetLoop;
-<a name="l00057"></a>00057 
+<a name="l00045"></a>00045 
+<a name="l00046"></a>00046 <span class="comment">// Auxiliary Playback</span>
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048 - (void)audioRegionPreview:(<span class="keywordtype">id</span>)region;
+<a name="l00049"></a>00049 - (void)testNoise:(BOOL)enable forChannelatIndex:(NSUInteger)index;
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="comment">// Transport</span>
+<a name="l00052"></a>00052 
+<a name="l00053"></a>00053 - (void)startAudio:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)playbackLocation;
+<a name="l00054"></a>00054 - (void)stopAudio;
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056 - (void)setLoopStart:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)start end:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)end;
+<a name="l00057"></a>00057 - (void)unsetLoop;
 <a name="l00058"></a>00058 
-<a name="l00059"></a>00059 <span class="comment">// Getter</span>
+<a name="l00059"></a>00059 - (void)bounceToDisk:(NSURL *)URL start:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)start end:(<span class="keywordtype">unsigned</span> <span class="keywordtype">long</span>)end;
 <a name="l00060"></a>00060 
-<a name="l00061"></a>00061 - (BOOL)isPlaying;
-<a name="l00062"></a>00062 - (<span class="keywordtype">unsigned</span> long)playbackLocation;
-<a name="l00063"></a>00063 - (<span class="keywordtype">unsigned</span> int)sampleRate;
-<a name="l00064"></a>00064 - (<span class="keywordtype">unsigned</span> short)numberOfSpeakerChannels;
-<a name="l00065"></a>00065 - (<span class="keywordtype">unsigned</span> short)numberOfHardwareDeviceOutputChannels;
-<a name="l00066"></a>00066 - (NSString *)nameOfHardwareOutputDevice;
-<a name="l00067"></a>00067 - (double)cpuUsage;
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070 <span class="comment">// Setter</span>
+<a name="l00061"></a>00061 
+<a name="l00062"></a>00062 <span class="comment">// Getter</span>
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064 - (BOOL)isPlaying;
+<a name="l00065"></a>00065 - (<span class="keywordtype">unsigned</span> long)playbackLocation;
+<a name="l00066"></a>00066 - (<span class="keywordtype">unsigned</span> int)sampleRate;
+<a name="l00067"></a>00067 - (<span class="keywordtype">unsigned</span> short)numberOfSpeakerChannels;
+<a name="l00068"></a>00068 - (<span class="keywordtype">unsigned</span> short)numberOfHardwareDeviceOutputChannels;
+<a name="l00069"></a>00069 - (NSString *)nameOfHardwareOutputDevice;
+<a name="l00070"></a>00070 - (double)cpuUsage;
 <a name="l00071"></a>00071 
-<a name="l00072"></a>00072 - (void)setMasterVolume:(<span class="keywordtype">float</span>)dbValue;
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074 - (void)setAmbisonicsOrder:(<span class="keywordtype">short</span>)order;
-<a name="l00075"></a>00075 - (void)setdBUnit:(<span class="keywordtype">double</span>)unit;
+<a name="l00072"></a>00072 
+<a name="l00073"></a>00073 <span class="comment">// Setter</span>
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075 - (void)setMasterVolume:(<span class="keywordtype">float</span>)dbValue;
 <a name="l00076"></a>00076 
-<a name="l00077"></a>00077 - (void)setUseHipassFilter:(BOOL)filter;
-<a name="l00078"></a>00078 - (void)setUseDelay:(BOOL)delay;
+<a name="l00077"></a>00077 - (void)setAmbisonicsOrder:(<span class="keywordtype">short</span>)order;
+<a name="l00078"></a>00078 - (void)setdBUnit:(<span class="keywordtype">double</span>)unit;
 <a name="l00079"></a>00079 
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081 <span class="comment">//  Schedule Playback</span>
+<a name="l00080"></a>00080 - (void)setUseHipassFilter:(BOOL)filter;
+<a name="l00081"></a>00081 - (void)setUseDelay:(BOOL)delay;
 <a name="l00082"></a>00082 
-<a name="l00083"></a>00083 - (void)addAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
-<a name="l00084"></a>00084 - (void)modifyAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
-<a name="l00085"></a>00085 - (void)deleteAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
-<a name="l00086"></a>00086 - (void)deleteAllAudioRegions;
-<a name="l00087"></a>00087 
+<a name="l00083"></a>00083 - (void)setTestNoiseVolume:(<span class="keywordtype">float</span>)dbValue;
+<a name="l00084"></a>00084 
+<a name="l00085"></a>00085 
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087 <span class="comment">//  Schedule Playback</span>
 <a name="l00088"></a>00088 
-<a name="l00089"></a>00089 <span class="comment">//  Speaker Setup</span>
-<a name="l00090"></a>00090 
-<a name="l00091"></a>00091 - (void)removeAllSpeakerChannels;
-<a name="l00092"></a>00092 - (void)addSpeakerChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
-<a name="l00093"></a>00093 - (void)validateSpeakerSetup;
-<a name="l00094"></a>00094 <span class="comment">//- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;</span>
-<a name="l00095"></a>00095 - (void)updateParametersForChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
-<a name="l00096"></a>00096 - (void)updateRoutingForChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098 
-<a name="l00099"></a>00099 <span class="comment">//  Level Meter</span>
+<a name="l00089"></a>00089 - (void)addAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
+<a name="l00090"></a>00090 - (void)modifyAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
+<a name="l00091"></a>00091 - (void)deleteAudioRegion:(<span class="keywordtype">id</span>)audioRegion;
+<a name="l00092"></a>00092 - (void)deleteAllAudioRegions;
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 <span class="comment">// Hardware</span>
+<a name="l00096"></a>00096 
+<a name="l00097"></a>00097 - (NSArray *)availableAudioDeviceNames;
+<a name="l00098"></a>00098 - (void)setHardwareOutputDevice:(NSString *)deviceName;
+<a name="l00099"></a>00099 
 <a name="l00100"></a>00100 
-<a name="l00101"></a>00101 - (void)enableVolumeLevelMeasurement:(BOOL)val;
-<a name="l00102"></a>00102 - (void)resetVolumePeakLevel:(NSUInteger)channel;
-<a name="l00103"></a>00103 - (float)volumeLevel:(NSUInteger)channel;
-<a name="l00104"></a>00104 - (float)volumePeakLevel:(NSUInteger)channel;
-<a name="l00105"></a>00105 
-<a name="l00106"></a>00106 
-<a name="l00107"></a>00107 <span class="comment">//  Settings</span>
-<a name="l00108"></a>00108 
-<a name="l00109"></a>00109 - (void)setPersistentSetting:(<span class="keywordtype">id</span>)data forKey:(NSString *)key;
-<a name="l00110"></a>00110 - (id)persistentSettingForKey:(NSString *)key;
-<a name="l00111"></a>00111 
+<a name="l00101"></a>00101 <span class="comment">//  Speaker Setup</span>
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 - (void)removeAllSpeakerChannels;
+<a name="l00104"></a>00104 - (void)addSpeakerChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
+<a name="l00105"></a>00105 - (void)validateSpeakerSetup;
+<a name="l00106"></a>00106 <span class="comment">//- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;</span>
+<a name="l00107"></a>00107 - (void)updateParametersForChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
+<a name="l00108"></a>00108 - (void)updateRoutingForChannel:(<a class="code" href="interface_speaker_channel.html">SpeakerChannel</a> *)channel atIndex:(NSUInteger)index;
+<a name="l00109"></a>00109 
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111 <span class="comment">//  Level Meter</span>
 <a name="l00112"></a>00112 
-<a name="l00113"></a>00113 <span class="comment">//  Real Time</span>
-<a name="l00114"></a>00114 <span class="comment">/*</span>
-<a name="l00115"></a>00115 <span class="comment">- (void)setVolume:(float)volume forVoice:(unsigned int)voice;</span>
-<a name="l00116"></a>00116 <span class="comment">- (void)setPosition:(Position *)position forVoice:(unsigned int)voice;</span>
-<a name="l00117"></a>00117 <span class="comment">*/</span>
+<a name="l00113"></a>00113 - (void)volumeLevelMeasurementClient:(BOOL)val;
+<a name="l00114"></a>00114 - (void)enableVolumeLevelMeasurement:(BOOL)val;
+<a name="l00115"></a>00115 - (void)resetVolumePeakLevel:(NSUInteger)channel;
+<a name="l00116"></a>00116 - (float)volumeLevel:(NSUInteger)channel;
+<a name="l00117"></a>00117 - (float)volumePeakLevel:(NSUInteger)channel;
 <a name="l00118"></a>00118 
-<a name="l00119"></a>00119 <span class="keyword">@end</span>
+<a name="l00119"></a>00119 
+<a name="l00120"></a>00120 <span class="comment">//  Settings</span>
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122 - (void)setPersistentSetting:(<span class="keywordtype">id</span>)data forKey:(NSString *)key;
+<a name="l00123"></a>00123 - (id)persistentSettingForKey:(NSString *)key;
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125 
+<a name="l00126"></a>00126 <span class="comment">//  Real Time</span>
+<a name="l00127"></a>00127 <span class="comment">/*</span>
+<a name="l00128"></a>00128 <span class="comment">- (void)setVolume:(float)volume forVoice:(unsigned int)voice;</span>
+<a name="l00129"></a>00129 <span class="comment">- (void)setPosition:(Position *)position forVoice:(unsigned int)voice;</span>
+<a name="l00130"></a>00130 <span class="comment">*/</span>
+<a name="l00131"></a>00131 
+<a name="l00132"></a>00132 <span class="keyword">@end</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -184,7 +201,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -193,7 +210,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:16:55 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

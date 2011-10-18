@@ -101,32 +101,6 @@ static AudioEngine *sharedAudioEngine = nil;
 #pragma mark Menu (UI Actions)
 // -----------------------------------------------------------
 
-- (void)bounceToDisk
-{
-	NSLog(@"bounce to disk");
-	
-	[self stopAudio];
-	
-	// String absolutePathToAudioFile("/Users/sam/Desktop/bounce.wav");
-	String absolutePathToAudioFile("/Users/philippekocher/Desktop/bounce.wav");
-	int bitsPerSample = 16;
-	String description("Test bounce");
-	String originator("Sam");
-	String originatorRef("Choreographer");
-	String codingHistory; 
-	int startSample = 0; //22*44100;
-	int numberOfSamplesToRead = 8*44100;
-	ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
-										bitsPerSample, 
-										description, 
-										originator, 
-										originatorRef,
-										codingHistory, 
-										startSample, 
-										numberOfSamplesToRead);	
-}
-
-
 - (IBAction)showHardwareSetup:(id)sender
 {
 	[self stopAudio];
@@ -143,19 +117,6 @@ static AudioEngine *sharedAudioEngine = nil;
 {	
 	[meterBridgeWindowController showWindow:nil];
 }
-
-//- (BOOL)validateUserInterfaceItem:(id)item
-//{
-//	id document = [[NSDocumentController sharedDocumentController] currentDocument];
-//	
-//	NSLog(@"doc: %@", (document != nil));
-//
-//	if ([item action] == @selector(bounceToDisk:) && (document != nil)) return YES;
-//	
-//	
-//	else return NO;
-//}
-
 	
 #pragma mark -
 #pragma mark auxiliary playback
@@ -202,6 +163,28 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)unsetLoop
 {
 	ambisonicsAudioEngine->disableArrangerLoop();
+}
+
+- (void)bounceToDisk:(NSURL *)URL start:(unsigned long)start end:(unsigned long)end
+{
+	String absolutePathToAudioFile = [[URL path] cStringUsingEncoding:NSASCIIStringEncoding];
+	int bitsPerSample = 16;
+	String description("Test bounce");
+	String originator("Sam");
+	String originatorRef("Choreographer");
+	String codingHistory; 
+	int startSample = start * 44.1; //22*44100;
+	int numberOfSamplesToRead = (end - start) * 44.1;
+	bool succ = ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
+													bitsPerSample, 
+													description,
+													originator, 
+													originatorRef,
+													codingHistory, 
+													startSample, 
+													numberOfSamplesToRead);
+	
+	NSLog(@"successful %d", succ);
 }
 
 
@@ -357,7 +340,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	else
 	{
 		int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
-		for(id bp in [audioRegion valueForKey:@"gainBreakpointArray"])
+		for(id bp in [audioRegion valueForKeyPath:@"gainBreakpointArray"])
 		{
 			//NSLog(@"gain bp: %d %f", [[bp valueForKey:@"time"] longValue], [[bp valueForKey:@"value"] floatValue]);
 			gain = pow(10, 0.05 * [[bp valueForKey:@"value"] floatValue]);
@@ -417,7 +400,7 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	NSLog(@"--- available devices...");
 	const StringArray juceStringArray = ambisonicsAudioEngine->getAvailableAudioDeviceNames();
-	NSMutableArray *array = [NSMutableArray new];
+	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
 	
 	int maxBufferSizeBytes = 120;
 	char audioDeviceName[maxBufferSizeBytes];

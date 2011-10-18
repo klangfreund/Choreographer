@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 44;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,9 +27,11 @@
 		15204C3A0E4AFC78005E66F0 /* SpatialPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204C390E4AFC78005E66F0 /* SpatialPosition.m */; };
 		15204D000E4B031C005E66F0 /* Playhead.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204CFD0E4B031C005E66F0 /* Playhead.m */; };
 		15204D010E4B031C005E66F0 /* RulerPlayhead.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204CFF0E4B031C005E66F0 /* RulerPlayhead.m */; };
+		1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 1534F84E140BBE6300A4FDB5 /* BreakpointArray.m */; };
 		153F154A0DF6D7C40037238D /* ProjectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F15490DF6D7C40037238D /* ProjectWindow.m */; };
 		153F154E0DF6D9530037238D /* RulerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F154D0DF6D9530037238D /* RulerScrollView.m */; };
 		153F178A0DF7293B0037238D /* SelectionRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F17890DF7293B0037238D /* SelectionRectangle.m */; };
+		1543CA1513F94E07006C36D2 /* GainSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1543CA1413F94E01006C36D2 /* GainSlider.m */; };
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
 		155724F40DD8909800FA16E2 /* CounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155724F30DD8909800FA16E2 /* CounterView.m */; };
 		155725110DD8919A00FA16E2 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1557250E0DD8919A00FA16E2 /* ContainerView.m */; };
@@ -37,6 +39,7 @@
 		1557251A0DD891D800FA16E2 /* ArrangerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725190DD891D800FA16E2 /* ArrangerView.m */; };
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
+		1584502013EAE2240066CC94 /* BounceToDiskController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1584501F13EAE2240066CC94 /* BounceToDiskController.m */; };
 		1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */; };
 		1586A9A013B3B45100262B02 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */; };
 		1586A9A213B3B45100262B02 /* MeterBridgeChannelStrip.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A89E13B3B45100262B02 /* MeterBridgeChannelStrip.m */; };
@@ -57,7 +60,6 @@
 		1586A9B613B3B45100262B02 /* SpeakerSetupChannelStrip.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A8C513B3B45100262B02 /* SpeakerSetupChannelStrip.xib */; };
 		1586A9B713B3B45100262B02 /* SpeakerSetups.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C713B3B45100262B02 /* SpeakerSetups.m */; };
 		1586A9B813B3B45100262B02 /* SpeakerSetupWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8C913B3B45100262B02 /* SpeakerSetupWindowController.m */; };
-		1586A9E313B3B76100262B02 /* AudioDeviceSelectorComponentMod.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */; };
 		158E9D7C0EAE3D7800435D25 /* TrajectoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */; };
 		158E9F0A0EAE6C4A00435D25 /* Breakpoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 158E9F090EAE6C4A00435D25 /* Breakpoint.m */; };
 		15979422133D3E49006FCFE6 /* MainCounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15979421133D3E49006FCFE6 /* MainCounterView.m */; };
@@ -66,6 +68,7 @@
 		1597A3C4112EE5E700AFCAA9 /* TimelineEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1597A3C3112EE5E700AFCAA9 /* TimelineEditorWindowController.m */; };
 		1597A48D112EF76700AFCAA9 /* ArrangerRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1597A48C112EF76700AFCAA9 /* ArrangerRulerView.m */; };
 		1597A4C2112F0DB100AFCAA9 /* TimelineEditorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1597A4C1112F0DB100AFCAA9 /* TimelineEditorView.m */; };
+		159EF2C313FC05F70027D151 /* TimelineEditorRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 159EF2C213FC05F50027D151 /* TimelineEditorRulerView.m */; };
 		15A3FC8E10416364001092FD /* CHProjectDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15A3FC8C10416364001092FD /* CHProjectDocument.xib */; };
 		15A82A3F111B952900F31B92 /* SelectAtCursor_off.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A82A39111B952900F31B92 /* SelectAtCursor_off.png */; };
 		15A82A40111B952900F31B92 /* SelectAtCursor_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A82A3A111B952900F31B92 /* SelectAtCursor_on.png */; };
@@ -107,23 +110,16 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		22394E7913E9814F005B681B /* libjuce.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22394E7813E98142005B681B /* libjuce.a */; };
+		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
+		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
+		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
+		22E2ACF0144C64CB001D94A3 /* juce_amalgamated.mm in Sources */ = {isa = PBXBuildFile; fileRef = 22E2ACEE144C64CB001D94A3 /* juce_amalgamated.mm */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC310486D014006FF6A4 /* CHProjectDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		22394E7713E98142005B681B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 22394E7013E98142005B681B /* Juce.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 389351359BA78C682E1931A6;
-			remoteInfo = Juce;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -137,7 +133,7 @@
 		151525B00DDAFE8900BB5114 /* CHGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHGlobals.h; sourceTree = "<group>"; };
 		15155E7E139CE92100A8BC0D /* Choreographer.help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Choreographer.help; sourceTree = "<group>"; };
 		151739B50EB3A5F500EABE92 /* TableEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableEditorWindowController.h; sourceTree = "<group>"; };
-		151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableEditorWindowController.m; sourceTree = "<group>"; };
+		151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TableEditorWindowController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		151739C30EB3A79B00EABE92 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/TableEditor.xib; sourceTree = "<group>"; };
 		151739C50EB3A79B00EABE92 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/RadarEditor.xib; sourceTree = "<group>"; };
 		151739D60EB3AE1C00EABE92 /* EditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorWindowController.h; sourceTree = "<group>"; };
@@ -146,30 +142,34 @@
 		1517F486115FAB50001E7BCD /* PlaybackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaybackController.m; sourceTree = "<group>"; };
 		151B33281163BB74000192F9 /* SettingsMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsMenu.h; sourceTree = "<group>"; };
 		151B33291163BB75000192F9 /* SettingsMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsMenu.m; sourceTree = "<group>"; };
-		15201593111B074A009DBFCA /* BreakpointBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointBezierPath.h; sourceTree = "<group>"; };
-		15201594111B074A009DBFCA /* BreakpointBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointBezierPath.m; sourceTree = "<group>"; };
+		15201593111B074A009DBFCA /* BreakpointBezierPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BreakpointBezierPath.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		15201594111B074A009DBFCA /* BreakpointBezierPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BreakpointBezierPath.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15204C250E4AFC39005E66F0 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		15204C260E4AFC39005E66F0 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		15204C2A0E4AFC51005E66F0 /* RadarEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarEditorView.h; sourceTree = "<group>"; };
-		15204C2B0E4AFC51005E66F0 /* RadarEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarEditorView.m; sourceTree = "<group>"; };
+		15204C2B0E4AFC51005E66F0 /* RadarEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RadarEditorView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15204C2C0E4AFC51005E66F0 /* RadarEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadarEditorWindowController.h; sourceTree = "<group>"; };
 		15204C2D0E4AFC51005E66F0 /* RadarEditorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadarEditorWindowController.m; sourceTree = "<group>"; };
 		15204C340E4AFC63005E66F0 /* ToolTip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ToolTip.h; sourceTree = "<group>"; };
-		15204C350E4AFC63005E66F0 /* ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ToolTip.m; sourceTree = "<group>"; };
+		15204C350E4AFC63005E66F0 /* ToolTip.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ToolTip.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15204C380E4AFC78005E66F0 /* SpatialPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatialPosition.h; sourceTree = "<group>"; };
 		15204C390E4AFC78005E66F0 /* SpatialPosition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatialPosition.m; sourceTree = "<group>"; };
 		15204CFC0E4B031C005E66F0 /* Playhead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Playhead.h; sourceTree = "<group>"; };
 		15204CFD0E4B031C005E66F0 /* Playhead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Playhead.m; sourceTree = "<group>"; };
 		15204CFE0E4B031C005E66F0 /* RulerPlayhead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerPlayhead.h; sourceTree = "<group>"; };
 		15204CFF0E4B031C005E66F0 /* RulerPlayhead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerPlayhead.m; sourceTree = "<group>"; };
+		1534F84D140BBE6300A4FDB5 /* BreakpointArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointArray.h; sourceTree = "<group>"; };
+		1534F84E140BBE6300A4FDB5 /* BreakpointArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BreakpointArray.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		153F15480DF6D7C40037238D /* ProjectWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectWindow.h; sourceTree = "<group>"; };
 		153F15490DF6D7C40037238D /* ProjectWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectWindow.m; sourceTree = "<group>"; };
 		153F154C0DF6D9530037238D /* RulerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerScrollView.h; sourceTree = "<group>"; };
 		153F154D0DF6D9530037238D /* RulerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerScrollView.m; sourceTree = "<group>"; };
 		153F17880DF7293B0037238D /* SelectionRectangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectionRectangle.h; sourceTree = "<group>"; };
 		153F17890DF7293B0037238D /* SelectionRectangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionRectangle.m; sourceTree = "<group>"; };
+		1543CA1313F94DFD006C36D2 /* GainSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GainSlider.h; sourceTree = "<group>"; };
+		1543CA1413F94E01006C36D2 /* GainSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GainSlider.m; sourceTree = "<group>"; };
 		15509AE11047F96900E0AEF0 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
-		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Region.m; sourceTree = "<group>"; };
+		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Region.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		155724F20DD8909800FA16E2 /* CounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CounterView.h; sourceTree = "<group>"; };
 		155724F30DD8909800FA16E2 /* CounterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CounterView.m; sourceTree = "<group>"; };
 		1557250D0DD8919A00FA16E2 /* ContainerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContainerView.h; sourceTree = "<group>"; };
@@ -177,16 +177,18 @@
 		1557250F0DD8919A00FA16E2 /* RulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerView.h; sourceTree = "<group>"; };
 		155725100DD8919A00FA16E2 /* RulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerView.m; sourceTree = "<group>"; };
 		155725180DD891D800FA16E2 /* ArrangerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrangerView.h; sourceTree = "<group>"; };
-		155725190DD891D800FA16E2 /* ArrangerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerView.m; sourceTree = "<group>"; };
+		155725190DD891D800FA16E2 /* ArrangerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ArrangerView.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1560817311CECAA00033C628 /* RandomTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RandomTrajectory.h; sourceTree = "<group>"; };
-		1560817411CECAA00033C628 /* RandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RandomTrajectory.m; sourceTree = "<group>"; };
+		1560817411CECAA00033C628 /* RandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RandomTrajectory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 2.xcdatamodel"; sourceTree = "<group>"; };
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
+		1584501E13EAE2240066CC94 /* BounceToDiskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BounceToDiskController.h; sourceTree = "<group>"; };
+		1584501F13EAE2240066CC94 /* BounceToDiskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BounceToDiskController.m; sourceTree = "<group>"; };
 		1586A7BE13B3B45100262B02 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
 		1586A7BF13B3B45100262B02 /* AudioEngine.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AudioEngine.mm; sourceTree = "<group>"; };
 		1586A89713B3B45100262B02 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AudioEngineMainMenu.xib; sourceTree = "<group>"; };
-		1586A89813B3B45100262B02 /* juce.tag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = juce.tag; sourceTree = "<group>"; };
+		1586A89813B3B45100262B02 /* juce.tag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; lineEnding = 0; path = juce.tag; sourceTree = "<group>"; };
 		1586A89A13B3B45100262B02 /* AppConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppConfig.h; sourceTree = "<group>"; };
 		1586A89B13B3B45100262B02 /* JuceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JuceHeader.h; sourceTree = "<group>"; };
 		1586A89D13B3B45100262B02 /* MeterBridgeChannelStrip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeChannelStrip.h; sourceTree = "<group>"; };
@@ -196,9 +198,9 @@
 		1586A8A113B3B45100262B02 /* MeterBridgeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeterBridgeWindowController.h; sourceTree = "<group>"; };
 		1586A8A213B3B45100262B02 /* MeterBridgeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeterBridgeWindowController.m; sourceTree = "<group>"; };
 		1586A8A313B3B45100262B02 /* README.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.txt; sourceTree = "<group>"; };
-		1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; };
+		1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AmbisonicsAudioEngine.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmbisonicsAudioEngine.h; sourceTree = "<group>"; };
-		1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioRegionMixer.cpp; sourceTree = "<group>"; };
+		1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = AudioRegionMixer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1586A8A813B3B45100262B02 /* AudioRegionMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegionMixer.h; sourceTree = "<group>"; };
 		1586A8A913B3B45100262B02 /* AudioSourceAmbipanning.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceAmbipanning.cpp; sourceTree = "<group>"; };
 		1586A8AA13B3B45100262B02 /* AudioSourceAmbipanning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceAmbipanning.h; sourceTree = "<group>"; };
@@ -206,10 +208,6 @@
 		1586A8AC13B3B45100262B02 /* AudioSourceGainEnvelope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceGainEnvelope.h; sourceTree = "<group>"; };
 		1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSpeakerGainAndRouting.cpp; sourceTree = "<group>"; };
 		1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSpeakerGainAndRouting.h; sourceTree = "<group>"; };
-		1586A8B013B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "AudioDeviceSelectorComponentMod copy.cpp"; sourceTree = "<group>"; };
-		1586A8B113B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AudioDeviceSelectorComponentMod copy.h"; sourceTree = "<group>"; };
-		1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioDeviceSelectorComponentMod.cpp; sourceTree = "<group>"; };
-		1586A8B313B3B45100262B02 /* AudioDeviceSelectorComponentMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioDeviceSelectorComponentMod.h; sourceTree = "<group>"; };
 		1586A8B413B3B45100262B02 /* AudioTransportSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioTransportSourceMod.cpp; sourceTree = "<group>"; };
 		1586A8B513B3B45100262B02 /* AudioTransportSourceMod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioTransportSourceMod.h; sourceTree = "<group>"; };
 		1586A8B613B3B45100262B02 /* BufferingAudioSourceMod.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BufferingAudioSourceMod.cpp; sourceTree = "<group>"; };
@@ -218,7 +216,7 @@
 		1586A8B913B3B45100262B02 /* juce_PositionableResamplingAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_PositionableResamplingAudioSource.h; sourceTree = "<group>"; };
 		1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
 		1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
-		1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; };
+		1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		1586A8BD13B3B45100262B02 /* SpeakerTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerTestComponent.h; sourceTree = "<group>"; };
 		1586A8C013B3B45100262B02 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SpeakerSetupWindow.xib; sourceTree = "<group>"; };
 		1586A8C113B3B45100262B02 /* PatchbayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatchbayView.h; sourceTree = "<group>"; };
@@ -231,9 +229,9 @@
 		1586A8C813B3B45100262B02 /* SpeakerSetupWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerSetupWindowController.h; sourceTree = "<group>"; };
 		1586A8C913B3B45100262B02 /* SpeakerSetupWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpeakerSetupWindowController.m; sourceTree = "<group>"; };
 		158E9D7A0EAE3D7800435D25 /* TrajectoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryItem.h; sourceTree = "<group>"; };
-		158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrajectoryItem.m; sourceTree = "<group>"; };
-		158E9F080EAE6C4A00435D25 /* Breakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
-		158E9F090EAE6C4A00435D25 /* Breakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Breakpoint.m; sourceTree = "<group>"; };
+		158E9D7B0EAE3D7800435D25 /* TrajectoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = TrajectoryItem.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		158E9F080EAE6C4A00435D25 /* Breakpoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Breakpoint.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		158E9F090EAE6C4A00435D25 /* Breakpoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Breakpoint.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15979420133D3E49006FCFE6 /* MainCounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainCounterView.h; sourceTree = "<group>"; };
 		15979421133D3E49006FCFE6 /* MainCounterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainCounterView.m; sourceTree = "<group>"; };
 		159794C1133D5269006FCFE6 /* LoopCounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoopCounterView.h; sourceTree = "<group>"; };
@@ -245,6 +243,8 @@
 		1597A48C112EF76700AFCAA9 /* ArrangerRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerRulerView.m; sourceTree = "<group>"; };
 		1597A4C0112F0DB100AFCAA9 /* TimelineEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineEditorView.h; sourceTree = "<group>"; };
 		1597A4C1112F0DB100AFCAA9 /* TimelineEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineEditorView.m; sourceTree = "<group>"; };
+		159EF2C113FC05F20027D151 /* TimelineEditorRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineEditorRulerView.h; sourceTree = "<group>"; };
+		159EF2C213FC05F50027D151 /* TimelineEditorRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineEditorRulerView.m; sourceTree = "<group>"; };
 		15A3FC8D10416364001092FD /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/CHProjectDocument.xib; sourceTree = "<group>"; };
 		15A82A39111B952900F31B92 /* SelectAtCursor_off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectAtCursor_off.png; sourceTree = "<group>"; };
 		15A82A3A111B952900F31B92 /* SelectAtCursor_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectAtCursor_on.png; sourceTree = "<group>"; };
@@ -269,7 +269,7 @@
 		15C6D25C11C7E304001ABA00 /* Trajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trajectory.h; sourceTree = "<group>"; };
 		15C6D25D11C7E304001ABA00 /* Trajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trajectory.m; sourceTree = "<group>"; };
 		15C6D76111C83BD0001ABA00 /* RotationTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationTrajectory.h; sourceTree = "<group>"; };
-		15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RotationTrajectory.m; sourceTree = "<group>"; };
+		15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RotationTrajectory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15C88D1D11BFC74000130A5E /* choreographer_icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = choreographer_icons.icns; sourceTree = "<group>"; };
 		15C95F951113218F0083EC3A /* ArrangerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrangerScrollView.h; sourceTree = "<group>"; };
 		15C95F961113218F0083EC3A /* ArrangerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerScrollView.m; sourceTree = "<group>"; };
@@ -281,21 +281,21 @@
 		15D162B7116BD70B00E22B42 /* ImageAndTextCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageAndTextCell.m; sourceTree = "<group>"; };
 		15D16336116BE3EF00E22B42 /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
 		15D937B71045E5AC00E40CEB /* GroupRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupRegion.h; sourceTree = "<group>"; };
-		15D937B81045E5AC00E40CEB /* GroupRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupRegion.m; sourceTree = "<group>"; };
+		15D937B81045E5AC00E40CEB /* GroupRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = GroupRegion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15DEFC270EC30B9800BBE6A8 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		15DEFE1A0EC3969E00BBE6A8 /* SmallTimelinePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SmallTimelinePanel.h; sourceTree = "<group>"; };
-		15DEFE1B0EC3969E00BBE6A8 /* SmallTimelinePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SmallTimelinePanel.m; sourceTree = "<group>"; };
+		15DEFE1B0EC3969E00BBE6A8 /* SmallTimelinePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = SmallTimelinePanel.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15E48AE81296E36F0058DDDD /* TrajectoryInspectorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrajectoryInspectorWindowController.h; sourceTree = "<group>"; };
 		15E48AE91296E36F0058DDDD /* TrajectoryInspectorWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrajectoryInspectorWindowController.m; sourceTree = "<group>"; };
 		15EA43CD0EC11981003304E0 /* EditorContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditorContent.h; sourceTree = "<group>"; };
-		15EA43CE0EC11981003304E0 /* EditorContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditorContent.m; sourceTree = "<group>"; };
+		15EA43CE0EC11981003304E0 /* EditorContent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = EditorContent.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15EA45340EC1B7AF003304E0 /* TableEditorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableEditorView.h; sourceTree = "<group>"; };
 		15EA45350EC1B7AF003304E0 /* TableEditorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableEditorView.m; sourceTree = "<group>"; };
 		15EA47551042CC0200F1A7BB /* AudioFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioFile.h; sourceTree = "<group>"; };
 		15EA47561042CC0200F1A7BB /* AudioFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioFile.m; sourceTree = "<group>"; };
 		15EAB2B40FF49A0200A41A79 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/Pool.xib; sourceTree = "<group>"; };
 		15EAB2F10FF4A6D300A41A79 /* PoolViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoolViewController.h; sourceTree = "<group>"; };
-		15EAB2F20FF4A6D300A41A79 /* PoolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoolViewController.m; sourceTree = "<group>"; };
+		15EAB2F20FF4A6D300A41A79 /* PoolViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = PoolViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15EBEC8612BF777A00C30D46 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MarkersWindow.xib; sourceTree = "<group>"; };
 		15EBEC8B12BF78E400C30D46 /* MarkersWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MarkersWindowController.h; sourceTree = "<group>"; };
 		15EBEC8C12BF78E400C30D46 /* MarkersWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MarkersWindowController.m; sourceTree = "<group>"; };
@@ -307,8 +307,13 @@
 		15F077C30DDB6B4D00A207D0 /* AudioItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioItem.h; sourceTree = "<group>"; };
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
-		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioRegion.m; sourceTree = "<group>"; };
-		22394E7013E98142005B681B /* Juce.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Juce.xcodeproj; path = ../../../../../../res/projects_dev/juce110413/juce/Builds/MacOSX/Juce.xcodeproj; sourceTree = SOURCE_ROOT; };
+		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AudioRegion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		22E2ACE4144C6186001D94A3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		22E2ACE5144C621C001D94A3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
+		22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		22E2ACED144C64CB001D94A3 /* juce_amalgamated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_amalgamated.h; sourceTree = "<group>"; };
+		22E2ACEE144C64CB001D94A3 /* juce_amalgamated.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = juce_amalgamated.mm; sourceTree = "<group>"; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -326,7 +331,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22394E7913E9814F005B681B /* libjuce.a in Frameworks */,
+				22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */,
+				22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */,
+				22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */,
+				15ED1FF90DDB9A21006A2351 /* AudioToolbox.framework in Frameworks */,
 				15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */,
 				15DA2BB71174949F00DF3F79 /* IOKit.framework in Frameworks */,
 				15DA2BBA117494B700DF3F79 /* CoreAudio.framework in Frameworks */,
@@ -336,7 +344,6 @@
 				15DA2BDF117494FD00DF3F79 /* Carbon.framework in Frameworks */,
 				15DA2BEF1174952200DF3F79 /* WebKit.framework in Frameworks */,
 				15DA2BF81174952F00DF3F79 /* OpenGL.framework in Frameworks */,
-				15ED1FF90DDB9A21006A2351 /* AudioToolbox.framework in Frameworks */,
 				775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -441,6 +448,8 @@
 				15D162B7116BD70B00E22B42 /* ImageAndTextCell.m */,
 				150C8945133AB1D1005A585D /* Path.h */,
 				150C8946133AB1D1005A585D /* Path.m */,
+				1543CA1313F94DFD006C36D2 /* GainSlider.h */,
+				1543CA1413F94E01006C36D2 /* GainSlider.m */,
 			);
 			name = Misc;
 			sourceTree = "<group>";
@@ -456,6 +465,8 @@
 				153F15490DF6D7C40037238D /* ProjectWindow.m */,
 				1517F485115FAB50001E7BCD /* PlaybackController.h */,
 				1517F486115FAB50001E7BCD /* PlaybackController.m */,
+				1584501E13EAE2240066CC94 /* BounceToDiskController.h */,
+				1584501F13EAE2240066CC94 /* BounceToDiskController.m */,
 			);
 			name = ProjectDocument;
 			sourceTree = "<group>";
@@ -504,6 +515,7 @@
 		1586A89913B3B45100262B02 /* JuceLibraryCode */ = {
 			isa = PBXGroup;
 			children = (
+				22E2ACEB144C64CB001D94A3 /* 110413 */,
 				1586A89A13B3B45100262B02 /* AppConfig.h */,
 				1586A89B13B3B45100262B02 /* JuceHeader.h */,
 			);
@@ -548,10 +560,6 @@
 		1586A8AF13B3B45100262B02 /* modified Juce Classes */ = {
 			isa = PBXGroup;
 			children = (
-				1586A8B013B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.cpp */,
-				1586A8B113B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.h */,
-				1586A8B213B3B45100262B02 /* AudioDeviceSelectorComponentMod.cpp */,
-				1586A8B313B3B45100262B02 /* AudioDeviceSelectorComponentMod.h */,
 				1586A8B413B3B45100262B02 /* AudioTransportSourceMod.cpp */,
 				1586A8B513B3B45100262B02 /* AudioTransportSourceMod.h */,
 				1586A8B613B3B45100262B02 /* BufferingAudioSourceMod.cpp */,
@@ -630,6 +638,8 @@
 				155725100DD8919A00FA16E2 /* RulerView.m */,
 				1597A48B112EF76700AFCAA9 /* ArrangerRulerView.h */,
 				1597A48C112EF76700AFCAA9 /* ArrangerRulerView.m */,
+				159EF2C113FC05F20027D151 /* TimelineEditorRulerView.h */,
+				159EF2C213FC05F50027D151 /* TimelineEditorRulerView.m */,
 				153F154C0DF6D9530037238D /* RulerScrollView.h */,
 				153F154D0DF6D9530037238D /* RulerScrollView.m */,
 			);
@@ -655,18 +665,21 @@
 		15B3D1A311661A30009CB620 /* Juce Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22394E7013E98142005B681B /* Juce.xcodeproj */,
-				15B3D1C011661D3E009CB620 /* IOKit.framework */,
-				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
-				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
-				15B3D1CA11661DD7009CB620 /* DiscRecording.framework */,
+				22E2ACE5144C621C001D94A3 /* AppKit.framework */,
+				22E2ACE4144C6186001D94A3 /* AudioToolbox.framework */,
 				15B3D1C811661DD7009CB620 /* AudioUnit.framework */,
+				15B3D3F211662731009CB620 /* Carbon.framework */,
+				15B3D1E811661E22009CB620 /* CoreAudio.framework */,
+				22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */,
+				22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */,
+				15B3D1A411661A52009CB620 /* CoreMIDI.framework */,
+				15B3D1CA11661DD7009CB620 /* DiscRecording.framework */,
+				15B3D1C011661D3E009CB620 /* IOKit.framework */,
 				15B3D1CC11661DD7009CB620 /* OpenGL.framework */,
 				15B3D1CE11661DD7009CB620 /* QTKit.framework */,
 				15B3D1D011661DD7009CB620 /* QuartzCore.framework */,
 				15B3D1D211661DD7009CB620 /* QuickTime.framework */,
-				15B3D1E811661E22009CB620 /* CoreAudio.framework */,
-				15B3D3F211662731009CB620 /* Carbon.framework */,
+				15B3D2AE11661EBD009CB620 /* WebKit.framework */,
 			);
 			name = "Juce Frameworks";
 			path = "Audio Engine";
@@ -683,6 +696,8 @@
 				15201594111B074A009DBFCA /* BreakpointBezierPath.m */,
 				1569872711B12DAB00E4325A /* BreakpointView.h */,
 				1569872811B12DAB00E4325A /* BreakpointView.m */,
+				1534F84D140BBE6300A4FDB5 /* BreakpointArray.h */,
+				1534F84E140BBE6300A4FDB5 /* BreakpointArray.m */,
 			);
 			name = Breakpoints;
 			sourceTree = "<group>";
@@ -758,12 +773,13 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		22394E7113E98142005B681B /* Products */ = {
+		22E2ACEB144C64CB001D94A3 /* 110413 */ = {
 			isa = PBXGroup;
 			children = (
-				22394E7813E98142005B681B /* libjuce.a */,
+				22E2ACED144C64CB001D94A3 /* juce_amalgamated.h */,
+				22E2ACEE144C64CB001D94A3 /* juce_amalgamated.mm */,
 			);
-			name = Products;
+			path = 110413;
 			sourceTree = "<group>";
 		};
 		2A37F4AAFDCFA73011CA2CEA /* Choreographer */ = {
@@ -868,10 +884,11 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Zurich University of the Arts";
 			};
 			buildConfigurationList = 26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "Choreographer" */;
-			compatibilityVersion = "Xcode 3.0";
+			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
@@ -882,28 +899,12 @@
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* Choreographer */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 22394E7113E98142005B681B /* Products */;
-					ProjectRef = 22394E7013E98142005B681B /* Juce.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* Choreographer */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		22394E7813E98142005B681B /* libjuce.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libjuce.a;
-			remoteRef = 22394E7713E98142005B681B /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
@@ -1013,7 +1014,11 @@
 				1586A9B513B3B45100262B02 /* SpeakerSetupChannelStrip.m in Sources */,
 				1586A9B713B3B45100262B02 /* SpeakerSetups.m in Sources */,
 				1586A9B813B3B45100262B02 /* SpeakerSetupWindowController.m in Sources */,
-				1586A9E313B3B76100262B02 /* AudioDeviceSelectorComponentMod.cpp in Sources */,
+				1584502013EAE2240066CC94 /* BounceToDiskController.m in Sources */,
+				1543CA1513F94E07006C36D2 /* GainSlider.m in Sources */,
+				159EF2C313FC05F70027D151 /* TimelineEditorRulerView.m in Sources */,
+				1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */,
+				22E2ACF0144C64CB001D94A3 /* juce_amalgamated.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1114,10 +1119,9 @@
 		26FC0AA60875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -1125,9 +1129,13 @@
 				GCC_PREFIX_HEADER = Choreographer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1136,7 +1144,7 @@
 		26FC0AA70875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_MODEL_TUNING = G5;
@@ -1144,9 +1152,13 @@
 				GCC_PREFIX_HEADER = Choreographer_Prefix.pch;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1154,26 +1166,26 @@
 		26FC0AAA0875C8B900E6366F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
-				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
 			};
 			name = Debug;
 		};
 		26FC0AAB0875C8B900E6366F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ONLY_ACTIVE_ARCH_PRE_XCODE_3_1)";
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				ONLY_ACTIVE_ARCH_PRE_XCODE_3_1 = "$(NATIVE_ARCH)";
-				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = "";
 			};
 			name = Release;
 		};

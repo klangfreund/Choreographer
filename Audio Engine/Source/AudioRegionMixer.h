@@ -256,7 +256,9 @@ private:
     SpacialEnvelopePointComparator spacialEnvelopePointComparator; 
     
     /** Used for scope locking in AudioRegionMixer::setSpeakerPositions. */
-    CriticalSection lock;	
+    CriticalSection lock;
+	
+	JUCE_LEAK_DETECTOR (AudioRegionMixer);
 };
 
 

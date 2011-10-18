@@ -26,7 +26,8 @@ static EditorContent *sharedEditorContent = nil;
 
 - (id)init
 {
-	if(self = [super init])
+    self = [super init];
+	if(self)
 	{
 		editorSelection = [[NSMutableSet alloc] init];
 		displayMode = noDisplayMode;
@@ -133,7 +134,7 @@ static EditorContent *sharedEditorContent = nil;
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 0)
 	{
-		NSMutableArray *tempArray = [[[NSMutableSet alloc] init] autorelease];
+		NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 		
 		for(AudioRegion *region in allAudioRegions)
 		{
@@ -195,6 +196,16 @@ static EditorContent *sharedEditorContent = nil;
 		if([[[EditorContent sharedEditorContent] valueForKey:@"editorSelection"] count])
 			[editableTrajectory updateModel];
 	}
+}
+
+- (void)setSelectedPointsTo:(SpatialPosition *)pos
+{
+	for(id item in editorSelection)
+	{
+		[item setValue:pos forKey:@"position"];
+	}
+    
+    [self updateModelForSelectedPoints];
 }
 
 @end

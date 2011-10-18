@@ -48,6 +48,7 @@ typedef struct _RadarPoint
 	
 	// selection
 	BOOL showSelectionRectangle;
+	NSMutableSet *tempEditorSelection;
 	
 	// colors
 	NSColor *backgroundColor;
@@ -75,7 +76,7 @@ typedef struct _RadarPoint
 - (void)drawTrajectories:(NSRect)rect;
 
 - (void)drawTrajectoryName:(TrajectoryItem *)trajectory;
-- (void)drawLinkedBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;
+- (void)drawPositionBreakpoints:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;
 - (void)drawAdditionalHandles:(TrajectoryItem *)trajectory;
 - (void)drawAdditionalShapes:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;
 
@@ -88,7 +89,7 @@ typedef struct _RadarPoint
 // editing
 - (BOOL)moveSelectedPointsBy:(NSPoint)delta;
 - (BOOL)rotateSelectedPointsBy:(NSPoint)delta;
-- (void)setSelectedPointsTo:(SpatialPosition *)pos;
+//- (void)setSelectedPointsTo:(SpatialPosition *)pos;
 
 // keyboard events
 - (void)nudge:(NSEvent *)event;

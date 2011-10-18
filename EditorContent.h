@@ -39,5 +39,7 @@
 
 - (void)deleteSelectedPoints;
 - (void)updateModelForSelectedPoints;
+- (void)setSelectedPointsTo:(SpatialPosition *)pos;
+
 
 @end

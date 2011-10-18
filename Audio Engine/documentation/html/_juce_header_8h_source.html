@@ -28,6 +28,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="namespaces.html"><span>Namespaces</span></a></li>
       <li><a href="annotated.html"><span>Classes</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li id="searchli">
@@ -51,6 +54,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow2" class="tabs2">
     <ul class="tablist">
       <li><a href="files.html"><span>File&#160;List</span></a></li>
+      <li><a href="globals.html"><span>File&#160;Members</span></a></li>
     </ul>
   </div>
 <div class="header">
@@ -74,18 +78,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00014"></a>00014 <span class="preprocessor"></span><span class="preprocessor">#define __APPHEADERFILE_D9639818__</span>
 <a name="l00015"></a>00015 <span class="preprocessor"></span>
 <a name="l00016"></a>00016 <span class="preprocessor">#include &quot;AppConfig.h&quot;</span>
-<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;/Users/sam/data/res/projects_dev/juce110413/juce/juce.h&quot;</span>
-<a name="l00018"></a>00018 <span class="comment">//#include &quot;/Users/philippekocher/Desktop/juce/juce.h&quot;</span>
-<a name="l00019"></a>00019 <span class="comment">//#include &quot;/Users/philippekocher/Documents/CocoaPlayground/juce/juce.h&quot;</span>
-<a name="l00020"></a>00020 
-<a name="l00021"></a>00021 <span class="keyword">namespace </span>ProjectInfo
-<a name="l00022"></a>00022 {
-<a name="l00023"></a>00023     <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>  projectName    = <span class="stringliteral">&quot;AmbisonicsAudioEngine&quot;</span>;
-<a name="l00024"></a>00024     <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>  versionString  = <span class="stringliteral">&quot;0.0.2&quot;</span>;
-<a name="l00025"></a>00025     <span class="keyword">const</span> <span class="keywordtype">int</span>          versionNumber  = 0x10000;
-<a name="l00026"></a>00026 }
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028 <span class="preprocessor">#endif   // __APPHEADERFILE_D9639818__</span>
+<a name="l00017"></a>00017 <span class="preprocessor">#include &quot;110413/juce_amalgamated.h&quot;</span>
+<a name="l00018"></a>00018 <span class="comment">//#include &quot;111017/juce_amalgamated.h&quot;</span>
+<a name="l00019"></a>00019 <span class="comment">//#include &quot;/Users/sam/data/res/projects_dev/juce110413/juce/juce.h&quot;</span>
+<a name="l00020"></a>00020 <span class="comment">//#include &quot;/Users/philippekocher/Desktop/juce/juce.h&quot;</span>
+<a name="l00021"></a>00021 <span class="comment">//#include &quot;/Users/philippekocher/Documents/CocoaPlayground/juce/juce.h&quot;</span>
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keyword">namespace </span>ProjectInfo
+<a name="l00024"></a>00024 {
+<a name="l00025"></a>00025     <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>  projectName    = <span class="stringliteral">&quot;AmbisonicsAudioEngine&quot;</span>;
+<a name="l00026"></a>00026     <span class="keyword">const</span> <span class="keywordtype">char</span>* <span class="keyword">const</span>  versionString  = <span class="stringliteral">&quot;0.0.2&quot;</span>;
+<a name="l00027"></a>00027     <span class="keyword">const</span> <span class="keywordtype">int</span>          versionNumber  = 0x10000;
+<a name="l00028"></a>00028 }
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030 <span class="preprocessor">#endif   // __APPHEADERFILE_D9639818__</span>
 </pre></div></div>
 </div>
 <!--- window showing the filter options -->
@@ -93,7 +99,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Namespaces</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Friends</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(10)"><span class="SelectionMark">&#160;</span>Defines</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -102,7 +108,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed May 11 2011 16:20:43 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:03 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

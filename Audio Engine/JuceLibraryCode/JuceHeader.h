@@ -14,7 +14,9 @@
 #define __APPHEADERFILE_D9639818__
 
 #include "AppConfig.h"
-#include "/Users/sam/data/res/projects_dev/juce110413/juce/juce.h"
+#include "110413/juce_amalgamated.h"
+//#include "111017/juce_amalgamated.h"
+//#include "/Users/sam/data/res/projects_dev/juce110413/juce/juce.h"
 //#include "/Users/philippekocher/Desktop/juce/juce.h"
 //#include "/Users/philippekocher/Documents/CocoaPlayground/juce/juce.h"
 

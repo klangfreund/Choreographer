@@ -20,8 +20,83 @@
 /**
  Contains the AEP audio channel settings.
  */
-struct JUCE_API aepChannelSettings
+class JUCE_API AepChannelSettings
 {
+public:
+    AepChannelSettings();
+    
+    /**
+     @param gain_               The gain of the AEP channel.
+     @param speakerPosition_    The speaker position in space in cartesian
+                                coordinates.
+     */
+    AepChannelSettings(const double& gain_,
+                       const SpeakerPosition& speakerPosition_);
+    
+    AepChannelSettings(const double& gain_,
+                       const bool& solo_,
+                       const bool& mute_,
+                       const bool& pinkNoise_,
+                       const double& x_,
+                       const double& y_,
+                       const double& z_);
+
+    /** The copy constructor.
+     
+     Needed to build an array of AepChannelSettings.   
+     @param other   The source object.
+     */
+    AepChannelSettings(const AepChannelSettings& other);
+
+    /** The assignment operator.
+     
+     Needed to build an array of AepChannelSettings.
+     @param other   The source object from the right hand side.
+     @return        This object to allow a=b=c like semantics.
+     */
+    const AepChannelSettings& operator=(const AepChannelSettings& other);
+    
+    void setGain(const double& gain_);
+    
+    void setLastGain(const double& lastGain_);
+    
+    void setSolo(const bool& engageSolo);
+    
+    void setMute(const bool& engageMute);
+    
+    void activatePinkNoise(const bool& turnPinkNoiseOn);
+    
+    void setSpeakerPosition(const SpeakerPosition& speakerPosition_);
+    
+    void setSpeakerPosition(const double& x,
+                            const double& y,
+                            const double& z);
+    
+    void enableMeasurement(const bool& turnMeasurementOn);
+    
+    void setMeasuredDecayingValue(const double& measurement);
+
+    void setMeasuredPeakValue(const double& measurement);
+    
+    double getGain();
+    
+    double getLastGain();
+    
+    bool getSoloStatus();
+    
+    bool getMuteStatus();
+    
+    bool getPinkNoiseStatus();
+    
+    const SpeakerPosition& getSpeakerPosition();
+    
+    bool getMeasurementStatus();
+    
+    double getMeasuredDecayingValue();
+    
+    double getMeasuredPeakValue();
+
+private:
 	/** The gain of the AEP channel.
 	 */
 	double gain;
@@ -43,7 +118,7 @@ struct JUCE_API aepChannelSettings
 	
 	/** Activates the pink noise generator on this AEP channel.
 	 */
-	bool activatePinkNoise;
+	bool pinkNoise;
 	
 	/** Specifies the speaker position in space in cartesian coordinates.
 	 */
@@ -55,21 +130,23 @@ struct JUCE_API aepChannelSettings
 	 The measured values are measuredDecayingValue and
 	 measuredPeakValue.
 	 */
-	bool enableMeasurement;
+	bool measurementEnabled;
 	
 	/** If enableOutputMeasurement is set, the root mean square
-	 with a fall off is stored in this variable.
+	 with a fall-off is stored in this variable.
 	 
 	 Measured are the samples that are sent to the audio driver.
 	 */
-	float measuredDecayingValue;
+	double measuredDecayingValue;
 
 	/** If enableOutputMeasurement is set, the peak value is 
 	 stored in this variable.
 	 
 	 Measured are the samples that are sent to the audio driver.
 	 */
-	float measuredPeakValue;
+	double measuredPeakValue;
+	
+	JUCE_LEAK_DETECTOR (AepChannelSettings);
 };
 
 //==============================================================================
@@ -78,7 +155,8 @@ struct JUCE_API aepChannelSettings
  output of the audio hardware. This is actually just a pair of numbers.
  */
 struct JUCE_API  aepChannelHardwareOutputPair
-{	
+{
+public:
     /** 
 	 The AEP audio channel.
      */
@@ -88,11 +166,16 @@ struct JUCE_API  aepChannelHardwareOutputPair
 	 The (physical) hardware output channel
      */
     int hardwareOutputChannel;
+	
+private:
+	JUCE_LEAK_DETECTOR (aepChannelHardwareOutputPair);
 };
 
 /**
  Represents a connection between an AEP audio channel and a physical
  output of the audio hardware. This is actually just a pair of numbers.
+ 
+ TODO: MAKE THIS CLASS SAVE!!!!
  */
 class JUCE_API  AEPChannelHardwareOutputPairs
 {
@@ -242,6 +325,8 @@ public:
 	
 private:
 	Array<aepChannelHardwareOutputPair*> pairs;
+	
+	JUCE_LEAK_DETECTOR (AEPChannelHardwareOutputPairs);
 };
 	
 
@@ -454,10 +539,9 @@ private:
 			///  which hardware output channels need to be activated.
 	
 	
-	Array<aepChannelSettings*> aepChannelSettingsAscending;
-	Array<aepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannels;
-	
-	Array<aepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+	Array<AepChannelSettings> aepChannelSettingsAscending;
+	Array<AepChannelSettings> aepChannelSettingsOrderedByActiveHardwareChannels;	
+	Array<AepChannelSettings> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
 			///< This backup object is only used by switchToBounceMode().
 	bool bounceMode;
 
@@ -481,6 +565,7 @@ private:
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
 	CriticalSection audioSpeakerGainAndRoutingLock;
 
+	JUCE_LEAK_DETECTOR (AudioSpeakerGainAndRouting);
 };
 
 
