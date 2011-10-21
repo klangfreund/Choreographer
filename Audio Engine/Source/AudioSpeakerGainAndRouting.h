@@ -206,8 +206,6 @@ private:
 /**
  Represents a connection between an AEP audio channel and a physical
  output of the audio hardware. This is actually just a pair of numbers.
- 
- TODO: MAKE THIS CLASS SAVE!!!!
  */
 class JUCE_API  AepChannelHardwareOutputPairs
 {
@@ -448,6 +446,13 @@ public:
 
 	
 private:
+    /** Updates the private object AudioSpeakerGainAndRouting::positionOfSpeakers
+     and passes it to the audioRegionMixer.
+     
+     This should always be called if a change of a speaker parameter has occured.
+     */
+    void updateThePositionOfSpeakers();
+    
 	/** Indicates if the given aepChannel is connected with a
 	    hardware output.
 	 
@@ -455,8 +460,6 @@ private:
 				a hardware output.
 	 */
 	bool aepChannelIsConnectedWithActiveHardwareChannel(int aepChannel);
-	
-	bool deleteSpeakerPositions(Array<void*> positionOfSpeakers_);
 	
 	AudioSource* audioSource;
 	AudioRegionMixer* audioRegionMixer;
@@ -476,7 +479,6 @@ private:
 	Array<AepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
 			///< This backup object is only used by switchToBounceMode().
 	bool bounceMode;
-
 	
 	int numberOfHardwareOutputChannels;
 	
@@ -485,7 +487,7 @@ private:
 	int numberOfChannelsWithActivatedPinkNoise;
 	int numberOfChannelsWithEnabledMeasurement;
 	
-	Array<void*> positionOfSpeakers;
+	Array<SpeakerPosition> positionOfSpeakers;
 			///< This class needs to know it, because it is responsible
 			///  for the deallocation of the SpeakerPosition's. Which happens
 			///  in enableNewRouting().

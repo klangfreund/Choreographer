@@ -242,13 +242,13 @@ bool AudioRegionMixer::setGainEnvelopeForRegion (const int regionID, Array<void*
 	}
 }
 
-void AudioRegionMixer::setSpeakerPositions (Array<void*> positionOfSpeaker)
+void AudioRegionMixer::setSpeakerPositions (const Array<SpeakerPosition>& positionOfSpeaker)
 {
 	const ScopedLock sl (lock); // without this scope lock, getNextAudioBlock(..) of
 	  // AudioSourceAmbipanning might wanna set array elements outside of the size of
 	  // these arrays
 	AudioSourceAmbipanning::setPositionOfSpeakers (positionOfSpeaker);
-	AudioSourceAmbipanning::setNumberOfSpeakers (positionOfSpeaker.size());	
+	
 	// inform all regions about the change
 	for (int i = 0; i < regions.size() && positionOfSpeaker.size(); i++)
 	{

@@ -287,9 +287,9 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 			                // make the code more readable.
 			for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 			{
-				xs = ((SpeakerPosition*)positionOfSpeaker[channel])->getX();
-				ys = ((SpeakerPosition*)positionOfSpeaker[channel])->getY();
-				zs = ((SpeakerPosition*)positionOfSpeaker[channel])->getZ();
+				xs = positionOfSpeaker[channel].getX();
+				ys = positionOfSpeaker[channel].getY();
+				zs = positionOfSpeaker[channel].getZ();
 				
 				// The ambipanning calculation
 				factor = pow(0.5 + 0.5*(x*xs + y*ys + z*zs), modifiedOrder) * distanceGain;
@@ -418,9 +418,9 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
 						// calculate the values of the float-array channelFactorAtNextSpacialPoint
-						xs = ((SpeakerPosition*)positionOfSpeaker[channel])->getX();
-						ys = ((SpeakerPosition*)positionOfSpeaker[channel])->getY();
-						zs = ((SpeakerPosition*)positionOfSpeaker[channel])->getZ();
+						xs = positionOfSpeaker[channel].getX();
+						ys = positionOfSpeaker[channel].getY();
+						zs = positionOfSpeaker[channel].getZ();
 						factor = pow(0.5 + 0.5*(xn*xs + yn*ys + zn*zs), modifiedOrderN) * distanceGainN;
 						channelFactorAtNextSpacialPoint.set(channel, factor);
 						
@@ -505,26 +505,20 @@ void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint
 
 void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
 {
-//	int old_size = channelFactor.size();
-	int new_size = numberOfSpeakers;
-	
-//	if (new_size != old_size)
-//	{
-		channelFactorAtPreviousSpacialPoint.clear();
-		channelFactorAtNextSpacialPoint.clear();
-		channelFactor.clear();
-		previousChannelFactor.clear();
-		channelFactorDelta.clear();
-		
-		int indexToInsertAt = 0;
-		double newElement = 0.0;
-		int numberOfTimesToInsertIt = new_size;
-		channelFactorAtPreviousSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
-		channelFactorAtNextSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
-		channelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
-		previousChannelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
-		channelFactorDelta.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);		
-//	}
+    channelFactorAtPreviousSpacialPoint.clear();
+    channelFactorAtNextSpacialPoint.clear();
+    channelFactor.clear();
+    previousChannelFactor.clear();
+    channelFactorDelta.clear();
+    
+    int indexToInsertAt = 0;
+    double newElement = 0.0;
+    int numberOfTimesToInsertIt = positionOfSpeaker.size();
+    channelFactorAtPreviousSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+    channelFactorAtNextSpacialPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+    channelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+    previousChannelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
+    channelFactorDelta.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);		
 	
 	numberOfSpeakersChanged = true; // This will trigger the section in
 		// getNextAudioBlock() which will fill the Factor-Arrays with
@@ -534,23 +528,13 @@ void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
 // ------------ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/   ------------
 // ATTENTION! "static void ..." would be wrong here in the definition (put it only in the declaration)!.
 //  See "Prata - C++ primer", p.583
-
 void AudioSourceAmbipanning::setOrder( int order_)
 {
 	order = order_;
 }
 
-void AudioSourceAmbipanning::setNumberOfSpeakers(int numberOfSpeakers_)
-{
-	numberOfSpeakers = numberOfSpeakers_;
-}
-
-void AudioSourceAmbipanning::setPositionOfSpeakers(Array<void*> positionOfSpeaker_)
+void AudioSourceAmbipanning::setPositionOfSpeakers(const Array<SpeakerPosition>& positionOfSpeaker_)
 {	
-	// Deallocation of the memory needs to be done by the caller, since
-	// the elements of positionOfSpeaker point to memory that was allocated
-	// outside of this scope.
-	
 	positionOfSpeaker = positionOfSpeaker_;
 }
 
@@ -627,12 +611,12 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
 	int distanceFromPreviousSpacialPointPosToCurrentPos = newPosition 
 							      - previousSpacialPoint.getPosition();
 
-	for (int channel = 0; channel < numberOfSpeakers; channel++) 
+	for (int channel = 0; channel < positionOfSpeaker.size(); channel++) 
 	{
 		// calculate the values of the float-array channelFactorAtPreviousSpacialPoint
-		xs = ((SpeakerPosition*)positionOfSpeaker[channel])->getX();
-		ys = ((SpeakerPosition*)positionOfSpeaker[channel])->getY();
-		zs = ((SpeakerPosition*)positionOfSpeaker[channel])->getZ();
+		xs = positionOfSpeaker[channel].getX();
+		ys = positionOfSpeaker[channel].getY();
+		zs = positionOfSpeaker[channel].getZ();
 		factor = pow(0.5 + 0.5*(xp*xs + yp*ys + zp*zs), modifiedOrderP) * distanceGainP;
 		channelFactorAtPreviousSpacialPoint.set(channel, factor);
 		
@@ -651,8 +635,7 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
 	}
 }
 
-inline void AudioSourceAmbipanning::calculationsForAEP (double & x, double & y, double & z, double & r,
-							double & distanceGain, double & modifiedOrder)
+inline void AudioSourceAmbipanning::calculationsForAEP (double& x, double& y, double &z, double& r, double& distanceGain, double& modifiedOrder)
 {
 	r = sqrt(x*x + y*y + z*z); // radius, i.e. the distance of (x,y,z) to (0,0,0)
 	
@@ -709,12 +692,10 @@ inline void AudioSourceAmbipanning::calculationsForAEP (double & x, double & y, 
 	
 }
 
-
 // Initialisation (and memory allocation) of the static variables
-// (I'm not 100% sure if this is the right place to do it)
 int AudioSourceAmbipanning::order = 1;
-int AudioSourceAmbipanning::numberOfSpeakers = 1;
-Array<void*> AudioSourceAmbipanning::positionOfSpeaker;
+//int AudioSourceAmbipanning::numberOfSpeakers = 1;
+Array<SpeakerPosition> AudioSourceAmbipanning::positionOfSpeaker;
 	
 int AudioSourceAmbipanning::distanceMode = 1;
 double AudioSourceAmbipanning::centerRadius = 1.0;

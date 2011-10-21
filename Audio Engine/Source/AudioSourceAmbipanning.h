@@ -327,16 +327,11 @@ public:
 	 Sets the order used in the Ambipanning calculation.
 	 */
 	static void setOrder(int order_);
-	
-	/**
-	 Sets the number of speakers used.
-	 */
-	static void setNumberOfSpeakers(int numberOfSpeakers_);
 
 	/** 
 	 Sets the positions of the speakers.
 	 */
-	static void setPositionOfSpeakers(Array<void*> positionOfSpeaker_);
+	static void setPositionOfSpeakers(const Array<SpeakerPosition>& positionOfSpeaker_);
 
 	/** 
 	 Sets the distanceMode to 0. In this mode, distanceGain := 1, modifiedOrder := order.
@@ -372,12 +367,11 @@ private:
 	 Calculates the distanceGain and the modifiedOrder,
 	 according to the chosen AudioSourceAmbipanning::distanceMode.
 	 */
-	inline void calculationsForAEP (double & x, double & y, double & z, double & r,
-									double & distanceGain, double & modifiedOrder);
+	inline void calculationsForAEP (double& x, double& y, double& z, double& r,
+									double& distanceGain, double& modifiedOrder);
 	
 	static int order;
-	static int numberOfSpeakers;
-	static Array<void*> positionOfSpeaker; // you have to typecast elements to SpeakerPosition*
+	static Array<SpeakerPosition> positionOfSpeaker; // you have to typecast elements to SpeakerPosition*
 	
 	// for the distance calculations
 	static int distanceMode;		///< Determines which algorithm is chosen to calculate the 
@@ -436,7 +430,7 @@ private:
 	
 	CriticalSection callbackLock;
 	
-	JUCE_LEAK_DETECTOR (AudioSourceAmbipanning);
+	//JUCE_LEAK_DETECTOR (AudioSourceAmbipanning);
 };
 
 

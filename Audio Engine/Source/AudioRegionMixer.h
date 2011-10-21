@@ -163,7 +163,7 @@ public:
                                 SpeakerPosition
     				( (SpeakerPosition*)positionOfSpeaker[speakerNumber_StartingAtZero] ).
      */
-    void setSpeakerPositions (Array<void*> positionOfSpeaker);
+    void setSpeakerPositions (const Array<SpeakerPosition>& positionOfSpeaker);
     
     /**
      Attaches a spacial envelope to a region. 
