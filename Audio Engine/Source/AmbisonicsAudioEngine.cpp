@@ -749,8 +749,8 @@ void setAEPDistanceModeTo2 (double centerRadius,
 											   outsideCenterExponent);
 }
 
-bool AmbisonicsAudioEngine::setSpacialEnvelopeForRegion (const int regionID,
-													     Array<void*> spacialEnvelope)
+bool AmbisonicsAudioEngine::setSpacialEnvelopeForRegion (const int& regionID,
+													     const Array<SpacialEnvelopePoint>& spacialEnvelope)
 {
 	return audioRegionMixer.setSpacialEnvelopeForRegion(regionID, spacialEnvelope);
 }

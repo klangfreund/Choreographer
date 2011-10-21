@@ -190,7 +190,7 @@ public:
     
      @return		 	The success of this operation.
      */
-    bool setSpacialEnvelopeForRegion (const int regionID, Array<void*> spacialEnvelope);
+    bool setSpacialEnvelopeForRegion (const int& regionID, Array<SpacialEnvelopePoint> spacialEnvelope);
 	
 
     //==============================================================================

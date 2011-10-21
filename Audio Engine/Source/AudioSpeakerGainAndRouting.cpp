@@ -185,6 +185,112 @@ const double& AepChannelSettings::getMeasuredPeakValue()
 
 
 //==============================================================================
+AepChannelHardwareOutputPairs::AepChannelHardwareOutputPairs()
+{
+}
+
+AepChannelHardwareOutputPairs::~AepChannelHardwareOutputPairs()
+{
+}
+
+void AepChannelHardwareOutputPairs::deletePairIfItContainsAEPChannel(const int& aepChannel)
+{
+    for (int i=0; i<pairs.size(); i++) 
+    {
+        if (pairs[i].getAepChannel() == aepChannel)
+			// A pair that contains the given aepChannel was found.
+        {
+            pairs.remove(i);
+            return;
+        }
+    }
+}
+
+void AepChannelHardwareOutputPairs::deletePairIfItContainsHardwareOutputChannel(const int& hardwareOutputChannel)
+{
+    for (int i=0; i<pairs.size(); i++) 
+    {
+        if (pairs[i].getHardwareOutputChannel() == hardwareOutputChannel)
+			// A pair that contains the given aepChannel was found.
+        {
+            pairs.remove(i);
+            return;
+        }
+    }
+}
+
+void AepChannelHardwareOutputPairs::add(const int& aepChannel, const int& hardwareOutputChannel)
+{
+    deletePairIfItContainsAEPChannel(aepChannel);
+    deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
+    
+    AepChannelHardwareOutputPair newPair = AepChannelHardwareOutputPair(aepChannel, hardwareOutputChannel);
+    
+    if (pairs.size() == 0)
+        // if the array pairs is empty.
+    {
+        pairs.add(newPair);
+        return;
+    }
+    
+    int i = 0;
+    while (i < pairs.size())
+    {
+        if (hardwareOutputChannel < pairs[i].getHardwareOutputChannel())
+        {
+            break;
+        }
+        i++;
+    }
+    // either pairs[i-1].hardwareOutputChannel <= hardwareOutputChannel < 
+    // pairs[i].hardwareOutputChannel, or i-1 is the index of the last
+    // pair in the array pairs and newPair will be the new last pair in
+    // pairs.
+    pairs.insert(i, newPair);
+}
+
+bool AepChannelHardwareOutputPairs::containsAEPChannel(const int& aepChannel)
+{
+    for (int i=0; i<pairs.size(); i++) 
+    {
+        if (pairs[i].getAepChannel() == aepChannel) 
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool AepChannelHardwareOutputPairs::containsHardwareOutputChannel(const int& hardwareOutputChannel)
+{
+    for (int i=0; i<pairs.size(); i++) 
+    {
+        if (pairs[i].getHardwareOutputChannel() == hardwareOutputChannel) 
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+int AepChannelHardwareOutputPairs::size()
+{
+    return pairs.size();
+}
+
+void AepChannelHardwareOutputPairs::clear()
+{
+    pairs.clear();
+}
+
+const int& AepChannelHardwareOutputPairs::getAepChannel(const int& positionOfPairInArray)
+{
+    return pairs[positionOfPairInArray].getAepChannel();
+}
+
+
+
+//==============================================================================
 AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
 : audioSource (0),
   audioRegionMixer (0),

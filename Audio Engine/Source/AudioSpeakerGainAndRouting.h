@@ -154,9 +154,41 @@ private:
  Represents a connection between an AEP audio channel and a physical
  output of the audio hardware. This is actually just a pair of numbers.
  */
-struct JUCE_API  aepChannelHardwareOutputPair
+class JUCE_API  AepChannelHardwareOutputPair
 {
 public:
+    AepChannelHardwareOutputPair()
+    {
+    }
+    
+    AepChannelHardwareOutputPair(const int& aepChannel_, 
+                                 const int& hardwareOutputChannel_)
+    :   aepChannel(aepChannel_),
+        hardwareOutputChannel(hardwareOutputChannel_)
+    {
+    }
+    
+    void setAepChannel(const int& aepChannel_)
+    {
+        aepChannel = aepChannel_;
+    }
+    
+    void setHardwareOutputChannel(const int& hardwareOutputChannel_)
+    {
+        hardwareOutputChannel = hardwareOutputChannel_;
+    }
+    
+    const int& getAepChannel()
+    {
+        return aepChannel;
+    }
+    
+    const int& getHardwareOutputChannel()
+    {
+        return hardwareOutputChannel;
+    }
+
+private:
     /** 
 	 The AEP audio channel.
      */
@@ -167,53 +199,30 @@ public:
      */
     int hardwareOutputChannel;
 	
-private:
-	JUCE_LEAK_DETECTOR (aepChannelHardwareOutputPair);
+	JUCE_LEAK_DETECTOR (AepChannelHardwareOutputPair);
 };
 
+//==============================================================================
 /**
  Represents a connection between an AEP audio channel and a physical
  output of the audio hardware. This is actually just a pair of numbers.
  
  TODO: MAKE THIS CLASS SAVE!!!!
  */
-class JUCE_API  AEPChannelHardwareOutputPairs
+class JUCE_API  AepChannelHardwareOutputPairs
 {
 public:
-	AEPChannelHardwareOutputPairs()
-	: pairs()
-	{
-	}
+	AepChannelHardwareOutputPairs();
 	
-	~AEPChannelHardwareOutputPairs()
-	{
-		for (int i=0; i<pairs.size(); i++)
-		{
-			delete pairs[i];
-		}
-	}
-	
-	
+	~AepChannelHardwareOutputPairs();
+		
 	/**
 	 Deletes the (AEP channel, hardware output channel)-pair
 	 from the array pairs, if it contains the given AEP channel.
 	 Since an AEP channel can have at most one connection,
 	 there is at most one pair, that can be removed.
 	 */
-	void deletePairIfItContainsAEPChannel(int aepChannel)
-	{
-		for (int i=0; i<pairs.size(); i++) 
-		{
-			if (pairs[i]->aepChannel == aepChannel)
-			// A pair that contains the given aepChannel was found.
-			{
-				aepChannelHardwareOutputPair* theRemovedPair;
-				theRemovedPair = pairs.remove(i);
-				delete theRemovedPair;
-				return;
-			}
-		}
-	}
+	void deletePairIfItContainsAEPChannel(const int& aepChannel);
 	
 	/**
 	 Deletes the (AEP channel, hardware output channel)-pair from
@@ -221,20 +230,7 @@ public:
 	 Since a hardware output channel can have at most one connection,
 	 there is at most one pair, that can be removed.
 	 */
-	void deletePairIfItContainsHardwareOutputChannel(int hardwareOutputChannel)
-	{
-		for (int i=0; i<pairs.size(); i++) 
-		{
-			if (pairs[i]->hardwareOutputChannel == hardwareOutputChannel)
-			// A pair that contains the given aepChannel was found.
-			{
-				aepChannelHardwareOutputPair* theRemovedPair;
-				theRemovedPair = pairs.remove(i);
-				delete theRemovedPair;
-				return;
-			}
-		}
-	}
+	void deletePairIfItContainsHardwareOutputChannel(const int& hardwareOutputChannel);
 	
 	/**
 	 Generates the pair (aepChannel, hardwareOutputChannel). A pointer to
@@ -242,91 +238,26 @@ public:
 	 This internal array is ordered according to the second value of
 	 the pairs.
 	 */
-	void add(int aepChannel, int hardwareOutputChannel)
-	{
-		deletePairIfItContainsAEPChannel(aepChannel);
-		deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
-		
-		aepChannelHardwareOutputPair* newPair = new aepChannelHardwareOutputPair;
-		newPair->aepChannel = aepChannel;
-		newPair->hardwareOutputChannel = hardwareOutputChannel;
-		
-		if (pairs.size() == 0)
-			// if the array pairs is empty.
-		{
-			pairs.add(newPair);
-			return;
-		}
-//		if (hardwareOutputChannel < pairs[0]->hardwareOutputChannel)
-//			// if the new pair has the smallest hardwareOutputChennel,
-//			// it will be the new leading element.
-//		{
-//			pairs.insert(0, newPair);
-//			return;
-//		}
-		int i = 0;
-		while (i < pairs.size())
-		{
-			if (hardwareOutputChannel < pairs[i]->hardwareOutputChannel)
-			{
-				break;
-			}
-			i++;
-		}
-		// either pairs[i-1].hardwareOutputChannel <= hardwareOutputChannel < 
-	    // pairs[i].hardwareOutputChannel, or i-1 is the index of the last
-		// pair in the array pairs and newPair will be the new last pair in
-		// pairs.
-		pairs.insert(i, newPair);
-	}
+	void add(const int& aepChannel, const int& hardwareOutputChannel);
 	
 	/** Returns true if the given AEP channel number is part of a pair.	 
 	 */
-	bool containsAEPChannel(int aepChannel)
-	{
-		for (int i=0; i<pairs.size(); i++) 
-		{
-			if (pairs[i]->aepChannel == aepChannel) 
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	bool containsAEPChannel(const int& aepChannel);
 	
 	/** Returns true if the given hardware device channel number is part of a pair.	 
 	 */
-	bool containsHardwareOutputChannel(int hardwareOutputChannel)
-	{
-		for (int i=0; i<pairs.size(); i++) 
-		{
-			if (pairs[i]->hardwareOutputChannel == hardwareOutputChannel) 
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+	bool containsHardwareOutputChannel(const int& hardwareOutputChannel);
 	
-	int size()
-	{
-		return pairs.size();
-	}
+    int size();
 	
-	void clear()
-	{
-		pairs.clear();
-	}
+	void clear();
 	
-	int getAepChannel(int positionOfPairInArray)
-	{
-		return pairs[positionOfPairInArray]->aepChannel;
-	}
+	const int& getAepChannel(const int& positionOfPairInArray);
 	
 private:
-	Array<aepChannelHardwareOutputPair*> pairs;
+	Array<AepChannelHardwareOutputPair> pairs;
 	
-	JUCE_LEAK_DETECTOR (AEPChannelHardwareOutputPairs);
+	JUCE_LEAK_DETECTOR (AepChannelHardwareOutputPairs);
 };
 	
 
@@ -530,7 +461,7 @@ private:
 	AudioSource* audioSource;
 	AudioRegionMixer* audioRegionMixer;
 
-	AEPChannelHardwareOutputPairs aepChannelHardwareOutputPairs;
+	AepChannelHardwareOutputPairs aepChannelHardwareOutputPairs;
 			///< This object
 			///  hosts an array of aepChannel - hardwareOutputChannel
 			///  pairs. These pairs determine the connection between

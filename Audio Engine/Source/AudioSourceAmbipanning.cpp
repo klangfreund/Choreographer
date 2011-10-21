@@ -198,12 +198,10 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	// because the reallocateMemoryForTheArrays() function sets
 	// newSpacialEnvelopeSet = true. (Which leads to the use
 	// of newSpacialEnvelope in getNextAudioBlock(..)).
-	SpacialEnvelopePoint* spacialEnvelopePoint 
-	= new SpacialEnvelopePoint(0,	// time (in samples)
-							   0,	// x
-							   0,	// y
-							   0);	// z
-	newSpacialEnvelope.add(spacialEnvelopePoint);
+	newSpacialEnvelope.add(SpacialEnvelopePoint(0,      // time (in samples)
+                                                0,      // x
+                                                0,      // y
+                                                0));	// z);
 	spacialEnvelope = newSpacialEnvelope;
 	
 	constantSpacialPosition = true;
@@ -263,28 +261,21 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	{
 		if (newSpacialEnvelopeSet)
 		{
-			Array<void*> oldSpacialEnvelope = spacialEnvelope;
+			Array<SpacialEnvelopePoint> oldSpacialEnvelope = spacialEnvelope;
 			spacialEnvelope = newSpacialEnvelope;
 			previousChannelFactor = channelFactor; // This is used in the info.buffer->applyGainRamp(..)
 			// a couple of lines below to generate a smooth transition from the current spacial value to 
 			// the spacial value of the new envelope.
-			
-			// delete content of the old spacial envelope
-			for (int i = oldSpacialEnvelope.size(); --i >= 0;)
-			{
-				SpacialEnvelopePoint* spacialEnvelopePointToDelete = (SpacialEnvelopePoint*)oldSpacialEnvelope[i];
-				delete spacialEnvelopePointToDelete;
-			}
 		}
 		
 		if (spacialEnvelope.size() == 1) // by the way: size() == 0 can't be, this was
 			// checked in setGainEnvelope(..)
 		{
 			constantSpacialPosition = true;
-			nextSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[0];
-			double x = nextSpacialPoint->getX() * 10.0; // 1 unit in the GUI = 10 units here
-			double y = nextSpacialPoint->getY() * 10.0;
-			double z = nextSpacialPoint->getZ() * 10.0;
+			nextSpacialPoint = spacialEnvelope[0];
+			double x = nextSpacialPoint.getX();
+			double y = nextSpacialPoint.getY();
+			double z = nextSpacialPoint.getZ();
 			double r; // radius, will be calculated in calculationsForAEP(..)
 			double distanceGain; // will be calculated in calculationsForAEP(..)
 			double modifiedOrder; // will be calculated in calculationsForAEP(..)
@@ -362,7 +353,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 				// if the next spacial point is outside of the current audio block
 				// (audioBlockEndPosition is the position of to the first sample
 				//  after the current block)
-				if (nextSpacialPoint->getPosition() >= audioBlockEndPosition )
+				if (nextSpacialPoint.getPosition() >= audioBlockEndPosition )
 				{
 					numberOfRemainingSamples = audioBlockEndPosition - currentPosition;
 					while (--numberOfRemainingSamples >= 0)
@@ -381,7 +372,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 				else
 				{
 					// apply the gain envelope up to the sample before the nextGainPoint
-					numberOfRemainingSamples = nextSpacialPoint->getPosition() - currentPosition;
+					numberOfRemainingSamples = nextSpacialPoint.getPosition() - currentPosition;
 					while (--numberOfRemainingSamples >= 0)
 					{
 						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
@@ -400,20 +391,20 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 						sample.set(channel, sample[channel] + 1);
 					}
 					
-					currentPosition = nextSpacialPoint->getPosition() + 1;
+					currentPosition = nextSpacialPoint.getPosition() + 1;
 				    // currentPosition tells you the next sample to apply the gain
 					
 					previousSpacialPoint = nextSpacialPoint;
 					nextSpacialPointIndex++;
-					nextSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[nextSpacialPointIndex];
+					nextSpacialPoint = spacialEnvelope[nextSpacialPointIndex];
 					
 					// figure out the channelFactorAtPreviousSpacialPoint
 					channelFactorAtPreviousSpacialPoint = channelFactorAtNextSpacialPoint;
 					
 					// figure out the channelFactorAtNextSpacialPoint, channelFactorDelta and channelFactor
-					double xn = nextSpacialPoint->getX();
-					double yn = nextSpacialPoint->getY();
-					double zn = nextSpacialPoint->getZ();
+					double xn = nextSpacialPoint.getX();
+					double yn = nextSpacialPoint.getY();
+					double zn = nextSpacialPoint.getZ();
 					double rn; // radius, will be calculated in calculationsForAEP(..)
 					double distanceGainN; // will be calculated in calculationsForAEP(..)
 					double modifiedOrderN; // will be calculated in calculationsForAEP(..)	
@@ -422,7 +413,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					double xs, ys, zs; // speaker coordinates, used in the upcoming for-loop
 					double factor;  // used in the upcoming for-loop
 					
-					int distance = nextSpacialPoint->getPosition() - previousSpacialPoint->getPosition();
+					int distance = nextSpacialPoint.getPosition() - previousSpacialPoint.getPosition();
 					
 					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
@@ -490,17 +481,18 @@ void AudioSourceAmbipanning::setGainEnvelope (Array<void*> newGainEnvelope)
 	audioSourceGainEnvelope->setGainEnvelope(newGainEnvelope);
 }
 
-void AudioSourceAmbipanning::setSpacialEnvelope(Array<void*> newSpacialEnvelope_)
+void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)
 {
 	DBG(T("AudioSourceAmbipanning: setSpacialEnvelope called"));
 	
 	if (newSpacialEnvelope_.size() != 0)
-	{
-		// this Array must be sorted for the code in getNextAudioLoop(..)
-		// to work.
-		newSpacialEnvelope_.sort(spacialEnvelopePointComparator);
-			
+	{			
 		newSpacialEnvelope = newSpacialEnvelope_;
+        
+        // this Array must be sorted for the code in getNextAudioBlock(..)
+		// to work.
+		newSpacialEnvelope.sort(spacialEnvelopePointComparator);
+        
 		newSpacialEnvelopeSet = true; // when set, the spacial value 
 		// is faded from the old spacial envelope to the new one, in 
 		// the interval of one audio block in the getNextAudioBlock(..).
@@ -602,27 +594,27 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
 	// figure out between which audioEnvelopePoints we are right now
 	// and set up all variables needed by getNextAudioBlock(..)
 	nextSpacialPointIndex = 1; // since the first audioEnvelopePoint has to be at position 0 
-	while (((SpacialEnvelopePoint*)spacialEnvelope[nextSpacialPointIndex])->getPosition() <= newPosition)
+	while (spacialEnvelope[nextSpacialPointIndex].getPosition() <= newPosition)
 	{
 		nextSpacialPointIndex++;
 	}
 	
-	previousSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[nextSpacialPointIndex - 1];
-	nextSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[nextSpacialPointIndex];
+	previousSpacialPoint = spacialEnvelope[nextSpacialPointIndex - 1];
+	nextSpacialPoint = spacialEnvelope[nextSpacialPointIndex];
 	
 	// calculate the values of the float-arrays channelFactorAtPreviousSpacialPoint,
 	// channelFactorAtNextSpacialPoint, channelFactorDelta and channelFactor
-	double xp = previousSpacialPoint->getX();
-	double yp = previousSpacialPoint->getY();
-	double zp = previousSpacialPoint->getZ();
+	double xp = previousSpacialPoint.getX();
+	double yp = previousSpacialPoint.getY();
+	double zp = previousSpacialPoint.getZ();
 	double rp; // radius, will be calculated in calculationsForAEP(..)
 	double distanceGainP; // will be calculated in calculationsForAEP(..)
 	double modifiedOrderP; // will be calculated in calculationsForAEP(..)	
 	calculationsForAEP(xp, yp, zp, rp, distanceGainP, modifiedOrderP);
 	
-	double xn = nextSpacialPoint->getX();
-	double yn = nextSpacialPoint->getY();
-	double zn = nextSpacialPoint->getZ();
+	double xn = nextSpacialPoint.getX();
+	double yn = nextSpacialPoint.getY();
+	double zn = nextSpacialPoint.getZ();
 	double rn; // radius, will be calculated in calculationsForAEP(..)
 	double distanceGainN; // will be calculated in calculationsForAEP(..)
 	double modifiedOrderN; // will be calculated in calculationsForAEP(..)	
@@ -631,9 +623,9 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
 	double xs, ys, zs; // speaker coordinates, used in the upcoming for-loop
 	double factor;  // used in the upcoming for-loop
 	
-	int distance = nextSpacialPoint->getPosition() - previousSpacialPoint->getPosition();
+	int distance = nextSpacialPoint.getPosition() - previousSpacialPoint.getPosition();
 	int distanceFromPreviousSpacialPointPosToCurrentPos = newPosition 
-							      - previousSpacialPoint->getPosition();
+							      - previousSpacialPoint.getPosition();
 
 	for (int channel = 0; channel < numberOfSpeakers; channel++) 
 	{

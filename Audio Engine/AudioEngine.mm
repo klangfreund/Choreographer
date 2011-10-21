@@ -357,9 +357,11 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)setSpatialAutomation:(id)audioRegion
 {
 	unsigned int index = [[audioRegion valueForKey:@"playbackIndex"] unsignedIntValue];
-	Array<void*> spacialEnvelope;
+	Array<SpacialEnvelopePoint> spacialEnvelope;
 	
 //	NSLog(@"setSpatialAutomation for AudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
+    
+    const double spacialFactor = 10.0; // 1 unit in the GUI = 10 units in the audio engine.
 	
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 	int fromMsToSamples = 0.001*sampleRate;
@@ -370,15 +372,13 @@ static AudioEngine *sharedAudioEngine = nil;
 		//  The spacial envelope contains points. Such a point holds four values: The position
 		//  (the time information, measured in samples, starting at the beginning of the audiofile
 		//   - not at the beginning of a region with an offset) and the x, y and z coordinates.
-		SpacialEnvelopePoint* spacialEnvelopePoint 
-		  = new SpacialEnvelopePoint([[bp valueForKey:@"time"] longValue] * fromMsToSamples + offsetInFile,
-									 [[bp valueForKey:@"x"] floatValue],
-									 [[bp valueForKey:@"y"] floatValue],
-									 [[bp valueForKey:@"z"] floatValue]);
-			// The "+ offsetInFile" is needed because the GUI wants to start with the spacial envelope at
-			// the start of a region, whereas the audio engine wants it to start at the beginning of the
-			// audio file.
-		spacialEnvelope.add(spacialEnvelopePoint);
+		spacialEnvelope.add(SpacialEnvelopePoint([[bp valueForKey:@"time"] longValue] * fromMsToSamples + offsetInFile,
+                                                 [[bp valueForKey:@"x"] floatValue] * spacialFactor,
+                                                 [[bp valueForKey:@"y"] floatValue] * spacialFactor,
+                                                 [[bp valueForKey:@"z"] floatValue] * spacialFactor));
+            // The "+ offsetInFile" is needed because the GUI wants to start with the spacial envelope at
+            // the start of a region, whereas the audio engine wants it to start at the beginning of the
+            // audio file.
 		
 //		NSLog(@"time: %ld x: %f y: %f z: %f",
 //		[[bp valueForKey:@"time"] longValue],

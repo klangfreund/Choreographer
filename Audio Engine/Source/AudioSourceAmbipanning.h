@@ -122,13 +122,14 @@ public:
 		    	    > ((SpacialEnvelopePoint*)second)->getPosition().
 			</ul>
 	 */
-	int compareElements (void* first, void* second) const
+	int compareElements (SpacialEnvelopePoint first, 
+                         SpacialEnvelopePoint second) const
 	{
-		if (((SpacialEnvelopePoint*)first)->getPosition() < ((SpacialEnvelopePoint*)second)->getPosition())
+		if (first.getPosition() < second.getPosition())
 		{
 			return -1;
 		}
-		else if (((SpacialEnvelopePoint*)first)->getPosition() > ((SpacialEnvelopePoint*)second)->getPosition())
+		else if (first.getPosition() > second.getPosition())
 		{
 			return 1;
 		}
@@ -313,7 +314,7 @@ public:
 	/**
 	 TODO
 	 */
-	void setSpacialEnvelope (Array<void*> newSpacialEnvelope);
+	void setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope);
 	
 	/**
 	 This is the place where the size/memory space for all arrays of this class is
@@ -398,12 +399,12 @@ private:
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).
 	AudioSampleBuffer monoBuffer;  // used in getNextAudioBlock(..).
 	
-	Array<void*> spacialEnvelope; ///< TODO
+	Array<SpacialEnvelopePoint> spacialEnvelope; ///< TODO
 
 	/** This is used by AudioSourceAmbipanning::setSpacialEnvelope and
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
 	 */
-	Array<void*> newSpacialEnvelope;
+	Array<SpacialEnvelopePoint> newSpacialEnvelope;
 
 	SpacialEnvelopePointComparator spacialEnvelopePointComparator;
 	bool newSpacialEnvelopeSet;
@@ -421,8 +422,8 @@ private:
 	                            // in the previously processed audio block) + 1
 	                            // in samples, relative to the start of the audio
 	                            // file.
-	SpacialEnvelopePoint* previousSpacialPoint;
-	SpacialEnvelopePoint* nextSpacialPoint;
+	SpacialEnvelopePoint previousSpacialPoint;
+	SpacialEnvelopePoint nextSpacialPoint;
 	int nextSpacialPointIndex;
 	Array <double> channelFactorAtPreviousSpacialPoint;
 	Array <double> channelFactorAtNextSpacialPoint;

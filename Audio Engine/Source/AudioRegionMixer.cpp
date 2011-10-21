@@ -256,7 +256,7 @@ void AudioRegionMixer::setSpeakerPositions (Array<void*> positionOfSpeaker)
 	}
 }
 
-bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int regionID, Array<void*> spacialEnvelope)
+bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int& regionID, Array<SpacialEnvelopePoint> spacialEnvelope)
 {
 	int index;
 	bool foundTheRegion = findRegion(regionID, index);
@@ -277,23 +277,22 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int regionID, Array<vo
 				// as the closest point.
 				spacialEnvelope.sort(spacialEnvelopePointComparator);
 				
-				SpacialEnvelopePoint* firstSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[0];
-				if (firstSpacialPoint->getPosition() > 0)
+				SpacialEnvelopePoint firstSpacialPoint = spacialEnvelope.getFirst();
+				if (firstSpacialPoint.getPosition() > 0)
 				{
-					SpacialEnvelopePoint* newFirstSpacialPoint 
-					  = new SpacialEnvelopePoint(0, firstSpacialPoint->getX(),
-												    firstSpacialPoint->getY(),
-													firstSpacialPoint->getZ());
+					SpacialEnvelopePoint newFirstSpacialPoint(0, firstSpacialPoint.getX(),
+                                                              firstSpacialPoint.getY(),
+                                                              firstSpacialPoint.getZ());
 					spacialEnvelope.addSorted(spacialEnvelopePointComparator, newFirstSpacialPoint);
 				}
-				SpacialEnvelopePoint* lastSpacialPoint = (SpacialEnvelopePoint*)spacialEnvelope[spacialEnvelope.size()-1];
+				SpacialEnvelopePoint lastSpacialPoint = spacialEnvelope.getLast();
 				int lengthOfThisRegion = audioRegionToModify->endPosition - audioRegionToModify->startPosition;
-				if (lastSpacialPoint->getPosition() < lengthOfThisRegion )
+				if (lastSpacialPoint.getPosition() < lengthOfThisRegion )
 				{
-					SpacialEnvelopePoint* newLastSpacialPoint
-					= new SpacialEnvelopePoint(lengthOfThisRegion, firstSpacialPoint->getX(),
-																   firstSpacialPoint->getY(),
-																   firstSpacialPoint->getZ());
+					SpacialEnvelopePoint newLastSpacialPoint(lengthOfThisRegion,
+                                                             firstSpacialPoint.getX(),
+                                                             firstSpacialPoint.getY(),
+                                                             firstSpacialPoint.getZ());
 					spacialEnvelope.addSorted(spacialEnvelopePointComparator, newLastSpacialPoint);
 				}
 				
