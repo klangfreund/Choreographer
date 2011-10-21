@@ -78,23 +78,23 @@ public:
 
     void setMeasuredPeakValue(const double& measurement);
     
-    double getGain();
+    const double& getGain();
     
-    double getLastGain();
+    const double& getLastGain();
     
-    bool getSoloStatus();
+    const bool& getSoloStatus();
     
-    bool getMuteStatus();
+    const bool&  getMuteStatus();
     
-    bool getPinkNoiseStatus();
+    const bool&  getPinkNoiseStatus();
     
     const SpeakerPosition& getSpeakerPosition();
     
-    bool getMeasurementStatus();
+    const bool&  getMeasurementStatus();
     
-    double getMeasuredDecayingValue();
+    const double& getMeasuredDecayingValue();
     
-    double getMeasuredPeakValue();
+    const double& getMeasuredPeakValue();
 
 private:
 	/** The gain of the AEP channel.
@@ -539,9 +539,10 @@ private:
 			///  which hardware output channels need to be activated.
 	
 	
-	Array<AepChannelSettings> aepChannelSettingsAscending;
-	Array<AepChannelSettings> aepChannelSettingsOrderedByActiveHardwareChannels;	
-	Array<AepChannelSettings> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
+	OwnedArray<AepChannelSettings> aepChannelSettingsOrderedByAepChannel;
+	Array<AepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannels;
+	
+	Array<AepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
 			///< This backup object is only used by switchToBounceMode().
 	bool bounceMode;
 

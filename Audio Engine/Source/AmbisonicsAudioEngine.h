@@ -11,7 +11,6 @@
 #define __AMBISONICS_AUDIO_ENGINE
 
 #include "../JuceLibraryCode/JuceHeader.h"
-#include "modified Juce Classes/AudioDeviceSelectorComponentMod.h"
 #include "modified Juce Classes/AudioTransportSourceMod.h"
 #include "AudioSpeakerGainAndRouting.h"
 #include "AudioRegionMixer.h"

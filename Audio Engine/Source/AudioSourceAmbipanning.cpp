@@ -9,6 +9,97 @@
 
 #include "AudioSourceAmbipanning.h"
 
+SpacialEnvelopePoint::SpacialEnvelopePoint()
+:   position (0),
+    x (0.0),
+    y (0.0),
+    z (0.0)
+{
+}
+
+SpacialEnvelopePoint::SpacialEnvelopePoint(const int& position_, 
+                                           const double& x_, 
+                                           const double& y_, 
+                                           const double& z_)
+:   position (position_),
+    x (x_),
+    y (y_),
+    z (z_)
+{
+}
+
+SpacialEnvelopePoint::~SpacialEnvelopePoint()
+{
+}
+
+void SpacialEnvelopePoint::setPosition(const int& position_)
+{
+    position = position_;
+    
+}
+
+void SpacialEnvelopePoint::setX(const double & x_)
+{
+    x = x_;
+}
+
+void SpacialEnvelopePoint::setY(const double & y_)
+{
+    y = y_;
+}
+
+void SpacialEnvelopePoint::setZ(const double & z_)
+{
+    z = z_;
+}
+
+/** Sets the position in time and the coordinates in space. */
+void SpacialEnvelopePoint::setPositionAndValue(const int & position_,
+                         const double & x_,
+                         const double & y_,
+                         const double & z_)
+{
+    position = position_;
+    x = x_;
+    y = y_;
+    z = z_;
+}
+
+/** Gets the position in time.
+ @return The position in time (in samples).
+ */
+const int& SpacialEnvelopePoint::getPosition()
+{
+    return position;
+}
+
+/** Gets the spacial x-coordinate.
+ @return The spacial x-coordinate.
+ */
+const double& SpacialEnvelopePoint::getX()
+{
+    return x;
+}
+
+/** Gets the spacial y-coordinate.
+ @return The spacial y-coordinate.
+ */
+const double& SpacialEnvelopePoint::getY()
+{
+    return y;
+}
+
+/** Gets the spacial z-coordinate.
+ @return The spacial z-coordinate.
+ */
+const double& SpacialEnvelopePoint::getZ()
+{
+    return z;
+}
+
+
+//==============================================================================
+
 SpeakerPosition::SpeakerPosition()
 :   x(0.0),
     y(1.0),
@@ -16,7 +107,9 @@ SpeakerPosition::SpeakerPosition()
 {
 }
 
-SpeakerPosition::SpeakerPosition (double x_, double y_, double z_)
+SpeakerPosition::SpeakerPosition (const double& x_, 
+                                  const double& y_, 
+                                  const double& z_)
 :   x(x_),
     y(y_),
     z(z_)
@@ -45,43 +138,47 @@ const SpeakerPosition& SpeakerPosition::operator= (const SpeakerPosition& other)
 }
 
 
-void SpeakerPosition::setX (double x_)
+void SpeakerPosition::setX (const double& x_)
 {
     x = x_;
 }
 
-void SpeakerPosition::setY (double y_)
+void SpeakerPosition::setY (const double& y_)
 {
     y = y_;
 }
 
-void SpeakerPosition::setZ (double z_)
+void SpeakerPosition::setZ (const double& z_)
 {
     z = z_;
 }
 
-void SpeakerPosition::setXYZ (double x_, double y_, double z_)
+void SpeakerPosition::setXYZ (const double& x_,
+                              const double& y_,
+                              const double& z_)
 {
     x = x_;
     y = y_;
     z = z_;
 }
 
-double SpeakerPosition::getX ()
+const double& SpeakerPosition::getX ()
 {
     return x;
 }
 
-double SpeakerPosition::getY ()
+const double& SpeakerPosition::getY ()
 {
     return y;
 }
 
-double SpeakerPosition::getZ ()
+const double& SpeakerPosition::getZ ()
 {
     return z;
 }
 
+
+//==============================================================================
 
 AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFormatReader,
 												double sampleRateOfTheAudioDevice)

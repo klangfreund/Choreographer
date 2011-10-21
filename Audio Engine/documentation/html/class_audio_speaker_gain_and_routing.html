@@ -228,12 +228,12 @@ Private Attributes</h2></td></tr>
 <a class="el" href="class_audio_region_mixer.html">AudioRegionMixer</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>audioRegionMixer</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_e_p_channel_hardware_output_pairs.html">AEPChannelHardwareOutputPairs</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_audio_speaker_gain_and_routing.html#ad02b0079e62be8e20c36895ee36213b6">aepChannelHardwareOutputPairs</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This object hosts an array of aepChannel - hardwareOutputChannel pairs.  <a href="#ad02b0079e62be8e20c36895ee36213b6"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1e81549abfe3923648422cfc17262bd6"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsAscending" ref="a1e81549abfe3923648422cfc17262bd6" args="" -->
-<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsAscending</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad951dc5bdbb30938ff860ef19b098672"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels" ref="ad951dc5bdbb30938ff860ef19b098672" args="" -->
-<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsOrderedByActiveHardwareChannels</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a097d5bef39d855abe4ca8708610701e4"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannelsBackup" ref="a097d5bef39d855abe4ca8708610701e4" args="" -->
-<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_audio_speaker_gain_and_routing.html#a097d5bef39d855abe4ca8708610701e4">aepChannelSettingsOrderedByActiveHardwareChannelsBackup</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a465b04e2187b18ef0777d508699f4ca1"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsAscending" ref="a465b04e2187b18ef0777d508699f4ca1" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="class_aep_channel_settings.html">AepChannelSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsAscending</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad789a27c15718136232fbbaf235ebf39"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels" ref="ad789a27c15718136232fbbaf235ebf39" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="class_aep_channel_settings.html">AepChannelSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsOrderedByActiveHardwareChannels</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6c3ebf20376f9a7ebf23ddd2480ea5fe"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannelsBackup" ref="a6c3ebf20376f9a7ebf23ddd2480ea5fe" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="class_aep_channel_settings.html">AepChannelSettings</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_audio_speaker_gain_and_routing.html#a6c3ebf20376f9a7ebf23ddd2480ea5fe">aepChannelSettingsOrderedByActiveHardwareChannelsBackup</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This backup object is only used by <a class="el" href="class_audio_speaker_gain_and_routing.html#a5a15808768e362a02080c6d9f3200c2c" title="Puts the AudioSpeakerGainAndRouting object into the bounce mode.">switchToBounceMode()</a>. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ace4939d41e5ecd74d0498fa3094b056c"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::bounceMode" ref="ace4939d41e5ecd74d0498fa3094b056c" args="" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>bounceMode</b></td></tr>
@@ -262,6 +262,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfChannelsWithEn
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Used in enableNewRouting . <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9396c632c6f7743f85f9edb5c0b0e6df"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::audioSpeakerGainAndRoutingLock" ref="a9396c632c6f7743f85f9edb5c0b0e6df" args="" -->
 <a class="el" href="class_critical_section.html">CriticalSection</a>&#160;</td><td class="memItemRight" valign="bottom"><b>audioSpeakerGainAndRoutingLock</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a356978a29cb80da1cd35722ebfc137f2"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsAscending" ref="a356978a29cb80da1cd35722ebfc137f2" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsAscending</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abbbd0598c9c971f77e37c640584a2b2e"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels" ref="abbbd0598c9c971f77e37c640584a2b2e" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>aepChannelSettingsOrderedByActiveHardwareChannels</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae29790b4a1a1e12e6055d158e3c95d9e"></a><!-- doxytag: member="AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannelsBackup" ref="ae29790b4a1a1e12e6055d158e3c95d9e" args="" -->
+<a class="el" href="class_array.html">Array</a>&lt; <a class="el" href="structaep_channel_settings.html">aepChannelSettings</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_audio_speaker_gain_and_routing.html#ae29790b4a1a1e12e6055d158e3c95d9e">aepChannelSettingsOrderedByActiveHardwareChannelsBackup</a></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">This backup object is only used by <a class="el" href="class_audio_speaker_gain_and_routing.html#a5a15808768e362a02080c6d9f3200c2c" title="Puts the AudioSpeakerGainAndRouting object into the bounce mode.">switchToBounceMode()</a>. <br/></td></tr>
 </table>
 <hr/><a name="_details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="class_positionable_audio_source.html" title="A type of AudioSource which can be repositioned.">PositionableAudioSource</a> that ... </p>
@@ -1274,7 +1281,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>numberOfChannelsWithEn
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Mon Oct 17 2011 21:17:06 for ChoreographerAmbisonicsAudioEngine by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Oct 18 2011 18:29:27 for ChoreographerAmbisonicsAudioEngine by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.3 </small></address>
 </body>

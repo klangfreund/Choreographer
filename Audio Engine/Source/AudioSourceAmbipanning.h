@@ -27,97 +27,55 @@ public:
      SpacialEnvelopePoint::x = 0.0, SpacialEnvelopePoint::y = 0.0,
      SpacialEnvelopePoint::z = 0.0.
      */
-    SpacialEnvelopePoint()
-    : position (0),
-      x (0.0),
-      y (0.0),
-      z (0.0)
-    {
-    }
+    SpacialEnvelopePoint();
     
     
     /** Constructor with a non-trivial initialisation. */
-    SpacialEnvelopePoint(int position_, double x_, double y_, double z_)
-    : position (position_),
-    x (x_),
-    y (y_),
-    z (z_)
-    {
-        }
+    SpacialEnvelopePoint(const int& position_, 
+                         const double& x_, 
+                         const double& y_, 
+                         const double& z_);
     
     /** Destructor. */
-    ~SpacialEnvelopePoint()
-    {
-    }
+    ~SpacialEnvelopePoint();
     
     /** Sets a new position in time (in samples).*/
-    void setPosition(const int& position_)
-    {
-    	position = position_;
-    	
-    }
+    void setPosition(const int& position_);
     
     /** Sets a new x-coordinate in space.*/
-    void setX(const double & x_)
-    {
-    	x = x_;
-    }
+    void setX(const double & x_);
     
     /** Sets a new y-coordinate in space.*/
-    void setY(const double & y_)
-    {
-    	y = y_;
-    }
+    void setY(const double & y_);
     
     /** Sets a new z-coordinate in space.*/
-    void setZ(const double & z_)
-    {
-    	z = z_;
-    }	
+    void setZ(const double & z_);	
     
     /** Sets the position in time and the coordinates in space. */
     void setPositionAndValue(const int & position_,
-    			 const double & x_,
-    			 const double & y_,
-    			 const double & z_)
-    {
-    	position = position_;
-    	x = x_;
-    	y = y_;
-    	z = z_;
-    }
+                             const double & x_,
+                             const double & y_,
+                             const double & z_);
     
     /** Gets the position in time.
      @return The position in time (in samples).
      */
-    int getPosition()
-    {
-    	return position;
-    }
+    const int& getPosition();
     
     /** Gets the spacial x-coordinate.
      @return The spacial x-coordinate.
      */
-    double getX()
-    {
-    	return x;
-    }
+    const double& getX();
     
     /** Gets the spacial y-coordinate.
      @return The spacial y-coordinate.
      */
-    double getY()
-    {
-    	return y;
-    }
+    const double& getY();
     
     /** Gets the spacial z-coordinate.
      @return The spacial z-coordinate.
      */
-    double getZ()
-    {
-    	return z;
-    }
+    const double& getZ();
 	
 private:	
     /** The position in time (in samples). */
@@ -204,7 +162,9 @@ public:
 	 @param y_ y-coordinate in space.
 	 @param z_ z-coordinate in space.
 	 */
-	SpeakerPosition (double x_, double y_, double z_);
+	SpeakerPosition (const double& x_, 
+                     const double& y_, 
+                     const double& z_);
     
     SpeakerPosition (const SpeakerPosition& other);
 	
@@ -219,25 +179,27 @@ public:
     const SpeakerPosition& operator= (const SpeakerPosition& other);
 	
 	/** Sets the x-coordinate in space. */
-	void setX (double x_);
+	void setX (const double& x_);
 	
 	/** Sets the y-coordinate in space. */
-	void setY (double y_);
+	void setY (const double& y_);
 	
 	/** Sets the z-coordinate in space. */
-	void setZ (double z_);
+	void setZ (const double& z_);
 	
 	/** Sets the x-, y- and z-coordinate in space. */
-	void setXYZ (double x_, double y_, double z_);
+	void setXYZ (const double& x_,
+                 const double& y_,
+                 const double& z_);
 	
 	/** Gets the x-coordinate in space. */
-	double getX ();
+	const double& getX ();
     
 	/** Gets the y-coordinate in space. */
-	double getY ();
+	const double& getY ();
 	
 	/** Gets the z-coordinate in space. */
-	double getZ ();
+	const double& getZ ();
 	
 private:
 	double x;
