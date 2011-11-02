@@ -19,8 +19,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioSourcePlayer(),
       audioTransportSource(),
       audioRegionMixer(),
-	  audioSpeakerGainAndRouting(&audioRegionMixer),
-	  numberOfHardwareOutputChannels (0)
+	  audioSpeakerGainAndRouting(&audioRegionMixer)
 {
 	
 	DBG(T("AmbisonicsAudioEngine: constructor called."));
@@ -79,7 +78,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	deviceNames = getAvailableAudioDeviceNames();
 	
 	// Check if there are audioDevices available at all.
-	if (deviceNames.size() < 1)
+	if (deviceNames.size() == 0)
 	{
 		DBG(T("AmbisonicsAudioEngine, constructor: Can't find a Core Audio device."));
 	}
@@ -97,38 +96,32 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 		
 		// Select an audioDevice
 		String chosenOutputDevice = deviceNames[0];
+        DBG(T("AmbisonicsAudioEngine, chosenOutputDevice = ") + chosenOutputDevice);
 		//String chosenOutputDevice = T("bla");		
 		String errorString;
 		errorString = setAudioDevice(chosenOutputDevice);
+            // This will call enableNewRouting() and in there,
+            //audioTransportSource.setSource (&audioRegionMixer,
+            //								numberOfActiveOutputChannels,
+            //								AUDIOTRANSPORT_BUFFER);
+            // is called.
 		if (errorString.isNotEmpty())
 		{
 			DBG(T("AmbisonicsAudioEngine, constructor: Wasn't able to set the audio device ") + chosenOutputDevice);
 			DBG(errorString);
 		}		
 	}
-	
-	
-	// Get the number of hardware output channels:
-	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
-	// this points to a object used by the audioDeviceManager, don't delete it!
-	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
-	numberOfHardwareOutputChannels = outputChannelNames.size();
-	// Let others know about this new number of hardware output channels:
-	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
-	
-	// figure out the number of active output channels:
-	int numberOfActiveOutputChannels = (currentAudioDevice->getActiveOutputChannels()).countNumberOfSetBits();
-
-	// Connect the objects together (for a better understanding, please take a look at
-	// the picture in the AmbisonicsAudioEngine Class Reference in the documentation):
-	audioTransportSource.setSource (&audioRegionMixer,
-									numberOfActiveOutputChannels,
-									AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+    	
+	// Connect the objects together (for a better understanding, please take a 
+    // look at the picture in the AmbisonicsAudioEngine Class Reference in the
+    // documentation):
+    // (Some lines above, the audioRegionMixer and the audioTransportSource
+    // have already been connected.)
 	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
     audioSourcePlayer.setSource (&audioSpeakerGainAndRouting);
 	audioDeviceManager.addAudioCallback (&audioSourcePlayer);
 	
-	
+    
 	// temp (test) ----------------------
 	
 //	addAepChannel(0, 1.0, false, false, false, -1.0, 0.0, 0.0);
@@ -143,8 +136,6 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 //	activatePinkNoise(1, true);
 	
 	// end temp (test) ------------------
-
-	
 }
 	
 // destructor
@@ -215,21 +206,12 @@ void AmbisonicsAudioEngine::showAudioSettingsWindow()
 //	
 //	ApplicationProperties::getInstance()->getUserSettings()->saveIfNeeded();
 
-	// Get the number of hardware output channels:
-	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
-		// this points to a object used by the audioDeviceManager, don't delete it!
-	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
-	numberOfHardwareOutputChannels = outputChannelNames.size();
+    audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+    
 	// Let others know about this new number of hardware output channels:
-	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
-	
-	// figure out the number of active output channels:
-	int numberOfActiveOutputChannels = (currentAudioDevice->getActiveOutputChannels()).countNumberOfSetBits();
-	
-	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
-	audioTransportSource.setSource (&audioRegionMixer,
-									numberOfActiveOutputChannels,
-									2048); // tells it to buffer this many samples ahead (choose a value >1024)
+	audioSpeakerGainAndRouting.enableNewRouting(&audioDeviceManager);
+    
+    audioDeviceManager.addAudioCallback(&audioSourcePlayer);
 	
 	// audioTransportSource.setSource(..) puts the playhead to 0. This will 
 	// put it back to the current position:
@@ -280,42 +262,74 @@ StringArray AmbisonicsAudioEngine::getAvailableAudioDeviceNames()
 	}	
 }
 
-String AmbisonicsAudioEngine::setAudioDevice(String audioDeviceName)
+String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
 {
-	// Set the device as new output device
-	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
-	audioDeviceSetup.outputDeviceName = audioDeviceName;
-	bool treatAsChosenDevice = true;
-	String errorString;
-	errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
-	
-	// On failure, initialise the audioDeviceManager again, such that there is at
-	// least something available for audio output.
-	if (errorString.isNotEmpty())
-	{
-		DBG(T("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = ") + errorString);
-		
-		String errorString2;
-		int numInputChannelsNeeded = 256;
-		int numOutputChannelsNeeded = 256;
-		bool selectDefaultDeviceOnFailure = true;
-		errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
-													  numOutputChannelsNeeded, 
-													  0, 
-													  selectDefaultDeviceOnFailure);
-		if (errorString2.isNotEmpty())
-		{
-			DBG(T("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = ") + errorString2);
-		}
-	}
-	
-	// Get the number of hardware output channels:
-	AudioIODevice* currentAudioDevice = audioDeviceManager.getCurrentAudioDevice();
-		// this points to a object used by the audioDeviceManager, don't delete it!
-	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
-	numberOfHardwareOutputChannels = outputChannelNames.size();
-	// Let others know about this new number of hardware output channels:
-	audioSpeakerGainAndRouting.setNumberOfHardwareOutputChannels(numberOfHardwareOutputChannels);
+    // Is the audioDeviceName the name of an actual audio Device?
+    StringArray availableAudioDeviceNames = getAvailableAudioDeviceNames();
+
+    String errorString; // The string that will be returned.
+    
+    if (availableAudioDeviceNames.contains(audioDeviceName))
+    {
+        
+        // Stop the playback, if it was running.
+        bool wasPlaying = audioTransportSource.isPlaying();
+        int currentPosition;
+        if (wasPlaying)
+        {
+            currentPosition = getCurrentPosition();
+            stop();
+        }
+
+        {
+            //const ScopedLock sl (lock);
+            audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+            
+            // Choose the new output device for the audio output.
+            AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
+            audioDeviceSetup.outputDeviceName = audioDeviceName;
+            bool treatAsChosenDevice = true;
+            
+            errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
+            
+            // On failure, initialise the audioDeviceManager again, such that there is at
+            // least something available for audio output.
+            if (errorString.isNotEmpty())
+            {
+                DBG(T("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = ") + errorString);
+                
+                String errorString2;
+                int numInputChannelsNeeded = 256;
+                int numOutputChannelsNeeded = 256;
+                bool selectDefaultDeviceOnFailure = true;
+                errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
+                                                              numOutputChannelsNeeded, 
+                                                              0, 
+                                                              selectDefaultDeviceOnFailure);
+                if (errorString2.isNotEmpty())
+                {
+                    DBG(T("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = ") + errorString2);
+                }
+            }
+            
+            // Let everybody know about this new output device:
+            enableNewRouting();
+            
+            // audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+            // is called by the enableNewRouting()
+        }
+        
+        if (wasPlaying)
+        {
+            setPosition(currentPosition);
+            start();
+        }
+    }
+    else
+    {
+        errorString = "There is no audio device available with the name " 
+                      + audioDeviceName;
+    }
 	
 	return errorString;
 }
@@ -334,7 +348,7 @@ double AmbisonicsAudioEngine::getCurrentSampleRate ()
 
 int AmbisonicsAudioEngine::getNumberOfHardwareOutputChannels()
 {
-	return numberOfHardwareOutputChannels;
+	return audioSpeakerGainAndRouting.getNumberOfHardwareOutputChannels();
 }
 
 int AmbisonicsAudioEngine::getNumberOfAepChannels()
@@ -573,38 +587,43 @@ void AmbisonicsAudioEngine::enableNewRouting()
 		// This section is scope locked.
 		const ScopedLock sl (lock);
 		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
-	
-	int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.enableNewRouting(&audioDeviceManager);
-	
-	// Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
-	if (numberOfActiveOutputChannels > 0)
-	{
-		audioTransportSource.setSource (&audioRegionMixer,
-										numberOfActiveOutputChannels,
-										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
-		
-		audioDeviceManager.addAudioCallback(&audioSourcePlayer);
-		
-		if (wasPlaying)
-		{
-			
-			setPosition(currentPosition);
-			start();
-		}
-	}
-	else
-	{
-		// In the case of 0 channels,
-		//		audioTransportSource.setSource (&audioRegionMixer,
-		//										0,
-		//										AUDIOTRANSPORT_BUFFER);
-		// would lead to a crash because the audio buffer can't handle it.
-		// With &audioRegionMixer = 0 the audioTransport doesn't create
-		// an audio buffer at all.
-//		audioTransportSource.setSource (0,
-//										0,
-//										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
-	}
+        
+        int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.enableNewRouting(&audioDeviceManager);
+        
+        // Since the numberOfActiveOutputChannels has changed, audioTransportSource needs to know this:
+        if (numberOfActiveOutputChannels != 0)
+        {
+            audioTransportSource.setSource (&audioRegionMixer,
+                                            numberOfActiveOutputChannels,
+                                            AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+            
+            audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+            
+            if (wasPlaying)
+            {
+                
+                setPosition(currentPosition);
+                start();
+            }
+        }
+        else
+        {
+            DBG(T("AmbisonicsAudioEngine::enableNewRouting: BIG PROBLEM: "
+                  "The number of active output channels is 0. Therefore "
+                  "the setSource() of the audio transport source can't be"
+                  "called"));
+            
+            // In the case of 0 channels,
+            //		audioTransportSource.setSource (&audioRegionMixer,
+            //										0,
+            //										AUDIOTRANSPORT_BUFFER);
+            // would lead to a crash because the audio buffer can't handle it.
+            // With &audioRegionMixer = 0 the audioTransport doesn't create
+            // an audio buffer at all.
+            //		audioTransportSource.setSource (0,
+            //										0,
+            //										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+        }
 	}
 	
 

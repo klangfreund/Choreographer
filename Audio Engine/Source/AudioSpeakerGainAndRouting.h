@@ -288,15 +288,18 @@ public:
 	 @param newSource             The new input source to use. This might be zero.
 	 */
     void setSource (AudioSource* const newAudioRegionMixer);
+    
+    /** Get the number of available hardware output channels of the
+     current audio device.
+     
+     This value is determined in the method enableNewRouting().
+     */
+    int getNumberOfHardwareOutputChannels();
 
 	/** Get the number of aep channels with a speaker configuration assigned
 	 to them (by setSpeakerPosition).
 	 */	
 	int getNumberOfAepChannels();
-	
-	/** Sets the number of hardware output channels of the current AudioIODevice.
-	 */
-	void setNumberOfHardwareOutputChannels(int numberOfHardwareOutputChannels_);
 	
 	/** Adds a new AEP channel to the array of AEP channels.
 	 
@@ -467,10 +470,13 @@ private:
 	AepChannelHardwareOutputPairs aepChannelHardwareOutputPairs;
 			///< This object
 			///  hosts an array of aepChannel - hardwareOutputChannel
-			///  pairs. These pairs determine the connection between
-			///  the AEP- and the hardware channels. This array of
-			///  pairs is hosted here, because it is needed to determine
-			///  which hardware output channels need to be activated.
+			///  pairs. These pairs determine the desired connections
+            ///  between the AEP- and the hardware channels.
+            ///  It's possible that a certain hardware channel does not
+            ///  even exist on the current audio device.
+            ///  The actual connections are made when enableNewRouting()
+            ///  is called. The actual connections are "hardwired" by
+            ///  The AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels.
 	
 	
 	OwnedArray<AepChannelSettings> aepChannelSettingsOrderedByAepChannel;

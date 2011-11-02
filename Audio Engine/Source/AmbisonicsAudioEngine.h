@@ -54,12 +54,12 @@ public:
 	StringArray getAvailableAudioDeviceNames ();
 
 	/**
-	 Sets the Core Audio device used for the audio output.
+	 Sets the Core Audio device to be used for the audio output.
 	 
 	 @return	An error message if anything went wrong, or 
 				an empty string if it worked ok.
 	 */
-	String setAudioDevice (String audioDeviceName);
+	String setAudioDevice (const String& audioDeviceName);
 	
 	/**
 	 Returns the name of the current AudioIODevice (core audio).
@@ -473,8 +473,6 @@ private:
 	
 	AudioRegionMixer audioRegionMixer;		///< An instance of a new object, manages 
 							///  and mixes audio regions.
-
-	int numberOfHardwareOutputChannels;
 	
 	//TODO: Maybe this is not used anymore
 	Array<void*> positionOfSpeakerMaybeReduced;	///< An instance of a Juce array of void*.

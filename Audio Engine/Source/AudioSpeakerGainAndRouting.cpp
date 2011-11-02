@@ -362,14 +362,14 @@ void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
 	}
 }
 
+int AudioSpeakerGainAndRouting::getNumberOfHardwareOutputChannels()
+{
+    return numberOfHardwareOutputChannels;
+}
+
 int AudioSpeakerGainAndRouting::getNumberOfAepChannels()
 {
 	return aepChannelSettingsOrderedByAepChannel.size();
-}
-
-void AudioSpeakerGainAndRouting::setNumberOfHardwareOutputChannels(int numberOfHardwareOutputChannels_)
-{
-	numberOfHardwareOutputChannels = numberOfHardwareOutputChannels_;
 }
 
 bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool solo, 
@@ -645,12 +645,9 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 			  number of times before calling connectAepChannelWithHardwareOutputChannel."));
 		return;
 	}
-	if (hardwareOutputChannel >= numberOfHardwareOutputChannels)
-	{
-		DBG(T("Error. The hardwareOutputChannel argument is bigger than the available number of \
-			  hardware device outputs."));
-		return;		
-	}
+    // hardwareOutputChannel >= numberOfHardwareOutputChannels
+    // is allowed.
+
 	// ... now we are sure to have a valid configuration.
 	
 	
@@ -684,11 +681,11 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		// this points to a object used by the audioDeviceManager, don't delete it!
 	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
 	numberOfHardwareOutputChannels = outputChannelNames.size();
+    DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(numberOfHardwareOutputChannels));
 	
 	// Activate (and deactivate) the hardware device output channels as needed
 	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
 	audioDeviceManager->getAudioDeviceSetup(audioDeviceSetup);
-	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(numberOfHardwareOutputChannels));
 	
 	// temp:
 	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
@@ -743,8 +740,6 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		aepChannelSettingsOrderedByActiveHardwareChannels[i]->setMeasuredDecayingValue(0.0);
 	}
 	
-
-	
 	// Remove all elements from the array (which will be filled with
 	// the most recent routing configuration in the following loop).
 	aepChannelSettingsOrderedByActiveHardwareChannels.clear();
@@ -752,7 +747,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 	// The pairs in aepChannelHardwareOutputPairs are in ascending order,
 	// sorted by their hardware output channel values.
 	// This loop fills the array aepChannelSettingsOrderedByActiveHardwareChannels.
-	for (int i=0; i < aepChannelHardwareOutputPairs.size(); i++)
+	for (int i=0; i != numberOfHardwareOutputChannels && i != aepChannelHardwareOutputPairs.size(); ++i)
 	{
 		// Fill the aepChannelSettingsOrderedByActiveHardwareChannels array.
 		int AepChannelConnectedWithTheIthActiveHardwareOutput
@@ -766,7 +761,7 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
     updateThePositionOfSpeakers();
 	
 	// Return the number of active hardware output channels.
-	return aepChannelHardwareOutputPairs.size();
+	return numberOfActiveOutputChannels;
 }
 
 
@@ -1012,7 +1007,7 @@ void AudioSpeakerGainAndRouting::updateThePositionOfSpeakers()
 {
     positionOfSpeakers.clear();
     
-    for (int i = 0; i != aepChannelSettingsOrderedByActiveHardwareChannels.size(); i++)
+    for (int i = 0; i != numberOfHardwareOutputChannels && i != aepChannelHardwareOutputPairs.size(); ++i)
     {
         // Fill the newPositionOfSpeakers array.
         SpeakerPosition theIthSpeaker(aepChannelSettingsOrderedByActiveHardwareChannels[i]->getSpeakerPosition());

@@ -440,7 +440,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)removeAllSpeakerChannels
 {
 	ambisonicsAudioEngine->removeAllRoutingsAndAllAepChannels();
-	  // Philippe: Ich verstehe nicht, weshalb das beim Programmstart aufgerufen wird.
+	  // Sam an Philippe: Ich verstehe nicht, weshalb das beim Programmstart aufgerufen wird.
 }
 
 - (void)addSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
@@ -456,11 +456,7 @@ static AudioEngine *sharedAudioEngine = nil;
 										 channel.position.y,
 										 channel.position.z);
 
-	
-	if(channel.hardwareDeviceOutputChannel < [self numberOfHardwareDeviceOutputChannels])
-	{
-		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
-	}
+    ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
 }
 
 - (void)validateSpeakerSetup
@@ -490,11 +486,8 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
 {
-	if(channel.hardwareDeviceOutputChannel < [self numberOfHardwareDeviceOutputChannels])
-	{
-		ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
-		ambisonicsAudioEngine->enableNewRouting();
-	}
+    ambisonicsAudioEngine->setNewRouting(index, channel.hardwareDeviceOutputChannel);
+    ambisonicsAudioEngine->enableNewRouting();
 }
 
 #pragma mark -
