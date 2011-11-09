@@ -204,8 +204,7 @@ private:
 
 //==============================================================================
 /**
- Represents a connection between an AEP audio channel and a physical
- output of the audio hardware. This is actually just a pair of numbers.
+ TODO.
  */
 class JUCE_API  AepChannelHardwareOutputPairs
 {
@@ -231,8 +230,8 @@ public:
 	void deletePairIfItContainsHardwareOutputChannel(const int& hardwareOutputChannel);
 	
 	/**
-	 Generates the pair (aepChannel, hardwareOutputChannel). A pointer to
-	 this pair is added to the internal array (called pairs).
+	 Generates the pair (aepChannel, hardwareOutputChannel). An element
+     is added to the internal array (called pairs).
 	 This internal array is ordered according to the second value of
 	 the pairs.
 	 */
@@ -475,8 +474,8 @@ private:
             ///  It's possible that a certain hardware channel does not
             ///  even exist on the current audio device.
             ///  The actual connections are made when enableNewRouting()
-            ///  is called. The actual connections are "hardwired" by
-            ///  The AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels.
+            ///  is called. The actual connections are "hardwired" by the
+            ///  AudioSpeakerGainAndRouting::aepChannelSettingsOrderedByActiveHardwareChannels.
 	
 	
 	OwnedArray<AepChannelSettings> aepChannelSettingsOrderedByAepChannel;
