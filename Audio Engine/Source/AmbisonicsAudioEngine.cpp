@@ -22,7 +22,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	  audioSpeakerGainAndRouting(&audioRegionMixer)
 {
 	
-	DBG(T("AmbisonicsAudioEngine: constructor called."));
+	DEB("AmbisonicsAudioEngine: constructor called.");
 
 
 // OPTION 1:
@@ -43,7 +43,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 //    delete savedAudioState;
 //	if (err != T(""))
 //	{
-//		DBG(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
+//		DEB(T("AmbisonicsAudioEngine: audioDeviceManager, initialisation error = ") + err);
 //	}
 
 // OPTION 2:
@@ -67,7 +67,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 										 selectDefaultDeviceOnFailure);
 	if (errorString.isNotEmpty())
 	{
-		DBG(T("AmbisonicsAudioEngine, constructor: audioDeviceManager, initialisation error = ") + errorString);
+		DEB("AmbisonicsAudioEngine, constructor: audioDeviceManager, initialisation error = " + errorString);
 	}
 	
 	// TEMP: Select an audioDevice
@@ -80,14 +80,14 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 	// Check if there are audioDevices available at all.
 	if (deviceNames.size() == 0)
 	{
-		DBG(T("AmbisonicsAudioEngine, constructor: Can't find a Core Audio device."));
+		DEB("AmbisonicsAudioEngine, constructor: Can't find a Core Audio device.");
 	}
 	else
 	{
-		DBG(T("AmbisonicsAudioEngine, constructor: Available audio devices:"));
+		DEB("AmbisonicsAudioEngine, constructor: Available audio devices:");
 		for (int i = 0; i < deviceNames.size(); ++i)
 		{
-			DBG(deviceNames[i]);
+			DEB(deviceNames[i]);
 			// Output on the console on my system:
 			//	Built-in Output
 			//	Soundflower (2ch)
@@ -96,7 +96,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 		
 		// Select an audioDevice
 		String chosenOutputDevice = deviceNames[0];
-        DBG(T("AmbisonicsAudioEngine, chosenOutputDevice = ") + chosenOutputDevice);
+        DEB("AmbisonicsAudioEngine, chosenOutputDevice = " + chosenOutputDevice);
 		//String chosenOutputDevice = T("bla");		
 		String errorString;
 		errorString = setAudioDevice(chosenOutputDevice);
@@ -107,8 +107,8 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
             // is called.
 		if (errorString.isNotEmpty())
 		{
-			DBG(T("AmbisonicsAudioEngine, constructor: Wasn't able to set the audio device ") + chosenOutputDevice);
-			DBG(errorString);
+			DEB("AmbisonicsAudioEngine, constructor: Wasn't able to set the audio device " + chosenOutputDevice);
+			DEB(errorString);
 		}		
 	}
     	
@@ -141,7 +141,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
 // destructor
 AmbisonicsAudioEngine::~AmbisonicsAudioEngine ()
 {	
-	DBG(T("AmbisonicsAudioEngine: destructor called."));
+	DEB("AmbisonicsAudioEngine: destructor called.");
 	
 	audioTransportSource.setSource (0, 1);
     audioSourcePlayer.setSource (0);
@@ -240,14 +240,14 @@ StringArray AmbisonicsAudioEngine::getAvailableAudioDeviceNames()
 	{
 		if (audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i)->getTypeName() == coreAudioString)
 		{
-			DBG(T("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Got the AudioIODeviceType for the CoreAudio."));
+			DEB("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Got the AudioIODeviceType for the CoreAudio.");
 			audioIODeviceTypeCoreAudio = audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i);			
 		}
 	}
 	
 	if (audioIODeviceTypeCoreAudio == 0)
 	{
-		DBG(T("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Couldn't find CoreAudio."));
+		DEB("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Couldn't find CoreAudio.");
 		StringArray returnValue; // An empty StringArray.
 		return returnValue;
 	}
@@ -296,7 +296,7 @@ String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
             // least something available for audio output.
             if (errorString.isNotEmpty())
             {
-                DBG(T("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = ") + errorString);
+                DEB("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = " + errorString);
                 
                 String errorString2;
                 int numInputChannelsNeeded = 256;
@@ -308,7 +308,7 @@ String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
                                                               selectDefaultDeviceOnFailure);
                 if (errorString2.isNotEmpty())
                 {
-                    DBG(T("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = ") + errorString2);
+                    DEB("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
                 }
             }
             
@@ -483,7 +483,7 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 		// Reset the playhead position
 		setPosition(currentPosition);
 		
-		DBG(T("AmbisonicsAudioEngine::bounceToDisc: success = ") + String(success));
+		DEB("AmbisonicsAudioEngine::bounceToDisc: success = " + String(success));
 		
 		return success;
 	}
@@ -608,10 +608,10 @@ void AmbisonicsAudioEngine::enableNewRouting()
         }
         else
         {
-            DBG(T("AmbisonicsAudioEngine::enableNewRouting: BIG PROBLEM: "
+            DEB("AmbisonicsAudioEngine::enableNewRouting: BIG PROBLEM: "
                   "The number of active output channels is 0. Therefore "
                   "the setSource() of the audio transport source can't be"
-                  "called"));
+                  "called");
             
             // In the case of 0 channels,
             //		audioTransportSource.setSource (&audioRegionMixer,

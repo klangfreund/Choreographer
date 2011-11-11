@@ -237,7 +237,7 @@ void AudioTransportSourceMod::setGain (const float newGain) throw()
 void AudioTransportSourceMod::prepareToPlay (int samplesPerBlockExpected,
                                           double sampleRate_)
 {
-	DBG(T("AudioTransportSourceMod: prepareToPlay called"));
+	DEB("AudioTransportSourceMod: prepareToPlay called")
 	
     const ScopedLock sl (callbackLock);
 	

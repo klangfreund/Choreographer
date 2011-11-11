@@ -16,6 +16,10 @@
 // IMPORTANT: Enable this for the Debug configuration only:
 #define DEBUG 1
 
+// If you would like to set the DEBUG flag above but don't want the 
+// debug output of the audio engine, outcomment the next line:
+#define AUDIO_ENGINE_DEBUG 1
+
 
 //#define  JUCE_FORCE_DEBUG
 //#define  JUCE_LOG_ASSERTIONS

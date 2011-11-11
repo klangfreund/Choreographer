@@ -304,7 +304,7 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
   pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
   positionOfSpeakers ()
 {
-	DBG(T("AudioSpeakerGainAndRouting: constructor (without any argument) called."));
+	DEB("AudioSpeakerGainAndRouting: constructor (without any argument) called.");
 	
 	// initialize the pinkNoiseInfo
 	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
@@ -325,7 +325,8 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRe
   pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
   positionOfSpeakers ()
 {
-	DBG(T("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager argument) called."));
+	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
+        "argument) called.")
 	
 	// initialize the pinkNoiseInfo
 	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
@@ -335,14 +336,14 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRe
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
 {
-	DBG(T("AudioSpeakerGainAndRouting: destructor called."));
+	DEB("AudioSpeakerGainAndRouting: destructor called.")
 	
 	removeAllRoutingsAndAllAepChannels();
 }
 
 void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
 {
-	DBG(T("AudioSpeakerGainAndRouting: setSource called."));
+	DEB("AudioSpeakerGainAndRouting: setSource called.")
 	
 	// sam: This part is copied from the AudioTransportSource
     if (audioSource == newAudioSource)
@@ -376,18 +377,19 @@ bool AudioSpeakerGainAndRouting::addAepChannel(int aepChannel, double gain, bool
 											   bool mute, bool activatePinkNoise, 
 											   double x, double y, double z)
 {
-	DBG(T("AudioSpeakerGainAndRouting: addAepChannel has been called."));
+	DEB("AudioSpeakerGainAndRouting: addAepChannel has been called.")
 
 	if (aepChannelSettingsOrderedByAepChannel.size() > aepChannel)
 	{
 		// The specified AEP channel already exists.
-		DBG(T("addAepChannel can't add the AEP channel because it already exists."));
+		DEB("addAepChannel can't add the AEP channel because it already exists.")
 		return false;
 	}
 	if (aepChannel < 0)
 	{
 		// The specified AEP channel is too small (< 0).
-		DBG(T("addAepChannel can't add the AEP channel because aepChannel is smaller than zero."));
+		DEB("addAepChannel can't add the AEP channel because aepChannel is "
+            "smaller than zero.")
 		return false;
 	}
 	
@@ -435,7 +437,8 @@ bool AudioSpeakerGainAndRouting::setSpeakerPosition(int aepChannel, double x, do
 
 bool AudioSpeakerGainAndRouting::setGain(int aepChannel, double gain)
 {
-	DBG(T("AudioSpeakerGainAndRouting.setGain on aepChannel ") + String(aepChannel) + T(" with gain ") + String(gain));
+	DEB("AudioSpeakerGainAndRouting.setGain on aepChannel " 
+        + String(aepChannel) + " with gain " + String(gain))
 
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
@@ -474,7 +477,8 @@ bool AudioSpeakerGainAndRouting::setSolo(int aepChannel, bool enable)
 			aepChannelSettingsOrderedByAepChannel[aepChannel]->setSolo(enable);
 		}
 		
-		DBG(T("AudioSpeakerGainAndRouting: setSolo called. numberOfSoloedChannels = ") + String(numberOfSoloedChannels));
+		DEB("AudioSpeakerGainAndRouting: setSolo called. "
+            "numberOfSoloedChannels = " + String(numberOfSoloedChannels))
 
 		return true;
 	}
@@ -515,7 +519,9 @@ bool AudioSpeakerGainAndRouting::activatePinkNoise(int aepChannel, bool enable)
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1.
-		DBG(T("AudioSpeakerGainAndRouting.activatePinkNoise: the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1."));
+		DEB("AudioSpeakerGainAndRouting.activatePinkNoise: the given AEP "
+            "channel is out of the possible range 0, ..., "
+            "aepChannelSettingsOrderedByAepChannel.size()-1.")
 		return false;
 	}
 	else
@@ -552,7 +558,9 @@ bool AudioSpeakerGainAndRouting::enableMeasurement(int aepChannel, bool enable)
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1.
-		DBG(T("AudioSpeakerGainAndRouting.setMeasurement: the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1."));
+		DEB("AudioSpeakerGainAndRouting.setMeasurement: the given AEP channel "
+            "is out of the possible range 0, ..., "
+            "aepChannelSettingsOrderedByAepChannel.size()-1.")
 		return false;
 	}
 	else
@@ -566,11 +574,11 @@ bool AudioSpeakerGainAndRouting::enableMeasurement(int aepChannel, bool enable)
 		{
 			if (enable)
 			{
-				numberOfChannelsWithEnabledMeasurement++;
+				++numberOfChannelsWithEnabledMeasurement;
 			}
 			else
 			{
-				numberOfChannelsWithEnabledMeasurement--;
+				--numberOfChannelsWithEnabledMeasurement;
 			}
 			aepChannelSettingsOrderedByAepChannel[aepChannel]->enableMeasurement(enable);
 		}
@@ -583,7 +591,9 @@ bool AudioSpeakerGainAndRouting::resetMeasuredPeakValue(int aepChannel)
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1.
-		DBG(T("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1."));
+		DEB("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP "
+            "channel is out of the possible range 0, ..., "
+            "aepChannelSettingsOrderedByAepChannel.size()-1.")
 		return false;
 	}
 	else
@@ -598,7 +608,9 @@ float AudioSpeakerGainAndRouting::getMeasuredDecayingValue(int aepChannel)
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1.
-		DBG(T("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1."));
+		DEB("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP "
+            "channel is out of the possible range 0, ..., "
+            "aepChannelSettingsOrderedByAepChannel.size()-1.")
 		return 0.0f;
 	}
 	else
@@ -612,7 +624,9 @@ float AudioSpeakerGainAndRouting::getMeasuredPeakValue(int aepChannel)
 	if (aepChannel < 0 || aepChannel >= aepChannelSettingsOrderedByAepChannel.size()) 
 	{
 		// the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1.
-		DBG(T("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP channel is out of the possible range 0, ..., aepChannelSettingsOrderedByAepChannel.size()-1."));
+		DEB("AudioSpeakerGainAndRouting.resetMeasuredPeakValue: the given AEP "
+            "channel is out of the possible range 0, ..., "
+            "aepChannelSettingsOrderedByAepChannel.size()-1.")
 		return 0.0f;
 	}
 	else
@@ -629,20 +643,22 @@ void AudioSpeakerGainAndRouting::removeAllRoutings()
 
 void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutputChannel)
 {
-	DBG(T("AudioSpeakerGainAndRouting: setNewRouting(") + String(aepChannel) + T(", ") + String(hardwareOutputChannel) + T(") called."));
+	DEB("AudioSpeakerGainAndRouting: setNewRouting(" + String(aepChannel) 
+        + ", " + String(hardwareOutputChannel) + ") called.")
 	
 	// check if the arguments define a valid configuration.
 	if (aepChannel < 0 && hardwareOutputChannel < 0)
 	{
-		DBG(T("Error. Both arguments (aepChannel and hardwareOutputChannel) are smaller than zero. \
-			  This is not a valid set of arguments!"));
+		DEB("Error. Both arguments (aepChannel and hardwareOutputChannel) are "
+            "smaller than zero. This is not a valid set of arguments!")
 		return;
 	}
 	if (aepChannel >= getNumberOfAepChannels())
 	{
-		DBG(T("Error. The aepChannel argument is bigger than the available AEP channels. Please configure \
-			  the number of AEP channels needed by calling setSpeakerPosition the appropriate \
-			  number of times before calling connectAepChannelWithHardwareOutputChannel."));
+		DEB("Error. The aepChannel argument is bigger than the available AEP "
+            "channels. Please configure the number of AEP channels needed by "
+            "calling setSpeakerPosition the appropriate number of times before "
+            "calling connectAepChannelWithHardwareOutputChannel.")
 		return;
 	}
     // hardwareOutputChannel >= numberOfHardwareOutputChannels
@@ -670,7 +686,7 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 
 int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDeviceManager)
 {	
-	DBG(T("AudioSpeakerGainAndRouting: enableNewRouting called."));
+	DEB("AudioSpeakerGainAndRouting: enableNewRouting called.")
 	
 	// This section is scope locked.
 	const ScopedLock sl (connectionLock);
@@ -681,14 +697,15 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		// this points to a object used by the audioDeviceManager, don't delete it!
 	StringArray outputChannelNames = currentAudioDevice->getOutputChannelNames();
 	numberOfHardwareOutputChannels = outputChannelNames.size();
-    DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = ") + String(numberOfHardwareOutputChannels));
+    DEB("AudioSpeakerGainAndRouting::enableNewRouting: Number of hardware output channels = " + String(numberOfHardwareOutputChannels))
 	
 	// Activate (and deactivate) the hardware device output channels as needed
 	AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
 	audioDeviceManager->getAudioDeviceSetup(audioDeviceSetup);
 	
 	// temp:
-	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
+	DEB("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = " 
+        + String(audioDeviceSetup.outputChannels.toInteger()))
 	
 	// Figure out which hardware outputs will be in use.
 	audioDeviceSetup.outputChannels.clear();
@@ -701,14 +718,16 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 			audioDeviceSetup.outputChannels.setBit(i);
 		}
 		// temp:
-		DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (set bits) = ") + String(audioDeviceSetup.outputChannels.toInteger()));
+		DEB("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels "
+            "(set bits) = " + String(audioDeviceSetup.outputChannels.toInteger()))
 	}
 	
 	// temp
 	AudioIODevice* audioIODevice = audioDeviceManager->getCurrentAudioDevice();
 	BigInteger activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	int numberOfActiveOutputChannelsBefore = activeOutputChannels.countNumberOfSetBits();
-	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output channels (before) = ") + String(numberOfActiveOutputChannelsBefore));
+	DEB("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output "
+        "channels (before) = " + String(numberOfActiveOutputChannelsBefore))
 	// end temp
 	
 	audioDeviceSetup.useDefaultOutputChannels = false;
@@ -718,14 +737,16 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 	String error = audioDeviceManager->setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
 	if (error != T(""))
 	{
-		DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Error message of setAudioDeviceSetup: ") + error);
+		DEB("AudioSpeakerGainAndRouting::enableNewRouting: Error message of "
+            "setAudioDeviceSetup: " + error)
 	}
 	
 	activeOutputChannels = audioIODevice->getActiveOutputChannels();
 	int numberOfActiveOutputChannels = activeOutputChannels.countNumberOfSetBits();
     
     // temp
-	DBG(T("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output channels (after) = ") + String(numberOfActiveOutputChannels));
+	DEB("AudioSpeakerGainAndRouting::enableNewRouting: Number of active output "
+        "channels (after) = " + String(numberOfActiveOutputChannels))
 	// end temp
 	
 	// Let the audioSpeakerGainAndRouting know about the new connections.
@@ -791,14 +812,13 @@ int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
 		// Enable the bounce mode
 		if (bounceMode)
 		{
-            // Backup the regular settings
-            aepChannelSettingsOrderedByActiveHardwareChannelsBackup.clear();            
+            // Backup the regular settings          
             aepChannelSettingsOrderedByActiveHardwareChannels.swapWithArray(aepChannelSettingsOrderedByActiveHardwareChannelsBackup);
 
             // Get rid of the regular settings
-			  aepChannelSettingsOrderedByActiveHardwareChannels.clear();  // Just to be sure..
+            aepChannelSettingsOrderedByActiveHardwareChannels.clear();
 			
-			  // Use the ascending settings instead
+            // Use the ascending settings instead
             for (int i = 0; i != aepChannelSettingsOrderedByAepChannel.size(); ++i)
             {
                 AepChannelSettings* theIthAepChannelSettings = aepChannelSettingsOrderedByAepChannel[i];
@@ -810,7 +830,6 @@ int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
 		else
 		{
 			// Recover the regular settings
-            
 			aepChannelSettingsOrderedByActiveHardwareChannels.swapWithArray(aepChannelSettingsOrderedByActiveHardwareChannelsBackup);
 			aepChannelSettingsOrderedByActiveHardwareChannelsBackup.clear();
 		}
@@ -834,7 +853,7 @@ int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
 
 void AudioSpeakerGainAndRouting::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
-	DBG(T("AudioSpeakerGainAndRouting: prepareToPlay called."));
+	DEB("AudioSpeakerGainAndRouting: prepareToPlay called.")
 	
 	if (audioSource != 0) {
 		audioSource->prepareToPlay(samplesPerBlockExpected_, sampleRate_);
@@ -847,7 +866,7 @@ void AudioSpeakerGainAndRouting::prepareToPlay (int samplesPerBlockExpected_, do
 // Implementation of the AudioSource method.
 void AudioSpeakerGainAndRouting::releaseResources()
 {
-	DBG(T("AudioSpeakerGainAndRouting: releaseResources called."));
+	DEB("AudioSpeakerGainAndRouting: releaseResources called.")
 	
 	if (audioSource != 0) {
 		audioSource->releaseResources();
@@ -859,8 +878,8 @@ void AudioSpeakerGainAndRouting::releaseResources()
 void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
 	
-	// DBG(T("AudioSpeakerGainAndRouting: nr of channels = ") + String(info.buffer->getNumChannels()));
-	// DBG(T("AudioSpeakerGainAndRouting::getNextAudioBlock called."));
+	// DEB(T("AudioSpeakerGainAndRouting: nr of channels = ") + String(info.buffer->getNumChannels()))
+	// DEB(T("AudioSpeakerGainAndRouting::getNextAudioBlock called."))
 
 	if (audioSource != 0)
 	{

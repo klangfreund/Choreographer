@@ -21,12 +21,12 @@ AudioRegionMixer::AudioRegionMixer()
       samplesPerBlockExpected (512),
       sampleRate (44100.0)
 {
-	DBG(T("AudioRegionMixer: constructor called."));
+	DEB("AudioRegionMixer: constructor called.");
 }
 
 AudioRegionMixer::~AudioRegionMixer()
 {
-	DBG(T("AudioRegionMixer: destructor called."));
+	DEB("AudioRegionMixer: destructor called.");
 	removeAllRegions();
 }
 
@@ -37,13 +37,14 @@ bool AudioRegionMixer::addRegion (const int regionID,
 								  String absolutePathToAudioFile,
 								  double sampleRateOfTheAudioDevice)
 {
-	DBG(T("AudioRegionMixer: addRegion called."));
+    DEB("AudioRegionMixer: addRegion called.");
+    
 	
 	int index; // just here because findRegion needs it
 	bool foundTheRegion = findRegion(regionID, index);
 	if (foundTheRegion)
 	{
-		DBG(T("AudioRegionMixer: Didn't add the region because its regionID already exists."))
+		DEB(T("AudioRegionMixer: Didn't add the region because its regionID already exists."))
 		return false;
 	}
 	
@@ -63,7 +64,7 @@ bool AudioRegionMixer::addRegion (const int regionID,
 	// if the previous lines of code weren't successful
 	if (audioFormatReader == 0)
 	{
-		DBG(T("AudioRegionMixer: Didn't add region because the audio file couldn't be read."))
+		DEB("AudioRegionMixer: Didn't add region because the audio file couldn't be read.")
 		delete audioFormatReader;
 		return false;
 	}
@@ -72,7 +73,9 @@ bool AudioRegionMixer::addRegion (const int regionID,
 			 || startPosition < startPositionOfAudioFileInTimeline
 			 || endPosition - startPositionOfAudioFileInTimeline > audioFormatReader->lengthInSamples)
 	{
-		DBG(T("AudioRegionMixer: Didn't add region because the set (startPosition, endPosition, startPositionOfAudioFileInTimeline, file length) doesn't make sense."))
+		DEB("AudioRegionMixer: Didn't add region because the set" 
+            "(startPosition, endPosition, startPositionOfAudioFileInTimeline,"
+            "file length) doesn't make sense.")
 		return false;
 	}
 	// add the region
@@ -108,7 +111,7 @@ bool AudioRegionMixer::addRegion (const int regionID,
 bool AudioRegionMixer::modifyRegion (const int regionID, const int newStartPosition, const int newEndPosition,
 				   const int newStartPositionOfAudioFileInTimeline)
 {
-	DBG(T("AudioRegionMixer: modifyRegion called."));
+	DEB("AudioRegionMixer: modifyRegion called.");
 	
 	int index;
 	bool foundTheRegion = findRegion(regionID, index);
@@ -123,7 +126,10 @@ bool AudioRegionMixer::modifyRegion (const int regionID, const int newStartPosit
 				 || newEndPosition - newStartPositionOfAudioFileInTimeline 
 					> audioRegionToModify->audioSourceAmbipanning->getTotalLength())
 		{
-			DBG(T("AudioRegionMixer: Didn't modify region because the set (newStartPosition, endPosition, startPositionOfAudioFileInTimeline, file length) doesn't make sense."))
+			DEB("AudioRegionMixer: Didn't modify region because the set "
+                "(newStartPosition, endPosition, "
+                "startPositionOfAudioFileInTimeline, file length) doesn't make "
+                "sense.")
 			return false;
 		}
 		
@@ -136,14 +142,15 @@ bool AudioRegionMixer::modifyRegion (const int regionID, const int newStartPosit
 	}
 	else
 	{
-		DBG(T("AudioRegionMixer: Can't remove the region because the specified regionID can't be found."))
+		DEB("AudioRegionMixer: Can't remove the region because the specified "
+            "regionID can't be found.")
 		return false;
 	}
 }
 
 bool AudioRegionMixer::removeRegion (const int regionID)
 {
-	DBG(T("AudioRegionMixer: removeRegion called."));
+	DEB("AudioRegionMixer: removeRegion called.");
 	
 	int index;
 	bool foundTheRegion = findRegion(regionID, index);
@@ -160,7 +167,7 @@ bool AudioRegionMixer::removeRegion (const int regionID)
 	}
 	else
 	{
-		DBG(T("AudioRegionMixer: Can't remove the region because the specified regionID can't be found."))
+		DEB("AudioRegionMixer: Can't remove the region because the specified regionID can't be found.")
 		return false;
 	}
 	
@@ -168,7 +175,7 @@ bool AudioRegionMixer::removeRegion (const int regionID)
 
 void AudioRegionMixer::removeAllRegions ()
 {
-	DBG(T("AudioRegionMixer: removeAllRegions called."));
+	DEB("AudioRegionMixer: removeAllRegions called.");
 	
 	const ScopedLock sl (lock);
 	
@@ -222,7 +229,7 @@ bool AudioRegionMixer::setGainEnvelopeForRegion (const int regionID, Array<void*
 				
 				//temp: for debugging only
 				// firstGainPoint = (AudioEnvelopePoint*)gainEnvelope[0];
-				// DBG(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
+				// DEB(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
 			}
 
 			audioRegionToModify->audioSourceAmbipanning->setGainEnvelope (gainEnvelope);
@@ -230,14 +237,16 @@ bool AudioRegionMixer::setGainEnvelopeForRegion (const int regionID, Array<void*
 		}
 		else
 		{
-			DBG(T("AudioRegionMixer: Can't attach a gain envelope to the region because the specified gainEnvelope is empty."))
+			DEB("AudioRegionMixer: Can't attach a gain envelope to the region "
+                "because the specified gainEnvelope is empty.")
 			return false;
 		}
 
 	}
 	else
 	{
-		DBG(T("AudioRegionMixer: Can't attach a gain envelope to the region because the specified regionID can't be found."))
+		DEB("AudioRegionMixer: Can't attach a gain envelope to the region "
+            "because the specified regionID can't be found.")
 		return false;
 	}
 }
@@ -298,7 +307,7 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int& regionID, Array<S
 				
 				//DEBUGGING:
 				// firstGainPoint = (AudioEnvelopePoint*)gainEnvelope[0];
-				// DBG(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
+				// DEB(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
 			}
 			
 			audioRegionToModify->audioSourceAmbipanning->setSpacialEnvelope (spacialEnvelope);
@@ -306,21 +315,23 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int& regionID, Array<S
 		}
 		else
 		{
-			DBG(T("AudioRegionMixer: Can't attach a spacial envelope to the region because the specified spacial Envelope is empty."))
+			DEB("AudioRegionMixer: Can't attach a spacial envelope to the "
+                "region because the specified spacial Envelope is empty.")
 			return false;
 		}
 		
 	}
 	else
 	{
-		DBG(T("AudioRegionMixer: Can't attach a gain envelope to the region because the specified regionID can't be found."))
+		DEB("AudioRegionMixer: Can't attach a gain envelope to the region "
+            "because the specified regionID can't be found.")
 		return false;
 	}	
 }
 
 void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
-	DBG(T("AudioRegionMixer: prepareToPlay called."));
+	DEB("AudioRegionMixer: prepareToPlay called.");
 	
 	samplesPerBlockExpected = samplesPerBlockExpected_;
 	sampleRate = sampleRate_;
@@ -336,7 +347,7 @@ void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampl
 // Implementation of the AudioSource method.
 void AudioRegionMixer::releaseResources()
 {
-	DBG(T("AudioRegionMixer: releaseResources called."));
+	DEB("AudioRegionMixer: releaseResources called.");
 	
 	for (int i = regions.size(); --i >= 0;)
 	{		
@@ -348,7 +359,7 @@ void AudioRegionMixer::releaseResources()
 // Implements the PositionableAudioSource method.
 void AudioRegionMixer::setNextReadPosition (int64 newPosition)
 {
-	// DBG(T("AudioRegionMixer: setNextReadPosition called."));
+	// DEB(T("AudioRegionMixer: setNextReadPosition called."));
 	
 	nextPlayPosition = newPosition;
 }
@@ -357,7 +368,7 @@ void AudioRegionMixer::setNextReadPosition (int64 newPosition)
 void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
 	
-	// DBG(T("AudioRegionMixer: nr of channels = ") + String(info.buffer->getNumChannels()));
+	// DEB(T("AudioRegionMixer: nr of channels = ") + String(info.buffer->getNumChannels()));
 
 	if (info.numSamples > 0)
 	{
@@ -412,7 +423,7 @@ void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
 // Implements the PositionableAudioSource method.
 int64 AudioRegionMixer::getNextReadPosition() const
 {
-	// DBG(T("AudioRegionMixer: getNextReadPosition called."));
+	// DEB(T("AudioRegionMixer: getNextReadPosition called."));
 	
 	return nextPlayPosition;
 }
@@ -420,7 +431,7 @@ int64 AudioRegionMixer::getNextReadPosition() const
 // Implements the PositionableAudioSource method.
 int64 AudioRegionMixer::getTotalLength() const
 {
-	// DBG(T("AudioRegionMixer: getTotalLength called."));
+	// DEB(T("AudioRegionMixer: getTotalLength called."));
 
 	// --------------------------------------
 	// TODO: Think about what to return here!
@@ -433,7 +444,7 @@ int64 AudioRegionMixer::getTotalLength() const
 // Implements the PositionableAudioSource method.
 bool AudioRegionMixer::isLooping() const
 {
-	// DBG(T("AudioRegionMixer: isLooping called."));
+	// DEB(T("AudioRegionMixer: isLooping called."));
 	
 	// temp
 	//return ((AudioRegion*)regions[0])->audioFormatReaderSource

@@ -191,7 +191,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  newSpacialEnvelopeSet (false),
 	  numberOfSpeakersChanged (false)
 {
-	DBG(T("AudioSourceAmbipanning: constructor called."));
+	DEB("AudioSourceAmbipanning: constructor called.");
 	
 	// Define an initial spacial envelope.
 	// It is also neccessary to set up the newSpacialEnvelope,
@@ -214,7 +214,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 
 AudioSourceAmbipanning::~AudioSourceAmbipanning()
 {
-	DBG(T("AudioSourceAmbipanning: destructor called."));
+	DEB("AudioSourceAmbipanning: destructor called.");
 	delete audioSourceGainEnvelope;
 }
 
@@ -445,9 +445,10 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 	// of the last audio block
 	if (audioBlockEndPosition != newPosition && !constantSpacialPosition)
 	{
-		DBG(T("AudioSourceAmbipanning.setNextReadPosition: newPosition = ") + String(newPosition));
-		DBG(T("AudioSourceAmbipanning.setNextReadPosition: expected newPosition: ") 
-			+ String(audioBlockEndPosition));
+		DEB("AudioSourceAmbipanning.setNextReadPosition: newPosition = "
+            + String(newPosition))
+		DEB("AudioSourceAmbipanning.setNextReadPosition: expected newPosition: " 
+			+ String(audioBlockEndPosition))
 		
 		// figure out between which audioEnvelopePoints we are right now
 		// and set up all variables needed by getNextAudioBlock(..)
@@ -483,7 +484,7 @@ void AudioSourceAmbipanning::setGainEnvelope (Array<void*> newGainEnvelope)
 
 void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)
 {
-	DBG(T("AudioSourceAmbipanning: setSpacialEnvelope called"));
+	DEB("AudioSourceAmbipanning: setSpacialEnvelope called")
 	
 	if (newSpacialEnvelope_.size() != 0)
 	{			
@@ -499,7 +500,7 @@ void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint
 	}
 	else
 	{
-		DBG(T("AudioSourceAmbipanning: The newSpacialEnvelope is empty! The spacial envelope hasn't been changed."));
+		DEB("AudioSourceAmbipanning: The newSpacialEnvelope is empty! The spacial envelope hasn't been changed.")
 	}
 }
 

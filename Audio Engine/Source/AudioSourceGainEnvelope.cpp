@@ -19,7 +19,7 @@ AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audio
       gainValue (1.0f),
       gainDelta (0.0f)
 {
-	DBG(T("AudioSourceGainEnvelope: constructor called."));
+	DEB("AudioSourceGainEnvelope: constructor called.")
 	
 	audioFormatReaderSource = new AudioFormatReaderSource (audioFormatReader, true);
 
@@ -43,7 +43,7 @@ AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audio
 
 AudioSourceGainEnvelope::~AudioSourceGainEnvelope()
 {
-	DBG(T("AudioSourceGainEnvelope: destructor called."));
+	DEB("AudioSourceGainEnvelope: destructor called.")
 	delete bufferingAudioSource;  // this also deletes the positionableResamplingAudioSource
 								  // and the audioFormatReaderSource.
 	
@@ -74,9 +74,9 @@ void AudioSourceGainEnvelope::setNextReadPosition (int64 newPosition)
 	// of the last audio block
 	if (audioBlockEndPosition != newPosition && !constantGain)
 	{
-		DBG(T("AudioSourceGainEnvelope.setNextReadPosition: newPosition = ") + String(newPosition));
-		DBG(T("AudioSourceGainEnvelope.setNextReadPosition: expected newPosition: ") 
-			+ String(audioBlockEndPosition));
+		DEB("AudioSourceGainEnvelope.setNextReadPosition: newPosition = " + String(newPosition))
+		DEB("AudioSourceGainEnvelope.setNextReadPosition: expected newPosition: " 
+			+ String(audioBlockEndPosition))
 
 		// figure out between which audioEnvelopePoints we are right now
 		// and set up all variables needed by getNextAudioBlock(..)
@@ -224,7 +224,7 @@ bool AudioSourceGainEnvelope::isLooping() const
 
 void AudioSourceGainEnvelope::setGainEnvelope(Array<void*> newGainEnvelope_)
 {
-	DBG(T("AudioSourceGainEnvelope: setGainEnvelope called."));
+	DEB("AudioSourceGainEnvelope: setGainEnvelope called.")
 	
 	if (newGainEnvelope_.size() != 0)
 	{
@@ -244,7 +244,8 @@ void AudioSourceGainEnvelope::setGainEnvelope(Array<void*> newGainEnvelope_)
 	}
 	else
 	{
-		DBG(T("AudioSourceGainEnvelope: The newGainEnvelope is empty! The gain envelope hasn't been changed."));
+		DEB("AudioSourceGainEnvelope: The newGainEnvelope is empty! The gain "
+            "envelope hasn't been changed.")
 	}
 }
 

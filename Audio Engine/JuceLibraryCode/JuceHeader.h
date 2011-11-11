@@ -20,6 +20,15 @@
 //#include "/Users/philippekocher/Desktop/juce/juce.h"
 //#include "/Users/philippekocher/Documents/CocoaPlayground/juce/juce.h"
 
+#if AUDIO_ENGINE_DEBUG
+    /** Writes a string to the standard error stream.
+     Using the DBG macro from Juce.
+     */
+    #define DEB(dbgtext)		  { DBG(dbgtext) }
+#else
+    #define DEB(dbgtext)
+#endif
+
 namespace ProjectInfo
 {
     const char* const  projectName    = "AmbisonicsAudioEngine";
