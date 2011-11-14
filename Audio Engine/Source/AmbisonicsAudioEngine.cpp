@@ -299,12 +299,14 @@ String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
                 DEB("AmbisonicsAudioEngine::setAudioDevice: Because an initialisation error occured the default device will be tried to be initialised instead. Error message = " + errorString);
                 
                 String errorString2;
-                int numInputChannelsNeeded = 256;
+                //int numInputChannelsNeeded = 256;
+                int numInputChannelsNeeded = 0;
                 int numOutputChannelsNeeded = 256;
+                const int savedState = 0;
                 bool selectDefaultDeviceOnFailure = true;
                 errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
                                                               numOutputChannelsNeeded, 
-                                                              0, 
+                                                              savedState, 
                                                               selectDefaultDeviceOnFailure);
                 if (errorString2.isNotEmpty())
                 {
@@ -645,13 +647,24 @@ int AmbisonicsAudioEngine::getCurrentPosition()
 
 void AmbisonicsAudioEngine::setPosition(int positionInSamples)
 {
+    // DEB("AmbisonicsAudioEngine::setPosition called.")
+    
 	double sampleRateOfTheAudioDevice = getCurrentSampleRate();
 	double positionInSeconds = (double)positionInSamples/sampleRateOfTheAudioDevice;
 	audioTransportSource.setPosition(positionInSeconds);
+    
+    // The setReadPosition of a region is only called from the audioRegionMixers
+    // getNextAudioBlock iff the region is under the play head.
+    // But especially if the playhead is relocated back in time, a region
+    // should be aware of it since all of a sudden it has to deliver sound again.
+    // This is particular crucial for an AudioFormatReader.
+    audioRegionMixer.setNextReadPositionOnAllRegions(getCurrentPosition());
 }
 
 void AmbisonicsAudioEngine::start()
 {
+    audioRegionMixer.prepareAllRegionsToPlay();
+
 	audioTransportSource.start();
 }
 	

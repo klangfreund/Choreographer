@@ -1,3 +1,4 @@
+
 /*
  *  AudioSourceGainEnvelope.cpp
  *  Choreographer
@@ -58,6 +59,8 @@ AudioSourceGainEnvelope::~AudioSourceGainEnvelope()
 /** Implementation of the AudioSource method. */
 void AudioSourceGainEnvelope::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
+    // DEB("AudioSourceGainEnvelope::prepareToPlay called.")
+    
 	bufferingAudioSource->prepareToPlay (samplesPerBlockExpected, sampleRate);
 }
 
@@ -96,9 +99,13 @@ int64 AudioSourceGainEnvelope::getNextReadPosition() const
 /** Implementation of the AudioSource method. */
 void AudioSourceGainEnvelope::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
-	audioBlockEndPosition = nextPlayPosition + info.numSamples; // used here and in setNextReadPosition.
-																// It referes to the first sample after
-																// the current audio block.
+    // DEB("AudioSourceGainEnvelope::getNextAudioBlock: nextPlayPosition = " + String(nextPlayPosition))
+    // DEB("info.startSample = " + String(info.startSample))
+    
+	audioBlockEndPosition = nextPlayPosition + info.numSamples;
+        // used here and in setNextReadPosition.
+		// It referes to the first sample after
+		// the current audio block.
 	bufferingAudioSource->getNextAudioBlock(info);
 	
 	// This will be executed when a new gain envelope has been set with setGainEnvelope(..).

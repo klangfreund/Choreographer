@@ -94,9 +94,12 @@ public:
 
      @return					The success of the operation.
      */
-    bool addRegion (const int regionID, const int startPosition, const int endPosition,
-                    const int startPositionOfAudioFileInTimeline, String absolutePathToAudioFile,
-		    double sampleRateOfTheAudioDevice);
+    bool addRegion (const int& regionID, 
+                    const int& startPosition, 
+                    const int& endPosition,
+                    const int& startPositionOfAudioFileInTimeline, 
+                    const String& absolutePathToAudioFile,
+                    const double& sampleRateOfTheAudioDevice);
 
     /**
      Modifies an audio region to the pool of audio regions.
@@ -113,8 +116,10 @@ public:
 
      @return					The success of the operation.
      */	
-    bool modifyRegion (const int regionID, const int newStartPosition, const int newEndPosition,
-                       const int newStartPositionOfAudioFileInTimeline);
+    bool modifyRegion (const int& regionID, 
+                       const int& newStartPosition, 
+                       const int& newEndPosition,
+                       const int& newStartPositionOfAudioFileInTimeline);
 	
     /**
      Removes an audio region from the pool of audio regions.
@@ -196,6 +201,14 @@ public:
     //==============================================================================
     /** Implements the AudioSource method. */
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate);
+    
+    /** Will call the prepareToPlay method on all regions.
+     
+     This needs to be done every time the playback starts again in the sequencer.
+     Without doing it, the BufferingAudioSources don't work exact (e.g. they
+     skip samples at the beginning and/or the end of the region they belong to).
+     */
+    void prepareAllRegionsToPlay ();
 	
     /** Implements the AudioSource method. */
     void releaseResources();
@@ -207,6 +220,16 @@ public:
     //==============================================================================
     /** Implements the PositionableAudioSource method. */
     void setNextReadPosition (int64 newPosition);
+    
+    /** Sets the read position on all regions.
+     
+    The setReadPosition of a region is only called from the
+    getNextAudioBlock iff the region is under the play head.
+    But especially if the playhead is relocated back in time, a region
+    should be aware of it since all of a sudden it has to deliver sound again.
+    This is particular crucial for an AudioFormatReader.
+     */
+    void setNextReadPositionOnAllRegions (int64 newPosition);
 	
     /** Implements the PositionableAudioSource method. */
     int64 getNextReadPosition() const;

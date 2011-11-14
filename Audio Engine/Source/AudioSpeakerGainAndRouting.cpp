@@ -721,6 +721,9 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		DEB("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels "
             "(set bits) = " + String(audioDeviceSetup.outputChannels.toInteger()))
 	}
+    
+    // Remove all input channels, we don't need them.
+    audioDeviceSetup.inputChannels.clear();
 	
 	// temp
 	AudioIODevice* audioIODevice = audioDeviceManager->getCurrentAudioDevice();

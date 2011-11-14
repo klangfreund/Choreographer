@@ -30,14 +30,19 @@ AudioRegionMixer::~AudioRegionMixer()
 	removeAllRegions();
 }
 
-bool AudioRegionMixer::addRegion (const int regionID,
-								  const int startPosition, 
-								  const int endPosition,
-								  const int startPositionOfAudioFileInTimeline,
-								  String absolutePathToAudioFile,
-								  double sampleRateOfTheAudioDevice)
+bool AudioRegionMixer::addRegion (const int& regionID,
+								  const int& startPosition, 
+								  const int& endPosition,
+								  const int& startPositionOfAudioFileInTimeline,
+								  const String& absolutePathToAudioFile,
+								  const double& sampleRateOfTheAudioDevice)
 {
-    DEB("AudioRegionMixer: addRegion called.");
+    DEB("AudioRegionMixer: addRegion called.\n"
+        "regionID = " + String(regionID) +
+        ", startPosition = " + String(startPosition) +
+        ", endPosition = " + String(endPosition) +
+        ", startPositionOfAudioFileInTimeline = " +
+        String(startPositionOfAudioFileInTimeline));
     
 	
 	int index; // just here because findRegion needs it
@@ -88,7 +93,7 @@ bool AudioRegionMixer::addRegion (const int regionID,
 		audioRegionToAdd->endPosition = endPosition;
 		audioRegionToAdd->startPositionOfAudioFileInTimeline = startPositionOfAudioFileInTimeline;		
 		AudioSourceAmbipanning *audioSourceAmbipanning = new AudioSourceAmbipanning (audioFormatReader,
-																					 sampleRateOfTheAudioDevice);		
+             sampleRateOfTheAudioDevice);		
 		audioRegionToAdd->audioSourceAmbipanning = audioSourceAmbipanning;
 		
 		// add the region
@@ -108,10 +113,17 @@ bool AudioRegionMixer::addRegion (const int regionID,
 	
 }
 
-bool AudioRegionMixer::modifyRegion (const int regionID, const int newStartPosition, const int newEndPosition,
-				   const int newStartPositionOfAudioFileInTimeline)
+bool AudioRegionMixer::modifyRegion (const int& regionID, 
+                                     const int& newStartPosition, 
+                                     const int& newEndPosition,
+                                     const int& newStartPositionOfAudioFileInTimeline)
 {
-	DEB("AudioRegionMixer: modifyRegion called.");
+    DEB("AudioRegionMixer: modifyRegion called.\n"
+        "regionID = " + String(regionID) +
+        ", newStartPosition = " + String(newStartPosition) +
+        ", newEndPosition = " + String(newEndPosition) +
+        ", newStartPositionOfAudioFileInTimeline = " +
+        String(newStartPositionOfAudioFileInTimeline));
 	
 	int index;
 	bool foundTheRegion = findRegion(regionID, index);
@@ -336,10 +348,22 @@ void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampl
 	samplesPerBlockExpected = samplesPerBlockExpected_;
 	sampleRate = sampleRate_;
 	
-	for (int i = regions.size(); --i >= 0;)
+	for (int i = 0; i != regions.size(); ++i)
 	{		
 		((AudioRegion*)regions[i])->audioSourceAmbipanning
 		  ->prepareToPlay(samplesPerBlockExpected, sampleRate);
+	}
+	
+}
+
+void AudioRegionMixer::prepareAllRegionsToPlay ()
+{
+	// DEB("AudioRegionMixer::prepareAllRegionsToPlay called.")
+	
+	for (int i = 0; i != regions.size(); ++i)
+	{		
+		((AudioRegion*)regions[i])->audioSourceAmbipanning
+        ->prepareToPlay(samplesPerBlockExpected, sampleRate);
 	}
 	
 }
@@ -364,59 +388,83 @@ void AudioRegionMixer::setNextReadPosition (int64 newPosition)
 	nextPlayPosition = newPosition;
 }
 
+void AudioRegionMixer::setNextReadPositionOnAllRegions (int64 newPosition)
+{	
+    // DEB("AudioRegionMixer::setNextReadPositionOnAllRegions called.")
+    
+	nextPlayPosition = newPosition;
+    
+    for (int i = 0; i != regions.size(); ++i)
+	{
+        AudioRegion* currentAudioRegion = (AudioRegion*)regions[i];
+        int startPositionOfCurrentRegionInThisChunk = jmax(nextPlayPosition,
+                                                           currentAudioRegion->startPosition);
+        
+        // place the "virtual reading head" to the right position in the (multi channel) audio file
+        currentAudioRegion->audioSourceAmbipanning
+        ->setNextReadPosition( startPositionOfCurrentRegionInThisChunk 
+                              - currentAudioRegion->startPositionOfAudioFileInTimeline);
+	}
+}
+
 // Implementation of the AudioSource method.
 void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
 	
-	// DEB(T("AudioRegionMixer: nr of channels = ") + String(info.buffer->getNumChannels()));
+	// DEB("AudioRegionMixer: nr of channels = " + String(info.buffer->getNumChannels()))
 
 	if (info.numSamples > 0)
 	{
 		// Zero the buffer of info. Will soon add regions to it (if there are any).
 		info.clearActiveBufferRegion();
-		
-		tempBuffer.setSize (jmax (1, info.buffer->getNumChannels()),
-							info.buffer->getNumSamples());
-		AudioSourceChannelInfo tempInfo;
-		tempInfo.buffer = &tempBuffer;
-		tempInfo.startSample = 0;
-		
-		AudioRegion* currentAudioRegion;
-		const int startOfThisChunk = nextPlayPosition;
-		const int endOfThisChunk = nextPlayPosition + info.numSamples;
-		for (int i = regions.size(); --i >= 0;)
-		{	
-			currentAudioRegion = (AudioRegion*)regions[i];
-			if (currentAudioRegion->startPosition < endOfThisChunk 
-				&& currentAudioRegion->endPosition >= startOfThisChunk)
-			{
-				// the next two variables are still measured in absolute samples on the timeline
-				int startPositionOfCurrentRegionInThisChunk = jmax(startOfThisChunk,
-													currentAudioRegion->startPosition);
-				int endPositionOfCurrentRegionInThisChunk = jmin(endOfThisChunk,
-												  currentAudioRegion->endPosition);
-				
-				int numberOfSamplesOfCurrentRegionInThisChunk
-				     = endPositionOfCurrentRegionInThisChunk - startPositionOfCurrentRegionInThisChunk;
-				
-				// place the "virtual reading head" to the right position in the (multi channel) audio file
-				currentAudioRegion->audioSourceAmbipanning->setNextReadPosition(
-				  startPositionOfCurrentRegionInThisChunk
-				  - currentAudioRegion->startPositionOfAudioFileInTimeline);
-				
-				// get the desired fragment of the audio file
-				tempInfo.numSamples = numberOfSamplesOfCurrentRegionInThisChunk;
-				currentAudioRegion->audioSourceAmbipanning->getNextAudioBlock(tempInfo);
-				
-				// add it to the buffer that will be returned
-				int startSampleInTheBuffer = startPositionOfCurrentRegionInThisChunk - startOfThisChunk;
-				for (int chan = 0; chan < info.buffer->getNumChannels(); ++chan)
-				{
-                    info.buffer->addFrom (chan, info.startSample + startSampleInTheBuffer , tempBuffer, 
-										  chan, 0, numberOfSamplesOfCurrentRegionInThisChunk);
-				}
-			}
-		}
+        
+        if (regions.size() != 0)
+        {
+            // Below, this buffer is used as argument for the getNextAudioBlock
+            // method for regions under the playhead.
+            tempBuffer.setSize (jmax (1, info.buffer->getNumChannels()),
+                                info.buffer->getNumSamples());
+            AudioSourceChannelInfo tempInfo;
+            tempInfo.buffer = &tempBuffer;
+            tempInfo.startSample = 0;
+            
+            AudioRegion* currentAudioRegion;
+            const int startOfThisChunk = nextPlayPosition;
+            const int endOfThisChunk = nextPlayPosition + info.numSamples;
+
+            for (int i = 0; i != regions.size(); ++i)
+            {	
+                currentAudioRegion = (AudioRegion*)regions[i];
+                if (currentAudioRegion->startPosition < endOfThisChunk 
+                    && currentAudioRegion->endPosition >= startOfThisChunk)
+                {
+                    // the next two variables are still measured in absolute samples on the timeline
+                    int startPositionOfCurrentRegionInThisChunk = jmax(startOfThisChunk,
+                                                                       currentAudioRegion->startPosition);
+                    int endPositionOfCurrentRegionInThisChunk = jmin(endOfThisChunk,
+                                                                     currentAudioRegion->endPosition);
+                    
+                    int numberOfSamplesOfCurrentRegionInThisChunk
+                    = endPositionOfCurrentRegionInThisChunk - startPositionOfCurrentRegionInThisChunk;
+                    
+                    // place the "virtual reading head" to the right position in the (multi channel) audio file
+                    currentAudioRegion->audioSourceAmbipanning->setNextReadPosition(
+                        startPositionOfCurrentRegionInThisChunk - currentAudioRegion->startPositionOfAudioFileInTimeline);
+                    
+                    // get the desired fragment of the audio file
+                    tempInfo.numSamples = numberOfSamplesOfCurrentRegionInThisChunk;
+                    currentAudioRegion->audioSourceAmbipanning->getNextAudioBlock(tempInfo);
+                    
+                    // Add it to the buffer that will be returned
+                    int startSampleInTheBuffer = startPositionOfCurrentRegionInThisChunk - startOfThisChunk;
+                    for (int chan = 0; chan < info.buffer->getNumChannels(); ++chan)
+                    {
+                        info.buffer->addFrom (chan, info.startSample + startSampleInTheBuffer , tempBuffer, 
+                                              chan, 0, numberOfSamplesOfCurrentRegionInThisChunk);
+                    }
+                }
+            }
+        }
 	}
 }
 

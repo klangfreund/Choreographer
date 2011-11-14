@@ -233,6 +233,8 @@ void AudioSourceAmbipanning::releaseResources()
 /** Implementation of the AudioSource method. */
 void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
+    // DEB("AudioSourceAmbipanning::getNextAudioBlock: nextPlayPosition = " + String(nextPlayPosition))
+    
 	audioBlockEndPosition = nextPlayPosition + info.numSamples; // used here and in setNextReadPosition.
 								    // It referes to the first sample after
 								    // the current audio block.
