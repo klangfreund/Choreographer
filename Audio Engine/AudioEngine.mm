@@ -270,10 +270,13 @@ static AudioEngine *sharedAudioEngine = nil;
 	unsigned int index = regionIndex++;
 		
 	[audioRegion setValue:[NSNumber numberWithInt:index] forKey:@"playbackIndex"];
+    
+    int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	double fromMsToSamples = 0.001*sampleRate;
 	
-	unsigned long  startTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * 44.1;
-	unsigned long  duration = [[audioRegion valueForKey:@"duration"] unsignedLongValue] * 44.1;
-	unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * 44.1;
+	unsigned long  startTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * fromMsToSamples;
+	unsigned long  duration = [[audioRegion valueForKey:@"duration"] unsignedLongValue] * fromMsToSamples;
+	unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 
 	NSString *filePath = [audioRegion valueForKeyPath:@"audioItem.audioFile.filePathString"];
 
@@ -299,7 +302,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	NSLog(@"modifyAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
 
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
-	int fromMsToSamples = 0.001*sampleRate;
+	double fromMsToSamples = 0.001*sampleRate;
 	
 	// These new values are measured in samples
 	unsigned long  newStartTime = [[audioRegion valueForKey:@"startTime"] unsignedLongValue] * fromMsToSamples;

@@ -103,7 +103,8 @@ bool AudioRegionMixer::addRegion (const int& regionID,
 		audioRegionToAdd->audioSourceAmbipanning->prepareToPlay(samplesPerBlockExpected, sampleRate);
 		
 		// update totalLength, if needed
-		if (totalLength < endPosition ) {
+		if (totalLength < endPosition )
+        {
 			totalLength = endPosition;
 		}
 		
@@ -149,6 +150,12 @@ bool AudioRegionMixer::modifyRegion (const int& regionID,
 		audioRegionToModify->startPosition = newStartPosition;
 		audioRegionToModify->endPosition = newEndPosition;
 		audioRegionToModify->startPositionOfAudioFileInTimeline = newStartPositionOfAudioFileInTimeline;
+		
+		// update totalLength, if needed
+		if (totalLength < newEndPosition )
+        {
+			totalLength = newEndPosition;
+		}
 		
 		return true;
 	}
