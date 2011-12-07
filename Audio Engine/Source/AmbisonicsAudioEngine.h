@@ -50,37 +50,76 @@ public:
 	 Returns the names of all available Core Audio devices.
 	 
 	 @return	The names of all available Core Audio devices.
-				They are put into a Juce StringArray.
+				If there is none, an empty array is returned.
 	 */
-	StringArray getAvailableAudioDeviceNames ();
+     StringArray getAvailableAudioDeviceNames ();
 
 	/**
 	 Sets the Core Audio device to be used for the audio output.
 	 
-	 @return	An error message if anything went wrong, or 
-				an empty string if it worked ok.
+	 @return	An error message if anything went wrong.
+                An empty string otherwise.
 	 */
 	String setAudioDevice (const String& audioDeviceName);
 	
 	/**
-	 Returns the name of the current AudioIODevice (core audio).
+	 Returns the name of the currently used Audio IO Device.
 	 
-	 @return	A Juce string object containing the name of the
-				current AudioIODevice.
+	 @return	The name of the currently used Audio IO Device.
 	 */
-	String getNameOfCurrentAudioDevice ();
+	const String & getNameOfCurrentAudioDevice ();
+    
+    /**
+     Returns a list of the names of all output channels of the
+     currently used audio io device.
+     
+     @return    A list of the names of all output channels of the
+                currently used audio io device.
+     */
+    StringArray getOutputChannelNames();
+    
+    /**
+     Returns the available samplerates of the currently used
+     audio io device.
+     
+     @return    The available samplerates of the currently used
+                audio io device.
+     */
+     Array<double> getAvailableSampleRates();
+    
+	/**
+	 Sets the sample rate the current audio io device should
+     operate in.
+     To know which sample rates are supported, call
+     getAvailableSampleRates().
+	 
+	 @return	An error message if anything went wrong.
+     An empty string otherwise.
+	 */
+     String setSampleRate(const double& sampleRate);
 
 	/**
-	 Returns the currently used sample rate of the AudioIODevice
-	 (the audio driver). 
+	 Returns the currently used sample rate of the audio io device.
 	 
-	 This value is set in the Engine -> Hardware Setup...
-	 by the user.
-	 
-	 @return The currently used sample rate of the AudioIODevice
-	 (the audio driver). 
+	 @return The currently used sample rate of the audio io device.
 	 */
 	double getCurrentSampleRate ();
+    
+/* TODO
+    const Array<int> & getAvailableBufferSizes();
+    
+    int getDefaultBufferSize();
+    
+    int getCurrentBufferSize();
+    
+    const String & setBufferSize(const int & bufferSizeInSamples);
+ */
+    
+//    int getCurrentBitDepth();
+//    
+//    bool showControlPanel();
+//    
+//    int getOutputLatencyInSamples();
 	
 	/**
 	 Returns the number of output channels of the current

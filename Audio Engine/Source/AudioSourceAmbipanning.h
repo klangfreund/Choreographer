@@ -303,6 +303,15 @@ public:
     bool isLooping () const;
 	
 	//==============================================================================
+    /**
+     Enables or disables the buffering.
+     
+     By default, buffering is enabled. For realtime operation, buffering
+     should always be engaged. For non-realtime operation (e.g. bounce 
+     to disk), buffering should be disabled.
+     */
+    void enableBuffering (bool enable);
+    
 	/** 
 	 @param newGainEnvelope		it will be deleted in the setGainEnvelope(..) of
 								AudioSourceGainEnvelope or in the destructor of
@@ -389,7 +398,7 @@ private:
 	  // used in distanceMode 2
 	static double outsideCenterExponent; // = 1
 	
-	AudioSourceGainEnvelope* audioSourceGainEnvelope;
+	AudioSourceGainEnvelope audioSourceGainEnvelope;
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).
 	AudioSampleBuffer monoBuffer;  // used in getNextAudioBlock(..).
 	

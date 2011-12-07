@@ -151,23 +151,41 @@ public:
     bool isLooping() const;
 	
 	//==============================================================================
+    
+    /**
+     Enables or disables the buffering.
+     
+     By default, buffering is enabled. For realtime operation, buffering
+     should always be engaged. For non-realtime operation (e.g. bounce 
+     to disk), buffering should be disabled.
+     */
+    void enableBuffering (bool enable);
+    
 	/** 
 	 @param newGainEnvelope			it will be deleted in the setGainEnvelope(..)
 									or in the destructor, so you don't have to
 									care about.
 	 */
-	void setGainEnvelope(Array<void*> newGainEnvelope);
+	void setGainEnvelope (Array<void*> newGainEnvelope);
 	
 
 private:
 	inline void prepareForNewPosition(int newPosition);
 	
-	BufferingAudioSource* bufferingAudioSource;
+	BufferingAudioSource bufferingAudioSource;
+    
 //	PositionableResamplingAudioSource* positionableResamplingAudioSource;
-	AudioFormatReaderSource* audioFormatReaderSource;
+    
+    /** Responsible for reading the audio file from the harddisk and
+     decoding it.
+     */
+	AudioFormatReaderSource audioFormatReaderSource;
+    
+    PositionableAudioSource* bufferOrReaderAudioSource;
 	
 	Array<void*> gainEnvelope;
-	Array<void*> newGainEnvelope; // This is used by setGainEnvelope(..) and
+	Array<void*> newGainEnvelope; 
+      // This is used by setGainEnvelope(..) and
 	  // by getNextAudioBlock(..) when a new envelope is engaged.
 	AudioEnvelopePointComparator audioEnvelopePointComparator;
 	bool newGainEnvelopeSet;

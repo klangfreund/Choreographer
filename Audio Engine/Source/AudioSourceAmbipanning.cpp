@@ -189,7 +189,8 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  nextSpacialPoint (),
 	  nextSpacialPointIndex (0),
 	  newSpacialEnvelopeSet (false),
-	  numberOfSpeakersChanged (false)
+	  numberOfSpeakersChanged (false),
+      audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice)
 {
 	DEB("AudioSourceAmbipanning: constructor called.");
 	
@@ -207,27 +208,23 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	constantSpacialPosition = true;
 	reallocateMemoryForTheArrays();
 	  // this will also set newSpacialEnvelopeSet = true;
-	
-	audioSourceGainEnvelope = new AudioSourceGainEnvelope (audioFormatReader,
-														   sampleRateOfTheAudioDevice);
 }
 
 AudioSourceAmbipanning::~AudioSourceAmbipanning()
 {
 	DEB("AudioSourceAmbipanning: destructor called.");
-	delete audioSourceGainEnvelope;
 }
 
 /** Implementation of the AudioSource method. */
 void AudioSourceAmbipanning::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-	audioSourceGainEnvelope->prepareToPlay (samplesPerBlockExpected, sampleRate);
+	audioSourceGainEnvelope.prepareToPlay (samplesPerBlockExpected, sampleRate);
 }
 
 /** Implementation of the AudioSource method. */
 void AudioSourceAmbipanning::releaseResources()
 {
-	audioSourceGainEnvelope->releaseResources();
+	audioSourceGainEnvelope.releaseResources();
 }
 
 /** Implementation of the AudioSource method. */
@@ -246,7 +243,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	monoInfo.numSamples = info.numSamples;
 	monoInfo.buffer = &monoBuffer;
 	
-	audioSourceGainEnvelope->getNextAudioBlock(monoInfo);
+	audioSourceGainEnvelope.getNextAudioBlock(monoInfo);
 	  // the gain envelope is now applied.
 	
 	// copy the samples of the first channel (with index 0) to the other channels
@@ -458,30 +455,35 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 	}
 	
 	nextPlayPosition = newPosition;		
-	audioSourceGainEnvelope->setNextReadPosition (newPosition);
+	audioSourceGainEnvelope.setNextReadPosition (newPosition);
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getNextReadPosition () const
 {
-	return audioSourceGainEnvelope->getNextReadPosition();
+	return audioSourceGainEnvelope.getNextReadPosition();
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getTotalLength () const
 {
-	return audioSourceGainEnvelope->getTotalLength();
+	return audioSourceGainEnvelope.getTotalLength();
 }
 
 /** Implements the PositionableAudioSource method. */
 bool AudioSourceAmbipanning::isLooping () const
 {
-	return audioSourceGainEnvelope->isLooping();
+	return audioSourceGainEnvelope.isLooping();
+}
+
+void AudioSourceAmbipanning::enableBuffering(bool enable)
+{
+	audioSourceGainEnvelope.enableBuffering(enable);
 }
 
 void AudioSourceAmbipanning::setGainEnvelope (Array<void*> newGainEnvelope)
 {
-	audioSourceGainEnvelope->setGainEnvelope(newGainEnvelope);
+	audioSourceGainEnvelope.setGainEnvelope(newGainEnvelope);
 }
 
 void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)

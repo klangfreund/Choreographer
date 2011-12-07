@@ -124,7 +124,7 @@ void AudioTransportSourceMod::start()
         {
             const ScopedLock sl (callbackLock);
             playing = true;
-            stopped = false;
+            // stopped = false;
             inputStreamEOF = false;
         }
 		
@@ -381,11 +381,38 @@ void AudioTransportSourceMod::getNextAudioBlock (const AudioSourceChannelInfo& i
 											lastGain, gain);
 			}
 		}
+        
+        //temp
+        //info.clearActiveBufferRegion();
     }
-    else
+    else // stopped==true
     {
+        if (playing)
+        {
+            // playing==true and stopped==true. We are about to start. Fade in.
+            
+            masterSource->getNextAudioBlock (info);
+            
+            int endOfRamp = jmin (256, info.numSamples);
+            for (int i = info.buffer->getNumChannels(); --i >= 0;)
+            {
+                info.buffer->applyGainRamp (i, info.startSample, 
+                                            endOfRamp, 0.0f, gain);
+                if (info.numSamples > 256)
+                    info.buffer->applyGain(i, info.startSample + endOfRamp, 
+                                       info.numSamples-endOfRamp, gain);
+            }   
+            
+            lastGain = gain;
+            
+            stopped = false;
+        }
+        else
+        {
+        // playing==false and stopped==true. Stopped -> return silence.
         info.clearActiveBufferRegion();
         stopped = true;
+        }
     }
 	
     lastGain = gain;
