@@ -262,6 +262,18 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
 }
 
+- (void)setSampleRate:(NSUInteger)sr
+{
+    ambisonicsAudioEngine->setSampleRate(sr);
+}
+
+- (void)setBufferSize:(NSUInteger)size
+{
+    ambisonicsAudioEngine->setBufferSize(size);
+}
+
+
+
 #pragma mark -
 #pragma mark scheduled playback
 // -----------------------------------------------------------  

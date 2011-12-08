@@ -38,6 +38,7 @@
 - (void)setup;
 
 // Menu (UI Actions)
+
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
@@ -81,6 +82,9 @@
 - (void)setUseDelay:(BOOL)delay;
 
 - (void)setTestNoiseVolume:(float)dbValue;
+
+- (void)setSampleRate:(NSUInteger)sr;
+- (void)setBufferSize:(NSUInteger)size;
 
 
 

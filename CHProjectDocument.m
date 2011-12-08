@@ -121,7 +121,7 @@
 {
 	NSLog(@"Project setup");
 	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
     NSError *fetchError = nil;
     NSArray *fetchResults;
 	
@@ -371,6 +371,7 @@
 		[projectSettings setValue:[NSNumber numberWithInt:val] forKey:@"projectSampleRate"];
 	
 	[projectSampleRateTextField setStringValue:[NSString stringWithFormat:@"%d Hz", [[projectSettings valueForKey:@"projectSampleRate"] longValue]]];
+    [[AudioEngine sharedAudioEngine] setSampleRate:val];
 }
 
 
