@@ -412,7 +412,7 @@ String AmbisonicsAudioEngine::setSampleRate(const double& sampleRate)
                                                               selectDefaultDeviceOnFailure);
                 if (errorString2.isNotEmpty())
                 {
-                    DEB("AmbisonicsAudioEngine::setAudioDevice: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
+                    DEB("AmbisonicsAudioEngine::setSampleRate: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
                 }
             }
             
@@ -432,13 +432,111 @@ String AmbisonicsAudioEngine::setSampleRate(const double& sampleRate)
     }
     
     return errorString;
-    
 }
 
 double AmbisonicsAudioEngine::getCurrentSampleRate ()
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
 	return currentAudioIODevice->getCurrentSampleRate();
+}
+
+Array<int> AmbisonicsAudioEngine::getAvailableBufferSizes()
+{
+    // The return value.
+    Array<int> availableBufferSizes;
+    
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    
+    for (int i=0; i < currentAudioIODevice->getNumBufferSizesAvailable(); ++i)
+    {
+        availableBufferSizes.add(currentAudioIODevice->getBufferSizeSamples(i));
+    }
+    
+    return availableBufferSizes;
+}
+
+int AmbisonicsAudioEngine::getDefaultBufferSize()
+{
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    return currentAudioIODevice->getDefaultBufferSize();
+}
+
+int AmbisonicsAudioEngine::getCurrentBufferSize()
+{
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    return currentAudioIODevice->getCurrentBufferSizeSamples();
+}
+
+String AmbisonicsAudioEngine::setBufferSize(const int & bufferSizeInSamples)
+{
+    Array<int> availableBufferSizes = getAvailableBufferSizes();
+    
+    String errorString; // The string that will be returned.
+    
+    if (availableBufferSizes.contains(bufferSizeInSamples))
+    {
+        
+        // Stop the playback, if it was running.
+        bool wasPlaying = audioTransportSource.isPlaying();
+        int currentPosition;
+        if (wasPlaying)
+        {
+            currentPosition = getCurrentPosition();
+            stop();
+        }
+        
+        {
+            //const ScopedLock sl (lock);
+            audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+            
+            AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
+            audioDeviceManager.getAudioDeviceSetup(audioDeviceSetup);
+            audioDeviceSetup.bufferSize = bufferSizeInSamples;
+            
+            bool treatAsChosenDevice = true;
+            errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
+            
+            // On failure, initialise the audioDeviceManager again, such that there is at
+            // least something available for audio output.
+            if (errorString.isNotEmpty())
+            {
+                DEB("AmbisonicsAudioEngine::setBufferSize: Because an "
+                    "initialisation error occured the default device is "
+                    "tried to be initialised instead. Error message = " 
+                    + errorString);
+                
+                String errorString2;
+                //int numInputChannelsNeeded = 256;
+                int numInputChannelsNeeded = 0;
+                int numOutputChannelsNeeded = 256;
+                const int savedState = 0;
+                bool selectDefaultDeviceOnFailure = true;
+                errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
+                                                              numOutputChannelsNeeded, 
+                                                              savedState, 
+                                                              selectDefaultDeviceOnFailure);
+                if (errorString2.isNotEmpty())
+                {
+                    DEB("AmbisonicsAudioEngine::setBufferSize: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
+                }
+            }
+            
+            audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+        }
+        
+        if (wasPlaying)
+        {
+            setPosition(currentPosition);
+            start();
+        }
+    }
+    else
+    {
+        errorString = "The buffer size " + String(bufferSizeInSamples) 
+        + "is not supported by the current audio io device.";
+    }
+    
+    return errorString;
 }
 
 int AmbisonicsAudioEngine::getNumberOfHardwareOutputChannels()

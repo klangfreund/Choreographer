@@ -105,15 +105,27 @@ public:
 	 */
 	double getCurrentSampleRate ();
     
-/* TODO
-    const Array<int> & getAvailableBufferSizes();
+    /**
+     Returns the available buffer sizes of the currently used audio device
+     in samples.
+     */
+    Array<int> getAvailableBufferSizes();
     
+    /**
+     Returns the default buffer size of the currently used audio device
+     in samples.
+     */
     int getDefaultBufferSize();
     
+    /**
+     Returns the currently used buffer size of the currently used audio device.
+     
+     Measured in samples.
+     */
     int getCurrentBufferSize();
     
-    const String & setBufferSize(const int & bufferSizeInSamples);
- */
+    String setBufferSize(const int & bufferSizeInSamples);
+
     
 //    int getCurrentBitDepth();
 //    
