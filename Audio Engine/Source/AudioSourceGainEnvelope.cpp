@@ -18,26 +18,16 @@ AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audio
       nextGainPoint (0),
       nextGainPointIndex (0),
       gainValue (1.0f),
-      gainDelta (0.0f)
+      gainDelta (0.0f),
+      audioFormatReaderSource (audioFormatReader, true),
+            // second argument: deleteSourceWhenDeleted
+      bufferingAudioSource (&audioFormatReaderSource, false, 32768)
+            // second argument: deleteSourceWhenDeleted
 {
 	DEB("AudioSourceGainEnvelope: constructor called.")
 	
-	audioFormatReaderSource = new AudioFormatReaderSource (audioFormatReader, true);
+    bufferOrReaderAudioSource = &bufferingAudioSource;
 
-	// ENTWEDER
-//	positionableResamplingAudioSource 
-//	  = new PositionableResamplingAudioSource (audioFormatReaderSource, true);
-//	  // second argument: deleteSourceWhenDeleted
-//	double sampleRateOfTheFile = audioFormatReader->sampleRate;
-//	positionableResamplingAudioSource->setResamplingRatio(sampleRateOfTheFile/sampleRateOfTheAudioDevice);
-//	bufferingAudioSource = new BufferingAudioSource (positionableResamplingAudioSource, true, 32768);
-
-	// ODER (nur diese eine Zeile)
-	bufferingAudioSource = new BufferingAudioSource (audioFormatReaderSource, true, 32768);	
-	  // This buffer is needed because the audioFormatReaderSource is slow (because reading from
-	  //   hard drive is a slow operation - compared with the time given for filling the audio
-	  //   buffer of a audio callback)
-	  // second argument: deleteSourceWhenDeleted
 	newGainEnvelopeSet = false;
 	constantGain = true;
 }
@@ -45,7 +35,7 @@ AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audio
 AudioSourceGainEnvelope::~AudioSourceGainEnvelope()
 {
 	DEB("AudioSourceGainEnvelope: destructor called.")
-	delete bufferingAudioSource;  // this also deletes the positionableResamplingAudioSource
+//	delete bufferingAudioSource;  // this also deletes the positionableResamplingAudioSource
 								  // and the audioFormatReaderSource.
 	
 	// delete the gain envelope
@@ -61,13 +51,13 @@ void AudioSourceGainEnvelope::prepareToPlay (int samplesPerBlockExpected, double
 {
     // DEB("AudioSourceGainEnvelope::prepareToPlay called.")
     
-	bufferingAudioSource->prepareToPlay (samplesPerBlockExpected, sampleRate);
+	bufferOrReaderAudioSource->prepareToPlay (samplesPerBlockExpected, sampleRate);
 }
 
 /** Implementation of the AudioSource method. */
 void AudioSourceGainEnvelope::releaseResources()
 {
-	bufferingAudioSource->releaseResources();
+	bufferOrReaderAudioSource->releaseResources();
 }
 
 /** Implements the PositionableAudioSource method. */
@@ -87,13 +77,13 @@ void AudioSourceGainEnvelope::setNextReadPosition (int64 newPosition)
 	}
 	
 	nextPlayPosition = newPosition;
-	bufferingAudioSource->setNextReadPosition (newPosition);
+	bufferOrReaderAudioSource->setNextReadPosition (newPosition);
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceGainEnvelope::getNextReadPosition() const
 {
-	return bufferingAudioSource->getNextReadPosition();
+	return bufferOrReaderAudioSource->getNextReadPosition();
 }
 
 /** Implementation of the AudioSource method. */
@@ -106,7 +96,7 @@ void AudioSourceGainEnvelope::getNextAudioBlock (const AudioSourceChannelInfo& i
         // used here and in setNextReadPosition.
 		// It referes to the first sample after
 		// the current audio block.
-	bufferingAudioSource->getNextAudioBlock(info);
+	bufferOrReaderAudioSource->getNextAudioBlock(info);
 	
 	// This will be executed when a new gain envelope has been set with setGainEnvelope(..).
 	if (newGainEnvelopeSet)
@@ -220,13 +210,25 @@ void AudioSourceGainEnvelope::getNextAudioBlock (const AudioSourceChannelInfo& i
 
 int64 AudioSourceGainEnvelope::getTotalLength() const
 {
-	return bufferingAudioSource->getTotalLength();
+	return bufferOrReaderAudioSource->getTotalLength();
 }
 
 /** Implements the PositionableAudioSource method. */
 bool AudioSourceGainEnvelope::isLooping() const
 {
-	return bufferingAudioSource->isLooping();
+	return bufferOrReaderAudioSource->isLooping();
+}
+
+void AudioSourceGainEnvelope::enableBuffering(bool enable)
+{
+    if (enable)
+    {
+        bufferOrReaderAudioSource = &bufferingAudioSource;
+    }
+    else
+    {
+        bufferOrReaderAudioSource = &audioFormatReaderSource;
+    }
 }
 
 void AudioSourceGainEnvelope::setGainEnvelope(Array<void*> newGainEnvelope_)

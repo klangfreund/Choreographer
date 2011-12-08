@@ -348,6 +348,17 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int& regionID, Array<S
 	}	
 }
 
+void AudioRegionMixer::enableBuffering(bool enable)
+{
+	DEB("AudioRegionMixer: enableBuffering called.");
+	
+	for (int i = 0; i < regions.size(); i++)
+	{
+		AudioRegion* audioRegion = (AudioRegion*)regions[i];
+		audioRegion->audioSourceAmbipanning->enableBuffering(enable);
+	}
+}
+
 void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
 	DEB("AudioRegionMixer: prepareToPlay called.");
@@ -471,6 +482,8 @@ void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
                     }
                 }
             }
+            
+            nextPlayPosition = endOfThisChunk;
         }
 	}
 }

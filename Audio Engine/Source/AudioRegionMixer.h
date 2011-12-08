@@ -196,6 +196,15 @@ public:
      @return		 	The success of this operation.
      */
     bool setSpacialEnvelopeForRegion (const int& regionID, Array<SpacialEnvelopePoint> spacialEnvelope);
+    
+    /**
+     Enables or disables the buffering for each individual audio region.
+     
+     By default, buffering is enabled. For realtime operation, buffering
+     should always be engaged. For non-realtime operation (e.g. bounce 
+     to disk), buffering should be disabled.
+     */
+    void enableBuffering(bool enable);
 	
 
     //==============================================================================

@@ -197,6 +197,8 @@ private:
     PositionableAudioSource* source;
     BufferingAudioSourceMod* bufferingSource;
     PositionableAudioSource* positionableSource;
+    /** Here, the masterSource is always equal to the positionableSource.
+     In the original code it is used if resampling is engaged. */
     AudioSource* masterSource;
 	
     CriticalSection callbackLock;

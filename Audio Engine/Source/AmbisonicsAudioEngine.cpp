@@ -316,9 +316,8 @@ String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
             
             // Let everybody know about this new output device:
             enableNewRouting();
-            
-            // audioDeviceManager.addAudioCallback(&audioSourcePlayer);
-            // is called by the enableNewRouting()
+                // audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+                // is called by the enableNewRouting()
         }
         
         if (wasPlaying)
@@ -336,16 +335,208 @@ String AmbisonicsAudioEngine::setAudioDevice(const String& audioDeviceName)
 	return errorString;
 }
 
-String AmbisonicsAudioEngine::getNameOfCurrentAudioDevice ()
+const String & AmbisonicsAudioEngine::getNameOfCurrentAudioDevice ()
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
 	return currentAudioIODevice->getName();
+}
+
+StringArray AmbisonicsAudioEngine::getOutputChannelNames()
+{
+	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    
+    return currentAudioIODevice->getOutputChannelNames();
+}
+
+Array<double> AmbisonicsAudioEngine::getAvailableSampleRates()
+{
+    // The return value.
+    Array<double>   availableSampleRates;
+    
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    for (int i=0; i < currentAudioIODevice->getNumSampleRates(); ++i)
+    {
+        availableSampleRates.add(currentAudioIODevice->getSampleRate(i));
+    }
+    
+    return availableSampleRates;
+}
+
+String AmbisonicsAudioEngine::setSampleRate(const double& sampleRate)
+{
+    Array<double> availableSampleRates = getAvailableSampleRates();
+
+    String errorString; // The string that will be returned.
+    
+    if (availableSampleRates.contains(sampleRate))
+    {
+        
+        // Stop the playback, if it was running.
+        bool wasPlaying = audioTransportSource.isPlaying();
+        int currentPosition;
+        if (wasPlaying)
+        {
+            currentPosition = getCurrentPosition();
+            stop();
+        }
+        
+        {
+            //const ScopedLock sl (lock);
+            audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+            
+            AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
+            audioDeviceManager.getAudioDeviceSetup(audioDeviceSetup);
+            audioDeviceSetup.sampleRate = sampleRate;
+            
+            bool treatAsChosenDevice = true;
+            errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
+            
+            // On failure, initialise the audioDeviceManager again, such that there is at
+            // least something available for audio output.
+            if (errorString.isNotEmpty())
+            {
+                DEB("AmbisonicsAudioEngine::setSampleRate: Because an "
+                    "initialisation error occured the default device is "
+                    "tried to be initialised instead. Error message = " 
+                    + errorString);
+                
+                String errorString2;
+                //int numInputChannelsNeeded = 256;
+                int numInputChannelsNeeded = 0;
+                int numOutputChannelsNeeded = 256;
+                const int savedState = 0;
+                bool selectDefaultDeviceOnFailure = true;
+                errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
+                                                              numOutputChannelsNeeded, 
+                                                              savedState, 
+                                                              selectDefaultDeviceOnFailure);
+                if (errorString2.isNotEmpty())
+                {
+                    DEB("AmbisonicsAudioEngine::setSampleRate: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
+                }
+            }
+            
+            audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+        }
+        
+        if (wasPlaying)
+        {
+            setPosition(currentPosition);
+            start();
+        }
+    }
+    else
+    {
+        errorString = "The sample rate " + String(sampleRate) 
+            + "is not supported by the current audio io device.";
+    }
+    
+    return errorString;
 }
 
 double AmbisonicsAudioEngine::getCurrentSampleRate ()
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
 	return currentAudioIODevice->getCurrentSampleRate();
+}
+
+Array<int> AmbisonicsAudioEngine::getAvailableBufferSizes()
+{
+    // The return value.
+    Array<int> availableBufferSizes;
+    
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    
+    for (int i=0; i < currentAudioIODevice->getNumBufferSizesAvailable(); ++i)
+    {
+        availableBufferSizes.add(currentAudioIODevice->getBufferSizeSamples(i));
+    }
+    
+    return availableBufferSizes;
+}
+
+int AmbisonicsAudioEngine::getDefaultBufferSize()
+{
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    return currentAudioIODevice->getDefaultBufferSize();
+}
+
+int AmbisonicsAudioEngine::getCurrentBufferSize()
+{
+    AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
+    return currentAudioIODevice->getCurrentBufferSizeSamples();
+}
+
+String AmbisonicsAudioEngine::setBufferSize(const int & bufferSizeInSamples)
+{
+    Array<int> availableBufferSizes = getAvailableBufferSizes();
+    
+    String errorString; // The string that will be returned.
+    
+    if (availableBufferSizes.contains(bufferSizeInSamples))
+    {
+        
+        // Stop the playback, if it was running.
+        bool wasPlaying = audioTransportSource.isPlaying();
+        int currentPosition;
+        if (wasPlaying)
+        {
+            currentPosition = getCurrentPosition();
+            stop();
+        }
+        
+        {
+            //const ScopedLock sl (lock);
+            audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
+            
+            AudioDeviceManager::AudioDeviceSetup audioDeviceSetup;
+            audioDeviceManager.getAudioDeviceSetup(audioDeviceSetup);
+            audioDeviceSetup.bufferSize = bufferSizeInSamples;
+            
+            bool treatAsChosenDevice = true;
+            errorString = audioDeviceManager.setAudioDeviceSetup(audioDeviceSetup, treatAsChosenDevice);
+            
+            // On failure, initialise the audioDeviceManager again, such that there is at
+            // least something available for audio output.
+            if (errorString.isNotEmpty())
+            {
+                DEB("AmbisonicsAudioEngine::setBufferSize: Because an "
+                    "initialisation error occured the default device is "
+                    "tried to be initialised instead. Error message = " 
+                    + errorString);
+                
+                String errorString2;
+                //int numInputChannelsNeeded = 256;
+                int numInputChannelsNeeded = 0;
+                int numOutputChannelsNeeded = 256;
+                const int savedState = 0;
+                bool selectDefaultDeviceOnFailure = true;
+                errorString2 = audioDeviceManager.initialise (numInputChannelsNeeded, 
+                                                              numOutputChannelsNeeded, 
+                                                              savedState, 
+                                                              selectDefaultDeviceOnFailure);
+                if (errorString2.isNotEmpty())
+                {
+                    DEB("AmbisonicsAudioEngine::setBufferSize: It wasn't even possible to properly initialize the default device. Error = " + errorString2);
+                }
+            }
+            
+            audioDeviceManager.addAudioCallback(&audioSourcePlayer);
+        }
+        
+        if (wasPlaying)
+        {
+            setPosition(currentPosition);
+            start();
+        }
+    }
+    else
+    {
+        errorString = "The buffer size " + String(bufferSizeInSamples) 
+        + "is not supported by the current audio io device.";
+    }
+    
+    return errorString;
 }
 
 int AmbisonicsAudioEngine::getNumberOfHardwareOutputChannels()
@@ -372,8 +563,7 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 	// (Otherwise the bounced audio would be appended to the existing file.)
 	fileToWriteTo.deleteFile();
 	
-	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();
-	
+	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();	
 	
 	if (getCurrentSampleRate() > 0 && fileOutputStream != 0)
 	{		
@@ -424,10 +614,17 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 															   bitsPerSample, 
 															   metadataValues, 
 															   qualityOptionIndex);
-			
+            
+            // Disable the buffering for the audio format readers...
+			audioRegionMixer.enableBuffering(false);
+            // ...as well as the buffering for the audio transport source.
+            // And also set the virtualNumberOfActiveOutputChannels.
 			audioTransportSource.setSource (&audioRegionMixer,
 											virtualNumberOfActiveOutputChannels,
-											AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
+                                            AUDIOTRANSPORT_BUFFER);
+											//0);
+                // The 0 tells it to NOT use a BufferingAudioSource, e.g.
+                // to not buffer.
 			
 			
 			
@@ -475,6 +672,8 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 		// Put the audioSpeakerGainAndRouting into regular mode
 		int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(false);
 		
+        // Reenable the buffering.
+        audioRegionMixer.enableBuffering(true);
 		audioTransportSource.setSource (&audioRegionMixer,
 										numberOfActiveOutputChannels,
 										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
