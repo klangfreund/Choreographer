@@ -11,6 +11,7 @@
 #import "SpatialPosition.h"
 #import "SpeakerSetupWindowController.h"
 #import "MeterBridgeWindowController.h"
+#import "AudioSettingsWindowController.h"
 
 #ifdef __cplusplus
 #include "Source/AmbisonicsAudioEngine.h"
@@ -24,7 +25,8 @@
 	
 	SpeakerSetupWindowController *speakerSetupWindowController;
 	MeterBridgeWindowController *meterBridgeWindowController;
-	
+    AudioSettingsWindowController *audioSettingsWindowController;
+    
 	IBOutlet NSMenu *menu;
 
 	BOOL isPlaying;
@@ -42,6 +44,7 @@
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
+- (IBAction)showAudioSettings:(id)sender;
 
 
 // Auxiliary Playback

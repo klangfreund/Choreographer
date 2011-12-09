@@ -32,6 +32,8 @@
 		153F154E0DF6D9530037238D /* RulerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F154D0DF6D9530037238D /* RulerScrollView.m */; };
 		153F178A0DF7293B0037238D /* SelectionRectangle.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F17890DF7293B0037238D /* SelectionRectangle.m */; };
 		1543CA1513F94E07006C36D2 /* GainSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 1543CA1413F94E01006C36D2 /* GainSlider.m */; };
+		154C6B7814926A6900D64FD6 /* AudioSettingsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 154C6B7714926A6900D64FD6 /* AudioSettingsWindowController.m */; };
+		154C6B7A14926B4400D64FD6 /* AudioSettingsWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 154C6B7914926B4400D64FD6 /* AudioSettingsWindow.xib */; };
 		15509AE31047F96900E0AEF0 /* Region.m in Sources */ = {isa = PBXBuildFile; fileRef = 15509AE21047F96900E0AEF0 /* Region.m */; };
 		155724F40DD8909800FA16E2 /* CounterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155724F30DD8909800FA16E2 /* CounterView.m */; };
 		155725110DD8919A00FA16E2 /* ContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1557250E0DD8919A00FA16E2 /* ContainerView.m */; };
@@ -168,6 +170,9 @@
 		153F17890DF7293B0037238D /* SelectionRectangle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectionRectangle.m; sourceTree = "<group>"; };
 		1543CA1313F94DFD006C36D2 /* GainSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GainSlider.h; sourceTree = "<group>"; };
 		1543CA1413F94E01006C36D2 /* GainSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GainSlider.m; sourceTree = "<group>"; };
+		154C6B7614926A6900D64FD6 /* AudioSettingsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSettingsWindowController.h; sourceTree = "<group>"; };
+		154C6B7714926A6900D64FD6 /* AudioSettingsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioSettingsWindowController.m; sourceTree = "<group>"; };
+		154C6B7914926B4400D64FD6 /* AudioSettingsWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AudioSettingsWindow.xib; sourceTree = "<group>"; };
 		15509AE11047F96900E0AEF0 /* Region.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Region.h; sourceTree = "<group>"; };
 		15509AE21047F96900E0AEF0 /* Region.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = Region.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		155724F20DD8909800FA16E2 /* CounterView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CounterView.h; sourceTree = "<group>"; };
@@ -436,7 +441,6 @@
 		153F17870DF729040037238D /* Misc */ = {
 			isa = PBXGroup;
 			children = (
-				155724F50DD8909C00FA16E2 /* Custom Views */,
 				15009EAB11C01BBA00FCE0F7 /* Menus & Popup Buttons */,
 				15204C340E4AFC63005E66F0 /* ToolTip.h */,
 				15204C350E4AFC63005E66F0 /* ToolTip.m */,
@@ -452,6 +456,16 @@
 				1543CA1413F94E01006C36D2 /* GainSlider.m */,
 			);
 			name = Misc;
+			sourceTree = "<group>";
+		};
+		154C6B75149269DD00D64FD6 /* AudioSettings */ = {
+			isa = PBXGroup;
+			children = (
+				154C6B7614926A6900D64FD6 /* AudioSettingsWindowController.h */,
+				154C6B7714926A6900D64FD6 /* AudioSettingsWindowController.m */,
+				154C6B7914926B4400D64FD6 /* AudioSettingsWindow.xib */,
+			);
+			name = AudioSettings;
 			sourceTree = "<group>";
 		};
 		155724CE0DD88E7B00FA16E2 /* ProjectDocument */ = {
@@ -488,6 +502,7 @@
 		155725170DD891C800FA16E2 /* Arranger */ = {
 			isa = PBXGroup;
 			children = (
+				155724F50DD8909C00FA16E2 /* Custom Views */,
 				155725180DD891D800FA16E2 /* ArrangerView.h */,
 				155725190DD891D800FA16E2 /* ArrangerView.m */,
 				15C95F951113218F0083EC3A /* ArrangerScrollView.h */,
@@ -499,14 +514,15 @@
 		1586A7BB13B3B45100262B02 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
+				1586A8A313B3B45100262B02 /* README.txt */,
 				1586A7BE13B3B45100262B02 /* AudioEngine.h */,
 				1586A7BF13B3B45100262B02 /* AudioEngine.mm */,
 				1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */,
 				1586A89813B3B45100262B02 /* juce.tag */,
 				1586A89913B3B45100262B02 /* JuceLibraryCode */,
-				1586A89C13B3B45100262B02 /* MeterBridge */,
-				1586A8A313B3B45100262B02 /* README.txt */,
 				1586A8A413B3B45100262B02 /* Source */,
+				1586A89C13B3B45100262B02 /* MeterBridge */,
+				154C6B75149269DD00D64FD6 /* AudioSettings */,
 				1586A8BE13B3B45100262B02 /* SpeakerSetup */,
 			);
 			path = "Audio Engine";
@@ -936,6 +952,7 @@
 				1586A9A413B3B45100262B02 /* MeterBridgeWindow.xib in Resources */,
 				1586A9B313B3B45100262B02 /* SpeakerSetupWindow.xib in Resources */,
 				1586A9B613B3B45100262B02 /* SpeakerSetupChannelStrip.xib in Resources */,
+				154C6B7A14926B4400D64FD6 /* AudioSettingsWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1036,7 @@
 				159EF2C313FC05F70027D151 /* TimelineEditorRulerView.m in Sources */,
 				1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */,
 				157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */,
+				154C6B7814926A6900D64FD6 /* AudioSettingsWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

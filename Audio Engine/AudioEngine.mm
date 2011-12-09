@@ -70,11 +70,10 @@ static AudioEngine *sharedAudioEngine = nil;
 	// instantiate ambisonicsAudioEngine
 	ambisonicsAudioEngine = new AmbisonicsAudioEngine();
 	
-	// instantiate the Speaker Setup Window
+	// instantiate the window controllers
 	speakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
-	
-	// instantiate the Meter Bridge Window
 	meterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
+    audioSettingsWindowController = [[AudioSettingsWindowController alloc] init];
 	
 	// settings
 	[self setTestNoiseVolume:-12];
@@ -93,6 +92,8 @@ static AudioEngine *sharedAudioEngine = nil;
 	NSLog(@"AudioEngine.mm: dealloc");
 	
 	[speakerSetupWindowController release];
+    [meterBridgeWindowController release];
+    [audioSettingsWindowController release];
 	[super dealloc];
 }
 
@@ -117,6 +118,13 @@ static AudioEngine *sharedAudioEngine = nil;
 {	
 	[meterBridgeWindowController showWindow:nil];
 }
+
+- (IBAction)showAudioSettings:(id)sender
+{	
+	[audioSettingsWindowController showWindow:nil];
+}
+
+
 	
 #pragma mark -
 #pragma mark auxiliary playback
