@@ -463,6 +463,8 @@ public:
 	 Sets the distanceMode used in AudioSourceAmbipanning to 1.
 	 In this mode, some values are needed, which have to be
 	 specified here.
+     
+     Exponential decrease.
 	 */
 	void setAEPDistanceModeTo1 (double centerRadius, 
 								double centerExponent,
@@ -473,6 +475,8 @@ public:
 	 Sets the distanceMode used in AudioSourceAmbipanning to 2.
 	 In this mode, some values are needed, which have to be
 	 specified here.
+     
+     Inverse proportional decrease.
 	 */
 	void setAEPDistanceModeTo2 (double centerRadius, 
 								double centerExponent,

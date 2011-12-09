@@ -621,8 +621,7 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
             // And also set the virtualNumberOfActiveOutputChannels.
 			audioTransportSource.setSource (&audioRegionMixer,
 											virtualNumberOfActiveOutputChannels,
-                                            AUDIOTRANSPORT_BUFFER);
-											//0);
+											0);
                 // The 0 tells it to NOT use a BufferingAudioSource, e.g.
                 // to not buffer.
 			
