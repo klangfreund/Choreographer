@@ -1,9 +1,9 @@
 # ignore all directories and files in the build directory
 
 .DS_Store
-build/**/*
-#**/*/.DS_Store
+.Doxyfile.swp
 
+build/**/*
 Audio Engine/documentation/**/*
 
 # more info about the .gitignore file:
