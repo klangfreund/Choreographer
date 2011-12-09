@@ -121,7 +121,6 @@
 - (void)updateGUI
 {
 //	NSLog(@"Speaker Setup Window Controller: update GUI");
-	[hardwareOutputTextField setStringValue:[[AudioEngine sharedAudioEngine] nameOfHardwareOutputDevice]];
 	
 	// stop any running test noise
 

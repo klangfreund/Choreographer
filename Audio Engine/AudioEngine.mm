@@ -275,12 +275,6 @@ static AudioEngine *sharedAudioEngine = nil;
     ambisonicsAudioEngine->setSampleRate(sr);
 }
 
-- (void)setBufferSize:(NSUInteger)size
-{
-    ambisonicsAudioEngine->setBufferSize(size);
-}
-
-
 
 #pragma mark -
 #pragma mark scheduled playback
@@ -437,25 +431,51 @@ static AudioEngine *sharedAudioEngine = nil;
 	}
 	
 	return [NSArray arrayWithArray:array];
-	//	return [NSArray arrayWithObjects:@"device 1", @"second device", @"third device", nil];
 }
 
-- (NSString *)nameOfHardwareOutputDevice
-{
-	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
-	
-	int maxBufferSizeBytes = 120;
-	char audioDeviceName[maxBufferSizeBytes];
-	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
-	
-	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
-}
+//- (NSString *)nameOfHardwareOutputDevice
+//{
+//	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
+//	
+//	int maxBufferSizeBytes = 120;
+//	char audioDeviceName[maxBufferSizeBytes];
+//	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
+//	
+//	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
+//}
 
 - (void)setHardwareOutputDevice:(NSString *)deviceName
 {
 	String audioDeviceName = [deviceName UTF8String];
 	ambisonicsAudioEngine->setAudioDevice(audioDeviceName);	
 }
+
+- (NSArray *)availableBufferSizes
+{
+	NSLog(@"--- available buffer sizes...");
+	Array<int> juceArray = ambisonicsAudioEngine->getAvailableBufferSizes();
+	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
+		
+	for (int i = 0; i < juceArray.size(); ++i)
+	{		
+		[array addObject:[NSNumber numberWithInt:juceArray[i]]];
+	}
+	
+	return [NSArray arrayWithArray:array];
+}
+
+- (void)setBufferSize:(NSUInteger)size
+{
+    ambisonicsAudioEngine->setBufferSize(size);
+}
+
+- (NSUInteger)bufferSize
+{
+    return ambisonicsAudioEngine->getCurrentBufferSize();
+}
+
+
+
 
 
 #pragma mark -

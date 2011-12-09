@@ -70,7 +70,6 @@
 - (unsigned int)sampleRate;
 - (unsigned short)numberOfSpeakerChannels;
 - (unsigned short)numberOfHardwareDeviceOutputChannels;
-- (NSString *)nameOfHardwareOutputDevice;
 - (double)cpuUsage;
 
 
@@ -87,7 +86,6 @@
 - (void)setTestNoiseVolume:(float)dbValue;
 
 - (void)setSampleRate:(NSUInteger)sr;
-- (void)setBufferSize:(NSUInteger)size;
 
 
 
@@ -103,6 +101,10 @@
 
 - (NSArray *)availableAudioDeviceNames;
 - (void)setHardwareOutputDevice:(NSString *)deviceName;
+//- (NSString *)nameOfHardwareOutputDevice;
+- (NSArray *)availableBufferSizes;
+- (void)setBufferSize:(NSUInteger)size;
+- (NSUInteger)bufferSize;
 
 
 //  Speaker Setup

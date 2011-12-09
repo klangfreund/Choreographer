@@ -22,7 +22,6 @@
 	
 	IBOutlet NSPopUpButton *setupChoicePopupButton;
 	IBOutlet PatchbayView *patchbayView;
-	IBOutlet NSTextField *hardwareOutputTextField;
 	
 	// rename, copy, new
 	IBOutlet NSPanel *renameSheet;

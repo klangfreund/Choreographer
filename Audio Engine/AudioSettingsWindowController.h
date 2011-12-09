@@ -9,5 +9,13 @@
 #import <Cocoa/Cocoa.h>
 
 @interface AudioSettingsWindowController : NSWindowController
+{
+	NSArray *bufferSizes;
+	NSInteger selectedBufferSizeIndex;
+}
+
+
+- (void)setSelectedBufferSizeIndex:(NSUInteger)index;
+
 
 @end
