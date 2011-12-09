@@ -7,4 +7,8 @@ build/**/*
 Audio Engine/documentation/**/*
 
 # more info about the .gitignore file:
+<<<<<<< HEAD
 # http://gitready.com/beginner/2009/01/19/ignoring-files.html
+=======
+# http://gitready.com/beginner/2009/01/19/ignoring-files.html
+>>>>>>> github/master
