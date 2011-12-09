@@ -175,9 +175,9 @@
 									   alternateButton:nil
 										   otherButton:nil
 							 informativeTextWithFormat:[NSString stringWithFormat:@"%@ doesn't have the appropriate sample rate (%d instead of %d)",
-                                                        [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue],
-                                                         [self filePathString],
-                                                        basicDescription.mSampleRate]];
+                                                        [self filePathString],
+                                                        (int)basicDescription.mSampleRate,
+                                                        [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue]]];
 		
 		// show alert in a modal dialog
 		[alert runModal];

@@ -58,6 +58,7 @@
 // update engine
 - (void)updateEngine;
 - (void)updateEngineForChannel:(SpeakerChannel *)channel;
+- (void)updateEnginePositionForChannel:(SpeakerChannel *)channel;
 - (void)updateEngineRoutingForChannel:(SpeakerChannel *)channel;
 
 // accessors

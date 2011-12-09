@@ -152,7 +152,7 @@
 			
 			bp.time = time;
 			
-			NSLog(@"time = %d", time);
+			NSLog(@"time = %u", time);
 			
 			[tempArray addObject:bp];
 		}

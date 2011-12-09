@@ -716,9 +716,9 @@
 	};
 	1586A7BF13B3B45100262B02 /* AudioEngine.mm */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1363, 7969}}";
-			sepNavSelRange = "{3898, 12}";
-			sepNavVisRange = "{3105, 1172}";
+			sepNavIntBoundsRect = "{{0, 0}, {1180, 6981}}";
+			sepNavSelRange = "{9653, 0}";
+			sepNavVisRange = "{8273, 3275}";
 		};
 	};
 	1586A89813B3B45100262B02 /* juce.tag */ = {
@@ -775,20 +775,6 @@
 			sepNavIntBoundsRect = "{{0, 0}, {1174, 9386}}";
 			sepNavSelRange = "{3080, 11}";
 			sepNavVisRange = "{2605, 1125}";
-		};
-	};
-	1586A8B013B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.cpp */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1006, 15054}}";
-			sepNavSelRange = "{14150, 9}";
-			sepNavVisRange = "{13204, 1155}";
-		};
-	};
-	1586A8B113B3B45100262B02 /* AudioDeviceSelectorComponentMod copy.h */ = {
-		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1006, 1664}}";
-			sepNavSelRange = "{4471, 9}";
-			sepNavVisRange = "{4271, 1393}";
 		};
 	};
 	1586A8B513B3B45100262B02 /* AudioTransportSourceMod.h */ = {
@@ -878,6 +864,20 @@
 			sepNavVisRange = "{1125, 854}";
 			sepNavWindowFrame = "{{15, 0}, {949, 778}}";
 		};
+	};
+	158F638414730FE900BF24F0 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */;
+	};
+	158F638B1473110800BF24F0 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */;
+		name = "AudioEngine.mm: 370";
+		rLen = 0;
+		rLoc = 9653;
+		rType = 0;
+		vrLen = 3275;
+		vrLoc = 8273;
 	};
 	15979420133D3E49006FCFE6 /* MainCounterView.h */ = {
 		uiCtxt = {
@@ -1121,6 +1121,11 @@
 		name = AudioEngine.mm;
 		path = "/Users/philippekocher/Documents/CocoaPlayground/_ChoreographerProject/Choreographer/Audio Engine/AudioEngine.mm";
 		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {864, 7930}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 677}";
+		};
 	};
 	15EA43CD0EC11981003304E0 /* EditorContent.h */ = {
 		uiCtxt = {
@@ -1388,7 +1393,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					1301,
+					1017,
 					20,
 					48,
 					43,
@@ -1479,8 +1484,12 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 338301087;
-			PBXWorkspaceStateSaveDate = 338301087;
+			PBXPerProjectTemplateStateSaveDate = 343085016;
+			PBXWorkspaceStateSaveDate = 343085016;
+		};
+		perUserProjectItems = {
+			158F638414730FE900BF24F0 /* PBXBookmark */ = 158F638414730FE900BF24F0 /* PBXBookmark */;
+			158F638B1473110800BF24F0 /* PBXTextBookmark */ = 158F638B1473110800BF24F0 /* PBXTextBookmark */;
 		};
 		sourceControlManager = 155724C00DD88D7200FA16E2 /* Source Control */;
 		userBookmarkGroup = 15F5E84D0DDCAC5100EA5E4A /* PBXBookmarkGroup */;

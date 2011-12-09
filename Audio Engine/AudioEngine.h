@@ -38,6 +38,7 @@
 - (void)setup;
 
 // Menu (UI Actions)
+
 - (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showSpeakerSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
@@ -82,6 +83,9 @@
 
 - (void)setTestNoiseVolume:(float)dbValue;
 
+- (void)setSampleRate:(NSUInteger)sr;
+- (void)setBufferSize:(NSUInteger)size;
+
 
 
 //  Schedule Playback
@@ -105,12 +109,13 @@
 - (void)validateSpeakerSetup;
 //- (void)updateSpeakerChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
 - (void)updateParametersForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
+- (void)updatePositionForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
 - (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index;
 
 
 //  Level Meter
 
-- (void)volumeLevelMeasurementClient:(BOOL)val;
+- (void)volumeLevelMeasurementClient:(BOOL)status;
 - (void)enableVolumeLevelMeasurement:(BOOL)val;
 - (void)resetVolumePeakLevel:(NSUInteger)channel;
 - (float)volumeLevel:(NSUInteger)channel;

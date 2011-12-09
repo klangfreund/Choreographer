@@ -334,7 +334,7 @@
 	for(bp in [trajectory valueForKeyPath:@"parameterBreakpoints"])
 	{
         if([bp breakpointType] == breakpointTypeValue ||
-           [[bp descriptor] isEqualToString:@"Init"] && [[trajectory valueForKey:@"adaptiveInitialPosition"] boolValue]) continue;
+           ([[bp descriptor] isEqualToString:@"Init"] && [[trajectory valueForKey:@"adaptiveInitialPosition"] boolValue])) continue;
         
 		pos = [bp position];
 
@@ -840,10 +840,10 @@
 		pos = [item valueForKey:@"position"];
 		
 		if([pos x] + delta.x < -1 || [pos x] + delta.x > 1 ||
-		   activeAreaOfDisplay == 0 &&
-		   ([pos y] + delta.y < -1 || [pos y] + delta.y > 1) ||
-		   activeAreaOfDisplay == 1 &&
-		   ([pos z] + delta.y < -1 || [pos z] + delta.y > 1))
+		   (activeAreaOfDisplay == 0 &&
+		   ([pos y] + delta.y < -1 || [pos y] + delta.y > 1)) ||
+		   (activeAreaOfDisplay == 1 &&
+		   ([pos z] + delta.y < -1 || [pos z] + delta.y > 1)))
 			inside = NO;
 	}
 	
@@ -1008,7 +1008,7 @@
 		for(Breakpoint* breakpoint in tempArray)
 		{
 			if(![breakpoint position] ||
-               [[breakpoint descriptor] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue]) continue;
+               ([[breakpoint descriptor] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue])) continue;
             
             p.x = [breakpoint x];
 			p.y = activeAreaOfDisplay == 0 ? [breakpoint y] : [breakpoint z];
@@ -1190,7 +1190,7 @@
 		while ((item = [enumerator nextObject]))
 		{			
             if(displayMode == trajectoryDisplayMode &&
-               ([item breakpointType] == breakpointTypeValue || [[item valueForKey:@"descriptor"] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue])) continue;
+               ([item breakpointType] == breakpointTypeValue || ([[item valueForKey:@"descriptor"] isEqualToString:@"Init"] && [[editableTrajectory valueForKey:@"adaptiveInitialPosition"] boolValue]))) continue;
 
 			pos = [item valueForKey:@"position"];
 

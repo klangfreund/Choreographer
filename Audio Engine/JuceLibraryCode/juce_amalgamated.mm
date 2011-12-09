@@ -7,4 +7,7 @@
     treat the code as mixed C++/objective-C.
 */
 
-#include "juce_amalgamated.cpp"
+#include "AppConfig.h"
+
+#include "110413/juce_amalgamated.cpp"
+//#include "juce_amalgamated.cpp"

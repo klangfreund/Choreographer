@@ -65,6 +65,8 @@
 			[self setBounceStart:[[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue]];
 			[self setBounceEnd:[[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue]];
 			break;
+		case 2:
+			break;
 	}
 }
 
@@ -72,8 +74,8 @@
 {
 	bounceStart = val;
 	
-	if(bounceMode == 0 && bounceStart != 0
-	   || bounceMode == 1 && bounceStart != [[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue])
+	if((bounceMode == 0 && bounceStart != 0)
+	   || (bounceMode == 1 && bounceStart != [[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue]))
 		[self setBounceMode:2];
 }
 
@@ -81,8 +83,8 @@
 {
 	bounceEnd = val;
 
-	if(bounceMode == 0 && bounceEnd != [[document valueForKeyPath:@"arrangerView.arrangerSizeX"] unsignedIntValue]
-	   || bounceMode == 1 && bounceEnd != [[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue])
+	if((bounceMode == 0 && bounceEnd != [[document valueForKeyPath:@"arrangerView.arrangerSizeX"] unsignedIntValue])
+	   || (bounceMode == 1 && bounceEnd != [[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue]))
 		[self setBounceMode:2];
 }
 

@@ -1098,11 +1098,11 @@
 	}
 	
 
-	NSMutableArray *gainBreakpointArray = [[NSMutableArray alloc] init];
+	BreakpointArray *gainBreakpointArray = [[BreakpointArray alloc] init];
 	
 	for(Breakpoint *bp in [originalRegion valueForKey:@"gainBreakpointArray"])
 	{
-		[gainBreakpointArray addObject:[bp copy]];
+		[gainBreakpointArray addBreakpoint:[bp copy]];
 	}
 	
 	[newRegion setValue:gainBreakpointArray forKey:@"gainBreakpointArray"];

@@ -137,6 +137,10 @@
 	{
 		[self updateEngineRoutingForChannel:object];
 	}
+	else if([keyPath isEqualToString:@"position.a"] || [keyPath isEqualToString:@"position.e"] || [keyPath isEqualToString:@"position.d"])
+	{
+		[self updateEnginePositionForChannel:object];
+	}
 	else
 	{
 		[self updateEngineForChannel:object];
@@ -199,6 +203,7 @@
 - (void)updateEngine
 {
 	NSLog(@"update engine....");
+    [[AudioEngine sharedAudioEngine] stopAudio];
 	
 	// remove all speaker channels in order to build a new speaker setup from scatch
 	[[AudioEngine sharedAudioEngine] removeAllSpeakerChannels];
@@ -218,11 +223,15 @@
 	[[AudioEngine sharedAudioEngine] updateParametersForChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
 }
 
+- (void)updateEnginePositionForChannel:(SpeakerChannel *)channel
+{
+	[[AudioEngine sharedAudioEngine] updatePositionForChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
+}
+
 - (void)updateEngineRoutingForChannel:(SpeakerChannel *)channel
 {
 	[[AudioEngine sharedAudioEngine] updateRoutingForChannel:channel atIndex:[speakerChannels indexOfObject:channel]];
 }
-
 
 
 #pragma mark -

@@ -1,5 +1,9 @@
 # ignore all directories and files in the build directory
+
+.DS_Store
 build/**/*
+#**/*/.DS_Store
+
 Audio Engine/documentation/**/*
 
 # more info about the .gitignore file:

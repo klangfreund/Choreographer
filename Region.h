@@ -38,6 +38,8 @@
 	float zoomFactorX, zoomFactorY;
 }
 
+@property (retain) BreakpointArray *gainBreakpointArray;
+
 - (void)commonAwake;
 
 // drawing

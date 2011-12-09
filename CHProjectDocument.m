@@ -29,6 +29,13 @@
 	self = [super initWithType:type error:error];
     if (self != nil)
 	{
+        if([[[NSDocumentController sharedDocumentController] documents] count])
+        {
+            NSLog(@"only one open file at once");
+            NSBeep();
+            return nil;
+        }
+
         NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
 
         projectSettings = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectSettings"
@@ -114,7 +121,7 @@
 {
 	NSLog(@"Project setup");
 	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
     NSError *fetchError = nil;
     NSArray *fetchResults;
 	
@@ -364,6 +371,7 @@
 		[projectSettings setValue:[NSNumber numberWithInt:val] forKey:@"projectSampleRate"];
 	
 	[projectSampleRateTextField setStringValue:[NSString stringWithFormat:@"%d Hz", [[projectSettings valueForKey:@"projectSampleRate"] longValue]]];
+    [[AudioEngine sharedAudioEngine] setSampleRate:val];
 }
 
 

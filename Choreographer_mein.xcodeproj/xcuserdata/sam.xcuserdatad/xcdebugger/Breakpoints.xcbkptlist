@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   type = "1"
+   version = "1.0">
+   <FileBreakpoints>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Audio Engine/Source/AudioRegionMixer.cpp"
+         timestampString = "342976439.011353"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "106"
+         endingLineNumber = "106"
+         landmarkName = "AudioRegionMixer::addRegion (const int&amp; regionID, const int&amp; startPosition, const int&amp; endPosition, const int&amp; startPositionOfAudioFileInTimeline, const String&amp; absolutePathToAudioFile, const double&amp; sampleRateOfTheAudioDevice)"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "Audio Engine/Source/AudioRegionMixer.cpp"
+         timestampString = "342976693.136363"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "155"
+         endingLineNumber = "155"
+         landmarkName = "AudioRegionMixer::modifyRegion (const int&amp; regionID, const int&amp; newStartPosition, const int&amp; newEndPosition, const int&amp; newStartPositionOfAudioFileInTimeline)"
+         landmarkType = "5">
+      </FileBreakpoint>
+   </FileBreakpoints>
+</Bucket>

@@ -173,8 +173,10 @@ static AudioEngine *sharedAudioEngine = nil;
 	String originator("Sam");
 	String originatorRef("Choreographer");
 	String codingHistory; 
-	int startSample = start * 44.1; //22*44100;
-	int numberOfSamplesToRead = (end - start) * 44.1;
+    int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	double fromMsToSamples = 0.001*sampleRate;
+	int startSample = start * fromMsToSamples;
+	int numberOfSamplesToRead = (end - start) * fromMsToSamples;
 	bool succ = ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
 													bitsPerSample, 
 													description,
@@ -260,6 +262,18 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
 }
 
+- (void)setSampleRate:(NSUInteger)sr
+{
+    ambisonicsAudioEngine->setSampleRate(sr);
+}
+
+- (void)setBufferSize:(NSUInteger)size
+{
+    ambisonicsAudioEngine->setBufferSize(size);
+}
+
+
+
 #pragma mark -
 #pragma mark scheduled playback
 // -----------------------------------------------------------  
@@ -270,7 +284,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	unsigned int index = regionIndex++;
 		
 	[audioRegion setValue:[NSNumber numberWithInt:index] forKey:@"playbackIndex"];
-    
+	
     int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 	double fromMsToSamples = 0.001*sampleRate;
 	
@@ -367,7 +381,7 @@ static AudioEngine *sharedAudioEngine = nil;
     const double spacialFactor = 10.0; // 1 unit in the GUI = 10 units in the audio engine.
 	
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
-	int fromMsToSamples = 0.001*sampleRate;
+	double fromMsToSamples = 0.001*sampleRate;
 	unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 	for(id bp in [audioRegion valueForKey:@"playbackBreakpointArray"])
 	{
@@ -468,16 +482,16 @@ static AudioEngine *sharedAudioEngine = nil;
 	// to rebuild the audio buffers
 	
 	ambisonicsAudioEngine->enableNewRouting();
+
+	if(volumeLevelMeasurementClientCount > 0)
+	{
+		[self enableVolumeLevelMeasurement:YES];		
+	}
 }
 
 
 - (void)updateParametersForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
 {
-	ambisonicsAudioEngine->setSpeakerPosition(index,
-											  channel.position.x,
-											  channel.position.y,
-											  channel.position.z);
-	
 	double gain = pow(10, 0.05 * channel.dbGain);
 	ambisonicsAudioEngine->setGain(index, gain);
 	ambisonicsAudioEngine->setSolo(index, channel.solo);
@@ -485,6 +499,14 @@ static AudioEngine *sharedAudioEngine = nil;
 	
 	//	NSLog(@"update channel %i x=%f y=%f z=%f out:%i", index, channel.position.x, channel.position.y, channel.position.z, channel.hardwareDeviceOutputChannel + 1);
 	//	NSLog(@" - gain=%f solo=%i mute=%i", gain, channel.solo, channel.mute);
+}
+
+- (void)updatePositionForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
+{
+    ambisonicsAudioEngine->setSpeakerPosition(index,
+    										  channel.position.x,
+    										  channel.position.y,
+    										  channel.position.z);
 }
 
 - (void)updateRoutingForChannel:(SpeakerChannel *)channel atIndex:(NSUInteger)index
@@ -502,18 +524,16 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	if(val && volumeLevelMeasurementClientCount == 0)
 	{
-		//NSLog(@"enable Volume Meter");
 		[self enableVolumeLevelMeasurement:YES];		
 	}
 	else if(!val && volumeLevelMeasurementClientCount == 1)
 	{
-		//NSLog(@"disable Volume Meter");
 		[self enableVolumeLevelMeasurement:NO];
 	}
 
-	
 	if(val)volumeLevelMeasurementClientCount++;
 	else volumeLevelMeasurementClientCount--;
+	
 }
 
 - (void)enableVolumeLevelMeasurement:(BOOL)val

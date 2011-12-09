@@ -17,7 +17,7 @@
 	if([event clickCount] > 1)
 	{
         // on double click reset value to 0
-        [self setIntValue:0];
+        [super setIntValue:0];
 		return;
 	}
 

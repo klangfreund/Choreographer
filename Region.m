@@ -13,7 +13,6 @@
 #import "BreakpointBezierPath.h"
 
 @implementation Region
-
 /*
  the superclass for all regions
  - audio region
@@ -23,6 +22,10 @@
  is a lightweight view class (not a subclass of NSView)
 
  */
+
+@synthesize gainBreakpointArray;
+
+
 - (void)awakeFromInsert
 {
 //	NSLog(@"Region %x awakeFromInsert", self);
@@ -416,14 +419,14 @@
 
 - (void)updateGainEnvelope
 {
-	NSLog(@"Region: updateGainEnvelope ---------------");
+//	NSLog(@"Region: updateGainEnvelope");
 	
 	NSMutableArray *tempArray = [gainBreakpointArray.breakpoints mutableCopy];
-	
-//	float lastValue = [(Breakpoint *)[gainBreakpointArray objectAtIndex:0] value];
+
+    //	float lastValue = [(Breakpoint *)[gainBreakpointArray objectAtIndex:0] value];
 	for(Breakpoint* bp in tempArray)
 	{
-		if(bp.time < contentOffset / zoomFactorX ||
+        if(bp.time < contentOffset / zoomFactorX ||
 		   bp.time > contentOffset / zoomFactorX + frame.size.width / zoomFactorX)
 		{
 			[gainBreakpointArray removeBreakpoint:bp];
@@ -619,7 +622,7 @@
 	data = [self valueForKey:@"gainEnvelopeData"];
 	if(!data)
 	{
-		gainBreakpointArray = [[NSMutableArray alloc] init];
+		gainBreakpointArray = [[BreakpointArray alloc] init];
 	}
 	else
 	{

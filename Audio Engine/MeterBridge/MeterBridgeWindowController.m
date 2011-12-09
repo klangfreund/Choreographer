@@ -53,6 +53,8 @@
 {
 	[super showWindow:sender];
 	[self run];
+
+	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:YES];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -148,8 +150,6 @@
 		[refreshGUITimer invalidate];
 	}
 	
-	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:YES];
-
 	refreshGUITimer = [NSTimer timerWithTimeInterval:0.05
 											  target:self
 											selector:@selector(tick)

@@ -39,6 +39,7 @@
 		1557251A0DD891D800FA16E2 /* ArrangerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 155725190DD891D800FA16E2 /* ArrangerView.m */; };
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
+		157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */ = {isa = PBXBuildFile; fileRef = 157B8B1514699101001B247B /* juce_amalgamated.mm */; };
 		1584502013EAE2240066CC94 /* BounceToDiskController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1584501F13EAE2240066CC94 /* BounceToDiskController.m */; };
 		1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */; };
 		1586A9A013B3B45100262B02 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */; };
@@ -110,7 +111,6 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
-		223F18471450032400AA6B76 /* juce_amalgamated.mm in Sources */ = {isa = PBXBuildFile; fileRef = 223F18451450032400AA6B76 /* juce_amalgamated.mm */; };
 		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
 		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
 		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
@@ -183,6 +183,7 @@
 		156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 2.xcdatamodel"; sourceTree = "<group>"; };
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
+		157B8B1514699101001B247B /* juce_amalgamated.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = juce_amalgamated.mm; sourceTree = "<group>"; };
 		1584501E13EAE2240066CC94 /* BounceToDiskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BounceToDiskController.h; sourceTree = "<group>"; };
 		1584501F13EAE2240066CC94 /* BounceToDiskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BounceToDiskController.m; sourceTree = "<group>"; };
 		1586A7BE13B3B45100262B02 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
@@ -309,7 +310,6 @@
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AudioRegion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		223F18441450032400AA6B76 /* juce_amalgamated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_amalgamated.h; sourceTree = "<group>"; };
-		223F18451450032400AA6B76 /* juce_amalgamated.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = juce_amalgamated.mm; sourceTree = "<group>"; };
 		22E2ACE4144C6186001D94A3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		22E2ACE5144C621C001D94A3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
@@ -518,6 +518,7 @@
 				223F18421450032400AA6B76 /* 110413 */,
 				1586A89A13B3B45100262B02 /* AppConfig.h */,
 				1586A89B13B3B45100262B02 /* JuceHeader.h */,
+				157B8B1514699101001B247B /* juce_amalgamated.mm */,
 			);
 			path = JuceLibraryCode;
 			sourceTree = "<group>";
@@ -777,7 +778,6 @@
 			isa = PBXGroup;
 			children = (
 				223F18441450032400AA6B76 /* juce_amalgamated.h */,
-				223F18451450032400AA6B76 /* juce_amalgamated.mm */,
 			);
 			path = 110413;
 			sourceTree = "<group>";
@@ -884,7 +884,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0410;
 				ORGANIZATIONNAME = "Zurich University of the Arts";
 			};
 			buildConfigurationList = 26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "Choreographer" */;
@@ -1018,7 +1018,7 @@
 				1543CA1513F94E07006C36D2 /* GainSlider.m in Sources */,
 				159EF2C313FC05F70027D151 /* TimelineEditorRulerView.m in Sources */,
 				1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */,
-				223F18471450032400AA6B76 /* juce_amalgamated.mm in Sources */,
+				157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1135,7 +1135,6 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1150,6 +1149,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Choreographer_Prefix.pch;
+				GCC_PREPROCESSOR_DEFINITIONS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
@@ -1158,7 +1158,6 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = Choreographer;
-				SDKROOT = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1172,7 +1171,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = "";
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -1185,7 +1184,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				SDKROOT = "";
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};

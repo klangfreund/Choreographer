@@ -297,7 +297,7 @@
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	NSArray *ctlArray = [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"];
 	
-	NSLog(@"last time %d %d",[[playbackBreakpointArray lastObject] time], [[ctlArray lastObject] time]);
+	NSLog(@"last time %u %u",[[playbackBreakpointArray lastObject] time], [[ctlArray lastObject] time]);
 
 	NSUInteger time = 0;
 	NSUInteger ctlTimeOffset = [[self valueForKey:@"startTime"] unsignedIntValue] - [[self valueForKeyPath:@"parentRegion.startTime"] unsignedIntValue];
@@ -343,7 +343,7 @@
 		
 		
 		// update time
-		NSLog(@"time %d bp1 %d bp2 %d ctlBp1 %d ctlBp2 %d", time, [bp1 time], [bp2 time], [ctlBp1 time], [ctlBp2 time]);
+		// NSLog(@"time %u bp1 %u bp2 %u ctlBp1 %u ctlBp2 %u", time, [bp1 time], [bp2 time], [ctlBp1 time], [ctlBp2 time]);
 		if(time >= [bp2 time] && [playbackBreakpointArray lastObject] == bp2 &&
 		   time >= [ctlBp2 time] - ctlTimeOffset && [ctlArray lastObject] == ctlBp2)
 		{

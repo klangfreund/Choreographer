@@ -30,7 +30,7 @@
 
 - (void)update
 {
-//	levelMeterView.peakLevel = [[AudioEngine sharedAudioEngine] volumePeakLevel:channelIndex]; 			
+//	levelMeterView.peakLevel = [[AudioEngine sharedAudioEngine] volumePeakLevel:channelIndex];
 	levelMeterView.level = [[AudioEngine sharedAudioEngine] volumeLevel:channelIndex];
 }
 
