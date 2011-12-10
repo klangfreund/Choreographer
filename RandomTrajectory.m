@@ -30,9 +30,13 @@
         [initialMaxSpeed setDescriptor:@"maxSpeed"];
         [initialMaxSpeed setTimeEditable:NO];
 
+        parameterBreakpointArray = [[BreakpointArray alloc] init];
+        [parameterBreakpointArray addBreakpoint:initialPosition];
+        [parameterBreakpointArray addBreakpoint:boundingVolumePoint1];
+        [parameterBreakpointArray addBreakpoint:boundingVolumePoint2];
+        [parameterBreakpointArray addBreakpoint:initialMinSpeed];
+        [parameterBreakpointArray addBreakpoint:initialMaxSpeed];
         
-        parameterBreakpointArray = [[NSMutableArray arrayWithObjects:initialPosition, boundingVolumePoint1, boundingVolumePoint2, initialMinSpeed, initialMaxSpeed, nil] retain];
-
 		stability = 1000;
 	}
 	return self;	

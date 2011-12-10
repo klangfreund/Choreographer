@@ -296,7 +296,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 	NSString *filePath = [audioRegion valueForKeyPath:@"audioItem.audioFile.filePathString"];
 
-	NSLog(@"addAudioRegion(%d) %@", index, filePath);
+	//NSLog(@"addAudioRegion(%d) %@", index, filePath);
 
 	
 	// add the audio region to the scheduler	
@@ -417,7 +417,6 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (NSArray *)availableAudioDeviceNames
 {
-	NSLog(@"--- available devices...");
 	const StringArray juceStringArray = ambisonicsAudioEngine->getAvailableAudioDeviceNames();
 	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
 	
@@ -452,7 +451,6 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (NSArray *)availableBufferSizes
 {
-	NSLog(@"--- available buffer sizes...");
 	Array<int> juceArray = ambisonicsAudioEngine->getAvailableBufferSizes();
 	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
 		

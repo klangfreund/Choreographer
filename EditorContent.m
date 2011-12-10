@@ -66,7 +66,7 @@ static EditorContent *sharedEditorContent = nil;
 
 - (void)synchronizeWithArranger:(id)arranger pool:(id)pool
 {
-	// clear the editors' selection
+    // clear the editors' selection
 	[editorSelection removeAllObjects];
 	editableTrajectory = nil;
 	

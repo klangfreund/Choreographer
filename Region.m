@@ -612,7 +612,7 @@
 
 - (void)unarchiveData
 {
-	NSLog(@"Region: unarchiveData");
+	//NSLog(@"Region: unarchiveData");
 
 	NSMutableData *data;
 	NSKeyedUnarchiver* unarchiver;

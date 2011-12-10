@@ -170,7 +170,7 @@
 
 - (void)drawRegionPositions:(NSRect)rect
 {
-    NSLog(@"draw region position.....");
+    // NSLog(@"draw region position.....");
 
 	RadarPoint		regionPositionHandle;
 	NSString		*string;												
