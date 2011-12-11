@@ -13,4 +13,6 @@
     
 }
 
+-(void)propagateValue:(id)value forBinding:(NSString*)binding;
+
 @end

@@ -447,6 +447,9 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	String audioDeviceName = [deviceName UTF8String];
 	ambisonicsAudioEngine->setAudioDevice(audioDeviceName);	
+    // TODO: present the error message returned by this method
+
+    [[NSUserDefaults standardUserDefaults] setValue:deviceName forKey:@"audioOutputDevice"];
 }
 
 - (NSArray *)availableBufferSizes

@@ -24,7 +24,19 @@
 	if(self)
 	{
 		outputDevices = [[[AudioEngine sharedAudioEngine] availableAudioDeviceNames] retain];
-		selectedOutputDeviceIndex = 0;
+        selectedOutputDeviceIndex = 0;
+       
+        // find preferred output device and set it
+        for (NSString *device in outputDevices)
+        {
+            if([device isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"audioOutputDevice"]])
+            {
+                selectedOutputDeviceIndex = [outputDevices indexOfObject:device];
+                break;
+            }
+        }
+        [self setSelectedOutputDeviceIndex:selectedOutputDeviceIndex];
+
 		
 		speakerSetups = [[SpeakerSetups alloc] init];
 		[speakerSetups unarchiveData];
@@ -92,7 +104,8 @@
 
 - (void)setSelectedOutputDeviceIndex:(NSUInteger)index
 {
-	if(index != selectedOutputDeviceIndex)
+	if(/*index != selectedOutputDeviceIndex && */
+       index < [outputDevices count])
 	{
 		selectedOutputDeviceIndex = index;
 		[[AudioEngine sharedAudioEngine] setHardwareOutputDevice:[outputDevices objectAtIndex:index]];
