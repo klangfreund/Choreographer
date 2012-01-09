@@ -272,6 +272,7 @@
 		15B3D2AE11661EBD009CB620 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		15B3D3F211662731009CB620 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		15C29D930ECB56F50071DDAA /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/TrajectoryInspector.xib; sourceTree = "<group>"; };
+		15C3DA1C14B7562900029FCC /* ProjectDocument 3.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 3.xcdatamodel"; sourceTree = "<group>"; };
 		15C6D25C11C7E304001ABA00 /* Trajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trajectory.h; sourceTree = "<group>"; };
 		15C6D25D11C7E304001ABA00 /* Trajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trajectory.m; sourceTree = "<group>"; };
 		15C6D76111C83BD0001ABA00 /* RotationTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationTrajectory.h; sourceTree = "<group>"; };
@@ -1233,9 +1234,10 @@
 		1517F14B115E6864001E7BCD /* ProjectDocument.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				15C3DA1C14B7562900029FCC /* ProjectDocument 3.xcdatamodel */,
 				156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */,
 			);
-			currentVersion = 156601621384132E001DA329 /* ProjectDocument 2.xcdatamodel */;
+			currentVersion = 15C3DA1C14B7562900029FCC /* ProjectDocument 3.xcdatamodel */;
 			path = ProjectDocument.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

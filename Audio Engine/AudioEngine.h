@@ -28,8 +28,14 @@
     AudioSettingsWindowController *audioSettingsWindowController;
     
 	IBOutlet NSMenu *menu;
+    IBOutlet NSPanel *bounceProgressPanel;
+    IBOutlet NSProgressIndicator *bounceProgressIndicator;
+    IBOutlet NSTextField *bounceElapsedTimeTextField;
 
 	BOOL isPlaying;
+    
+    NSURL *bounceURL;
+    unsigned long bounceStart, bounceDuration;
 
 	NSUInteger regionIndex;
 	NSUInteger volumeLevelMeasurementClientCount;
@@ -60,14 +66,14 @@
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end;
 - (void)unsetLoop;
 
-- (void)bounceToDisk:(NSURL *)URL start:(unsigned long)start end:(unsigned long)end;
+- (void)bounceToDisk:(NSURL *)URL start:(NSUInteger)start end:(NSUInteger)end;
 
 
 // Getter
 
 - (BOOL)isPlaying;
 - (unsigned long)playbackLocation;
-- (unsigned int)sampleRate;
+- (NSUInteger)sampleRate;
 - (unsigned short)numberOfSpeakerChannels;
 - (unsigned short)numberOfHardwareDeviceOutputChannels;
 - (double)cpuUsage;

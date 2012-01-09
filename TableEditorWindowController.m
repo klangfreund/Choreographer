@@ -118,7 +118,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 	[editorSelection removeAllObjects];
 
-	int i = [selectedIndices firstIndex];
+	NSInteger i = [selectedIndices firstIndex];
 	
 //	if(i == 0) return;
 //	   !editableTrajectory ||

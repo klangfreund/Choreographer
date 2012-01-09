@@ -26,9 +26,9 @@
 
 - (void)bounceToDisk:(id)doc
 {
-	[[AudioEngine sharedAudioEngine] stopAudio];
-	
 	document = doc;
+
+	[[AudioEngine sharedAudioEngine] stopAudio];
 
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
 	[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"wav",nil]];
@@ -41,7 +41,7 @@
 	[savePanel setAccessoryView:bouncePanelAccessoryView];
 	
 	[savePanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
-	 {
+    {
 		 if (result == NSOKButton)
 		 {
 			 [savePanel orderOut:self];

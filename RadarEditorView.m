@@ -395,7 +395,7 @@
 			}
 			else
 			{
-				float array[2];
+				CGFloat array[2];
 				array[0] = 1.0; // segment painted with stroke color
 				array[1] = 2.0; // segment not painted with a color
 				[rotationPath setLineDash: array count: 2 phase: 0.0];

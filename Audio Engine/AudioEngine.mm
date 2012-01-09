@@ -173,18 +173,52 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->disableArrangerLoop();
 }
 
-- (void)bounceToDisk:(NSURL *)URL start:(unsigned long)start end:(unsigned long)end
+#pragma mark -
+#pragma mark bounce to disk
+// -----------------------------------------------------------
+
+- (void)bounceToDisk:(NSURL *)URL start:(NSUInteger)start end:(NSUInteger)end
 {
-	String absolutePathToAudioFile = [[URL path] cStringUsingEncoding:NSASCIIStringEncoding];
+    bounceURL = URL;
+    bounceStart = start;
+    bounceDuration = end - start;
+
+    [NSThread detachNewThreadSelector:@selector(bounceToDiskThread)
+							 toTarget:self
+						   withObject:nil];
+    
+
+    NSModalSession session = [NSApp beginModalSessionForWindow:bounceProgressPanel];
+    [bounceProgressPanel center];
+    [bounceProgressIndicator setIndeterminate:NO];
+    
+    for (;;)
+    {
+        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+            break;
+        [bounceProgressIndicator setDoubleValue:((double)[self playbackLocation] - bounceStart) / bounceDuration];
+        [bounceElapsedTimeTextField setStringValue: [NSString stringWithFormat:@"%ld ms", [self playbackLocation]]];
+    }
+    [NSApp endModalSession:session];
+	[bounceProgressPanel orderOut:nil];
+}
+
+- (void)bounceToDiskThread
+{
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+    [self unsetLoop];
+    
+    String absolutePathToAudioFile = [[bounceURL path] cStringUsingEncoding:NSASCIIStringEncoding];
 	int bitsPerSample = 16;
 	String description("Test bounce");
 	String originator("Sam");
 	String originatorRef("Choreographer");
 	String codingHistory; 
     int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
-	double fromMsToSamples = 0.001*sampleRate;
-	int startSample = start * fromMsToSamples;
-	int numberOfSamplesToRead = (end - start) * fromMsToSamples;
+	double fromMsToSamples = 0.001 * sampleRate;
+	int startSample = bounceStart * fromMsToSamples;
+	int numberOfSamplesToRead = bounceDuration * fromMsToSamples;
 	bool succ = ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
 													bitsPerSample, 
 													description,
@@ -193,9 +227,19 @@ static AudioEngine *sharedAudioEngine = nil;
 													codingHistory, 
 													startSample, 
 													numberOfSamplesToRead);
-	
+
+         
+    [NSApp stopModal];
 	NSLog(@"successful %d", succ);
+
+    [pool release];
 }
+
+- (void)bounceToDiskCancel;
+{
+    [NSApp stopModal];
+}
+
 
 
 #pragma mark -
@@ -210,14 +254,14 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (unsigned long)playbackLocation
 {
-	return ambisonicsAudioEngine->getCurrentPosition()     // in samples
-	       / ambisonicsAudioEngine->getCurrentSampleRate() // now in seconds
-		   * 1000;									       // and now in ms.
+	return ambisonicsAudioEngine->getCurrentPosition()     // in sample
+           / ambisonicsAudioEngine->getCurrentSampleRate() // now in seconds
+           * 1000;									       // and now in ms.
 }
 
-- (unsigned int)sampleRate
+- (NSUInteger)sampleRate
 {
-	return (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	return (NSUInteger)ambisonicsAudioEngine->getCurrentSampleRate();
 }
 
 - (unsigned short)numberOfSpeakerChannels
