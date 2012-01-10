@@ -24,7 +24,8 @@ public:
     //==============================================================================
     /** Constructor.
 	 */
-    AudioSourceDopplerEffect (AudioSourceGainEnvelope& audioSourceGainEnvelope_);
+    AudioSourceDopplerEffect (AudioSourceGainEnvelope& audioSourceGainEnvelope_,
+                              double sampleRate_);
 	
     /** Destructor.
      */
@@ -70,9 +71,11 @@ private:
 	 */
 	inline void prepareForNewPosition (int newPosition);
     
+    double sampleRate;
+    double samplesPerBlockExpected;
+    
     /** Holds the SpacialEnvelopePoints which define the
      position / movement of the audio source in space over time.
-     
      It is assumed by the code that the SpacialEnvelopePoints are
      ordered in this array according to their position in time.
      */
@@ -84,8 +87,35 @@ private:
 	Array<SpacialEnvelopePoint> newSpacialEnvelope;
     SpacialEnvelopePointComparator spacialEnvelopePointComparator;
     bool newSpacialEnvelopeSet;
+    bool constantSpacialPosition;
+    SpacialEnvelopePoint previousSpacialPoint;
+    SpacialEnvelopePoint nextSpacialPoint;
+    int nextSpacialPointIndex;
     
+    /** 
+     */
+    double audioBlockStretchFactor;
+    int maxSamplesPerBlockForSource;
     AudioSourceGainEnvelope& audioSourceGainEnvelope;
+    
+    int nextPlayPosition;
+    int audioBlockEndPosition;
+    
+    /**
+     The delay of the current sample, measured in samples.
+     */
+    double delayOnCurrentSample;
+    
+    /**
+     The delay difference between two samples.
+     */
+    double delayDelta;
+    
+    AudioSampleBuffer sourceBuffer;
+    /** This stores the samples from the audioSourceGainEnvelope needed
+     for the interpolation.
+     */
+    AudioSourceChannelInfo sourceInfo;  // used in getNextAudioBlock(..).
 		
 	JUCE_LEAK_DETECTOR (AudioSourceDopplerEffect);
 };

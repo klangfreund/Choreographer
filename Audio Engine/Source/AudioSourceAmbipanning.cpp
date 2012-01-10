@@ -103,7 +103,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  newSpacialEnvelopeSet (false),
 	  numberOfSpeakersChanged (false),
       audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice),
-      audioSourceDopplerEffect(audioSourceGainEnvelope),
+      audioSourceDopplerEffect(audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
       audioSourceGainEnvOrDopplerFX (audioSourceGainEnvelope)
 {
 	DEB("AudioSourceAmbipanning: constructor called.");
@@ -179,14 +179,15 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	{
 		if (newSpacialEnvelopeSet)
 		{
-			Array<SpacialEnvelopePoint> oldSpacialEnvelope = spacialEnvelope;
-			spacialEnvelope = newSpacialEnvelope;
-			previousChannelFactor = channelFactor; // This is used in the info.buffer->applyGainRamp(..)
-			// a couple of lines below to generate a smooth transition from the current spacial value to 
-			// the spacial value of the new envelope.
+			previousChannelFactor = channelFactor; // This is used in the 
+                // info.buffer->applyGainRamp(..) a couple of lines below to 
+                // generate a smooth transition from the current spacial value 
+                // to the spacial value of the new envelope.
+            spacialEnvelope = newSpacialEnvelope;
 		}
 		
-		if (spacialEnvelope.size() == 1) // by the way: size() == 0 can't be, this was
+		if (spacialEnvelope.size() == 1) 
+            // by the way: size() == 0 can't be, this was
 			// checked in setGainEnvelope(..)
 		{
 			constantSpacialPosition = true;
@@ -219,11 +220,13 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 		else
 		{
 			constantSpacialPosition = false;
-			prepareForNewPosition(audioBlockEndPosition); // The variables are set up for the
-			// next call of getNextAudioBlock(..)
+			prepareForNewPosition(audioBlockEndPosition);
+                // The variables are set up for the
+                // next call of getNextAudioBlock(..)
 		}
 		
-		// finally, the start and end values are prepared and the fading can be calculated.
+		// finally, the start and end values are prepared and the fading 
+        // can be calculated.
 		for (int channel = 0; channel < info.buffer->getNumChannels(); ++channel)
 		{
 			info.buffer->applyGainRamp(channel, 
@@ -373,7 +376,7 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 		prepareForNewPosition(newPosition);	
 	}
 	
-	nextPlayPosition = newPosition;		
+	nextPlayPosition = newPosition;
 	audioSourceGainEnvOrDopplerFX.setNextReadPosition (newPosition);
 }
 
@@ -434,6 +437,10 @@ void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint
 		newSpacialEnvelopeSet = true; // when set, the spacial value 
 		// is faded from the old spacial envelope to the new one, in 
 		// the interval of one audio block in the getNextAudioBlock(..).
+        
+        // Let the doppler effect audio source also know about the new
+        // spacial envelope.
+        audioSourceDopplerEffect.setSpacialEnvelope(newSpacialEnvelope);
 	}
 	else
 	{
@@ -577,7 +584,8 @@ inline void AudioSourceAmbipanning::calculationsForAEP (double& x, double& y, do
 {
 	r = sqrt(x*x + y*y + z*z); // radius, i.e. the distance of (x,y,z) to (0,0,0)
 	
-	// normalize x, y and z, such that they describe the projection to the unit sphere
+	// Normalize x, y and z, such that they describe the projection to 
+    // the unit sphere.
 	if (r > 0.0)
 	{
 		double oneOverR = 1.0 / r;

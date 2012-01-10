@@ -255,9 +255,15 @@ private:
 	/**
 	 Calculates the distanceGain and the modifiedOrder,
 	 according to the chosen AudioSourceAmbipanning::distanceMode.
+     r is also calculated and x, y, and z are normalised, such that they 
+     describe the projection to the unit sphere.
 	 */
-	inline void calculationsForAEP (double& x, double& y, double& z, double& r,
-									double& distanceGain, double& modifiedOrder);
+	inline void calculationsForAEP (double& x, 
+                                    double& y, 
+                                    double& z, 
+                                    double& r,
+									double& distanceGain, 
+                                    double& modifiedOrder);
 	
 	static int order;
 	static Array<SpeakerPosition> positionOfSpeaker; // you have to typecast elements to SpeakerPosition*
