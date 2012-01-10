@@ -16,7 +16,6 @@
 		151739C60EB3A79B00EABE92 /* TableEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C20EB3A79B00EABE92 /* TableEditor.xib */; };
 		151739C70EB3A79B00EABE92 /* RadarEditor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 151739C40EB3A79B00EABE92 /* RadarEditor.xib */; };
 		151739D80EB3AE1C00EABE92 /* EditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 151739D70EB3AE1C00EABE92 /* EditorWindowController.m */; };
-		1517F14C115E6864001E7BCD /* ProjectDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1517F14B115E6864001E7BCD /* ProjectDocument.xcdatamodeld */; };
 		1517F487115FAB50001E7BCD /* PlaybackController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1517F486115FAB50001E7BCD /* PlaybackController.m */; };
 		151B332A1163BB75000192F9 /* SettingsMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 151B33291163BB75000192F9 /* SettingsMenu.m */; };
 		15201595111B074A009DBFCA /* BreakpointBezierPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 15201594111B074A009DBFCA /* BreakpointBezierPath.m */; };
@@ -42,6 +41,7 @@
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
 		157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */ = {isa = PBXBuildFile; fileRef = 157B8B1514699101001B247B /* juce_amalgamated.mm */; };
+		1581A1F814BCA04400071656 /* ProjectSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581A1F714BCA04400071656 /* ProjectSettings.m */; };
 		1584502013EAE2240066CC94 /* BounceToDiskController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1584501F13EAE2240066CC94 /* BounceToDiskController.m */; };
 		1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */; };
 		1586A9A013B3B45100262B02 /* AudioEngineMainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1586A89613B3B45100262B02 /* AudioEngineMainMenu.xib */; };
@@ -113,6 +113,7 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
+		15FA0A4D14BC8EB0004DD1E8 /* ProjectDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1517F14B115E6864001E7BCD /* ProjectDocument.xcdatamodeld */; };
 		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
 		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
 		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
@@ -189,6 +190,8 @@
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
 		157B8B1514699101001B247B /* juce_amalgamated.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = juce_amalgamated.mm; sourceTree = "<group>"; };
+		1581A1F614BCA04400071656 /* ProjectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettings.h; sourceTree = "<group>"; };
+		1581A1F714BCA04400071656 /* ProjectSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettings.m; sourceTree = "<group>"; };
 		1584501E13EAE2240066CC94 /* BounceToDiskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BounceToDiskController.h; sourceTree = "<group>"; };
 		1584501F13EAE2240066CC94 /* BounceToDiskController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BounceToDiskController.m; sourceTree = "<group>"; };
 		1586A7BE13B3B45100262B02 /* AudioEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioEngine.h; sourceTree = "<group>"; };
@@ -482,6 +485,8 @@
 				1517F486115FAB50001E7BCD /* PlaybackController.m */,
 				1584501E13EAE2240066CC94 /* BounceToDiskController.h */,
 				1584501F13EAE2240066CC94 /* BounceToDiskController.m */,
+				1581A1F614BCA04400071656 /* ProjectSettings.h */,
+				1581A1F714BCA04400071656 /* ProjectSettings.m */,
 			);
 			name = ProjectDocument;
 			sourceTree = "<group>";
@@ -966,7 +971,6 @@
 			files = (
 				8D15AC310486D014006FF6A4 /* CHProjectDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				1517F14C115E6864001E7BCD /* ProjectDocument.xcdatamodeld in Sources */,
 				155724F40DD8909800FA16E2 /* CounterView.m in Sources */,
 				155725110DD8919A00FA16E2 /* ContainerView.m in Sources */,
 				155725120DD8919A00FA16E2 /* RulerView.m in Sources */,
@@ -1038,6 +1042,8 @@
 				1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */,
 				157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */,
 				154C6B7814926A6900D64FD6 /* AudioSettingsWindowController.m in Sources */,
+				15FA0A4D14BC8EB0004DD1E8 /* ProjectDocument.xcdatamodeld in Sources */,
+				1581A1F814BCA04400071656 /* ProjectSettings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

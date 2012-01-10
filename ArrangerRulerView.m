@@ -55,10 +55,9 @@
 
 	
 	CHProjectDocument *document = [[[self window] windowController] document];
-	NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
 
-	float start = [[projectSettings valueForKey:@"loopRegionStart"] integerValue] * zoomFactor;
-	float end = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue] * zoomFactor;
+	float start = [[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue] * zoomFactor;
+	float end = [[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue] * zoomFactor;
 	
 	float locator, x, y;
 	NSBezierPath *locatorPath;
@@ -155,7 +154,6 @@
 	if([event clickCount] > 1)
 	{
 		CHProjectDocument *document = [[[self window] windowController] document];
-		NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
 
 		if(localPoint.y > HEIGHT_1 + HEIGHT_2) // loop region area
 		{
@@ -186,8 +184,8 @@
 						}
 					}
 
-					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionStart] forKey:@"loopRegionStart"];
-					[projectSettings setValue:[NSNumber numberWithUnsignedInt:selectionEnd] forKey:@"loopRegionEnd"];
+					[document setValue:[NSNumber numberWithUnsignedInt:selectionStart] forKeyPath:@"projectSettings.loopRegionStart"];
+					[document setValue:[NSNumber numberWithUnsignedInt:selectionEnd] forKeyPath:@"projectSettings.loopRegionEnd"];
 
 					[playbackController setLoop];
 
@@ -224,20 +222,19 @@
 - (void)mouseDownInLoopRegionArea:(NSPoint)localPoint
 {
 	CHProjectDocument *document = [[[self window] windowController] document];
-	NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
 
 	if(document.keyboardModifierKeys == modifierCommand)
 	{
 		// command click, set new selection boundaries
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionStart"];
-		[projectSettings setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKey:@"loopRegionEnd"];
+		[document setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettings.loopRegionStart"];
+		[document setValue:[NSNumber numberWithUnsignedInt:localPoint.x / zoomFactor] forKeyPath:@"projectSettings.loopRegionEnd"];
 		mouseDraggingAction = rulerDragLoopRegionEnd;
 	}
 	else
 	{
 		// drag start or end handle
-		float tempSelectionStart = [[projectSettings valueForKey:@"loopRegionStart"] integerValue] * zoomFactor;
-		float tempSelectionEnd = [[projectSettings valueForKey:@"loopRegionEnd"] integerValue] * zoomFactor;
+		float tempSelectionStart = [[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue] * zoomFactor;
+		float tempSelectionEnd = [[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue] * zoomFactor;
 
 		if(localPoint.x > tempSelectionStart - 8 && localPoint.x < tempSelectionStart)	
 			mouseDraggingAction = rulerDragLoopRegionStart;
@@ -277,7 +274,7 @@
 - (void)mouseDragged:(NSEvent *)event
 {
 	CHProjectDocument *document = [[[self window] windowController] document];
-	NSManagedObject *projectSettings = [document valueForKey:@"projectSettings"];
+	NSDictionary *projectSettings = [document valueForKey:@"projectSettings"];
 
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
     localPoint.x = localPoint.x < ARRANGER_OFFSET ? ARRANGER_OFFSET : localPoint.x;

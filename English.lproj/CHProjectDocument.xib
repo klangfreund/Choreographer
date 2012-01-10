@@ -962,7 +962,7 @@
 				<string key="NSClassName">ToolbarController</string>
 			</object>
 			<object class="NSCustomView" id="895964669">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -971,14 +971,17 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{0, 10}, {160, 50}}</string>
 						<reference key="NSSuperview" ref="895964669"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSClassName">MainCounterView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{160, 60}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSNextKeyView" ref="150810572"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="542135914">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -987,14 +990,17 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{0, 10}, {290, 50}}</string>
 						<reference key="NSSuperview" ref="542135914"/>
+						<reference key="NSNextKeyView"/>
 						<string key="NSClassName">LoopCounterView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{290, 60}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSNextKeyView" ref="532330049"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="435967860">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1003,6 +1009,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{54, 9}, {38, 26}}</string>
 						<reference key="NSSuperview" ref="435967860"/>
+						<reference key="NSNextKeyView" ref="43106197"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="1027497419">
 							<int key="NSCellFlags">67239424</int>
@@ -1023,6 +1030,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{91, 9}, {35, 26}}</string>
 						<reference key="NSSuperview" ref="435967860"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="346342314">
 							<int key="NSCellFlags">-2080244224</int>
@@ -1043,6 +1051,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{20, 9}, {35, 26}}</string>
 						<reference key="NSSuperview" ref="435967860"/>
+						<reference key="NSNextKeyView" ref="135020595"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="1014342049">
 							<int key="NSCellFlags">67239424</int>
@@ -1060,10 +1069,12 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{146, 43}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSNextKeyView" ref="912341771"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSCustomView" id="679714601">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1072,6 +1083,7 @@
 						<int key="NSvFlags">268</int>
 						<string key="NSFrame">{{20, 9}, {38, 26}}</string>
 						<reference key="NSSuperview" ref="679714601"/>
+						<reference key="NSNextKeyView"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSButtonCell" key="NSCell" id="987540478">
 							<int key="NSCellFlags">67239424</int>
@@ -1089,6 +1101,8 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{80, 45}</string>
+				<reference key="NSSuperview"/>
+				<reference key="NSNextKeyView" ref="288002947"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSSlider" id="386912358">
@@ -2699,6 +2713,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						<int key="objectID">951</int>
 						<reference key="object" ref="1000710356"/>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Shared User Defaults Controller</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">970</int>

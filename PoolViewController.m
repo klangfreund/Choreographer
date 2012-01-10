@@ -240,10 +240,7 @@
 - (IBAction)poolTab:(id)sender
 {
 	// update preferences
-//	[[[document managedObjectContext] undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithInt:[sender selectedSegment]] forKey:@"poolSelectedTab"];
-//	[[document managedObjectContext] processPendingChanges];
-//	[[[document managedObjectContext] undoManager] enableUndoRegistration];
 	
 	[tabView selectTabViewItemAtIndex:[sender selectedSegment]];
 }

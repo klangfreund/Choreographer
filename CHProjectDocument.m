@@ -34,15 +34,14 @@
             NSLog(@"only one open file at once");
             NSBeep();
             return nil;
-        }
-
-        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-
-        projectSettings = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectSettings"
-											   inManagedObjectContext:managedObjectContext];
+        }        
     }
 
 	NSLog(@"CHProjectDocument: initWithType %@", self);
+
+	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    projectData = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectData" inManagedObjectContext:managedObjectContext];
+    
 
     return self;	
 }
@@ -120,28 +119,8 @@
 - (void)setup
 {
 	NSLog(@"Project setup");
-	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
-    NSError *fetchError = nil;
-    NSArray *fetchResults;
-	
-    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ProjectSettings"
-														 inManagedObjectContext:managedObjectContext];
-	
-    [fetchRequest setEntity:entityDescription];
- 	[fetchRequest setReturnsObjectsAsFaults:NO];
-	fetchResults = [managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
-	
-    if ((fetchResults != nil) && ([fetchResults count] == 1) && (fetchError == nil))
-	{
-        projectSettings = [[fetchResults objectAtIndex:0] retain];
-    }
-	
-    if (fetchError != nil)
-	{
-        [self presentError:fetchError];
-    }
-	
+
+	[self unarchiveProjectSettings];
 	[self setProjectSampleRate:[[projectSettings valueForKey:@"projectSampleRate"] intValue]];
 }
 
@@ -170,17 +149,11 @@
 
 - (void)canCloseDocumentWithDelegate:(id)delegate shouldCloseSelector:(SEL)shouldCloseSelector contextInfo:(void *)contextInfo
 {
-//	NSLog(@"CHProjectDocument: can close ");
+	NSLog(@"CHProjectDocument: can close ");
 
-	// store window scroll position	
-	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.x] forKey:@"arrangerScrollOriginX"];
-	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.y] forKey:@"arrangerScrollOriginY"];
-
-	// stop playback and store playhead position
-	[[AudioEngine sharedAudioEngine] stopAudio];
-//	[projectSettings setValue:[NSNumber numberWithUnsignedLong:[playbackController locator]] forKey:@"arrangerPlayheadPosition"];
-	[projectSettings setValue:[NSNumber numberWithUnsignedLong:0] forKey:@"arrangerPlayheadPosition"];
-	
+	// stop playback
+    [playbackController stopPlayback];
+    
 	// empty the engine's schedule
 	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
 
@@ -205,10 +178,17 @@
 }
 
 
-//- (void)saveDocument:(id)sender
-//{
-//	[super saveDocument:sender];
-//}
+- (void)saveDocument:(id)sender
+{
+	// store window scroll position	
+	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.x] forKey:@"arrangerScrollOriginX"];
+	[projectSettings setValue:[NSNumber numberWithFloat:[[arrangerView superview] bounds].origin.y] forKey:@"arrangerScrollOriginY"];
+    
+    // store the project settings
+    [self archiveProjectSettings];
+	
+	[super saveDocument:sender];
+}
 
 
 //- (void)revertDocumentToSaved:(id)sender
@@ -238,6 +218,78 @@
 }
 
 #pragma mark -
+#pragma mark project settings
+// -----------------------------------------------------------
+
+- (void)archiveProjectSettings
+{
+//    NSLog(@"archiveProjectSettings");
+
+    NSMutableData *data;
+	NSKeyedArchiver *archiver;
+	
+	data = [NSMutableData data];
+	archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+	[archiver encodeObject:projectSettings forKey:@"data"];
+	[archiver finishEncoding];
+	
+	[projectData setValue:data forKey:@"settings"];
+	[archiver release];
+
+}
+
+- (void)unarchiveProjectSettings
+{
+//    NSLog(@"unarchiveProjectSettings");
+
+	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSError *fetchError = nil;
+    NSArray *fetchResults;
+	
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"ProjectData" inManagedObjectContext:managedObjectContext];
+
+    [fetchRequest setEntity:entityDescription];
+ 	[fetchRequest setReturnsObjectsAsFaults:NO];
+	fetchResults = [managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
+	
+    if ((fetchResults != nil) && ([fetchResults count] == 1) && (fetchError == nil))
+	{
+        projectData = [[fetchResults objectAtIndex:0] retain];
+    }
+	else
+    {
+        if (fetchError != nil)
+        {
+            [self presentError:fetchError];
+        }
+        
+        projectSettings = [[ProjectSettings alloc] initWithDefaults];
+        return;
+    }
+
+	NSMutableData *data;
+	NSKeyedUnarchiver* unarchiver;
+	
+	data = [projectData valueForKey:@"settings"];
+	if(!data)
+	{
+        projectSettings = [[ProjectSettings alloc] initWithDefaults];
+        return;
+    }
+	else
+	{
+		unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
+		
+        [projectSettings release];
+        projectSettings = [[unarchiver decodeObjectForKey:@"data"] retain];
+		[unarchiver finishDecoding];
+		[unarchiver release];
+	}
+}	
+
+
+#pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
 
@@ -251,10 +303,7 @@
 	float zoomFactorX = [[projectSettings valueForKey:@"arrangerZoomFactorX"] floatValue];
 	zoomFactorX *= 1.2;
 
-	[[[self managedObjectContext] undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
-	[[self managedObjectContext] processPendingChanges];
-	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
@@ -276,10 +325,7 @@
 	zoomFactorY *= 1.2;
 	zoomFactorY = zoomFactorY > 10 ? 10 : zoomFactorY;
 
-	[[[self managedObjectContext] undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
-	[[self managedObjectContext] processPendingChanges];
-	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
@@ -290,10 +336,7 @@
 	zoomFactorY /= 1.2;
 	zoomFactorY = zoomFactorY < 0.1 ? 0.1 : zoomFactorY;
 
-	[[[self managedObjectContext] undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
-	[[self managedObjectContext] processPendingChanges];
-	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
@@ -319,10 +362,7 @@
 {
 	BOOL poolDisplayed = ![[projectSettings valueForKey:@"poolDisplayed"] boolValue];
 	
-	[[[self managedObjectContext] undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithBool:poolDisplayed] forKey:@"poolDisplayed"];
-	[[self managedObjectContext] processPendingChanges];
-	[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	
 	if(poolDisplayed)
 	{
@@ -488,10 +528,7 @@
 	{
 		float width = [splitView frame].size.width - proposedPosition;
 
-		[[[self managedObjectContext] undoManager] disableUndoRegistration];
 		[projectSettings setValue:[NSNumber numberWithFloat:width] forKey:@"poolViewWidth"];
-		[[self managedObjectContext] processPendingChanges];
-		[[[self managedObjectContext] undoManager] enableUndoRegistration];
 	}
 	return proposedPosition;
 }

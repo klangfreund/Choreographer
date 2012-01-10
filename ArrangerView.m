@@ -57,10 +57,13 @@
 
 	
 	// register for notifications
-
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(update:)
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(update:)
+												 name:@"projectSettingsDidChange" object:nil];		
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(setZoom:)
@@ -132,7 +135,7 @@
 	
 	
 	// init playhead position
-	[playbackController setLocator:[[projectSettings valueForKey:@"arrangerPlayheadPosition"] unsignedLongValue]];
+	[playbackController setLocator:0];
 	
 
 	[self setNeedsDisplay:YES];
@@ -702,13 +705,14 @@
 		[self addRegionToSelection:newRegion];
 	}
 
-	[placeholderRegions removeAllObjects];
-
 	// make first responder
 	[[self window] makeFirstResponder:self];
 
-	// undo
-	[[context undoManager] setActionName:@"add audio region to arranger"];
+    // undo
+    if([placeholderRegions count] == 1)
+        [[context undoManager] setActionName:@"add audio region to arranger"];
+    else if([placeholderRegions count] > 1)
+        [[context undoManager] setActionName:@"add audio regions to arranger"];
 	
 	// notification
 	[document selectionInArrangerDidChange];
@@ -716,7 +720,8 @@
 	// clear memory of dragged items
 	[document setValue:nil forKey:@"draggedAudioRegions"];
 	[document setValue:nil forKey:@"draggedTrajectories"];
-
+	[placeholderRegions removeAllObjects];
+    
 	
 	[self recalculateArrangerProperties];
 	[self setNeedsDisplay:YES];
@@ -1744,10 +1749,7 @@
 
 	zoomFactorX *= ([event magnification] + 1.0);
 	
-	[[context undoManager] disableUndoRegistration];
 	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
-	[context processPendingChanges];
-	[[context undoManager] enableUndoRegistration];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:document];	
 }

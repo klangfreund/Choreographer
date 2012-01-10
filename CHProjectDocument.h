@@ -9,12 +9,14 @@
 #import <Cocoa/Cocoa.h>
 #import "CHGlobals.h"
 #import "PoolViewController.h"
+#import "ProjectSettings.h"
 
 @class ArrangerView;
 
 @interface CHProjectDocument : NSPersistentDocument
 {
-    NSManagedObject *projectSettings;
+    NSManagedObject *projectData;
+    ProjectSettings *projectSettings;
 
 	IBOutlet id toolbarController;
 	IBOutlet NSSplitView *splitView;
@@ -36,7 +38,8 @@
 @property Modifiers keyboardModifierKeys;
 
 - (void)setup;
-
+- (void)archiveProjectSettings;
+- (void)unarchiveProjectSettings;
 
 // actions (menu)
 - (IBAction)bounceToDisk:(id)sender;
