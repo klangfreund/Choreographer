@@ -58,7 +58,9 @@ public:
 
 	/**
 	 Sets a new spacial envelope which determines the location in space of the
-     sound source in relation to the time.
+     sound source in relation to the time. It also contains the distance delay
+     for each point of the envelope, which is used here.
+     This class makes a copy of the newSpacialEnvelope.
 	 */
 	void setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope);
 	
@@ -94,8 +96,6 @@ private:
     
     /** 
      */
-    double audioBlockStretchFactor;
-    int maxSamplesPerBlockForSource;
     AudioSourceGainEnvelope& audioSourceGainEnvelope;
     
     int nextPlayPosition;

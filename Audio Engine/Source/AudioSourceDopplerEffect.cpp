@@ -54,16 +54,18 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
     // DEB("AudioSourceDopplerEffect::getNextAudioBlock: nextPlayPosition = " + String(nextPlayPosition))
     
     int audioBlockStartPosition = nextPlayPosition;
+    // To be precise, audioBlockEndPosition is actually the
+    // audioBlockStartPosition of the next audio block.
     audioBlockEndPosition = nextPlayPosition + info.numSamples;
     
     if (newSpacialEnvelopeSet)
     {
-        spacialEnvelope = newSpacialEnvelope;
-        
         // Apply a ramp from the first sample of this audio block
         // with the delay time from the old spacial envelope
         // to the last sample of this audio block with the delay time
         // from the new spacial envelope.
+        
+        spacialEnvelope = newSpacialEnvelope;
         
         // For the first sample (from the old spacial envelope).
         double delayOnFirstSample = delayOnCurrentSample;
@@ -106,16 +108,50 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                 floor(delayOnLastSample * sampleRate);
         
         int firstSampleOfDesiredAudioBlock = floor(jmin(startSample, endSample));
-        int lastSampleOfDesiredAudioBlock = floor(jmin(startSample, endSample));
+        int lastSampleOfDesiredAudioBlock = ceil(jmax(startSample, endSample));
+        int numberOfSamplesForAudioBlock = lastSampleOfDesiredAudioBlock -
+                                           firstSampleOfDesiredAudioBlock;
         
-        // Request the audio block
+        // The sourceInfo.buffer is big enough to hold the biggest audio blocks
+        // for the current and for the next spacial envelope, but it might be
+        // too small for this transition from the current to the next envelope.
+        if (sourceInfo.buffer->getNumSamples() < numberOfSamplesForAudioBlock)
+        {
+            bool keepExistingContent = false;
+            sourceInfo.buffer->setSize(1, 
+                                       numberOfSamplesForAudioBlock, 
+                                       keepExistingContent);
+        }
+                
+        // Request the audio block from audioSourceGainEnvelope
         audioSourceGainEnvelope.setNextReadPosition(firstSampleOfDesiredAudioBlock);
         sourceInfo.startSample = 0;
         sourceInfo.numSamples = lastSampleOfDesiredAudioBlock - 
                                 firstSampleOfDesiredAudioBlock;
         audioSourceGainEnvelope.getNextAudioBlock(sourceInfo);
         
-        float * sample = sourceInfo.buffer->getSampleData(0);
+        float * sampleOfSource = sourceInfo.buffer->getSampleData(0);
+        float * sampleOfDestination = info.buffer->getSampleData(0);
+        
+        // \/  \/  \/  \/  \/  \/  \/
+        // TODO: Implement proper interpolation!
+        // HERE (the dirty implementation): Take the closest sample before.
+        double absoluteSamplePositionInSeconds = audioBlockStartPosition/
+                                                 sampleRate +
+                                                 delayOnFirstSample;
+        // Relative to the first sample of the audioSourceGainEnvelope audio
+        // block.
+        double relativeSamplePositionInSeconds = absoluteSamplePositionInSeconds -
+        (startSample/sampleRate);
+        
+        for (int i=info.startSample; 
+             i < (info.numSamples + info.startSample); ++i)
+        {
+            
+            sampleOfDestination[i] = sampleOfSource[ int(floor(relativeSamplePositionInSeconds*sampleRate)) ];
+            relativeSamplePositionInSeconds += delayDelta;
+        }
+        // /\  /\  /\  /\  /\  /\  /\
         
         
         
@@ -136,6 +172,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         // It is assumed that a spacialEnvelope is set
     
     }
+    
+    nextPlayPosition = audioBlockEndPosition;
 }
 
 /** Implements the PositionableAudioSource method. */
@@ -192,10 +230,6 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
         // to work.
         newSpacialEnvelope.sort(spacialEnvelopePointComparator);
         
-        newSpacialEnvelopeSet = true; // when set, the spacial value 
-        // is faded from the old spacial envelope to the new one, in 
-        // the interval of one audio block in the getNextAudioBlock(..).
-        
         // Set the buffer size such that it is big enough for the fastest
         // movements in the new spacial envelope.
         // --------------------------------------------------------------
@@ -233,21 +267,34 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
         double biggestTimeDifference = jmax(highestTimeDifference, 
                                             std::abs(lowestTimeDifference));
         
-        audioBlockStretchFactor = biggestTimeDifference / regularDifference;
+        double audioBlockStretchFactor = biggestTimeDifference / regularDifference;
         
         // If this estimation is wrong and a bigger audio block is needed in
         // getNextAudioBlock(), memory allocation will be done there again.
         // (hopefully the audio driver behaves nice and it is not neccessary).
-        double estimatedMaxToExpectedAudioBlockFactor = 1.5;
-        maxSamplesPerBlockForSource = std::ceil(samplesPerBlockExpected * 
-                                                audioBlockStretchFactor *
-                                                estimatedMaxToExpectedAudioBlockFactor);
+        double estimatedMaxToExpectedAudioBlockRatio = 1.5;
+        int maxSamplesPerBlockForSource = std::ceil(samplesPerBlockExpected * 
+                                                    audioBlockStretchFactor *
+                                                    estimatedMaxToExpectedAudioBlockRatio);
         // Allocate memory for the buffer used for the
         // AudioSourceGainEnvelope.getNextAudioBlock() in this 
-        // getNextAudioBlock().
-        sourceInfo.buffer->setSize(1, maxSamplesPerBlockForSource);
+        // getNextAudioBlock() when the new spacial envelope is engaged.
+        // Since this change might happen while getNextAudioBlock() is working
+        // with the current spacial envelope, only growth is allowed.
+        if (sourceInfo.buffer->getNumSamples() < maxSamplesPerBlockForSource)
+        {
+            bool keepExistingContent = true;
+            sourceInfo.buffer->setSize(1, 
+                                       maxSamplesPerBlockForSource, 
+                                       keepExistingContent);
+        }
         
         // TODO: Also do this when fading from old to new envelope.
+        
+        newSpacialEnvelopeSet = true; // when set, the spacial value 
+        // is faded from the old spacial envelope to the new one, in 
+        // the interval of one audio block in the upcoming call of
+        // getNextAudioBlock(..).
     }
     else
     {
