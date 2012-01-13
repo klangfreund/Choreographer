@@ -61,10 +61,12 @@
 											 selector:@selector(update:)
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(update:)
-												 name:@"projectSettingsDidChange" object:nil];		
+//	[[NSNotificationCenter defaultCenter] addObserver:self
+//											 selector:@selector(update:)
+//												 name:@"projectSettingsDidChange" object:nil];		
+// not necessary, as there is a notification when the context did change
 	
+    
 	[[NSNotificationCenter defaultCenter] addObserver:self
 											 selector:@selector(setZoom:)
 												 name:@"arrangerViewZoomFactorDidChange" object:nil];

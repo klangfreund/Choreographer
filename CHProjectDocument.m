@@ -42,7 +42,6 @@
 	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
     projectData = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectData" inManagedObjectContext:managedObjectContext];
     
-
     return self;	
 }
 
@@ -114,6 +113,13 @@
 
 	// send notifications
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];
+
+
+	// register for notification
+    [[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(archiveProjectSettings)
+												 name:@"projectSettingsDidChange" object:nil];		
+    
 }
 
 - (void)setup
@@ -233,9 +239,18 @@
 	[archiver encodeObject:projectSettings forKey:@"data"];
 	[archiver finishEncoding];
 	
+	// settings are stored in the model
+    // (but undo disabled)
+    //[[self managedObjectContext] processPendingChanges];
+	[[[self managedObjectContext] undoManager] disableUndoRegistration];
 	[projectData setValue:data forKey:@"settings"];
-	[archiver release];
+	[[self managedObjectContext] processPendingChanges];
+	[[[self managedObjectContext] undoManager] enableUndoRegistration];
+    
+    // but set the document's dirty flag
+    [self updateChangeCount:NSChangeDone];
 
+	[archiver release];
 }
 
 - (void)unarchiveProjectSettings
