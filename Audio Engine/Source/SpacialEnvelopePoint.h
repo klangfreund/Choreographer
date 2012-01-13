@@ -19,7 +19,7 @@
  AudioSourceAmbipanning::newSpacialEnvelope and by the argument
  newSpacialEnvelope of AudioSourceAmbipanning::setSpacialEnvelope.
  */
-class JUCE_API SpacialEnvelopePoint
+class JUCE_API  SpacialEnvelopePoint
 {
 public:
     /** Default constructor. Sets SpacialEnvelopePoint::position = 0,
@@ -28,22 +28,15 @@ public:
      */
     SpacialEnvelopePoint();
     
+    
     /** Constructor with a non-trivial initialisation. */
     SpacialEnvelopePoint(const int& position_, 
                          const double& x_, 
                          const double& y_, 
                          const double& z_);
     
-    /** Copy-constructor.
-     Needed to be used in a Juce Array.*/
-    SpacialEnvelopePoint(const SpacialEnvelopePoint& source);
-    
     /** Destructor. */
     ~SpacialEnvelopePoint();
-    
-    /** Assignment operator.
-     Needed to be used in a Juce Array.*/
-    SpacialEnvelopePoint & operator= (const SpacialEnvelopePoint & source);
     
     /** Sets a new position in time (in samples).*/
     void setPosition(const int& position_);
@@ -63,31 +56,31 @@ public:
                              const double & y_,
                              const double & z_);
     
-    /** Returns the position in time.
+    /** Gets the position in time.
      @return The position in time (in samples).
      */
-    int getPosition();
+    const int& getPosition();
     
-    /** Returns the spacial x-coordinate.
+    /** Gets the spacial x-coordinate.
      @return The spacial x-coordinate.
      */
-    double getX();
+    const double& getX();
     
-    /** Returns the spacial y-coordinate.
+    /** Gets the spacial y-coordinate.
      @return The spacial y-coordinate.
      */
-    double getY();
+    const double& getY();
     
-    /** Returns the spacial z-coordinate.
+    /** Gets the spacial z-coordinate.
      @return The spacial z-coordinate.
      */
-    double getZ();
+    const double& getZ();
     
     /** Returns the delay of the sound caused by
      the distance from the sound source to the origin.
      @return The distance to the origin.
      */
-    double getDistanceDelay();
+    const double & getDistanceDelay();
 	
 private:
     void calculateTheDistanceDelayToOrigin();
@@ -97,10 +90,10 @@ private:
 	
     /** The x-coordinate in space. */
     double x;
-
+    
     /** The y-coordinate in space. */
     double y;
-
+    
     /** The z-coordinate in space. */
     double z;
     
@@ -128,18 +121,18 @@ public:
 	/**
 	 Compares two elements of type void*, that are actually pointers
 	 to SpacialEnvelopePoint after typecasting.
-
+     
 	 @param first	The first element to compare.
 	 @param second	The second element to compare.
-
+     
 	 @return	<ul>	
-	 		<li> -1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-	 		    < ((SpacialEnvelopePoint*)second)->getPosition().
-			<li> 0, if ((SpacialEnvelopePoint*)first)->getPosition() 
-	 		    = ((SpacialEnvelopePoint*)second)->getPosition().
-			<li> 1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-		    	    > ((SpacialEnvelopePoint*)second)->getPosition().
-			</ul>
+     <li> -1, if ((SpacialEnvelopePoint*)first)->getPosition() 
+     < ((SpacialEnvelopePoint*)second)->getPosition().
+     <li> 0, if ((SpacialEnvelopePoint*)first)->getPosition() 
+     = ((SpacialEnvelopePoint*)second)->getPosition().
+     <li> 1, if ((SpacialEnvelopePoint*)first)->getPosition() 
+     > ((SpacialEnvelopePoint*)second)->getPosition().
+     </ul>
 	 */
 	int compareElements (SpacialEnvelopePoint first, 
                          SpacialEnvelopePoint second) const

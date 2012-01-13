@@ -8,7 +8,6 @@
  */
 
 #include "AmbisonicsAudioEngine.h"
-#include "SpeakerTestComponent.h"
 
 #define AUDIOTRANSPORT_BUFFER 2048 // (choose a value >1024)
 #define SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK 512
