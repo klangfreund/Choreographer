@@ -96,7 +96,7 @@ void SpacialEnvelopePoint::setPositionAndValue(const int & position_,
 /** Gets the position in time.
  @return The position in time (in samples).
  */
-const int& SpacialEnvelopePoint::getPosition()
+int SpacialEnvelopePoint::getPosition()
 {
     return position;
 }
@@ -104,7 +104,7 @@ const int& SpacialEnvelopePoint::getPosition()
 /** Gets the spacial x-coordinate.
  @return The spacial x-coordinate.
  */
-const double& SpacialEnvelopePoint::getX()
+double SpacialEnvelopePoint::getX()
 {
     return x;
 }
@@ -112,7 +112,7 @@ const double& SpacialEnvelopePoint::getX()
 /** Gets the spacial y-coordinate.
  @return The spacial y-coordinate.
  */
-const double& SpacialEnvelopePoint::getY()
+double SpacialEnvelopePoint::getY()
 {
     return y;
 }
@@ -120,12 +120,12 @@ const double& SpacialEnvelopePoint::getY()
 /** Gets the spacial z-coordinate.
  @return The spacial z-coordinate.
  */
-const double& SpacialEnvelopePoint::getZ()
+double SpacialEnvelopePoint::getZ()
 {
     return z;
 }
 
-const double& SpacialEnvelopePoint::getDistanceDelay()
+double SpacialEnvelopePoint::getDistanceDelay()
 {
     return distanceDelay;
 }

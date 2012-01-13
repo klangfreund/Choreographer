@@ -74,17 +74,17 @@ void SpeakerPosition::setXYZ (const double& x_,
     z = z_;
 }
 
-const double& SpeakerPosition::getX ()
+double SpeakerPosition::getX ()
 {
     return x;
 }
 
-const double& SpeakerPosition::getY ()
+double SpeakerPosition::getY ()
 {
     return y;
 }
 
-const double& SpeakerPosition::getZ ()
+double SpeakerPosition::getZ ()
 {
     return z;
 }
@@ -162,7 +162,8 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	monoInfo.numSamples = info.numSamples;
 	monoInfo.buffer = &monoBuffer;
 	
-	audioSourceGainEnvOrDopplerFX.getNextAudioBlock(monoInfo);
+    //audioSourceGainEnvOrDopplerFX.getNextAudioBlock(monoInfo);
+	audioSourceGainEnvelope.getNextAudioBlock(monoInfo);
 	  // the gain envelope is now applied.
 	
 	// copy the samples of the first channel (with index 0) to the other channels
@@ -256,7 +257,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 			}
 		}
 		
-		// If there are multiple points in the gain envelope
+		// If there are multiple points in the spacial envelope
 		else
 		{		
 			currentPosition = nextPlayPosition;
@@ -339,15 +340,17 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
 						// calculate the values of the float-array channelFactorAtNextSpacialPoint
-						xs = positionOfSpeaker[channel].getX();
-						ys = positionOfSpeaker[channel].getY();
-						zs = positionOfSpeaker[channel].getZ();
+                        SpeakerPosition& posOfSpeaker = positionOfSpeaker.getReference(channel);
+						xs = posOfSpeaker.getX();
+						ys = posOfSpeaker.getY();
+						zs = posOfSpeaker.getZ();
 						factor = pow(0.5 + 0.5*(xn*xs + yn*ys + zn*zs), modifiedOrderN) * distanceGainN;
 						channelFactorAtNextSpacialPoint.set(channel, factor);
 						
 						// calculate the values of the float-array channelFactorDelta
-						channelFactorDelta.set(channel, (channelFactorAtNextSpacialPoint[channel] 
-														 - channelFactorAtPreviousSpacialPoint[channel])/distance);
+						channelFactorDelta.set(channel, 
+                                               (channelFactorAtNextSpacialPoint[channel] 
+                                                - channelFactorAtPreviousSpacialPoint[channel])/distance);
 						
 						// calculate the values of the float-array channelFactor
 						channelFactor.set(channel, channelFactor[channel] + channelFactorDelta[channel]);
@@ -377,13 +380,15 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 	}
 	
 	nextPlayPosition = newPosition;
-	audioSourceGainEnvOrDopplerFX.setNextReadPosition (newPosition);
+	//audioSourceGainEnvOrDopplerFX.setNextReadPosition (newPosition);
+    audioSourceGainEnvelope.setNextReadPosition (newPosition);
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getNextReadPosition () const
 {
-	return audioSourceGainEnvOrDopplerFX.getNextReadPosition();
+	// return audioSourceGainEnvOrDopplerFX.getNextReadPosition();
+    return audioSourceGainEnvelope.getNextReadPosition();
 }
 
 /** Implements the PositionableAudioSource method. */
@@ -479,7 +484,8 @@ void AudioSourceAmbipanning::setOrder( int order_)
 }
 
 void AudioSourceAmbipanning::setPositionOfSpeakers(const Array<SpeakerPosition>& positionOfSpeaker_)
-{	
+{
+    // Copy the array.
 	positionOfSpeaker = positionOfSpeaker_;
 }
 

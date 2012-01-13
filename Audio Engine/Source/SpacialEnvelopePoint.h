@@ -66,28 +66,28 @@ public:
     /** Returns the position in time.
      @return The position in time (in samples).
      */
-    const int& getPosition();
+    int getPosition();
     
     /** Returns the spacial x-coordinate.
      @return The spacial x-coordinate.
      */
-    const double& getX();
+    double getX();
     
     /** Returns the spacial y-coordinate.
      @return The spacial y-coordinate.
      */
-    const double& getY();
+    double getY();
     
     /** Returns the spacial z-coordinate.
      @return The spacial z-coordinate.
      */
-    const double& getZ();
+    double getZ();
     
     /** Returns the delay of the sound caused by
      the distance from the sound source to the origin.
      @return The distance to the origin.
      */
-    const double& getDistanceDelay();
+    double getDistanceDelay();
 	
 private:
     void calculateTheDistanceDelayToOrigin();

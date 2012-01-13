@@ -66,13 +66,13 @@ public:
                  const double& z_);
 	
 	/** Gets the x-coordinate in space. */
-	const double& getX ();
+    double getX ();
     
 	/** Gets the y-coordinate in space. */
-	const double& getY ();
+    double getY ();
 	
 	/** Gets the z-coordinate in space. */
-	const double& getZ ();
+    double getZ ();
 	
 private:
 	double x;
@@ -266,10 +266,10 @@ private:
                                     double& modifiedOrder);
 	
 	static int order;
-	static Array<SpeakerPosition> positionOfSpeaker; // you have to typecast elements to SpeakerPosition*
-	
+	static Array<SpeakerPosition> positionOfSpeaker;	
 	// for the distance calculations
-	static int distanceMode;		///< Determines which algorithm is chosen to calculate the 
+	static int distanceMode;		///< Determines which algorithm is chosen to 
+                                    ///< calculate the 
 									///< distanceGain and the modifiedOrder in
 									///< AudioSourceAmbipanning::calculationsForAEP. Must be
 									///< 0, 1 or 2.

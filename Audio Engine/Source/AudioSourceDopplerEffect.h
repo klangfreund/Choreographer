@@ -90,6 +90,7 @@ private:
     SpacialEnvelopePointComparator spacialEnvelopePointComparator;
     bool newSpacialEnvelopeSet;
     bool constantSpacialPosition;
+    int constantSpacialPositionDelayTimeInSamples;
     SpacialEnvelopePoint previousSpacialPoint;
     SpacialEnvelopePoint nextSpacialPoint;
     int nextSpacialPointIndex;
