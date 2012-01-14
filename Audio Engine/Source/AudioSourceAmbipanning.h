@@ -2,7 +2,7 @@
  *  AudioSourceAmbipanning.h
  *  Choreographer
  *
- *  Created by sam on 100516.
+ *  Created by Samuel Gaehwiler on 100516.
  *  Copyright 2010. All rights reserved.
  *
  */
@@ -11,137 +11,9 @@
 #define __AUDIOSOURCEAMBIPANNING_HEADER__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "SpacialEnvelopePoint.h"
 #include "AudioSourceGainEnvelope.h"
-
-//==============================================================================
-/**
- Describes a point in space at a certain time.
- Used by AudioSourceAmbipanning::spacialEnvelope, by 
- AudioSourceAmbipanning::newSpacialEnvelope and by the argument
- newSpacialEnvelope of AudioSourceAmbipanning::setSpacialEnvelope.
- */
-class JUCE_API  SpacialEnvelopePoint
-{
-public:
-    /** Default constructor. Sets SpacialEnvelopePoint::position = 0,
-     SpacialEnvelopePoint::x = 0.0, SpacialEnvelopePoint::y = 0.0,
-     SpacialEnvelopePoint::z = 0.0.
-     */
-    SpacialEnvelopePoint();
-    
-    
-    /** Constructor with a non-trivial initialisation. */
-    SpacialEnvelopePoint(const int& position_, 
-                         const double& x_, 
-                         const double& y_, 
-                         const double& z_);
-    
-    /** Destructor. */
-    ~SpacialEnvelopePoint();
-    
-    /** Sets a new position in time (in samples).*/
-    void setPosition(const int& position_);
-    
-    /** Sets a new x-coordinate in space.*/
-    void setX(const double & x_);
-    
-    /** Sets a new y-coordinate in space.*/
-    void setY(const double & y_);
-    
-    /** Sets a new z-coordinate in space.*/
-    void setZ(const double & z_);	
-    
-    /** Sets the position in time and the coordinates in space. */
-    void setPositionAndValue(const int & position_,
-                             const double & x_,
-                             const double & y_,
-                             const double & z_);
-    
-    /** Gets the position in time.
-     @return The position in time (in samples).
-     */
-    const int& getPosition();
-    
-    /** Gets the spacial x-coordinate.
-     @return The spacial x-coordinate.
-     */
-    const double& getX();
-    
-    /** Gets the spacial y-coordinate.
-     @return The spacial y-coordinate.
-     */
-    const double& getY();
-    
-    /** Gets the spacial z-coordinate.
-     @return The spacial z-coordinate.
-     */
-    const double& getZ();
-	
-private:	
-    /** The position in time (in samples). */
-    int position;
-	
-    /** The x-coordinate in space. */
-    double x;
-
-    /** The y-coordinate in space. */
-    double y;
-
-    /** The z-coordinate in space. */
-    double z;
-	
-	JUCE_LEAK_DETECTOR (SpacialEnvelopePoint);
-};
-
-//==============================================================================
-/**
- This comparator is needed for the sort function of AudioSourceAmbipanning::newSpacialEnvelope.
- The sort function is called in AudioSourceAmbipanning::setSpacialEnvelope.
- */
-class JUCE_API SpacialEnvelopePointComparator
-{
-public:
-	/** Constructor. */
-	SpacialEnvelopePointComparator ()
-	{
-	}
-	
-	/**
-	 Compares two elements of type void*, that are actually pointers
-	 to SpacialEnvelopePoint after typecasting.
-
-	 @param first	The first element to compare.
-	 @param second	The second element to compare.
-
-	 @return	<ul>	
-	 		<li> -1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-	 		    < ((SpacialEnvelopePoint*)second)->getPosition().
-			<li> 0, if ((SpacialEnvelopePoint*)first)->getPosition() 
-	 		    = ((SpacialEnvelopePoint*)second)->getPosition().
-			<li> 1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-		    	    > ((SpacialEnvelopePoint*)second)->getPosition().
-			</ul>
-	 */
-	int compareElements (SpacialEnvelopePoint first, 
-                         SpacialEnvelopePoint second) const
-	{
-		if (first.getPosition() < second.getPosition())
-		{
-			return -1;
-		}
-		else if (first.getPosition() > second.getPosition())
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-	
-private:
-	JUCE_LEAK_DETECTOR (SpacialEnvelopePointComparator);
-};
+#include "AudioSourceDopplerEffect.h"
 
 //==============================================================================
 /**
@@ -194,13 +66,13 @@ public:
                  const double& z_);
 	
 	/** Gets the x-coordinate in space. */
-	const double& getX ();
+    double getX ();
     
 	/** Gets the y-coordinate in space. */
-	const double& getY ();
+    double getY ();
 	
 	/** Gets the z-coordinate in space. */
-	const double& getZ ();
+    double getZ ();
 	
 private:
 	double x;
@@ -306,11 +178,18 @@ public:
     /**
      Enables or disables the buffering.
      
-     By default, buffering is enabled. For realtime operation, buffering
+     After instanciation buffering is enabled. For realtime operation, buffering
      should always be engaged. For non-realtime operation (e.g. bounce 
      to disk), buffering should be disabled.
      */
     void enableBuffering (bool enable);
+    
+    /**
+     Enables or disables the doppler effect.
+     
+     After instanciation it is disabled.
+     */    
+    void enableDopplerEffect (bool enable);
     
 	/** 
 	 @param newGainEnvelope		it will be deleted in the setGainEnvelope(..) of
@@ -321,7 +200,8 @@ public:
 	void setGainEnvelope (Array<void*> newGainEnvelope);
 
 	/**
-	 TODO
+	 Sets a new spacial envelope which determines the location in space of the
+     sound source in relation to the time.
 	 */
 	void setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope);
 	
@@ -375,15 +255,21 @@ private:
 	/**
 	 Calculates the distanceGain and the modifiedOrder,
 	 according to the chosen AudioSourceAmbipanning::distanceMode.
+     r is also calculated and x, y, and z are normalised, such that they 
+     describe the projection to the unit sphere.
 	 */
-	inline void calculationsForAEP (double& x, double& y, double& z, double& r,
-									double& distanceGain, double& modifiedOrder);
+	inline void calculationsForAEP (double& x, 
+                                    double& y, 
+                                    double& z, 
+                                    double& r,
+									double& distanceGain, 
+                                    double& modifiedOrder);
 	
 	static int order;
-	static Array<SpeakerPosition> positionOfSpeaker; // you have to typecast elements to SpeakerPosition*
-	
+	static Array<SpeakerPosition> positionOfSpeaker;	
 	// for the distance calculations
-	static int distanceMode;		///< Determines which algorithm is chosen to calculate the 
+	static int distanceMode;		///< Determines which algorithm is chosen to 
+                                    ///< calculate the 
 									///< distanceGain and the modifiedOrder in
 									///< AudioSourceAmbipanning::calculationsForAEP. Must be
 									///< 0, 1 or 2.
@@ -397,12 +283,27 @@ private:
 	static double dBFalloffPerUnit;
 	  // used in distanceMode 2
 	static double outsideCenterExponent; // = 1
-	
+    
+    bool dopplerEffectEnabled;
+    
+    /** Will point to
+        audioSourceGainEnvelope or to
+        audioSourceDopplerEffect
+        dependant of if the doppler effect is disabled or enabled.
+     */
+    PositionableAudioSource& audioSourceGainEnvOrDopplerFX;
+	AudioSourceDopplerEffect audioSourceDopplerEffect;
 	AudioSourceGainEnvelope audioSourceGainEnvelope;
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).
 	AudioSampleBuffer monoBuffer;  // used in getNextAudioBlock(..).
 	
-	Array<SpacialEnvelopePoint> spacialEnvelope; ///< TODO
+    /** Holds the SpacialEnvelopePoints which define the
+     position / movement of the audio source in space over time.
+     
+     It is assumed by the code that the SpacialEnvelopePoints are
+     ordered in this array according to their position in time.
+     */
+	Array<SpacialEnvelopePoint> spacialEnvelope;
 
 	/** This is used by AudioSourceAmbipanning::setSpacialEnvelope and
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
@@ -439,7 +340,7 @@ private:
 	
 	CriticalSection callbackLock;
 	
-	//JUCE_LEAK_DETECTOR (AudioSourceAmbipanning);
+	JUCE_LEAK_DETECTOR (AudioSourceAmbipanning);
 };
 
 

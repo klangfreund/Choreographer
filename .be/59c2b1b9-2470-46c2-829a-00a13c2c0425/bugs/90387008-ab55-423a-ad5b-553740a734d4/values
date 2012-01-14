@@ -1,0 +1,19 @@
+creator: Samuel Gaehwiler <sg@klangfreund.com>
+
+
+reporter: Samuel Gaehwiler <sg@klangfreund.com>
+
+
+severity: minor
+
+
+status: open
+
+
+summary: 'Issue: If dopplerfx is enabled and the sound position is not at the origin
+  when the audio region is finished, the depicted end of the region is not what you
+  will hear because of the delay.'
+
+
+time: Wed, 04 Jan 2012 14:30:16 +0000
+

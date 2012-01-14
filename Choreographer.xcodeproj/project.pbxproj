@@ -113,7 +113,12 @@
 		15ED207D0DDBB2EA006A2351 /* ProgressPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ED207C0DDBB2EA006A2351 /* ProgressPanel.m */; };
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
+<<<<<<< HEAD
 		15FA0A4D14BC8EB0004DD1E8 /* ProjectDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1517F14B115E6864001E7BCD /* ProjectDocument.xcdatamodeld */; };
+=======
+		220187FB14B70D45002C3A58 /* SpacialEnvelopePoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 220187F914B70D45002C3A58 /* SpacialEnvelopePoint.cpp */; };
+		225A618514B49E5F00F2964A /* AudioSourceDopplerEffect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 225A618314B49E5F00F2964A /* AudioSourceDopplerEffect.cpp */; };
+>>>>>>> 61302149a57bede845bb6d46e495d184fd960102
 		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
 		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
 		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
@@ -225,8 +230,6 @@
 		1586A8B913B3B45100262B02 /* juce_PositionableResamplingAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_PositionableResamplingAudioSource.h; sourceTree = "<group>"; };
 		1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PinkNoiseGeneratorAudioSource.cpp; sourceTree = "<group>"; };
 		1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinkNoiseGeneratorAudioSource.h; sourceTree = "<group>"; };
-		1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 2; path = SpeakerTestComponent.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
-		1586A8BD13B3B45100262B02 /* SpeakerTestComponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeakerTestComponent.h; sourceTree = "<group>"; };
 		1586A8C013B3B45100262B02 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/SpeakerSetupWindow.xib; sourceTree = "<group>"; };
 		1586A8C113B3B45100262B02 /* PatchbayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatchbayView.h; sourceTree = "<group>"; };
 		1586A8C213B3B45100262B02 /* PatchbayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatchbayView.m; sourceTree = "<group>"; };
@@ -318,7 +321,11 @@
 		15F077C40DDB6B4D00A207D0 /* AudioItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioItem.m; sourceTree = "<group>"; };
 		15F5E9890DDCD16900EA5E4A /* AudioRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioRegion.h; sourceTree = "<group>"; };
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AudioRegion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		220187F914B70D45002C3A58 /* SpacialEnvelopePoint.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpacialEnvelopePoint.cpp; sourceTree = "<group>"; };
+		220187FA14B70D45002C3A58 /* SpacialEnvelopePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpacialEnvelopePoint.h; sourceTree = "<group>"; };
 		223F18441450032400AA6B76 /* juce_amalgamated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_amalgamated.h; sourceTree = "<group>"; };
+		225A618314B49E5F00F2964A /* AudioSourceDopplerEffect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceDopplerEffect.cpp; sourceTree = "<group>"; };
+		225A618414B49E5F00F2964A /* AudioSourceDopplerEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceDopplerEffect.h; sourceTree = "<group>"; };
 		22E2ACE4144C6186001D94A3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		22E2ACE5144C621C001D94A3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
@@ -563,19 +570,21 @@
 			children = (
 				1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */,
 				1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */,
+				1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */,
+				1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */,
 				1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */,
 				1586A8A813B3B45100262B02 /* AudioRegionMixer.h */,
 				1586A8A913B3B45100262B02 /* AudioSourceAmbipanning.cpp */,
 				1586A8AA13B3B45100262B02 /* AudioSourceAmbipanning.h */,
+				225A618314B49E5F00F2964A /* AudioSourceDopplerEffect.cpp */,
+				225A618414B49E5F00F2964A /* AudioSourceDopplerEffect.h */,
 				1586A8AB13B3B45100262B02 /* AudioSourceGainEnvelope.cpp */,
 				1586A8AC13B3B45100262B02 /* AudioSourceGainEnvelope.h */,
-				1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */,
-				1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */,
 				1586A8AF13B3B45100262B02 /* modified Juce Classes */,
 				1586A8BA13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.cpp */,
 				1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */,
-				1586A8BC13B3B45100262B02 /* SpeakerTestComponent.cpp */,
-				1586A8BD13B3B45100262B02 /* SpeakerTestComponent.h */,
+				220187F914B70D45002C3A58 /* SpacialEnvelopePoint.cpp */,
+				220187FA14B70D45002C3A58 /* SpacialEnvelopePoint.h */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -1027,6 +1036,7 @@
 				1586A9A713B3B45100262B02 /* AmbisonicsAudioEngine.cpp in Sources */,
 				1586A9A813B3B45100262B02 /* AudioRegionMixer.cpp in Sources */,
 				1586A9A913B3B45100262B02 /* AudioSourceAmbipanning.cpp in Sources */,
+				225A618514B49E5F00F2964A /* AudioSourceDopplerEffect.cpp in Sources */,
 				1586A9AA13B3B45100262B02 /* AudioSourceGainEnvelope.cpp in Sources */,
 				1586A9AB13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp in Sources */,
 				1586A9AE13B3B45100262B02 /* AudioTransportSourceMod.cpp in Sources */,
@@ -1042,8 +1052,12 @@
 				1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */,
 				157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */,
 				154C6B7814926A6900D64FD6 /* AudioSettingsWindowController.m in Sources */,
+<<<<<<< HEAD
 				15FA0A4D14BC8EB0004DD1E8 /* ProjectDocument.xcdatamodeld in Sources */,
 				1581A1F814BCA04400071656 /* ProjectSettings.m in Sources */,
+=======
+				220187FB14B70D45002C3A58 /* SpacialEnvelopePoint.cpp in Sources */,
+>>>>>>> 61302149a57bede845bb6d46e495d184fd960102
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
