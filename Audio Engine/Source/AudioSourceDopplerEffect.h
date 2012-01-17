@@ -81,18 +81,18 @@ private:
      It is assumed by the code that the SpacialEnvelopePoints are
      ordered in this array according to their position in time.
      */
-	Array<SpacialEnvelopePoint> spacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> spacialEnvelope;
     
 	/** This is used by AudioSourceAmbipanning::setSpacialEnvelope and
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
 	 */
-	Array<SpacialEnvelopePoint> newSpacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> newSpacialEnvelope;
     SpacialEnvelopePointComparator spacialEnvelopePointComparator;
     bool newSpacialEnvelopeSet;
     bool constantSpacialPosition;
     int constantSpacialPositionDelayTimeInSamples;
-    SpacialEnvelopePoint previousSpacialPoint;
-    SpacialEnvelopePoint nextSpacialPoint;
+    SpacialEnvelopePoint * previousSpacialPoint;
+    SpacialEnvelopePoint * nextSpacialPoint;
     int nextSpacialPointIndex;
     
     /** 

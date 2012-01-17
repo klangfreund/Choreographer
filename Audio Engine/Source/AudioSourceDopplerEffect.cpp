@@ -66,7 +66,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         // to the last sample of this audio block with the delay time
         // from the new spacial envelope.
         
-        spacialEnvelope = newSpacialEnvelope;
+        spacialEnvelope.clear();
+        spacialEnvelope.addCopiesOf(newSpacialEnvelope);
         
         // For the first sample (from the old spacial envelope).
         double delayOnFirstSample = delayOnCurrentSample;
@@ -77,7 +78,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         if (spacialEnvelope.size() == 1)
         {
             nextSpacialPoint = spacialEnvelope[0];
-            delayOnLastSample = nextSpacialPoint.getDistanceDelay();
+            delayOnLastSample = nextSpacialPoint->getDistanceDelay();
             delayDelta = 0.0;
                 // delayDelta = The difference in the delay time between
                 // two adjacent samples AFTER this audio block. I.e. the
@@ -86,7 +87,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                 // it is set to zero.
             
             constantSpacialPosition = true;
-            constantSpacialPositionDelayTimeInSamples = int ( floor(sampleRate*nextSpacialPoint.getDistanceDelay()));
+            constantSpacialPositionDelayTimeInSamples = int ( floor(sampleRate*nextSpacialPoint->getDistanceDelay()));
         }
         else
         {
@@ -189,7 +190,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             double lowestPositionToRequestInSeconds = DBL_MAX;
             double highestPositionToRequestInSeconds = -DBL_MAX;
             
-            if (nextSpacialPoint.getPosition() > audioBlockEndPosition)
+            if (nextSpacialPoint->getPosition() > audioBlockEndPosition)
             {
                 // TODO
             }
@@ -262,11 +263,17 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
 	
 	if (newSpacialEnvelope_.size() != 0)
 	{
-        newSpacialEnvelope = newSpacialEnvelope_;
+        // Copy the elements over from the Array newSpacialEnvelope_ to the
+        // OwnedArray newSpacialEnvelope.
+        newSpacialEnvelope.clear();
+        for (int i=0; i!=newSpacialEnvelope_.size(); ++i)
+        {
+            newSpacialEnvelope.add(new SpacialEnvelopePoint(newSpacialEnvelope_[i]));
+        }
         
         // this Array must be sorted for the code in getNextAudioBlock(..)
         // to work.
-        newSpacialEnvelope.sort(spacialEnvelopePointComparator);
+        //newSpacialEnvelope.sort(spacialEnvelopePointComparator);
         
         // Set the buffer size such that it is big enough for the fastest
         // movements in the new spacial envelope.
@@ -278,13 +285,13 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
         {
             for (int k=1; k<newSpacialEnvelope.size(); k++)
             {
-                SpacialEnvelopePoint& previousEnvPoint = newSpacialEnvelope.getReference(k-1);
-                SpacialEnvelopePoint& nextEnvPoint = newSpacialEnvelope.getReference(k);
+                SpacialEnvelopePoint * previousEnvPoint = newSpacialEnvelope[k-1];
+                SpacialEnvelopePoint * nextEnvPoint = newSpacialEnvelope[k];
                 
-                double slope = (nextEnvPoint.getDistanceDelay() 
-                                - previousEnvPoint.getDistanceDelay()) /
-                               (nextEnvPoint.getPosition() 
-                                - previousEnvPoint.getPosition());
+                double slope = (nextEnvPoint->getDistanceDelay() 
+                                - previousEnvPoint->getDistanceDelay()) /
+                               (nextEnvPoint->getPosition() 
+                                - previousEnvPoint->getPosition());
                     // seconds / sample
                 highestSlope = jmax(highestSlope, slope); // will be >= 0
                 lowestSlope = jmin(lowestSlope, slope); // will be <= 0
@@ -343,23 +350,23 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition(int newPosition)
     // figure out between which audioEnvelopePoints we are right now
 	// and set up all variables needed by getNextAudioBlock(..)
 	nextSpacialPointIndex = 1; // since the first audioEnvelopePoint has to be at position 0 
-	while (spacialEnvelope[nextSpacialPointIndex].getPosition() <= newPosition)
+	while (spacialEnvelope[nextSpacialPointIndex]->getPosition() <= newPosition)
 	{
 		nextSpacialPointIndex++;
 	}
 	
-	previousSpacialPoint = spacialEnvelope.getReference(nextSpacialPointIndex - 1);
-	nextSpacialPoint = spacialEnvelope.getReference(nextSpacialPointIndex);
+	previousSpacialPoint = spacialEnvelope[nextSpacialPointIndex - 1];
+	nextSpacialPoint = spacialEnvelope[nextSpacialPointIndex];
 
 	
-	double distance = double (nextSpacialPoint.getPosition() 
-                              - previousSpacialPoint.getPosition());
+	double distance = double (nextSpacialPoint->getPosition() 
+                              - previousSpacialPoint->getPosition());
     
 	double distanceFromPreviousSpacialPointPosToCurrentPos = double(newPosition 
-    - previousSpacialPoint.getPosition());
+    - previousSpacialPoint->getPosition());
     
-    delayDelta = (nextSpacialPoint.getDistanceDelay() - previousSpacialPoint.getDistanceDelay() ) / distance;
+    delayDelta = (nextSpacialPoint->getDistanceDelay() - previousSpacialPoint->getDistanceDelay() ) / distance;
     
-    delayOnCurrentSample = previousSpacialPoint.getDistanceDelay()
+    delayOnCurrentSample = previousSpacialPoint->getDistanceDelay()
     + delayDelta * distanceFromPreviousSpacialPointPosToCurrentPos;
 }
