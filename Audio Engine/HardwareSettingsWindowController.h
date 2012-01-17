@@ -1,5 +1,5 @@
 //
-//  AudioSettingsWindowController.h
+//  HardwareSettingsWindowController.h
 //  Choreographer
 //
 //  Created by Philippe Kocher on 09.12.11.
@@ -8,8 +8,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface AudioSettingsWindowController : NSWindowController
+@interface HardwareSettingsWindowController : NSWindowController
 {
+    id audioEngine;
+
 	NSArray *bufferSizes;
 	NSInteger selectedBufferSizeIndex;
 }

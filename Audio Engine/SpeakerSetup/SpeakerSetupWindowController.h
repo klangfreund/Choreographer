@@ -13,8 +13,7 @@
 
 @interface SpeakerSetupWindowController : NSWindowController
 {
-	NSArray *outputDevices;
-	NSInteger selectedOutputDeviceIndex;
+    id audioEngine;
 	
 	id speakerSetups;
 	NSUInteger selectedIndex;
@@ -37,7 +36,7 @@
 	NSTimer *refreshGUITimer;
 }
 
-- (void)setSelectedOutputDeviceIndex:(NSUInteger)index;
+//- (void)setSelectedOutputDeviceIndex:(NSUInteger)index;
 
 - (void)setSelectedIndex:(NSUInteger)index;
 - (void)updateGUI;

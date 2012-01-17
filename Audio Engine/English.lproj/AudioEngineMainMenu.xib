@@ -39,16 +39,16 @@
 			<object class="NSMenu" id="601955300">
 				<string key="NSTitle">Engine</string>
 				<array class="NSMutableArray" key="NSMenuItems">
-					<object class="NSMenuItem" id="270644354">
+					<object class="NSMenuItem" id="753984696">
 						<reference key="NSMenu" ref="601955300"/>
-						<string key="NSTitle">Hardware Setup...</string>
+						<string key="NSTitle">Show Meter Bridge</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<object class="NSCustomResource" key="NSOnImage" id="562907001">
+						<object class="NSCustomResource" key="NSOnImage" id="750408533">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">NSMenuCheckmark</string>
 						</object>
-						<object class="NSCustomResource" key="NSMixedImage" id="926414205">
+						<object class="NSCustomResource" key="NSMixedImage" id="658852021">
 							<string key="NSClassName">NSImage</string>
 							<string key="NSResourceName">NSMenuMixedState</string>
 						</object>
@@ -60,42 +60,32 @@
 						<string key="NSTitle"/>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="562907001"/>
-						<reference key="NSMixedImage" ref="926414205"/>
+						<reference key="NSOnImage" ref="750408533"/>
+						<reference key="NSMixedImage" ref="658852021"/>
+					</object>
+					<object class="NSMenuItem" id="270644354">
+						<reference key="NSMenu" ref="601955300"/>
+						<string key="NSTitle">Hardware Settings...</string>
+						<string key="NSKeyEquiv"/>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="750408533"/>
+						<reference key="NSMixedImage" ref="658852021"/>
+					</object>
+					<object class="NSMenuItem" id="460431950">
+						<reference key="NSMenu" ref="601955300"/>
+						<string key="NSTitle">Project Audio Settings...</string>
+						<string key="NSKeyEquiv"/>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="750408533"/>
+						<reference key="NSMixedImage" ref="658852021"/>
 					</object>
 					<object class="NSMenuItem" id="845597182">
 						<reference key="NSMenu" ref="601955300"/>
 						<string key="NSTitle">Speaker Setup...</string>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="562907001"/>
-						<reference key="NSMixedImage" ref="926414205"/>
-					</object>
-					<object class="NSMenuItem" id="753984696">
-						<reference key="NSMenu" ref="601955300"/>
-						<string key="NSTitle">Show Meter Bridge</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="562907001"/>
-						<reference key="NSMixedImage" ref="926414205"/>
-					</object>
-					<object class="NSMenuItem" id="20373490">
-						<reference key="NSMenu" ref="601955300"/>
-						<bool key="NSIsDisabled">YES</bool>
-						<bool key="NSIsSeparator">YES</bool>
-						<string key="NSTitle"/>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="562907001"/>
-						<reference key="NSMixedImage" ref="926414205"/>
-					</object>
-					<object class="NSMenuItem" id="460431950">
-						<reference key="NSMenu" ref="601955300"/>
-						<string key="NSTitle">Audio Settings...</string>
-						<string key="NSKeyEquiv"/>
-						<int key="NSMnemonicLoc">2147483647</int>
-						<reference key="NSOnImage" ref="562907001"/>
-						<reference key="NSMixedImage" ref="926414205"/>
+						<reference key="NSOnImage" ref="750408533"/>
+						<reference key="NSMixedImage" ref="658852021"/>
 					</object>
 				</array>
 			</object>
@@ -109,7 +99,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="69808270">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<array class="NSMutableArray" key="NSSubviews">
 						<object class="NSProgressIndicator" id="242276501">
@@ -118,7 +108,6 @@
 							<object class="NSPSMatrix" key="NSDrawMatrix"/>
 							<string key="NSFrame">{{18, 56}, {408, 20}}</string>
 							<reference key="NSSuperview" ref="69808270"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="239433708"/>
 							<string key="NSReuseIdentifierKey">_NS:1582</string>
 							<int key="NSpiFlags">16392</int>
@@ -129,7 +118,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{17, 90}, {114, 17}}</string>
 							<reference key="NSSuperview" ref="69808270"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="242276501"/>
 							<string key="NSReuseIdentifierKey">_NS:3936</string>
 							<bool key="NSEnabled">YES</bool>
@@ -169,7 +157,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{17, 22}, {164, 17}}</string>
 							<reference key="NSSuperview" ref="69808270"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="390162882"/>
 							<string key="NSReuseIdentifierKey">_NS:3936</string>
 							<bool key="NSEnabled">YES</bool>
@@ -189,8 +176,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{334, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="69808270"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="991177427">
 								<int key="NSCellFlags">67239424</int>
@@ -208,8 +193,6 @@
 						</object>
 					</array>
 					<string key="NSFrameSize">{444, 127}</string>
-					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="702817112"/>
 					<string key="NSReuseIdentifierKey">_NS:2837</string>
 				</object>
@@ -230,14 +213,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">showHardwareSetup:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="270644354"/>
-					</object>
-					<int key="connectionID">15</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
 						<string key="label">showSpeakerSetup:</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="845597182"/>
@@ -251,14 +226,6 @@
 						<reference key="destination" ref="753984696"/>
 					</object>
 					<int key="connectionID">115</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">showAudioSettings:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="460431950"/>
-					</object>
-					<int key="connectionID">147</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -304,6 +271,22 @@
 					</object>
 					<int key="connectionID">165</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showHardwareSettings:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="270644354"/>
+					</object>
+					<int key="connectionID">166</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">showProjectAudioSettings:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="460431950"/>
+					</object>
+					<int key="connectionID">167</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -335,11 +318,10 @@
 						<int key="objectID">5</int>
 						<reference key="object" ref="601955300"/>
 						<array class="NSMutableArray" key="children">
-							<reference ref="270644354"/>
 							<reference ref="845597182"/>
 							<reference ref="1004370249"/>
 							<reference ref="753984696"/>
-							<reference ref="20373490"/>
+							<reference ref="270644354"/>
 							<reference ref="460431950"/>
 						</array>
 						<reference key="parent" ref="0"/>
@@ -362,11 +344,6 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">9</int>
 						<reference key="object" ref="753984696"/>
-						<reference key="parent" ref="601955300"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">145</int>
-						<reference key="object" ref="20373490"/>
 						<reference key="parent" ref="601955300"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -443,7 +420,6 @@
 				<string key="-1.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="-2.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="-3.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
-				<string key="145.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="146.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<string key="148.IBPluginDependency">com.apple.InterfaceBuilder.CocoaPlugin</string>
 				<boolean value="NO" key="148.NSWindowTemplate.visibleAtLaunch"/>
@@ -465,7 +441,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">165</int>
+			<int key="maxID">167</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -473,22 +449,22 @@
 					<string key="className">AudioEngine</string>
 					<string key="superclassName">NSObject</string>
 					<dictionary class="NSMutableDictionary" key="actions">
-						<string key="showAudioSettings:">id</string>
-						<string key="showHardwareSetup:">id</string>
+						<string key="showHardwareSettings:">id</string>
 						<string key="showMeterBridge:">id</string>
+						<string key="showProjectAudioSettings:">id</string>
 						<string key="showSpeakerSetup:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
-						<object class="IBActionInfo" key="showAudioSettings:">
-							<string key="name">showAudioSettings:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-						<object class="IBActionInfo" key="showHardwareSetup:">
-							<string key="name">showHardwareSetup:</string>
+						<object class="IBActionInfo" key="showHardwareSettings:">
+							<string key="name">showHardwareSettings:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showMeterBridge:">
 							<string key="name">showMeterBridge:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+						<object class="IBActionInfo" key="showProjectAudioSettings:">
+							<string key="name">showProjectAudioSettings:</string>
 							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBActionInfo" key="showSpeakerSetup:">

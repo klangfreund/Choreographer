@@ -11,7 +11,8 @@
 #import "SpatialPosition.h"
 #import "SpeakerSetupWindowController.h"
 #import "MeterBridgeWindowController.h"
-#import "AudioSettingsWindowController.h"
+#import "HardwareSettingsWindowController.h"
+#import "ProjectAudioSettingsWindowController.h"
 
 #ifdef __cplusplus
 #include "Source/AmbisonicsAudioEngine.h"
@@ -25,7 +26,8 @@
 	
 	SpeakerSetupWindowController *speakerSetupWindowController;
 	MeterBridgeWindowController *meterBridgeWindowController;
-    AudioSettingsWindowController *audioSettingsWindowController;
+    HardwareSettingsWindowController *hardwareSettingsWindowController;
+    ProjectAudioSettingsWindowController *projectAudioSettingsWindowController;
     
 	IBOutlet NSMenu *menu;
     IBOutlet NSPanel *bounceProgressPanel;
@@ -39,6 +41,8 @@
 
 	NSUInteger regionIndex;
 	NSUInteger volumeLevelMeasurementClientCount;
+
+    NSUInteger selectedOutputDeviceIndex;
 }
 
 + (AudioEngine *)sharedAudioEngine;
@@ -47,10 +51,11 @@
 
 // Menu (UI Actions)
 
-- (IBAction)showHardwareSetup:(id)sender;
-- (IBAction)showSpeakerSetup:(id)sender;
+//- (IBAction)showHardwareSetup:(id)sender;
 - (IBAction)showMeterBridge:(id)sender;
-- (IBAction)showAudioSettings:(id)sender;
+- (IBAction)showHardwareSettings:(id)sender;
+- (IBAction)showProjectAudioSettings:(id)sender;
+- (IBAction)showSpeakerSetup:(id)sender;
 
 
 // Auxiliary Playback
@@ -83,8 +88,16 @@
 
 - (void)setMasterVolume:(float)dbValue;
 
-- (void)setAmbisonicsOrder:(short)order;
-- (void)setdBUnit:(double)unit;
+
+// Project specific audio settings
+
+- (void)setAmbisonicsOrder:(float)order;
+
+- (void)setDistanceBasedAttenuation:(int)type
+                       centerRadius:(double)cRadius 
+                     centerExponent:(double)cExponent
+                  centerAttenuation:(double)cAttenuation
+                   dBFalloffPerUnit:(double)dBFalloff;
 
 - (void)setUseHipassFilter:(BOOL)filter;
 - (void)setUseDelay:(BOOL)delay;
@@ -105,8 +118,9 @@
 
 // Hardware
 
-- (NSArray *)availableAudioDeviceNames;
+- (NSArray *)availableOutputDeviceNames;
 - (void)setHardwareOutputDevice:(NSString *)deviceName;
+- (void)setSelectedOutputDeviceIndex:(NSUInteger)val;
 //- (NSString *)nameOfHardwareOutputDevice;
 - (NSArray *)availableBufferSizes;
 - (void)setBufferSize:(NSUInteger)size;

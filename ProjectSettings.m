@@ -37,7 +37,13 @@
         [theDictionary setValue:[NSNumber numberWithFloat:200] forKey:@"poolViewWidth"];       
         [theDictionary setValue:[NSNumber numberWithDouble:0.0] forKey:@"projectMasterVolume"];
         [theDictionary setValue:nil forKey:@"projectWindowFrame"];
-        [theDictionary setValue:[NSNumber numberWithInt:0] forKey:@"projectSampleRate"];       
+        [theDictionary setValue:[NSNumber numberWithInt:0] forKey:@"projectSampleRate"];
+        
+        // project audio settings
+        [theDictionary setValue:[NSNumber numberWithFloat:3.0] forKey:@"ambisonicsOrder"];       
+        [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedAttenuation"];       
+        [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedFiltering"];       
+        [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedDelay"];       
     }
     return self;
 }

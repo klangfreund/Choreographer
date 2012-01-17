@@ -1,21 +1,23 @@
 //
-//  AudioSettingsWindowController.m
+//  HardwareSettingsWindowController.m
 //  Choreographer
 //
 //  Created by Philippe Kocher on 09.12.11.
 //  Copyright 2011 Zurich University of the Arts. All rights reserved.
 //
 
-#import "AudioSettingsWindowController.h"
+#import "HardwareSettingsWindowController.h"
 #import "AudioEngine.h"
 
-@implementation AudioSettingsWindowController
+@implementation HardwareSettingsWindowController
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"AudioSettingsWindow"];
+	self = [self initWithWindowNibName:@"HardwareSettingsWindow"];
 	if(self)
 	{
+        audioEngine = [AudioEngine sharedAudioEngine];
+
         bufferSizes = [[[AudioEngine sharedAudioEngine] availableBufferSizes] retain];
 		NSUInteger bufferSize = [[AudioEngine sharedAudioEngine] bufferSize];
         
@@ -27,11 +29,10 @@
                 selectedBufferSizeIndex = [bufferSizes indexOfObject:num];
                 break;
             }
-            
         }
 		
 
-        [self setWindowFrameAutosaveName:@"AudioSettingsWindow"];
+        [self setWindowFrameAutosaveName:@"HardwareSettingsWindow"];
     }
     
 	return self;

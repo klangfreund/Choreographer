@@ -22,22 +22,8 @@
 {
 	self = [self initWithWindowNibName:@"SpeakerSetupWindow"];
 	if(self)
-	{
-		outputDevices = [[[AudioEngine sharedAudioEngine] availableAudioDeviceNames] retain];
-        selectedOutputDeviceIndex = 0;
-       
-        // find preferred output device and set it
-        for (NSString *device in outputDevices)
-        {
-            if([device isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"audioOutputDevice"]])
-            {
-                selectedOutputDeviceIndex = [outputDevices indexOfObject:device];
-                break;
-            }
-        }
-        [self setSelectedOutputDeviceIndex:selectedOutputDeviceIndex];
-
-		
+	{		
+        audioEngine = [AudioEngine sharedAudioEngine];
 		speakerSetups = [[SpeakerSetups alloc] init];
 		[speakerSetups unarchiveData];
 		[[speakerSetups selectedPreset] updateEngine];
@@ -53,7 +39,7 @@
 		
 - (void)awakeFromNib
 {
-	[self setValue:[speakerSetups selectedPreset] forKey:@"selectedSetup"];		// needed to enable bindings
+    [self setValue:[speakerSetups selectedPreset] forKey:@"selectedSetup"];		// needed to enable bindings
 	[self updateGUI];
 	
 	// register for notifications
@@ -66,8 +52,7 @@
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];	
 
-	[outputDevices release];
-	[speakerSetups release];
+    [speakerSetups release];
 	[speakerSetupChannelStripControllers release];
 	
 	[super dealloc];
@@ -83,10 +68,9 @@
 	[super showWindow:sender];
 	[self run];
 
-	[outputDevices release];
-	outputDevices = [[[AudioEngine sharedAudioEngine] availableAudioDeviceNames] retain];
-
 	[[AudioEngine sharedAudioEngine] volumeLevelMeasurementClient:YES];
+    
+    [self updateGUI];
 }
 
 - (void)windowWillClose:(NSNotification *)notification
@@ -101,20 +85,6 @@
 #pragma mark -
 #pragma mark update gui
 // -----------------------------------------------------------
-
-- (void)setSelectedOutputDeviceIndex:(NSUInteger)index
-{
-	if(/*index != selectedOutputDeviceIndex && */
-       index < [outputDevices count])
-	{
-		selectedOutputDeviceIndex = index;
-		[[AudioEngine sharedAudioEngine] setHardwareOutputDevice:[outputDevices objectAtIndex:index]];
-
-		// send notification
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
-	}
-}
-
 
 - (void)setSelectedIndex:(NSUInteger)index
 {
@@ -133,14 +103,15 @@
 
 - (void)updateGUI
 {
-//	NSLog(@"Speaker Setup Window Controller: update GUI");
+    NSLog(@"Speaker Setup Window Controller: update GUI");
 	
 	// stop any running test noise
 
 	if(testNoiseChannel > -1)
 		[[speakerSetupChannelStripControllers objectAtIndex:testNoiseChannel] setValue:[NSNumber numberWithBool:NO] forKey:@"test"];
 
-	// remove all channel strips
+    
+    // remove all channel strips
 
 	[speakerSetupChannelStripControllers release];
 	

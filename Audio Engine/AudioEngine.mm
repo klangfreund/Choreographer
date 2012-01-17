@@ -73,13 +73,27 @@ static AudioEngine *sharedAudioEngine = nil;
 	// instantiate the window controllers
 	speakerSetupWindowController = [[SpeakerSetupWindowController alloc] init];
 	meterBridgeWindowController = [[MeterBridgeWindowController alloc] init];
-    audioSettingsWindowController = [[AudioSettingsWindowController alloc] init];
+    hardwareSettingsWindowController = [[HardwareSettingsWindowController alloc] init];
+    projectAudioSettingsWindowController = [[ProjectAudioSettingsWindowController alloc] init];
 	
 	// settings
 	[self setTestNoiseVolume:-12];
+    
+
+    // output device
+    selectedOutputDeviceIndex = 0;
+    // find preferred output device and set it
+    for (NSString *device in [self availableOutputDeviceNames])
+    {
+        if([device isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"audioOutputDevice"]])
+        {
+            [self setSelectedOutputDeviceIndex:[[self availableOutputDeviceNames] indexOfObject:device]];
+            break;
+        }
+    }
 
 	
-	regionIndex = 0;	
+    regionIndex = 0;	
 	volumeLevelMeasurementClientCount = 0;
 }
 
@@ -93,7 +107,9 @@ static AudioEngine *sharedAudioEngine = nil;
 	
 	[speakerSetupWindowController release];
     [meterBridgeWindowController release];
-    [audioSettingsWindowController release];
+    [hardwareSettingsWindowController release];
+    [projectAudioSettingsWindowController release];
+    
 	[super dealloc];
 }
 
@@ -102,11 +118,28 @@ static AudioEngine *sharedAudioEngine = nil;
 #pragma mark Menu (UI Actions)
 // -----------------------------------------------------------
 
-- (IBAction)showHardwareSetup:(id)sender
-{
+//- (IBAction)showHardwareSetup:(id)sender
+//{
+//	[self stopAudio];
+//	
+//	ambisonicsAudioEngine->showAudioSettingsWindow();
+//}
+
+- (IBAction)showMeterBridge:(id)sender
+{	
+	[meterBridgeWindowController showWindow:nil];
+}
+
+- (IBAction)showHardwareSettings:(id)sender
+{	
 	[self stopAudio];
-	
-	ambisonicsAudioEngine->showAudioSettingsWindow();
+	[hardwareSettingsWindowController showWindow:nil];
+}
+
+- (IBAction)showProjectAudioSettings:(id)sender
+{	
+	[self stopAudio];
+	[projectAudioSettingsWindowController showWindow:nil];
 }
 
 - (IBAction)showSpeakerSetup:(id)sender
@@ -114,15 +147,14 @@ static AudioEngine *sharedAudioEngine = nil;
 	[speakerSetupWindowController showWindow:nil];
 }
 
-- (IBAction)showMeterBridge:(id)sender
-{	
-	[meterBridgeWindowController showWindow:nil];
+- (BOOL)validateMenuItem:(NSMenuItem *)item
+{
+	if ([item action] == @selector(showProjectAudioSettings:) && ![[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument"])
+		return NO;
+	else
+		return YES;
 }
 
-- (IBAction)showAudioSettings:(id)sender
-{	
-	[audioSettingsWindowController showWindow:nil];
-}
 
 
 	
@@ -291,14 +323,17 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->setMasterGain(gain);
 }
 
-- (void)setAmbisonicsOrder:(short)order
+- (void)setAmbisonicsOrder:(float)order
 {
-	ambisonicsAudioEngine->setAEPOrder(order);
+	ambisonicsAudioEngine->setAEPOrder((int)order);
 }
 
-- (void)setdBUnit:(double)unit
-{
-}
+- (void)setDistanceBasedAttenuation:(int)type
+                       centerRadius:(double)cRadius 
+                     centerExponent:(double)cExponent
+                  centerAttenuation:(double)cAttenuation
+                   dBFalloffPerUnit:(double)dBFalloff
+{}
 
 - (void)setUseHipassFilter:(BOOL)filter
 {
@@ -459,7 +494,7 @@ static AudioEngine *sharedAudioEngine = nil;
 #pragma mark hardware
 // -----------------------------------------------------------
 
-- (NSArray *)availableAudioDeviceNames
+- (NSArray *)availableOutputDeviceNames
 {
 	const StringArray juceStringArray = ambisonicsAudioEngine->getAvailableAudioDeviceNames();
 	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
@@ -494,6 +529,16 @@ static AudioEngine *sharedAudioEngine = nil;
     // TODO: present the error message returned by this method
 
     [[NSUserDefaults standardUserDefaults] setValue:deviceName forKey:@"audioOutputDevice"];
+}
+
+- (void)setSelectedOutputDeviceIndex:(NSUInteger)val
+{
+    selectedOutputDeviceIndex = val;
+    
+    [self setHardwareOutputDevice:[[self availableOutputDeviceNames] objectAtIndex:selectedOutputDeviceIndex]];
+
+    // send notification
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
 }
 
 - (NSArray *)availableBufferSizes

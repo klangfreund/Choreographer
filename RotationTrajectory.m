@@ -113,8 +113,6 @@
 	}
 	else
 		duration = dur;
-
-	
 	
 	while(time < duration)
 	{

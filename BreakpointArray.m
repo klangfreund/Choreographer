@@ -120,7 +120,7 @@
 
 - (float)interpolatedValueAtTime:(NSUInteger)time
 {
-    Breakpoint *bp1, *bp2;
+    Breakpoint *bp1, *bp2 = nil;
     
     for(Breakpoint *bp in breakpoints)
     {
