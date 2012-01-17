@@ -166,49 +166,15 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
     // This is the regular case
     else
     {
-        // If there is only one point in the spacial envelope,
-        // a constant delay is applied.
-        // To avaid noise added by interpolation, we sacrify
-        // delay time accuracy and adjust the delay time such that
-        // the delay time is a multiple of 1/sampleRate.
 		if (constantSpacialPosition)
 		{
-            // If you request samples at negative positions from
-            // AudioFormatReaderSource it will return the samples
-            // at position (requestedPosition mod fileLength).
-            // But here we would like to get silence for negative
-            // positions.
-            
-            // If all the samples we will request are at a position
-            // bigger than zero.
-            if (audioBlockStartPosition -
-                constantSpacialPositionDelayTimeInSamples >= 0)
-            {
-                // The correct position for the audioSourceGainEnvelope
-                // has already been set in the setNextReadPosition.
-                audioSourceGainEnvelope.getNextAudioBlock(info);
-            }
-            // If all the samples we will request are at a position
-            // smaller than zero, we set them to zero.
-            else if (audioBlockEndPosition - 
-                constantSpacialPositionDelayTimeInSamples <= 0)
-            {
-                info.buffer->clear(info.startSample, info.numSamples);
-            }
-            // If only some samples of the block needs to be set to zero.
-            else    // audioBlockStartPosition -
-                    // constantSpacialPositionDelayTimeInSamples < 0
-                    // && audioBlockEndPosition - 
-                    // constantSpacialPositionDelayTimeInSamples > 0
-            {
-                audioSourceGainEnvelope.getNextAudioBlock(info);
-                // How many samples need to be zero at the beginning of
-                // the audio block?
-                int numOfSamplesToSetZero = 
-                        constantSpacialPositionDelayTimeInSamples - 
-                        audioBlockStartPosition;
-                info.buffer->clear(info.startSample, numOfSamplesToSetZero);
-            }
+            // If there is only one point in the spacial envelope,
+            // a constant delay is applied.
+            // To avaid noise added by interpolation, we sacrify
+            // delay time accuracy and adjust the delay time such that
+            // the delay time is a multiple of 1/sampleRate.
+            // See constantSpacialPositionDelayTimeInSamples.
+            audioSourceGainEnvelope.getNextAudioBlock(info);
         }
         
         // If there are multiple points in the spacialEnvelope.
@@ -222,6 +188,11 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             //  audioSourceGainEnvelope.)
             double lowestPositionToRequestInSeconds = DBL_MAX;
             double highestPositionToRequestInSeconds = -DBL_MAX;
+            
+            if (nextSpacialPoint.getPosition() > audioBlockEndPosition)
+            {
+                // TODO
+            }
             
         }
     }
@@ -250,15 +221,15 @@ void AudioSourceDopplerEffect::setNextReadPosition (int64 newPosition)
 	nextPlayPosition = newPosition;
     
     // Set the nextPlayPosition for the audioSourceGainEnvelope
+    // --------------------------------------------------------
     if (constantSpacialPosition)
     { 
         audioSourceGainEnvelope.setNextReadPosition(nextPlayPosition - constantSpacialPositionDelayTimeInSamples);
         // If the argument (nextPlayPosition - 
         // constantSpacialPositionDelayTimeInSamples) is smaller than zero,
         // this will set the playhead to the position (argument mod fileLength).
-        // But since we would prefere silence in this case, it will be
-        // handled in the getNextAudioBlock method.
     }
+    // If the spacial envelope contains multiple points.
     else
     {
         // TODO
@@ -377,8 +348,8 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition(int newPosition)
 		nextSpacialPointIndex++;
 	}
 	
-	previousSpacialPoint = spacialEnvelope[nextSpacialPointIndex - 1];
-	nextSpacialPoint = spacialEnvelope[nextSpacialPointIndex];
+	previousSpacialPoint = spacialEnvelope.getReference(nextSpacialPointIndex - 1);
+	nextSpacialPoint = spacialEnvelope.getReference(nextSpacialPointIndex);
 
 	
 	double distance = double (nextSpacialPoint.getPosition() 
