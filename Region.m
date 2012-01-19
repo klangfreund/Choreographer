@@ -421,7 +421,7 @@
 {
 //	NSLog(@"Region: updateGainEnvelope");
 	
-	NSMutableArray *tempArray = [gainBreakpointArray.breakpoints mutableCopy];
+	NSMutableArray *tempArray = [gainBreakpointArray.breakpoints copy];
 
     //	float lastValue = [(Breakpoint *)[gainBreakpointArray objectAtIndex:0] value];
 	for(Breakpoint* bp in tempArray)

@@ -42,6 +42,13 @@
     [coder encodeObject:breakpoints forKey:@"bp"];
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    BreakpointArray *copy = [[[self class] allocWithZone: zone] init];
+    [copy setBreakpoints:[self breakpoints]];
+    return copy;
+}
+
 #pragma mark -
 #pragma mark deriving new arrays
 // -----------------------------------------------------------------------------

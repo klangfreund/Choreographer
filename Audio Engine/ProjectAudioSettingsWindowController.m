@@ -9,6 +9,7 @@
 #import "ProjectAudioSettingsWindowController.h"
 #import "AudioEngine.h"
 
+
 @implementation ProjectAudioSettingsWindowController
 
 - (id)init
@@ -21,6 +22,12 @@
     	[self addObserver:self forKeyPath:@"ambisonicsOrder" options:0 context:nil];
 
     	[self addObserver:self forKeyPath:@"distanceBasedAttenuation" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationCentreZoneSize" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationCentreDB" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationCentreExponent" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationMode" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationDbFalloff" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedAttenuationExponent" options:0 context:nil];
     	[self addObserver:self forKeyPath:@"distanceBasedFiltering" options:0 context:nil];
     	[self addObserver:self forKeyPath:@"distanceBasedDelay" options:0 context:nil];
 
@@ -38,24 +45,43 @@
 }
 
 - (void)showWindow:(id)sender
-{
-	[super showWindow:sender];
-
+{    
     document = [[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument"];
+
+    [NSApp beginSheet: [self window]
+       modalForWindow: [document windowForSheet]
+        modalDelegate: self
+       didEndSelector: nil
+          contextInfo: nil];
+
     [self setValue:[document valueForKeyPath:@"projectSettings.ambisonicsOrder"] forKeyPath:@"ambisonicsOrder"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuation"] forKeyPath:@"distanceBasedAttenuation"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationCentreZoneSize"] forKeyPath:@"distanceBasedAttenuationCentreZoneSize"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationCentreDB"] forKeyPath:@"distanceBasedAttenuationCentreDB"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationCentreExponent"] forKeyPath:@"distanceBasedAttenuationCentreExponent"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationMode"] forKeyPath:@"distanceBasedAttenuationMode"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationDbFalloff"] forKeyPath:@"distanceBasedAttenuationDbFalloff"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationExponent"] forKeyPath:@"distanceBasedAttenuationExponent"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFiltering"] forKeyPath:@"distanceBasedFiltering"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelay"] forKeyPath:@"distanceBasedDelay"];
 }
 
+- (IBAction)closeWindow:(id)sender
+{
+    [NSApp endSheet:[self window]];
+    [[self window] orderOut:nil];
+}
 
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {    
     [document setValue:[self valueForKeyPath:keyPath] forKeyPath:[NSString stringWithFormat:@"projectSettings.%@", keyPath]];
+    [attenuationCurveView setNeedsDisplay:YES];
     
     if([keyPath isEqualToString:@"ambisonicsOrder"])
         [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:ambisonicsOrder];
+    else if([keyPath isEqualToString:@"distanceBasedAttenuation"])
+        [attenuationCurveView setEnabled:distanceBasedAttenuation];
 }
 
 @end

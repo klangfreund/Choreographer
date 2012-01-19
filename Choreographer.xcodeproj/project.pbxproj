@@ -81,6 +81,7 @@
 		15A82A42111B952900F31B92 /* SelectRegions_on.png in Resources */ = {isa = PBXBuildFile; fileRef = 15A82A3C111B952900F31B92 /* SelectRegions_on.png */; };
 		15A82A43111B952900F31B92 /* trajectoryItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 15A82A3D111B952900F31B92 /* trajectoryItem.tiff */; };
 		15A82A45111B954A00F31B92 /* audioItem.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 15A82A44111B954A00F31B92 /* audioItem.tiff */; };
+		15A88DB414C5CE9700CCAFC6 /* AttenuationCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15A88DB314C5CE9700CCAFC6 /* AttenuationCurveView.m */; };
 		15AAAEFB12C22A8C00BF3035 /* choreographer_logo.eps in Resources */ = {isa = PBXBuildFile; fileRef = 15AAAEFA12C22A8C00BF3035 /* choreographer_logo.eps */; };
 		15B2662E0E4BA6FE00F41275 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B2662D0E4BA6FE00F41275 /* AudioUnit.framework */; };
 		15C29D940ECB56F50071DDAA /* TrajectoryInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */; };
@@ -266,6 +267,8 @@
 		15A82A3C111B952900F31B92 /* SelectRegions_on.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SelectRegions_on.png; sourceTree = "<group>"; };
 		15A82A3D111B952900F31B92 /* trajectoryItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = trajectoryItem.tiff; sourceTree = "<group>"; };
 		15A82A44111B954A00F31B92 /* audioItem.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = audioItem.tiff; sourceTree = "<group>"; };
+		15A88DB214C5CE9700CCAFC6 /* AttenuationCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttenuationCurveView.h; sourceTree = "<group>"; };
+		15A88DB314C5CE9700CCAFC6 /* AttenuationCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AttenuationCurveView.m; sourceTree = "<group>"; };
 		15AAAEFA12C22A8C00BF3035 /* choreographer_logo.eps */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = choreographer_logo.eps; sourceTree = "<group>"; };
 		15B2662D0E4BA6FE00F41275 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = /System/Library/Frameworks/AudioUnit.framework; sourceTree = "<absolute>"; };
 		15B3D1A411661A52009CB620 /* CoreMIDI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMIDI.framework; path = System/Library/Frameworks/CoreMIDI.framework; sourceTree = SDKROOT; };
@@ -480,6 +483,8 @@
 				1500639E14C47280001361BF /* ProjectAudioSettingsWindow.xib */,
 				1500639B14C4725D001361BF /* ProjectAudioSettingsWindowController.h */,
 				1500639C14C4725D001361BF /* ProjectAudioSettingsWindowController.m */,
+				15A88DB214C5CE9700CCAFC6 /* AttenuationCurveView.h */,
+				15A88DB314C5CE9700CCAFC6 /* AttenuationCurveView.m */,
 			);
 			name = AudioSettings;
 			sourceTree = "<group>";
@@ -1062,6 +1067,7 @@
 				15D9C25014C44BA500941A40 /* AudioSourceDopplerEffect.cpp in Sources */,
 				1500639A14C47225001361BF /* HardwareSettingsWindowController.m in Sources */,
 				1500639D14C4725D001361BF /* ProjectAudioSettingsWindowController.m in Sources */,
+				15A88DB414C5CE9700CCAFC6 /* AttenuationCurveView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

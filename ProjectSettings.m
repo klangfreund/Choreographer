@@ -41,7 +41,14 @@
         
         // project audio settings
         [theDictionary setValue:[NSNumber numberWithFloat:3.0] forKey:@"ambisonicsOrder"];       
-        [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedAttenuation"];       
+        [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedAttenuation"];
+        [theDictionary setValue:[NSNumber numberWithFloat:0.1] forKey:@"distanceBasedAttenuationCentreZoneSize"];
+        [theDictionary setValue:[NSNumber numberWithFloat:-6] forKey:@"distanceBasedAttenuationCentreDB"];
+        [theDictionary setValue:[NSNumber numberWithFloat:0.2] forKey:@"distanceBasedAttenuationCentreExponent"];
+        [theDictionary setValue:[NSNumber numberWithInt:0] forKey:@"distanceBasedAttenuationMode"];
+        [theDictionary setValue:[NSNumber numberWithFloat:-3] forKey:@"distanceBasedAttenuationDbFalloff"];
+        [theDictionary setValue:[NSNumber numberWithFloat:1] forKey:@"distanceBasedAttenuationExponent"];
+        
         [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedFiltering"];       
         [theDictionary setValue:[NSNumber numberWithBool:YES] forKey:@"distanceBasedDelay"];       
     }

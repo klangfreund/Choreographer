@@ -139,7 +139,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (IBAction)showProjectAudioSettings:(id)sender
 {	
 	[self stopAudio];
-	[projectAudioSettingsWindowController showWindow:nil];
+    [projectAudioSettingsWindowController showWindow:nil];
 }
 
 - (IBAction)showSpeakerSetup:(id)sender

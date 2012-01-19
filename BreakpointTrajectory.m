@@ -131,12 +131,13 @@
 	}
 	else if(mode == durationModeOriginal)
 	{
-		tempArray = [positionBreakpointArray mutableCopy];
+		tempArray = [positionBreakpointArray.breakpoints copy];
 	}
 	else if(mode == durationModeLoop)
 	{
-		tempArray = [[[NSMutableArray alloc] init] autorelease];
+        tempArray = [[[NSMutableArray alloc] init] autorelease];
 		count = [positionBreakpointArray count];
+        if(originalDur == 0) originalDur = dur; // avoid endless loop when there is only one bp
 		while (time < dur)
 		{
 			bp = [[positionBreakpointArray objectAtIndex:(i++ % count)] copy];
@@ -151,9 +152,7 @@
 			}
 			
 			bp.time = time;
-			
-			NSLog(@"time = %u", time);
-			
+						
 			[tempArray addObject:bp];
 		}
 	}
@@ -161,6 +160,7 @@
 	{
 		tempArray = [[[NSMutableArray alloc] init] autorelease];
 		count = [positionBreakpointArray count];
+        if(originalDur == 0) originalDur = dur; // avoid endless loop when there is only one bp
 		while (time < dur)
 		{
 			bp = [[positionBreakpointArray objectAtIndex:(i % count)] copy];
