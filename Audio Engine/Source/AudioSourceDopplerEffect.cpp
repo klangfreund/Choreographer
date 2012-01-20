@@ -8,6 +8,7 @@
  */
 
 #include "AudioSourceDopplerEffect.h"
+#include <float.h> // To be able to use DBL_MAX
 
 //==============================================================================
 
@@ -219,6 +220,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             // ----------------------------------------------------------
             // (such that we can request a corresponding audio block from the
             //  audioSourceGainEnvelope.)
+            double lowestPositionToRequestInSeconds = DBL_MAX;
+            double highestPositionToRequestInSeconds = -DBL_MAX;
             
         }
     }
