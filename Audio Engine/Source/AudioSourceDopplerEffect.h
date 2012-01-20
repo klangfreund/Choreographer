@@ -67,13 +67,18 @@ public:
 private:
 	/**
 	 Figures out between which audioEnvelopePoints we are right now
-	 and sets up nextSpacialPointIndex, previousSpacialPoint and nextSpacialPoint.
-	 It also calculates the values of the float-arrays channelFactorAtPreviousSpacialPoint,
-	 channelFactorAtNextSpacialPoint, channelFactorDelta and channelFactor.
+	 and sets up
+     - nextSpacialPointIndex
+     - nextSpacialPoint
+     - previousSpacialPoint
+     - delayOnCurrentSample
+     - delayDelta.
 	 */
-	inline void prepareForNewPosition (int newPosition);
+	inline void prepareForNewPosition (int newPosition,
+                                       int nextSpacialPointIndex_ = 1);
     
     double sampleRate;
+    double oneOverSampleRate;
     double samplesPerBlockExpected;
     
     /** Holds the SpacialEnvelopePoints which define the
@@ -103,7 +108,7 @@ private:
     int audioBlockEndPosition;
     
     /**
-     The delay of the current sample, measured in samples.
+     The delay of the current sample, measured in seconds.
      */
     double delayOnCurrentSample;
     

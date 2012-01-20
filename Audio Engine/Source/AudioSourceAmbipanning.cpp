@@ -110,6 +110,8 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
     
     // By default: No doppler effect
     enableDopplerEffect(false);
+    // TEMP
+    enableDopplerEffect(true);
 	
 	// Define an initial spacial envelope.
 	// It is also neccessary to set up the newSpacialEnvelope,
@@ -265,28 +267,30 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 			
 			for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 			{
-				// Points to the first sample in the audio block.
+				// Point sample (an Array<float*>) to the first sample in the audio block.
 				sample.set(channel, info.buffer->getSampleData(channel, info.startSample)); 
 				  // First argument: channelNumber = channel
 				  // Second argument: sampleOffset = info.startSample
 			}				
-				
+            
+            // Go through all spacial points lying in this audio block.
 			while (true)
 			{
-				// if the next spacial point is outside of the current audio block
+				// If the next spacial point is outside of the current audio block
 				// (audioBlockEndPosition is the position of to the first sample
 				//  after the current block)
 				if (nextSpacialPoint->getPosition() >= audioBlockEndPosition )
 				{
-					numberOfRemainingSamples = audioBlockEndPosition - currentPosition;
-					while (--numberOfRemainingSamples >= 0)
+					while (currentPosition != audioBlockEndPosition)
 					{
 						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 						{
 							*sample[channel] *= channelFactor[channel];
 							sample.set(channel, sample[channel] + 1);
+                                // Point to the next sample.
 							channelFactor.set(channel, channelFactor[channel] + channelFactorDelta[channel]);
 						}
+                        ++currentPosition;
 					}
 					break;
 				}
@@ -294,7 +298,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 				// if the next gain point is inside the current audio block
 				else
 				{
-					// apply the gain envelope up to the sample before the nextGainPoint
+					// apply the gain envelope up to the sample before the nextSpacialPoint
 					numberOfRemainingSamples = nextSpacialPoint->getPosition() - currentPosition;
 					while (--numberOfRemainingSamples >= 0)
 					{
@@ -306,7 +310,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 						}
 					}
 					
-					// apply the gain to the sample at the nextGainPoint position					
+					// apply the gain to the sample at the nextSpacialPoint position					
 					for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
 					{
 						channelFactor.set(channel, channelFactorAtNextSpacialPoint[channel]);

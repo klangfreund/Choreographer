@@ -339,13 +339,13 @@ private:
 	SpacialEnvelopePoint * previousSpacialPoint;
 	SpacialEnvelopePoint * nextSpacialPoint;
 	int nextSpacialPointIndex;
-	Array <double> channelFactorAtPreviousSpacialPoint;
-	Array <double> channelFactorAtNextSpacialPoint;
-	Array <double> channelFactor;
-	Array <double> previousChannelFactor; // used in getNextAudioBlock(..) if there is a
+	Array<double> channelFactorAtPreviousSpacialPoint;
+	Array<double> channelFactorAtNextSpacialPoint;
+	Array<double> channelFactor;
+	Array<double> previousChannelFactor; // used in getNextAudioBlock(..) if there is a
 	// transition to a new envelope going on.
-	Array <double> channelFactorDelta;
-	Array <float*> sample;
+	Array<double> channelFactorDelta;
+	Array<float*> sample;
 	int numberOfRemainingSamples;
 	
 	CriticalSection callbackLock;
