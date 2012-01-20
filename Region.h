@@ -38,8 +38,6 @@
 	float zoomFactorX, zoomFactorY;
 }
 
-@property (retain) BreakpointArray *gainBreakpointArray;
-
 - (void)commonAwake;
 
 // drawing
@@ -58,7 +56,6 @@
 - (void)moveByDeltaX:(float)deltaX deltaY:(float)deltaY;
 - (void)cropByDeltaX1:(float)deltaX1 deltaX2:(float)deltaX2;
 
-- (void)updateGainEnvelope;
 - (void)updateTimeInModel;
 //- (void)undoableRefreshView;
 
@@ -79,6 +76,7 @@
 - (void)setFrame:(NSRect)rect;
 - (NSRect)trajectoryFrame;
 - (NSNumber *)duration;
+- (void)setGainBreakpointArray:(BreakpointArray *)gainBreakpointArray;
 
 // position
 - (void)modulateTrajectory;

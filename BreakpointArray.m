@@ -45,7 +45,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     BreakpointArray *copy = [[[self class] allocWithZone: zone] init];
-    [copy setBreakpoints:[self breakpoints]];
+    [copy setBreakpoints:[[self breakpoints] mutableCopyWithZone:zone]];
     return copy;
 }
 
@@ -96,6 +96,66 @@
 
 
 #pragma mark -
+#pragma mark crop
+// -----------------------------------------------------------------------------
+
+- (void)cropStart:(float)start duration:(float)duration
+{
+	NSLog(@"Breakpoint Array: crop");
+	
+	NSMutableArray *tempArray = [breakpoints copy];
+    Breakpoint *bp;
+    
+    float startValue = [self interpolatedValueAtTime:start];
+    float endValue = [self interpolatedValueAtTime:start + duration];
+    
+	for(bp in tempArray)
+	{
+        if(bp.time < start ||
+		   bp.time > start + duration)
+		{
+			[breakpoints removeObject:bp];
+		}
+		else
+		{
+			bp.time -= start;
+		}
+	}
+    
+	// if the breakpoint array has been emptied
+    // add a breakpoint at the beginning
+	if(![breakpoints count])
+	{
+		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
+		[bp setValue:startValue];
+		[bp setTime:0];
+		[bp setBreakpointType:breakpointTypeValue];
+		[breakpoints addObject:bp];	
+	}
+    
+    // set interpolated values if appropriate
+    if([(Breakpoint *)[breakpoints objectAtIndex:0] value] != startValue)
+    {
+		bp = [[[Breakpoint alloc] init] autorelease];
+		[bp setValue:startValue];
+		[bp setTime:0];
+		[bp setBreakpointType:breakpointTypeValue];
+        [breakpoints insertObject:bp atIndex:0];
+	}
+    
+    if([(Breakpoint *)[breakpoints lastObject] value] != endValue)
+    {
+		bp = [[[Breakpoint alloc] init] autorelease];
+		[bp setValue:endValue];
+		[bp setTime:duration];
+		[bp setBreakpointType:breakpointTypeValue];
+        [breakpoints addObject:bp];
+	}
+
+}
+
+
+#pragma mark -
 #pragma mark interpolated values
 // -----------------------------------------------------------------------------
 - (SpatialPosition *)interpolatedPositionAtTime:(NSUInteger)time
@@ -128,6 +188,9 @@
 - (float)interpolatedValueAtTime:(NSUInteger)time
 {
     Breakpoint *bp1, *bp2 = nil;
+    
+    if([breakpoints count] == 1 || time == 0)
+        return [(Breakpoint *)[breakpoints objectAtIndex:0] value];
     
     for(Breakpoint *bp in breakpoints)
     {

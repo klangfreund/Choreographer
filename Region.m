@@ -23,16 +23,14 @@
 
  */
 
-@synthesize gainBreakpointArray;
-
 
 - (void)awakeFromInsert
 {
 //	NSLog(@"Region %x awakeFromInsert", self);
 
 	[self commonAwake];
-	gainBreakpointArray = [[BreakpointArray alloc] init];
-	[gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
+	BreakpointArray *bpArray = [[[BreakpointArray alloc] init] autorelease];
+    [self setGainBreakpointArray:bpArray];
 
 	frame = NSMakeRect(0, 0, 0, 0);
 	contentOffset = 0;
@@ -113,7 +111,7 @@
 	// get stored settings
 	if(!projectSettings)
 	{
-		id document = [[NSDocumentController sharedDocumentController] currentDocument];
+		id document = [superview valueForKey:@"document"];
 		projectSettings = [[document valueForKey:@"projectSettings"] retain];
 	}
 	
@@ -385,10 +383,15 @@
 - (void)mouseUp:(NSEvent *)event
 {
 	if(![[self valueForKey:@"locked"] boolValue])
-		[gainBreakpointView mouseUp:event];	
+    {
+		if([[gainBreakpointView valueForKey:@"dirty"]boolValue])
+        {
+            NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
+            [[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];        
+        }
 
-	NSManagedObjectContext *managedObjectContext = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
-	[[managedObjectContext undoManager] setActionName:[NSString stringWithFormat:@"edit gain envelope"]];
+        [gainBreakpointView mouseUp:event];	
+    }
 }
 
 
@@ -414,41 +417,11 @@
 	frame.origin.x += deltaX1;
 	contentOffset += deltaX1;
 	frame.size.width -= deltaX1 - deltaX2;
+    
+    [gainBreakpointArray cropStart:deltaX1 / zoomFactorX duration:frame.size.width / zoomFactorX];
 }
 
 
-- (void)updateGainEnvelope
-{
-//	NSLog(@"Region: updateGainEnvelope");
-	
-	NSMutableArray *tempArray = [gainBreakpointArray.breakpoints copy];
-
-    //	float lastValue = [(Breakpoint *)[gainBreakpointArray objectAtIndex:0] value];
-	for(Breakpoint* bp in tempArray)
-	{
-        if(bp.time < contentOffset / zoomFactorX ||
-		   bp.time > contentOffset / zoomFactorX + frame.size.width / zoomFactorX)
-		{
-			[gainBreakpointArray removeBreakpoint:bp];
-		}
-		else
-		{
-			bp.time -= contentOffset / zoomFactorX;
-		}
-	}
-	
-	// temp
-	// make sure that the breakpoint array is not empty
-	if(![gainBreakpointArray count])
-	{
-		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setValue:0];
-		[bp setTime:0];
-		[gainBreakpointArray addBreakpoint:bp];	
-	}
-	
-	[self archiveData];
-}
 
 - (void)updateTimeInModel
 {
@@ -567,6 +540,14 @@
 
 
 - (NSNumber *)duration { return nil; }
+
+- (void)setGainBreakpointArray:(BreakpointArray *)bpArray
+{
+    [gainBreakpointArray release];
+    gainBreakpointArray = [bpArray retain];
+    
+    [gainBreakpointView setValue:gainBreakpointArray forKey:@"breakpointArray"];
+}
 
 
 #pragma mark -

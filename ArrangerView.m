@@ -1104,15 +1104,10 @@
 		}
 	}
 	
-
-	BreakpointArray *gainBreakpointArray = [[BreakpointArray alloc] init];
-	
-	for(Breakpoint *bp in [originalRegion valueForKey:@"gainBreakpointArray"])
-	{
-		[gainBreakpointArray addBreakpoint:[bp copy]];
-	}
-	
+    // copy gain curve
+	BreakpointArray *gainBreakpointArray = [[originalRegion valueForKey:@"gainBreakpointArray"] copy];
 	[newRegion setValue:gainBreakpointArray forKey:@"gainBreakpointArray"];
+
 
 	return newRegion;
 }
@@ -1301,14 +1296,15 @@
 	/* handle double clicks
 		- open special editors
 		- not yet implemented
-	*/
 	
 	if([event clickCount] > 1)
 	{
 		NSLog(@"double click");
 		return;
 	}
+     */
 
+    
 	/* on mouse down: check the modifier
 	   (it might have changed while the focus was on another view
 		eg. an context menu)
@@ -1433,7 +1429,10 @@
 				
 				if(hitAudioRegion)
 				{
-					[self addRegionToSelection:hitAudioRegion];
+					if([[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+						[self removeRegionFromSelection:hitAudioRegion];
+					else
+						[self addRegionToSelection:hitAudioRegion];
 					
 					dragging = 1;
 				}
@@ -1612,6 +1611,7 @@
 				while ((aRegion = [enumerator nextObject]))
 				{
 					[aRegion updateTimeInModel];
+                    [aRegion archiveData];
 				}
 				
 				// undo
@@ -1631,7 +1631,8 @@
 					
 					[self removeRegionFromView:aRegion];
 
-					[region1 updateTimeInModel];
+                    [region1 archiveData];
+                    [region1 updateTimeInModel];
 					
 					[tempSet addObject:region1];
 				}
@@ -1787,6 +1788,7 @@
 	}
 
 	[self setNeedsDisplay:YES];
+    NSLog(@"select all %@", selectedRegions);
 }
 
 - (BOOL)selectionIsEditable
@@ -1932,13 +1934,13 @@
 {
 	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	Region *region;
-	int count = 0;
+	int dirty = 0;
 	
 	while((region = [enumerator nextObject]))
 	{
 		if([region valueForKey:@"trajectoryItem"])
 		{
-			count++;
+			dirty++;
 			[region setValue:nil forKey:@"trajectoryItem"];
 		}
 	}
@@ -1949,9 +1951,9 @@
 	[self setNeedsDisplay:YES];
 
 	// undo
-	if(count == 1)
+	if(dirty == 1)
 		[[context undoManager] setActionName:@"remove trajectory"];
-	else if(count > 1)
+	else if(dirty > 1)
 		[[context undoManager] setActionName:@"remove trajectories"];
 }
 
@@ -2110,6 +2112,7 @@
 		//[self setNeedsDisplayInRect:r];
 		
 		[newRegion moveByDeltaX:delta.x deltaY:delta.y];
+        [newRegion archiveData];
 		[newRegion updateTimeInModel];
 		
 		[newRegions addObject:newRegion];
@@ -2151,6 +2154,7 @@
 		delta.x = [[aRegion valueForKey:@"duration"] unsignedLongValue] * zoomFactorX;
 				
 		[newRegion moveByDeltaX:delta.x deltaY:delta.y];
+        [newRegion archiveData];
 		[newRegion updateTimeInModel];
 		
 		[newRegions addObject:newRegion];
@@ -2212,7 +2216,8 @@
 			}
 						
 			[region1 cropByDeltaX1:deltaX1 deltaX2:deltaX2];
-			[region1 updateTimeInModel];
+            [region1 archiveData];
+            [region1 updateTimeInModel];
 			
 
 			if(r.origin.x < marqueeRect.origin.x && r.origin.x + r.size.width > marqueeRect.origin.x + marqueeRect.size.width)
@@ -2222,7 +2227,8 @@
 				deltaX3 = marqueeRect.origin.x + marqueeRect.size.width - r.origin.x;
 
 				[region2 cropByDeltaX1:deltaX3 deltaX2:0];
-				[region2 updateTimeInModel];
+                [region2 archiveData];
+                [region2 updateTimeInModel];
 			}
 			
 			[self recursivelyDeleteRegions:region0];
@@ -2291,7 +2297,7 @@
 
 	float cursor = [playbackController locator] * zoomFactorX + ARRANGER_OFFSET;
 	NSRect r;
-	BOOL dirty = NO;
+	int dirty = 0;
 	
 	Region *region0, *region1, *region2;
 	
@@ -2301,7 +2307,7 @@
 		
 		if(cursor > r.origin.x && cursor < r.origin.x + r.size.width)
 		{
-			dirty = YES;
+			dirty++;
 			
 			// make copies of the original region
 			region1 = [self makeUniqueCopyOf:region0];
@@ -2310,16 +2316,16 @@
 			[self removeRegionFromView:region0];
 			
 			[region1 cropByDeltaX1:0 deltaX2:cursor - r.origin.x - r.size.width];
-			[region1 updateGainEnvelope];
+			[region1 archiveData];
 			[region1 updateTimeInModel];
 
 			[region2 cropByDeltaX1:cursor - r.origin.x deltaX2:0];
-			[region2 updateGainEnvelope];
+			[region2 archiveData];
 			[region2 updateTimeInModel];
 		}
 	}
 	
-	if(dirty)
+	if(0 < dirty)
 	{
 		[self deselectAllRegions];
 		
@@ -2330,9 +2336,9 @@
 		[document selectionInArrangerDidChange];
 
 		// undo
-		if([selectedRegions count] == 1)
+		if(dirty == 1)
 			[[context undoManager] setActionName:@"split audio region"];
-		else if([selectedRegions count] > 1)
+		else if(dirty > 1)
 			[[context undoManager] setActionName:@"split audio regions"];
 	}
 }

@@ -31,6 +31,8 @@
 - (id)lastObject;
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state objects:(id *)stackbuf count:(NSUInteger)len;
 
+- (void)cropStart:(float)start duration:(float)duration;
+
 // interpolated values
 - (SpatialPosition *)interpolatedPositionAtTime:(NSUInteger)time;
 - (float)interpolatedValueAtTime:(NSUInteger)time;

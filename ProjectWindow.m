@@ -89,47 +89,21 @@
 			[playbackController startStop];
 			break;
 			
-		default:
+        // shortcuts
+        case 18:
+            if([event modifierFlags] & NSAlternateKeyMask)
+                [document setValue:[NSNumber numberWithInt:0] forKeyPath:@"projectSettings.arrangerDisplayMode"];
+            break;
+            
+        case 19:
+            if([event modifierFlags] & NSAlternateKeyMask)
+                [document setValue:[NSNumber numberWithInt:1] forKeyPath:@"projectSettings.arrangerDisplayMode"];
+            break;
+
+
+            
+        default:
 			[[self nextResponder] keyDown:event];
-
-		// numbers
-/*		case 18:
-		case 83:
-			num = 1; break;
-		case 19:
-		case 84:
-			num = 2; break;
-		case 20:
-		case 85:
-			num = 3; break;
-		case 21:
-		case 86:
-			num = 4; break;
-		case 22:
-		case 87:
-			num = 6; break;
-		case 23:
-		case 88:
-			num = 5; break;
-		case 25:
-		case 89:
-			num = 9; break;
-		case 26:
-		case 91:
-			num = 7; break;
-		case 28:
-		case 92:
-			num = 8; break;
-		case 29:
-		case 82:
-			num = 0; break;
-
-		// tab or dot
-		case 48:
-		case 47:
-		case 65:
-			break; */
-			
 	}
 }
 

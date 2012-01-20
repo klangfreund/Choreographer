@@ -394,7 +394,7 @@ static AudioEngine *sharedAudioEngine = nil;
 {
 	unsigned int index = [[audioRegion valueForKey:@"playbackIndex"] unsignedIntValue];
 
-	NSLog(@"modifyAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
+//	NSLog(@"modifyAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
 
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 	double fromMsToSamples = 0.001*sampleRate;
@@ -413,7 +413,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)deleteAudioRegion:(id)audioRegion
 {
 	unsigned int index = [[audioRegion valueForKey:@"playbackIndex"] unsignedIntValue];
-	NSLog(@"deleteAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
+//	NSLog(@"deleteAudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
 	
 	ambisonicsAudioEngine->removeRegion(index);
 }
