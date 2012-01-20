@@ -73,6 +73,16 @@
     return [theDictionary valueForKey:key];
 }
 
+- (void)addObserver:(NSObject *)anObserver forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void *)context
+{
+    [theDictionary addObserver:anObserver forKeyPath:keyPath options:options context:context];
+}
+
+- (void)removeObserver:(NSObject *)anObserver forKeyPath:(NSString *)keyPath
+{
+    [theDictionary removeObserver:anObserver forKeyPath:keyPath];
+}
+
 
 #pragma mark -
 #pragma mark serialisation

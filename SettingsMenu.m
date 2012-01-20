@@ -77,13 +77,20 @@
 
 - (void)setModel:(id)aModel keyPath:(NSString *)aString index:(NSInteger)i
 {
+    if([models objectForKey:[NSNumber numberWithInt:i]])
+        [[models objectForKey:[NSNumber numberWithInt:i]] removeObserver:self forKeyPath:[keyPaths objectForKey:[NSNumber numberWithInt:i]]];
+
 	[models setObject:aModel forKey:[NSNumber numberWithInt:i]];
 	[keyPaths setObject:aString forKey:[NSNumber numberWithInt:i]];
-	id model = aModel;
+
+    [aModel addObserver:self forKeyPath:aString options:0 context:nil];
+
+    id model = aModel;
 	int loIndex = i == 0 ? 0 : [[highestIndexPerSection objectAtIndex:i - 1] intValue] + 2;
 	int hiIndex = [[highestIndexPerSection objectAtIndex:i] intValue];
 	id item = [self itemAtIndex:loIndex];
 	
+
 	for(NSMenuItem *tempItem in [self itemArray])
 	{
 		if([self indexOfItem:tempItem] >= loIndex && [self indexOfItem:tempItem] <= hiIndex &&
@@ -139,5 +146,11 @@
 	[[document managedObjectContext] processPendingChanges];
 	[[[document managedObjectContext] undoManager] enableUndoRegistration];
 }
+
+- (void)observeValueForKeyPath:(NSString *)path ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{    
+    //NSLog(@"observe: %@", object);
+}
+
 
 @end

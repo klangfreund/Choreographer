@@ -23,11 +23,22 @@
 	}
 }
 
+- (void)dealloc
+{
+    [model removeObserver:self forKeyPath:keyPath];
+    [super dealloc];
+}
+
 
 - (void)setModel:(id)aModel keyPath:(NSString *)aString
 {
+    if(model)
+        [model removeObserver:self forKeyPath:keyPath];
+
 	model = aModel;
 	keyPath = aString;
+    
+    [model addObserver:self forKeyPath:keyPath options:0 context:nil];
 	
 	id item = [[self menu] itemWithTag:[[model valueForKeyPath:keyPath] integerValue]];
 	if(!item)
@@ -61,6 +72,13 @@
 	[[[document managedObjectContext] undoManager] enableUndoRegistration];
 }
 
-
+- (void)observeValueForKeyPath:(NSString *)path ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{    
+    if([[object valueForKeyPath:path] intValue] != selectedTag)
+    {
+        selectedTag = [[object valueForKeyPath:path] intValue];
+        [self selectItemWithTag:selectedTag];
+    }
+}
 
 @end
