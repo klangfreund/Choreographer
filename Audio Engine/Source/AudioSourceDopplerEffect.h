@@ -38,12 +38,11 @@ public:
     /** Implementation of the AudioSource method. */
     void releaseResources ();
 	
-    /** Implementation of the AudioSource method. */
-    void getNextAudioBlock (const AudioSourceChannelInfo& info);
-	
-    //==============================================================================
     /** Implements the PositionableAudioSource method. */
     void setNextReadPosition (int64 newPosition);
+    
+    /** Implementation of the AudioSource method. */
+    void getNextAudioBlock (const AudioSourceChannelInfo& info);
 	
     /** Implements the PositionableAudioSource method. */
     int64 getNextReadPosition () const;
@@ -113,9 +112,9 @@ private:
     double delayOnCurrentSample;
     
     /**
-     The delay difference between two samples.
+     The time difference between two samples including the delay difference.
      */
-    double delayDelta;
+    double timeDifference;
     
     AudioSampleBuffer sourceBuffer;
     /** This stores the samples from the audioSourceGainEnvelope needed

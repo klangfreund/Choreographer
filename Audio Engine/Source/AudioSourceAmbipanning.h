@@ -301,7 +301,7 @@ private:
         audioSourceDopplerEffect
         dependant of if the doppler effect is disabled or enabled.
      */
-    PositionableAudioSource& audioSourceGainEnvOrDopplerFX;
+    PositionableAudioSource* audioSourceGainEnvOrDopplerFX;
 	AudioSourceDopplerEffect audioSourceDopplerEffect;
 	AudioSourceGainEnvelope audioSourceGainEnvelope;
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).

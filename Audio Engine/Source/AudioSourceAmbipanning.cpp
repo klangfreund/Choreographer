@@ -104,12 +104,12 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  numberOfSpeakersChanged (false),
       audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice),
       audioSourceDopplerEffect(audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
-      audioSourceGainEnvOrDopplerFX (audioSourceGainEnvelope)
+      audioSourceGainEnvOrDopplerFX (&audioSourceGainEnvelope)
 {
 	DEB("AudioSourceAmbipanning: constructor called.");
     
     // By default: No doppler effect
-    enableDopplerEffect(false);
+    // enableDopplerEffect(false);
     // TEMP
     enableDopplerEffect(true);
 	
@@ -152,6 +152,7 @@ void AudioSourceAmbipanning::releaseResources()
 void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
     // DEB("AudioSourceAmbipanning::getNextAudioBlock: nextPlayPosition = " + String(nextPlayPosition))
+    // DEB("AudioSourceAmbipanning::getNextAudioBlock: info.numSamples = " + String(info.numSamples))
     
 	audioBlockEndPosition = nextPlayPosition + info.numSamples; // used here and in setNextReadPosition.
 								    // It referes to the first sample after
@@ -164,8 +165,7 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	monoInfo.numSamples = info.numSamples;
 	monoInfo.buffer = &monoBuffer;
 	
-    //audioSourceGainEnvOrDopplerFX.getNextAudioBlock(monoInfo);
-	audioSourceGainEnvelope.getNextAudioBlock(monoInfo);
+    audioSourceGainEnvOrDopplerFX->getNextAudioBlock(monoInfo);
 	  // the gain envelope is now applied.
 	
 	// copy the samples of the first channel (with index 0) to the other channels
@@ -370,6 +370,8 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 /** Implements the PositionableAudioSource method. */
 void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 {
+    // DEB("AudioSourceAmbipanning.setNextReadPosition: newPosition = " + String(newPosition))
+    
 	// if the newPosition is not at the expected position, right after the end
 	// of the last audio block
 	if (audioBlockEndPosition != newPosition && !constantSpacialPosition)
@@ -385,27 +387,26 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 	}
 	
 	nextPlayPosition = newPosition;
-	//audioSourceGainEnvOrDopplerFX.setNextReadPosition (newPosition);
-    audioSourceGainEnvelope.setNextReadPosition (newPosition);
+	audioSourceGainEnvOrDopplerFX->setNextReadPosition (newPosition);
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getNextReadPosition () const
 {
 	// return audioSourceGainEnvOrDopplerFX.getNextReadPosition();
-    return audioSourceGainEnvelope.getNextReadPosition();
+    return audioSourceGainEnvOrDopplerFX->getNextReadPosition();
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getTotalLength () const
 {
-	return audioSourceGainEnvelope.getTotalLength();
+	return audioSourceGainEnvOrDopplerFX->getTotalLength();
 }
 
 /** Implements the PositionableAudioSource method. */
 bool AudioSourceAmbipanning::isLooping () const
 {
-	return audioSourceGainEnvelope.isLooping();
+	return audioSourceGainEnvOrDopplerFX->isLooping();
 }
 
 void AudioSourceAmbipanning::enableBuffering(bool enable)
@@ -419,11 +420,11 @@ void AudioSourceAmbipanning::enableDopplerEffect (bool enable)
     
     if (enable)
     {
-        audioSourceGainEnvOrDopplerFX = audioSourceDopplerEffect;
+        audioSourceGainEnvOrDopplerFX = &audioSourceDopplerEffect;
     }
     else
     {
-        audioSourceGainEnvOrDopplerFX = audioSourceGainEnvelope;
+        audioSourceGainEnvOrDopplerFX = &audioSourceGainEnvelope;
     }
 }
 

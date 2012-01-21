@@ -23,6 +23,16 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
 	DEB("AudioSourceDopplerEffect: constructor called.");
     
     sourceInfo.buffer = &sourceBuffer;
+    oneOverSampleRate = 1/sampleRate_;
+    
+    // Define an initial spacial envelope.
+	newSpacialEnvelope.add(new SpacialEnvelopePoint(0,      // time (in samples)
+                                                    0,      // x
+                                                    0,      // y
+                                                    0));	// z);
+	spacialEnvelope.addCopiesOf(newSpacialEnvelope);
+	
+	constantSpacialPosition = true;
 }
 
 AudioSourceDopplerEffect::~AudioSourceDopplerEffect()
@@ -34,6 +44,7 @@ AudioSourceDopplerEffect::~AudioSourceDopplerEffect()
 void AudioSourceDopplerEffect::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
     sampleRate = sampleRate_;
+    oneOverSampleRate = 1/sampleRate_;
     samplesPerBlockExpected = samplesPerBlockExpected_;
     
     // It is assumed that
@@ -49,10 +60,53 @@ void AudioSourceDopplerEffect::releaseResources()
     // is called outside.
 }
 
+/** Implements the PositionableAudioSource method. */
+void AudioSourceDopplerEffect::setNextReadPosition (int64 newPosition)
+{
+    // DEB("AudioSourceDopplerEffect.setNextReadPosition: newPosition = " + String(newPosition))
+    
+	// If the newPosition is not at the expected position, right after the end
+	// of the last audio block
+	if (audioBlockEndPosition != newPosition)
+	{
+		DEB("AudioSourceDopplerEffect.setNextReadPosition: newPosition = "
+            + String(newPosition))
+		DEB("AudioSourceDopplerEffect.setNextReadPosition: expected newPosition: " 
+			+ String(audioBlockEndPosition))
+		
+        if (!constantSpacialPosition)
+        {
+            // Figure out between which audioEnvelopePoints we are right now
+            // and set up all variables needed by getNextAudioBlock(..)
+            prepareForNewPosition(newPosition);	
+        }
+	}
+	
+	nextPlayPosition = newPosition;
+    
+    // Set the nextPlayPosition for the audioSourceGainEnvelope
+    // --------------------------------------------------------
+    if (constantSpacialPosition)
+    { 
+        audioSourceGainEnvelope.setNextReadPosition(nextPlayPosition - constantSpacialPositionDelayTimeInSamples);
+        // If the argument (nextPlayPosition - 
+        // constantSpacialPositionDelayTimeInSamples) is smaller than zero,
+        // this will set the playhead to the position (argument mod fileLength).
+    }
+    // If the spacial envelope contains multiple points.
+    else
+    {
+        // audioSourceGainEnvelope.setNextReadPosition will be called in the
+        // getNextAudioBlock.
+    }
+}
+
 /** Implementation of the AudioSource method. */
 void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
     // DEB("AudioSourceDopplerEffect::getNextAudioBlock: nextPlayPosition = " + String(nextPlayPosition))
+    // DEB("AudioSourceDopplerEffect::getNextAudioBlock: info.numSamples = " + String(info.numSamples))
+
     
     int audioBlockStartPosition = nextPlayPosition;
     // To be precise, audioBlockEndPosition is actually the
@@ -79,12 +133,12 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         {
             nextSpacialPoint = spacialEnvelope[0];
             delayOnLastSample = nextSpacialPoint->getDistanceDelay();
-            delayDelta = 0.0;
-                // delayDelta = The difference in the delay time between
+            timeDifference = oneOverSampleRate;
+                // timeDifference = The difference between
                 // two adjacent samples AFTER this audio block. I.e. the
-                // delayDelta for the new spacialEnvelope.
+                // timeDifference for the new spacialEnvelope.
                 // It's not actually used in this case, but for convenience
-                // it is set to zero.
+                // it is set.
             
             constantSpacialPosition = true;
             constantSpacialPositionDelayTimeInSamples = int ( floor(sampleRate*nextSpacialPoint->getDistanceDelay()));
@@ -95,18 +149,18 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             // We need to figure out the delay time on the last sample
             // (= the first sample of the next audio block)
             prepareForNewPosition(audioBlockEndPosition);
-                // delayDelta = The difference in the delay time between
+                // timeDifference = The difference between
                 // two adjacent samples AFTER this audio block. I.e. the
-                // delayDelta for the new spacialEnvelope.
+                // timeDifference for the new spacialEnvelope.
             
             // prepareForNewPosition will also set delayOnCurrentSample for 
             // the position audioBlockEndPosition.
             delayOnLastSample = delayOnCurrentSample;
         }
         
-        // Determine the delayDelta needed for this audioBlock.
-        double delayDeltaForTheNextAudioBlock = delayDelta;
-        delayDelta = (delayOnLastSample - delayOnFirstSample) / info.numSamples;
+        // Determine the timeDifference needed for this audioBlock.
+        double timeDifferenceForTheNextAudioBlock = timeDifference;
+        timeDifference = oneOverSampleRate + (delayOnLastSample - delayOnFirstSample) / info.numSamples;
         
         // Figure out the lowest and highest sample positions needed.
         // (such that we can request a corresponding audio block from the
@@ -164,10 +218,10 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             sampleOfDestination[i] = sampleOfSource[ int(floor(relativeSamplePositionInSeconds*sampleRate)) ];
             // /\  /\  /\  /\  /\  /\  /\
             
-            relativeSamplePositionInSeconds += delayDelta;
+            relativeSamplePositionInSeconds += timeDifference;
         }
 
-        delayDelta = delayDeltaForTheNextAudioBlock;
+        timeDifference = timeDifferenceForTheNextAudioBlock;
         newSpacialEnvelopeSet = false;
     }
     
@@ -208,71 +262,70 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             
             // Figure out the positions (incl. delay) of all spacial points
             // contained in this block - if any.
-            while (true)
+            while (nextSpacialPoint->getPosition() < audioBlockEndPosition)
             {
-                if (nextSpacialPoint->getPosition() < audioBlockEndPosition)
-                {
-                    prepareForNewPosition(nextSpacialPoint->getPosition());
-                        // This will set the nextSpacialPoint to
-                        // the previousSpacialPoint!
-                        // And set nextSpacialPoint to the next one.
-                    double positionOfPreviousSpacialPointInSeconds 
-                        = previousSpacialPoint->getPosition()/sampleRate 
-                        + delayOnCurrentSample;
-                    lowestPositionToRequestInSeconds 
-                        = jmin(lowestPositionToRequestInSeconds,
-                               positionOfPreviousSpacialPointInSeconds);
-                    highestPositionToRequestInSeconds 
-                        = jmax(highestPositionToRequestInSeconds,
-                               positionOfPreviousSpacialPointInSeconds);
-                }
-                else
-                {
-                    break;
-                }
+                prepareForNewPosition(nextSpacialPoint->getPosition());
+                    // This will set the nextSpacialPoint to
+                    // the previousSpacialPoint!
+                    // And set nextSpacialPoint to the next one.
+                double positionOfPreviousSpacialPointInSeconds 
+                    = previousSpacialPoint->getPosition()*oneOverSampleRate 
+                    + delayOnCurrentSample;
+                lowestPositionToRequestInSeconds 
+                    = jmin(lowestPositionToRequestInSeconds,
+                           positionOfPreviousSpacialPointInSeconds);
+                highestPositionToRequestInSeconds 
+                    = jmax(highestPositionToRequestInSeconds,
+                           positionOfPreviousSpacialPointInSeconds);
             }
    
-            // Figure out the position (incl. delay) of audioBlockEndPosition:
-            prepareForNewPosition(audioBlockEndPosition, nextSpacialPointIndex);
-            double audioBlockEndPositionInSeconds 
-                = audioBlockEndPosition/sampleRate +
-                delayOnCurrentSample;
+            // Figure out the position (incl. delay) of audioBlockEndPosition-1
+            // (the last sample of this audio block):
+            prepareForNewPosition(audioBlockEndPosition-1, nextSpacialPointIndex);
+                // To calculate the delayOnCurrentSample
+            double audioBlockEndPositionMinusOneInSeconds 
+                = (audioBlockEndPosition-1)*oneOverSampleRate
+                + delayOnCurrentSample;
             lowestPositionToRequestInSeconds = jmin(lowestPositionToRequestInSeconds,
-                                                    audioBlockEndPositionInSeconds);
+                                                    audioBlockEndPositionMinusOneInSeconds);
             highestPositionToRequestInSeconds = jmax(highestPositionToRequestInSeconds,
-                                                     audioBlockEndPositionInSeconds);
+                                                     audioBlockEndPositionMinusOneInSeconds);
             
             // Figure out the position (incl. delay) of audioBlockStartPosition:
             prepareForNewPosition(audioBlockStartPosition,
                                   nextSpacialPointIndexForAudioBlockStartPosition);
-                // This will reset the parameters as needed below at the
-                // processing stage.
+                // This will reset the parameters as needed in the upcoming code.
                 // It will also increase precision.
                 // How come? Imagine we are between two spacial points that are
                 // far away from each other. Of course the positions (incl. the
                 // delay from the envelope) of all samples in between are well
                 // defined by the position (incl. delay) of the first sample and
-                // the delayDelta... if doubles would be totally accurate.
-                // The error of delayDelta will grow linear in time. To avoid
+                // the timeDifference... if doubles would be totally accurate.
+                // The error of timeDifference will grow linear in time. To avoid
                 // big errors, on every first sample in an audio block the 
                 // position (incl. delay) will be recalculated.
             double audioBlockStartPositionInSeconds 
-                = audioBlockStartPosition/sampleRate +
-                delayOnCurrentSample;
+                = audioBlockStartPosition * oneOverSampleRate
+                + delayOnCurrentSample;
             lowestPositionToRequestInSeconds = jmin(lowestPositionToRequestInSeconds,
                                                     audioBlockStartPositionInSeconds);
             highestPositionToRequestInSeconds = jmax(highestPositionToRequestInSeconds,
                                                      audioBlockStartPositionInSeconds);
+            
+
 
             // Fill the sourceBuffer with samples
             // ----------------------------------
-            int lowestPositionToRequest = lowestPositionToRequestInSeconds 
-                * sampleRate;
-            int highestPositionToRequest = highestPositionToRequestInSeconds
-                * sampleRate;
+            int lowestPositionToRequest = int(floor(lowestPositionToRequestInSeconds 
+                * sampleRate));
+            int highestPositionToRequest = int(ceil(highestPositionToRequestInSeconds
+                * sampleRate));
+            DEB("AudioSourceDopplerEffect::getNextAudioBlock: lowestPositionToRequest = " + String(lowestPositionToRequest))
+            DEB("AudioSourceDopplerEffect::getNextAudioBlock: highestPositionToRequest = " + String(highestPositionToRequest))
+            
+            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
             
             int numberOfSamplesForAudioBlock = highestPositionToRequest - lowestPositionToRequest;
-            
             // The sourceInfo.buffer should actually be big enough.
             // This has been ensured in the method setSpacialEnvelope.
             // But if the info.buffer->getNumSamples() is much bigger than
@@ -289,7 +342,6 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                            numberOfSamplesForAudioBlock, 
                                            keepExistingContent);
             }
-            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
             sourceInfo.startSample = 0;
             sourceInfo.numSamples = numberOfSamplesForAudioBlock;
             audioSourceGainEnvelope.getNextAudioBlock(sourceInfo);
@@ -307,7 +359,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             
             // The position of the current sample (the one that is requested)
             // in the audio file.
-            double absolutePositionInSeconds = currentPosition/sampleRate
+            double absolutePositionInSeconds = currentPosition * oneOverSampleRate
                                                         + delayOnCurrentSample;
             double relativePositionInSeconds = absolutePositionInSeconds -
                                                lowestPositionToRequestInSeconds;
@@ -330,12 +382,13 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                         // HERE (the dirty implementation): Take the closest 
                         //      sample before.
                         *sampleOfDestination = sampleOfSource[ int(floor(relativePositionInSeconds*sampleRate)) ];
+                        //DEB(String(relativePositionInSeconds*sampleRate))
                         // ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
                         
                         // Determine the next destination sample:
                         ++sampleOfDestination; // Point to the next sample
                         // Determine the position of the next source sample:
-                        relativePositionInSeconds += delayDelta;
+                        relativePositionInSeconds += timeDifference;
                         
                         ++currentPosition;
                     }
@@ -359,7 +412,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                         // Determine the next destination sample:
                         ++sampleOfDestination; // Point to the next sample
                         // Determine the next source sample:
-                        relativePositionInSeconds += delayDelta;
+                        relativePositionInSeconds += timeDifference;
                         
                         ++currentPosition;
 					}
@@ -381,52 +434,13 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                     // Determine the next destination sample:
                     ++sampleOfDestination; // Point to the next sample
                     // Determine the next source sample:
-                    relativePositionInSeconds += delayDelta;
+                    relativePositionInSeconds += timeDifference;
                     
                     ++currentPosition;
                 }
             }
             
         }
-    }
-}
-
-/** Implements the PositionableAudioSource method. */
-void AudioSourceDopplerEffect::setNextReadPosition (int64 newPosition)
-{
-	// If the newPosition is not at the expected position, right after the end
-	// of the last audio block
-	if (audioBlockEndPosition != newPosition)
-	{
-		DEB("AudioSourceAmbipanning.setNextReadPosition: newPosition = "
-            + String(newPosition))
-		DEB("AudioSourceAmbipanning.setNextReadPosition: expected newPosition: " 
-			+ String(audioBlockEndPosition))
-		
-        if (!constantSpacialPosition)
-        {
-            // Figure out between which audioEnvelopePoints we are right now
-            // and set up all variables needed by getNextAudioBlock(..)
-            prepareForNewPosition(newPosition);	
-        }
-	}
-	
-	nextPlayPosition = newPosition;
-    
-    // Set the nextPlayPosition for the audioSourceGainEnvelope
-    // --------------------------------------------------------
-    if (constantSpacialPosition)
-    { 
-        audioSourceGainEnvelope.setNextReadPosition(nextPlayPosition - constantSpacialPositionDelayTimeInSamples);
-        // If the argument (nextPlayPosition - 
-        // constantSpacialPositionDelayTimeInSamples) is smaller than zero,
-        // this will set the playhead to the position (argument mod fileLength).
-    }
-    // If the spacial envelope contains multiple points.
-    else
-    {
-        // TODO
-        // audioSourceGainEnvelope.setNextReadPosition (newPosition);
     }
 }
 
@@ -563,5 +577,5 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition(int newPosition,
         distanceFromPreviousSpacialPointPosToCurrentPos / distance * 
         (nextSpacialPoint->getDistanceDelay() - previousSpacialPoint->getDistanceDelay());
     
-    delayDelta = (nextSpacialPoint->getDistanceDelay() - previousSpacialPoint->getDistanceDelay() ) / distance;
+    timeDifference = oneOverSampleRate + (nextSpacialPoint->getDistanceDelay() - previousSpacialPoint->getDistanceDelay() ) / distance;
 }
