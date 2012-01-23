@@ -55,6 +55,9 @@ typedef enum _ArrangerViewDragAndDropAction
 	IBOutlet id xGridLinesMenu;
 
 	IBOutlet id arrangerDisplayModePopupButton;
+    IBOutlet NSWindow *repeatRegionPanel;
+    
+    IBOutlet NSTextField *repeatRegionTextField;
 
 	// regions
 	NSMutableArray *placeholderRegions;

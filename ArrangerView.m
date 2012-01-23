@@ -2138,32 +2138,56 @@
 
 - (void)repeat:(id)sender
 {
-	Region *newRegion;
+    NSModalSession session = [NSApp beginModalSessionForWindow:repeatRegionPanel];
+    int i, count = 1;
+    int dirty = [selectedRegions count];
+    
+    NSPoint origin = [[self window] frame].origin;
+    origin.x += [[self window] frame].size.width * 0.5 - [repeatRegionPanel frame].size.width * 0.5;
+    origin.y += [[self window] frame].size.height * 0.5 - [repeatRegionPanel frame].size.height * 0.5;
+    [repeatRegionPanel setFrameOrigin:origin];
+
+    [repeatRegionTextField setIntegerValue:count];
+    
+    for (;;)
+    {
+        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+            break;
+    }
+    [NSApp endModalSession:session];
+	[repeatRegionPanel orderOut:nil];
+
+    if ([NSApp runModalSession:session] == NSRunAbortedResponse)
+        return;
+    if ([NSApp runModalSession:session] == NSRunStoppedResponse)
+        count = [repeatRegionTextField intValue];
+	
+    Region *newRegion;
 	NSMutableSet *newRegions = [[[NSMutableSet alloc] init] autorelease];
 	NSPoint delta = NSMakePoint(0, 0);
-	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	id aRegion;
-	
-	while((aRegion = [enumerator nextObject]))
+		
+	for(id aRegion in selectedRegions)
 	{
-		newRegion = [self makeCopyOf:aRegion];
-		if(!newRegion)
-			return;
-		
-		delta.x = [[aRegion valueForKey:@"duration"] unsignedLongValue] * zoomFactorX;
+        delta.x = [[aRegion valueForKey:@"duration"] unsignedLongValue] * zoomFactorX;
+
+		for(i=0;i<count;i++)
+        {
+            newRegion = [self makeCopyOf:aRegion];
+            if(!newRegion)
+                return;
+
 				
-		[newRegion moveByDeltaX:delta.x deltaY:delta.y];
-        [newRegion archiveData];
-		[newRegion updateTimeInModel];
+            [newRegion moveByDeltaX:delta.x * (i + 1) deltaY:delta.y];
+            [newRegion archiveData];
+            [newRegion updateTimeInModel];
 		
-		[newRegions addObject:newRegion];
-	}
+            [newRegions addObject:newRegion];
+        }
+    }
 	
 	[self deselectAllRegions];
 	
-	enumerator = [newRegions objectEnumerator];
-	while((aRegion = [enumerator nextObject]))
+	for(id aRegion in newRegions)
 	{
 		[self addRegionToSelection:aRegion];
 	}
@@ -2172,9 +2196,9 @@
 	[self setNeedsDisplay:YES];
 	
 	// undo
-	if([selectedRegions count] == 1)
+	if(dirty == 1)
 		[[context undoManager] setActionName:@"repeat audio region"];
-	else if([selectedRegions count] > 1)
+	else if(dirty > 1)
 		[[context undoManager] setActionName:@"repeat audio regions"];
 }
 
@@ -2520,7 +2544,11 @@
 		return NO;
 	
 	if (![selectedRegions count] &&
-		([item action] == @selector(delete:) ||
+		([item action] == @selector(repeat:) ||
+         [item action] == @selector(duplicate:) ||
+         
+		 [item action] == @selector(remove:) ||
+         [item action] == @selector(delete:) ||
 		 [item action] == @selector(split:) ||
 		 [item action] == @selector(trim:) ||
 		
