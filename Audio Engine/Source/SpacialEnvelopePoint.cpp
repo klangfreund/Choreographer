@@ -113,5 +113,8 @@ void SpacialEnvelopePoint::calculateTheDistanceDelayToOrigin()
     double distance = sqrt(x*x + y*y + z*z); // in meters
     // speed of sound = 343.2 m/s
     const double oneOverSpeedOfSound = 1.0 / 343.2;
-    distanceDelay = oneOverSpeedOfSound * distance;
+    distanceDelay = distance * oneOverSpeedOfSound;
+    // TEMP
+    distanceDelay = distance * oneOverSpeedOfSound * 100;
+
 }

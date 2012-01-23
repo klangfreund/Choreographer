@@ -415,13 +415,18 @@ void AudioRegionMixer::setNextReadPositionOnAllRegions (int64 newPosition)
     for (int i = 0; i != regions.size(); ++i)
 	{
         AudioRegion* currentAudioRegion = (AudioRegion*)regions[i];
-        int startPositionOfCurrentRegionInThisChunk = jmax(nextPlayPosition,
-                                                           currentAudioRegion->startPosition);
         
-        // place the "virtual reading head" to the right position in the (multi channel) audio file
-        currentAudioRegion->audioSourceAmbipanning
-        ->setNextReadPosition( startPositionOfCurrentRegionInThisChunk 
-                              - currentAudioRegion->startPositionOfAudioFileInTimeline);
+        if (currentAudioRegion->startPosition < newPosition &&
+            currentAudioRegion->endPosition > newPosition)
+        {
+            int startPositionOfCurrentRegionInThisChunk = jmax(nextPlayPosition,
+                                                               currentAudioRegion->startPosition);
+            // place the "virtual reading head" to the right position in the 
+            // (multi channel) audio file.
+            currentAudioRegion->audioSourceAmbipanning
+            ->setNextReadPosition( startPositionOfCurrentRegionInThisChunk 
+                                  - currentAudioRegion->startPositionOfAudioFileInTimeline);
+        }
 	}
 }
 

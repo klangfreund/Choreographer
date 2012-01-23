@@ -38,12 +38,11 @@ public:
     /** Implementation of the AudioSource method. */
     void releaseResources ();
 	
-    /** Implementation of the AudioSource method. */
-    void getNextAudioBlock (const AudioSourceChannelInfo& info);
-	
-    //==============================================================================
     /** Implements the PositionableAudioSource method. */
     void setNextReadPosition (int64 newPosition);
+    
+    /** Implementation of the AudioSource method. */
+    void getNextAudioBlock (const AudioSourceChannelInfo& info);
 	
     /** Implements the PositionableAudioSource method. */
     int64 getNextReadPosition () const;
@@ -67,13 +66,18 @@ public:
 private:
 	/**
 	 Figures out between which audioEnvelopePoints we are right now
-	 and sets up nextSpacialPointIndex, previousSpacialPoint and nextSpacialPoint.
-	 It also calculates the values of the float-arrays channelFactorAtPreviousSpacialPoint,
-	 channelFactorAtNextSpacialPoint, channelFactorDelta and channelFactor.
+	 and sets up
+     - nextSpacialPointIndex
+     - nextSpacialPoint
+     - previousSpacialPoint
+     - delayOnCurrentSample
+     - delayDelta.
 	 */
-	inline void prepareForNewPosition (int newPosition);
+	inline void prepareForNewPosition (int newPosition,
+                                       int nextSpacialPointIndex_ = 1);
     
     double sampleRate;
+    double oneOverSampleRate;
     double samplesPerBlockExpected;
     
     /** Holds the SpacialEnvelopePoints which define the
@@ -81,18 +85,18 @@ private:
      It is assumed by the code that the SpacialEnvelopePoints are
      ordered in this array according to their position in time.
      */
-	Array<SpacialEnvelopePoint> spacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> spacialEnvelope;
     
 	/** This is used by AudioSourceAmbipanning::setSpacialEnvelope and
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
 	 */
-	Array<SpacialEnvelopePoint> newSpacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> newSpacialEnvelope;
     SpacialEnvelopePointComparator spacialEnvelopePointComparator;
     bool newSpacialEnvelopeSet;
     bool constantSpacialPosition;
     int constantSpacialPositionDelayTimeInSamples;
-    SpacialEnvelopePoint previousSpacialPoint;
-    SpacialEnvelopePoint nextSpacialPoint;
+    SpacialEnvelopePoint * previousSpacialPoint;
+    SpacialEnvelopePoint * nextSpacialPoint;
     int nextSpacialPointIndex;
     
     /** 
@@ -103,14 +107,14 @@ private:
     int audioBlockEndPosition;
     
     /**
-     The delay of the current sample, measured in samples.
+     The delay of the current sample, measured in seconds.
      */
     double delayOnCurrentSample;
     
     /**
-     The delay difference between two samples.
+     The time difference between two samples including the delay difference.
      */
-    double delayDelta;
+    double timeDifference;
     
     AudioSampleBuffer sourceBuffer;
     /** This stores the samples from the audioSourceGainEnvelope needed

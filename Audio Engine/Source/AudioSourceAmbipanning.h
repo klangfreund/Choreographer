@@ -192,7 +192,7 @@ public:
     void enableDopplerEffect (bool enable);
     
 	/** 
-	 @param newGainEnvelope		it will be deleted in the setGainEnvelope(..) of
+	 @param newGainEnvelope		It will be deleted in the setGainEnvelope(..) of
 								AudioSourceGainEnvelope or in the destructor of
 								AudioSourceGainEnvelope, so you don't have to
 								care about.
@@ -202,6 +202,16 @@ public:
 	/**
 	 Sets a new spacial envelope which determines the location in space of the
      sound source in relation to the time.
+     
+     @param newSpacialEnvelope  This array defines the movement of the sound
+                                source over time in space. If it only contains
+                                one point, this one defines the fix position at
+                                every arbitrary moment in time. It it contains
+                                multiple points they must be ordered according
+                                to their position (in time). The first point
+                                has to be at the (sample) position 0 according
+                                to the audio file and the last point must be
+                                at the sample lengthOfTheAudioFile.
 	 */
 	void setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope);
 	
@@ -291,7 +301,7 @@ private:
         audioSourceDopplerEffect
         dependant of if the doppler effect is disabled or enabled.
      */
-    PositionableAudioSource& audioSourceGainEnvOrDopplerFX;
+    PositionableAudioSource* audioSourceGainEnvOrDopplerFX;
 	AudioSourceDopplerEffect audioSourceDopplerEffect;
 	AudioSourceGainEnvelope audioSourceGainEnvelope;
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).
@@ -303,12 +313,12 @@ private:
      It is assumed by the code that the SpacialEnvelopePoints are
      ordered in this array according to their position in time.
      */
-	Array<SpacialEnvelopePoint> spacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> spacialEnvelope;
 
 	/** This is used by AudioSourceAmbipanning::setSpacialEnvelope and
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
 	 */
-	Array<SpacialEnvelopePoint> newSpacialEnvelope;
+	OwnedArray<SpacialEnvelopePoint> newSpacialEnvelope;
 
 	SpacialEnvelopePointComparator spacialEnvelopePointComparator;
 	bool newSpacialEnvelopeSet;
@@ -326,16 +336,16 @@ private:
 	                            // in the previously processed audio block) + 1
 	                            // in samples, relative to the start of the audio
 	                            // file.
-	SpacialEnvelopePoint previousSpacialPoint;
-	SpacialEnvelopePoint nextSpacialPoint;
+	SpacialEnvelopePoint * previousSpacialPoint;
+	SpacialEnvelopePoint * nextSpacialPoint;
 	int nextSpacialPointIndex;
-	Array <double> channelFactorAtPreviousSpacialPoint;
-	Array <double> channelFactorAtNextSpacialPoint;
-	Array <double> channelFactor;
-	Array <double> previousChannelFactor; // used in getNextAudioBlock(..) if there is a
+	Array<double> channelFactorAtPreviousSpacialPoint;
+	Array<double> channelFactorAtNextSpacialPoint;
+	Array<double> channelFactor;
+	Array<double> previousChannelFactor; // used in getNextAudioBlock(..) if there is a
 	// transition to a new envelope going on.
-	Array <double> channelFactorDelta;
-	Array <float*> sample;
+	Array<double> channelFactorDelta;
+	Array<float*> sample;
 	int numberOfRemainingSamples;
 	
 	CriticalSection callbackLock;
