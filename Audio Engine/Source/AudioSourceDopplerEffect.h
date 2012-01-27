@@ -14,6 +14,110 @@
 #include "SpacialEnvelopePoint.h"
 #include "AudioSourceGainEnvelope.h"
 
+// Constants:
+#define ONEOVERSPEEDOFSOUND 0.00294 //1.0/340.0 m/s
+
+
+struct SpacialPosition
+{
+    double x;
+    double y;
+    double z;
+    
+    /** Constructor */
+    SpacialPosition ()
+    : x (0.0),
+    y (0.0),
+    z (0.0)
+    {
+    }
+    
+    /** Constructor */
+    SpacialPosition (double x_, double y_, double z_)
+    : x (x_),
+      y (y_),
+      z (z_)
+    {
+    }
+    
+    /** Constructor */
+    SpacialPosition (const SpacialEnvelopePoint & spacialEnvPoint)
+    : x (spacialEnvPoint.getX()),
+      y (spacialEnvPoint.getY()),
+      z (spacialEnvPoint.getZ())
+    {
+    }
+        
+    /** Comparison operator to check for equality. */    
+    bool operator== (const SpacialPosition & other) const
+    {
+        if (x == other.x && y == other.y && z == other.z)
+            return true;
+        else
+            return false;
+    }
+    
+    /** Comparison operator to check for inequality. */    
+    bool operator!= (const SpacialPosition & other) const
+    {
+        return !(*this == other);
+    }
+    
+    SpacialPosition operator+= (const SpacialPosition & other) const
+    {
+        SpacialPosition result = *this;
+        result.x += other.x;
+        result.y += other.y;
+        result.z += other.z;
+        return result;
+    }
+    
+    SpacialPosition operator+ (const SpacialPosition & other) const
+    {
+        SpacialPosition result = *this;
+        result.x += other.x;
+        result.y += other.y;
+        result.z += other.z;
+        return result;
+    }
+
+    SpacialPosition operator- (const SpacialPosition & other) const
+    {
+        SpacialPosition result = *this;
+        result.x -= other.x;
+        result.y -= other.y;
+        result.z -= other.z;
+        return result;
+    }
+    
+    /** The inner product */
+    double operator* (const SpacialPosition & other) const
+    {
+        return x*other.x + y*other.y + z*other.z;
+    }
+    
+    /** The product with a scalar on the right hand side. */
+    SpacialPosition operator* (double scalar) const
+    {
+        SpacialPosition result = *this;
+        result.x *= scalar;
+        result.y *= scalar;
+        result.z *= scalar;
+        return result;
+    }
+    
+    /** The product with a scalar on the left hand side. */
+    friend SpacialPosition operator*(double scalar, const SpacialPosition & rhs)
+    {return rhs * scalar;}
+    
+    double delay()
+    {
+//        return sqrt(*this * *this)*ONEOVERSPEEDOFSOUND;
+        return 100. * sqrt(*this * *this) * ONEOVERSPEEDOFSOUND;
+    }
+
+};
+
 //==============================================================================
 /**
  TODO
@@ -65,16 +169,47 @@ public:
 	
 private:
 	/**
-	 Figures out between which audioEnvelopePoints we are right now
-	 and sets up
-     - nextSpacialPointIndex
-     - nextSpacialPoint
-     - previousSpacialPoint
-     - delayOnCurrentSample
-     - delayDelta.
+	 It figures out the other parameters given the newPosition.
+     Either the *nextSpacialPointIndex_ is really the next one seen from the
+     newPosition, or in needs to be set to 1 before calling this.
+     
+     @param newPosition             The position in time (in samples) of interest.
+     @param nextSpacialPointIndex_  Will be modified.
+                                    This must be lower or equal to the index of
+                                    the next spacial point in the envelope.
+                                    If the value is lower, then it will be
+                                    increased until it is this index.
+     @param previousSpacialPoint_   Will be modified.
+                                    The envelope point that comes before the
+                                    point at the newPosition (in time).
+     @param nextSpacialPoint_       Will be modified.
+                                    The envelope point that comes after the
+                                    point at the newPosition (in time).
+     @param currentSpacialPosition_ Will be modified.
+                                    The position in space of the point at the
+                                    time position newPosition.
+     @param deltaSpacialPosition_   Will be modified.
+                                    The difference in space of two adjecent
+                                    samples between the previousSpacialPoint_
+                                    and the nextSpacialPoint_.
 	 */
 	inline void prepareForNewPosition (int newPosition,
-                                       int nextSpacialPointIndex_ = 1);
+                                       int * nextSpacialPointIndex_,
+                                       SpacialEnvelopePoint ** previousSpacialPoint_,
+                                       SpacialEnvelopePoint ** nextSpacialPoint_,
+                                       SpacialPosition * currentSpacialPosition_,
+                                       SpacialPosition * deltaSpacialPosition_);
+    
+    /**
+     Figures out the closest point on a line to the origin.
+     The line is defined by the two points firstPoint and secondPoint.
+     
+     @return If the closest point lies in between the first and the
+             second point.
+     */
+    inline bool closestPointInBetween (const SpacialPosition & firstPoint, 
+                                       const SpacialPosition & secondPoint,
+                                       SpacialPosition & closestPoint);
     
     double sampleRate;
     double oneOverSampleRate;
@@ -91,7 +226,7 @@ private:
 	 by AudioSourceAmbipanning::getNextAudioBlock when a new envelope is engaged.
 	 */
 	OwnedArray<SpacialEnvelopePoint> newSpacialEnvelope;
-    SpacialEnvelopePointComparator spacialEnvelopePointComparator;
+    SpacialEnvelopePointPointerComparator spacialEnvelopePointPointerComparator;
     bool newSpacialEnvelopeSet;
     bool constantSpacialPosition;
     int constantSpacialPositionDelayTimeInSamples;
@@ -109,12 +244,16 @@ private:
     /**
      The delay of the current sample, measured in seconds.
      */
-    double delayOnCurrentSample;
+//    double delayOnCurrentSample;
     
     /**
      The time difference between two samples including the delay difference.
      */
-    double timeDifference;
+//    double timeDifference;
+    
+    SpacialPosition currentSpacialPosition;
+    
+    SpacialPosition deltaSpacialPosition;
     
     AudioSampleBuffer sourceBuffer;
     /** This stores the samples from the audioSourceGainEnvelope needed

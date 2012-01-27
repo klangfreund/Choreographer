@@ -64,27 +64,23 @@ public:
     /** Gets the spacial x-coordinate.
      @return The spacial x-coordinate.
      */
-    const double& getX();
+    const double& getX() const;
     
     /** Gets the spacial y-coordinate.
      @return The spacial y-coordinate.
      */
-    const double& getY();
+    const double& getY() const;
     
     /** Gets the spacial z-coordinate.
      @return The spacial z-coordinate.
      */
-    const double& getZ();
+    const double& getZ() const;
     
-    /** Returns the delay of the sound caused by
-     the distance from the sound source to the origin.
-     @return The distance to the origin.
-     */
-    const double & getDistanceDelay();
+    /** The assignment operator */
+    SpacialEnvelopePoint & operator=(const SpacialEnvelopePoint & rhs);
+
 	
 private:
-    void calculateTheDistanceDelayToOrigin();
-    
     /** The position in time (in samples). */
     int position;
 	
@@ -96,11 +92,6 @@ private:
     
     /** The z-coordinate in space. */
     double z;
-    
-    /** Distance to the origin.
-     Needed by the AudioSourceDopplerEffect.
-     */
-    double distanceDelay;
 	
 	JUCE_LEAK_DETECTOR (SpacialEnvelopePoint);
 };
@@ -119,19 +110,16 @@ public:
 	}
 	
 	/**
-	 Compares two elements of type void*, that are actually pointers
-	 to SpacialEnvelopePoint after typecasting.
+	 Compares two SpacialEnvelopePoints according to their
+     position in time.
      
 	 @param first	The first element to compare.
 	 @param second	The second element to compare.
      
 	 @return	<ul>	
-     <li> -1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-     < ((SpacialEnvelopePoint*)second)->getPosition().
-     <li> 0, if ((SpacialEnvelopePoint*)first)->getPosition() 
-     = ((SpacialEnvelopePoint*)second)->getPosition().
-     <li> 1, if ((SpacialEnvelopePoint*)first)->getPosition() 
-     > ((SpacialEnvelopePoint*)second)->getPosition().
+     <li> -1, if (first.getPosition() < second.getPosition()).
+     <li> 0, if (first.getPosition() = second.getPosition()).
+     <li> 1, if (first.getPosition() > second.getPosition()).
      </ul>
 	 */
 	int compareElements (SpacialEnvelopePoint first, 
@@ -153,6 +141,53 @@ public:
 	
 private:
 	JUCE_LEAK_DETECTOR (SpacialEnvelopePointComparator);
+};
+
+//==============================================================================
+/**
+ This comparator is needed for the sort function of AudioSourceDopplerEffect::newSpacialEnvelope.
+ The sort function is called in SpacialEnvelopePointPointerComparator::setSpacialEnvelope.
+ */
+class JUCE_API SpacialEnvelopePointPointerComparator
+{
+public:
+	/** Constructor. */
+	SpacialEnvelopePointPointerComparator ()
+	{
+	}
+	
+	/**
+	 Compares two SpacialEnvelopePoint Pointers according to their
+     position in time.
+     
+	 @param first	The first element to compare.
+	 @param second	The second element to compare.
+     
+	 @return	<ul>	
+     <li> -1, if (first->getPosition() < second->getPosition()).
+     <li> 0, if (first->getPosition() = second->getPosition()).
+     <li> 1, if (first->getPosition() > second->getPosition()).
+     </ul>
+	 */
+	int compareElements (SpacialEnvelopePoint * first, 
+                         SpacialEnvelopePoint * second) const
+	{
+		if (first->getPosition() < second->getPosition())
+		{
+			return -1;
+		}
+		else if (first->getPosition() > second->getPosition())
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+	
+private:
+	JUCE_LEAK_DETECTOR (SpacialEnvelopePointPointerComparator);
 };
 
 #endif   // __SPACIALENVELOPEPOINT_HEADER__
