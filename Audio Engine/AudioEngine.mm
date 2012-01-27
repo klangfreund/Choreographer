@@ -426,7 +426,11 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setGainAutomation:(id)audioRegion
 {
+    int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+    double fromMsToSamples = 0.001*sampleRate;
+    
 	unsigned int index = [[audioRegion valueForKey:@"playbackIndex"] unsignedIntValue];
+    unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 	Array<void*> gainEnvelope;
 	float gain;
 	
@@ -437,12 +441,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	}
 	else
 	{
-		int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 		for(id bp in [audioRegion valueForKeyPath:@"gainBreakpointArray"])
 		{
 			//NSLog(@"gain bp: %d %f", [[bp valueForKey:@"time"] longValue], [[bp valueForKey:@"value"] floatValue]);
 			gain = pow(10, 0.05 * [[bp valueForKey:@"value"] floatValue]);
-			AudioEnvelopePoint* audioEnvelopePoint = new AudioEnvelopePoint([[bp valueForKey:@"time"] longValue] * 0.001 * sampleRate, gain);
+			AudioEnvelopePoint* audioEnvelopePoint = new AudioEnvelopePoint([[bp valueForKey:@"time"] longValue] * fromMsToSamples + offsetInFile, gain);
 			gainEnvelope.add(audioEnvelopePoint);		
 		}
 	}
