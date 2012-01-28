@@ -21,7 +21,7 @@
 	<key>HPDBookAccessPath</key>
 	<string>Choreographer.html</string>
 	<key>HPDBookIconPath</key>
-	<string>shared/ChoreographerIcn.png</string>
+	<string>img/ChoreographerIcn.png</string>
 	<key>HPDBookIndexPath</key>
 	<string>Choreographer.helpindex</string>
 	<key>HPDBookKBProduct</key>

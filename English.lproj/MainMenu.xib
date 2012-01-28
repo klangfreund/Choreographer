@@ -227,7 +227,7 @@
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<object class="NSMenuItem" id="1052520635">
 												<reference key="NSMenu" ref="293471112"/>
-												<string key="NSTitle">New Project</string>
+												<string key="NSTitle">New Project...</string>
 												<string key="NSKeyEquiv">n</string>
 												<int key="NSKeyEquivModMask">1048576</int>
 												<int key="NSMnemonicLoc">2147483647</int>
@@ -1053,7 +1053,6 @@
 							</object>
 							<string key="NSFrame">{{20, 252}, {44, 23}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<bool key="NSIsBordered">YES</bool>
 							<object class="NSColor" key="NSColor">
@@ -1073,7 +1072,6 @@
 							</object>
 							<string key="NSFrame">{{20, 221}, {44, 23}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<bool key="NSIsBordered">YES</bool>
 							<object class="NSColor" key="NSColor">
@@ -1086,7 +1084,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{79, 255}, {127, 17}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="555276559">
 								<int key="NSCellFlags">68288064</int>
@@ -1123,7 +1120,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{79, 224}, {129, 17}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="2244115">
 								<int key="NSCellFlags">68288064</int>
@@ -1147,7 +1143,6 @@
 							</object>
 							<string key="NSFrame">{{20, 175}, {44, 23}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<bool key="NSIsBordered">YES</bool>
 							<object class="NSColor" key="NSColor">
@@ -1160,7 +1155,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{79, 178}, {154, 17}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="611270704">
 								<int key="NSCellFlags">68288064</int>
@@ -1177,7 +1171,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{140, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="365786228">
 								<int key="NSCellFlags">67239424</int>
@@ -1198,7 +1191,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{38, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="532221831"/>
-							<reference key="NSWindow"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="445215273">
 								<int key="NSCellFlags">67239424</int>
@@ -1217,9 +1209,8 @@
 					</object>
 					<string key="NSFrameSize">{250, 295}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -1364,7 +1355,7 @@
 					<string key="NSFrameSize">{833, 233}</string>
 					<int key="NSViewLayerContentsRedrawPolicy">2</int>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
