@@ -248,7 +248,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	double fromMsToSamples = 0.001 * sampleRate;
 	int startSample = bounceStart * fromMsToSamples;
 	int numberOfSamplesToRead = bounceDuration * fromMsToSamples;
-	bool succ = ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
+	bool succ = ambisonicsAudioEngine->bounceToDisk(absolutePathToAudioFile, 
 													bitsPerSample, 
 													description,
 													originator, 
@@ -266,6 +266,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)bounceToDiskCancel;
 {
+    ambisonicsAudioEngine->cancelBounceToDisk();
     [NSApp stopModal];
 }
 

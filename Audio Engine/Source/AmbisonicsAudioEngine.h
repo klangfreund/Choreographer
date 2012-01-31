@@ -162,7 +162,7 @@ public:
 	 
 	 @return						True, if the operation was successful.
 	 */	
-	bool bounceToDisc(String absolutePathToAudioFile, 
+	bool bounceToDisk(String absolutePathToAudioFile, 
 					  int bitsPerSample, 
 					  String description,
 					  String originator,
@@ -170,6 +170,8 @@ public:
 					  String codingHistory,
 					  int startSample,
 					  int numberOfSamplesToRead);
+    
+    void cancelBounceToDisk();
 	
 	/** Adds a new AEP channel to the array of AEP channels.
 	 
@@ -544,6 +546,11 @@ private:
 							///  there are less available hardware outputs
 							///  then speakers. This is done in 
 							///  AmbisonicsAudioEngine::setSpeakerPositions.
+    
+    /** This can be set by cancelBounceToDisk to interrupt the
+     bouncing process and delete the output file.
+     */
+    bool stopBounceToDisk;
 	
 	/** Used for scope locking in enableNewRouting. */
     CriticalSection lock;
