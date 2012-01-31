@@ -320,16 +320,18 @@ public:
 	/**
 	 Turns the loop (as specified in the arranger) on.
 	 
-	 @param loopFadeTimeInSamples	min(audioBlockLength, loopFadeTimeInSamples) is
-									used as the fade out and fade in time - around the jump
-									from the end to the start marker of the loop (to avoid clicks).
+	 @param loopFadeTimeInSeconds	Is used as the fade out and fade in time -
+                                    around the jump from the end to the start 
+                                    marker of the loop (to avoid clicks).
 	 
 	 @return	True, if the input data is a valid set.
 	 */
-	bool enableArrangerLoop(int loopStartInSamples, int loopEndInSamples, int loopFadeTimeInSamples);
+	bool enableArrangerLoop(double loopStartInSeconds, 
+                            double loopEndInSeconds, 
+                            double loopFadeTimeInSeconds = 0.005);
 	
 	/**
-	 Turns the loop (as specified in the arranger) off.
+	 Turns the loop off.
 	 */
 	void disableArrangerLoop();
 	

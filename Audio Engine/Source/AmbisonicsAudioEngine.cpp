@@ -565,9 +565,17 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();	
 	
 	if (getCurrentSampleRate() > 0 && fileOutputStream != 0)
-	{		
+	{	
+        // Stop the playback.
+        stop(); 
+        
 		// Remember the current playhead position. (It's assumed that the playback has been stopped).
-		int currentPosition = getCurrentPosition();
+		int currentPosition = getCurrentPosition();  
+        
+        // Remember if the loop in the arranger is enabled or not.
+        bool arrangerLoopEnabled = audioTransportSource.getArrangerLoopStatus();
+        // Disable the arranger loop
+        audioTransportSource.disableArrangerLoop();
 		
 		// Disconnect from the audioDeviceManager
 		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
@@ -681,6 +689,12 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 		
 		// Reset the playhead position
 		setPosition(currentPosition);
+        
+        // Reenable the arranger loop if it was engaged before
+        if (arrangerLoopEnabled)
+        {
+            audioTransportSource.reenableArrangerLoop();
+        }
 		
 		DEB("AmbisonicsAudioEngine::bounceToDisc: success = " + String(success));
 		
@@ -878,13 +892,13 @@ void AmbisonicsAudioEngine::stop()
 	}
 }
 
-bool AmbisonicsAudioEngine::enableArrangerLoop(int loopStartInSamples, int loopEndInSamples, int loopFadeTimeInSamples)
+bool AmbisonicsAudioEngine::enableArrangerLoop(double loopStartInSeconds, 
+                                               double loopEndInSeconds, 
+                                               double loopFadeTimeInSeconds)
 {
-	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	double oneOverSampleRate = 1.0 / currentAudioIODevice->getCurrentSampleRate();
-	return audioTransportSource.enableArrangerLoop(oneOverSampleRate * loopStartInSamples, 
-												   oneOverSampleRate * loopEndInSamples,
-												   oneOverSampleRate * loopFadeTimeInSamples);
+	return audioTransportSource.enableArrangerLoop(loopStartInSeconds, 
+												   loopEndInSeconds,
+												   loopFadeTimeInSeconds);
 }
 
 void AmbisonicsAudioEngine::disableArrangerLoop()

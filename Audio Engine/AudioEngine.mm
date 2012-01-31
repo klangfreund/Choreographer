@@ -197,7 +197,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end
 {
-	ambisonicsAudioEngine->enableArrangerLoop(ambisonicsAudioEngine->getCurrentSampleRate() * 0.001 * (double)start, ambisonicsAudioEngine->getCurrentSampleRate() * 0.001 * (double)end, 0.005);
+	ambisonicsAudioEngine->enableArrangerLoop(0.001 * (double)start, 0.001 * (double)end, 0.005);
 }
 
 - (void)unsetLoop
@@ -238,9 +238,6 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)bounceToDiskThread
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    [self unsetLoop];
-    
     String absolutePathToAudioFile = [[bounceURL path] cStringUsingEncoding:NSASCIIStringEncoding];
 	int bitsPerSample = 16;
 	String description("Test bounce");

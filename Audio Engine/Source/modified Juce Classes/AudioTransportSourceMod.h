@@ -177,18 +177,28 @@ public:
 	/**
 	 Turns the loop (as specified in the arranger) on.
 	 
-	 @param loopFadeTime_inSeconds	min(audioBlockLength, loopFadeTime_inSeconds) is
-									used as the fade out and fade in time - before and after the jump
-									from the end to the start marker of the loop (to avoid clicks).
+	 @param loopFadeTime_inSeconds	Is used as the fade out and fade in time - 
+                                    before and after the jump from the end to 
+                                    the start marker of the loop (to avoid 
+                                    clicks).
 	 
 	 @return	True, if the input data is a valid set.
 	 */
 	bool enableArrangerLoop(double loopStart_inSeconds, double loopEnd_inSeconds, double loopFadeTime_inSeconds);
+    
+    /** Reenables the loop (as specified in the arranger) as specified
+     on the last call of enableArrangerLoop.
+     */
+    bool reenableArrangerLoop();
 
 	/**
 	 Turns the loop (as specified in the arranger) off.
 	 */
 	void disableArrangerLoop();
+    
+    /** Returns the status of the loop (as specified in the arranger).
+     */
+    bool getArrangerLoopStatus();
 	
     //==============================================================================
     juce_UseDebuggingNewOperator
