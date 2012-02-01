@@ -160,9 +160,6 @@
 	// stop playback
     [playbackController stopPlayback];
     
-	// empty the engine's schedule
-	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
-
 	[super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo]; 
 }
 

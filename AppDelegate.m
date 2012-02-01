@@ -149,6 +149,9 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+	// empty the engine's schedule
+	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
+    
 	// release and free the audio engine
 	[AudioEngine release];
 }
