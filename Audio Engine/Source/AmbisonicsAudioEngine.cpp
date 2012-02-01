@@ -548,7 +548,7 @@ int AmbisonicsAudioEngine::getNumberOfAepChannels()
 	return audioSpeakerGainAndRouting.getNumberOfAepChannels();
 }
 
-bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile, 
+bool AmbisonicsAudioEngine::bounceToDisk(String absolutePathToAudioFile, 
 										 int bitsPerSample, 
 										 String description,
 										 String originator,
@@ -565,15 +565,27 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 	FileOutputStream* fileOutputStream = fileToWriteTo.createOutputStream();	
 	
 	if (getCurrentSampleRate() > 0 && fileOutputStream != 0)
-	{		
+	{	
+        // Stop the playback.
+        stop(); 
+        
 		// Remember the current playhead position. (It's assumed that the playback has been stopped).
-		int currentPosition = getCurrentPosition();
+		int currentPosition = getCurrentPosition();  
+        
+        // Remember if the loop in the arranger is enabled or not.
+        bool arrangerLoopEnabled = audioTransportSource.getArrangerLoopStatus();
+        // Disable the arranger loop
+        audioTransportSource.disableArrangerLoop();
 		
 		// Disconnect from the audioDeviceManager
 		audioDeviceManager.removeAudioCallback(&audioSourcePlayer);
 		
 		// Put the audioSpeakerGainAndRouting into bounce mode
 		int virtualNumberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(true);
+        
+        // When set by the cancelBounceToDisk method during the upcoming
+        // bounce process, it will be interrupted and the file will be deleted.
+        stopBounceToDisk = false;
 		
 		bool success = false; // This will be returned if virtualNumberOfActiveOutputChannels = 0.
 		
@@ -630,42 +642,51 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 			audioSpeakerGainAndRouting.prepareToPlay(SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK, getCurrentSampleRate());
 			setPosition(startSample);
 			start();
-			
-			// Write the audio file.	
-			success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
-																   numberOfSamplesToRead, 
-																   SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
-			
-			
-			// TODO: Try to do this by hand (with some sleeps in between):
+            
+            // The upcoming bounce process could have been written like this:
+            //    success = audioFormatWriter->writeFromAudioSource(audioSpeakerGainAndRouting, 
+            //                                                  numberOfSamplesToRead, 
+            //                                                  SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+            // But this way it would not be possible to interrupt it.
+            // So we do it like it is done inside the
+            // audioFormatWriter->writeFromAudioSource method with the
+            // additional check of stopBounceToDisk.
 			
 			//		bool AudioFormatWriter::writeFromAudioSource (AudioSource& source, int numSamplesToRead, const int samplesPerBlock)
-			//		{
-			//			AudioSampleBuffer tempBuffer (getNumChannels(), samplesPerBlock);
-			//			
-			//			while (numSamplesToRead > 0)
-			//			{
-			//				const int numToDo = jmin (numSamplesToRead, samplesPerBlock);
-			//				
-			//				AudioSourceChannelInfo info;
-			//				info.buffer = &tempBuffer;
-			//				info.startSample = 0;
-			//				info.numSamples = numToDo;
-			//				info.clearActiveBufferRegion();
-			//				
-			//				source.getNextAudioBlock (info);
-			//				
-			//				if (! writeFromAudioSampleBuffer (tempBuffer, 0, numToDo))
-			//					return false;
-			//				
-			//				numSamplesToRead -= numToDo;
-			//			}
-			//			
-			//			return true;
-			//		}		
+            
+			AudioSampleBuffer tempBuffer (virtualNumberOfActiveOutputChannels, 
+                                          SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+            success = true;	
+			while (numberOfSamplesToRead > 0)
+			{
+                const int numToDo = jmin (numberOfSamplesToRead, SAMPLES_PER_BLOCK_FOR_BOUNCE_TO_DISK);
+                
+                AudioSourceChannelInfo info;
+                info.buffer = &tempBuffer;
+                info.startSample = 0;
+                info.numSamples = numToDo;
+                info.clearActiveBufferRegion();
+                
+                audioSpeakerGainAndRouting.getNextAudioBlock (info);
+                
+                if (! audioFormatWriter->writeFromAudioSampleBuffer (tempBuffer, 0, numToDo) || stopBounceToDisk)
+                {
+                    success = false;
+                    break;
+                }
+                
+                numberOfSamplesToRead -= numToDo;
+            }	
 			
 			stop();
-		}
+            
+            // Delete the audio file if the bouncing process has been
+            // canceled by the user.
+            if (stopBounceToDisk)
+            {
+                fileToWriteTo.deleteFile();
+            }
+        }
 		
 		// Put the audioSpeakerGainAndRouting into regular mode
 		int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(false);
@@ -681,6 +702,12 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 		
 		// Reset the playhead position
 		setPosition(currentPosition);
+        
+        // Reenable the arranger loop if it was engaged before
+        if (arrangerLoopEnabled)
+        {
+            audioTransportSource.reenableArrangerLoop();
+        }
 		
 		DEB("AmbisonicsAudioEngine::bounceToDisc: success = " + String(success));
 		
@@ -691,6 +718,11 @@ bool AmbisonicsAudioEngine::bounceToDisc(String absolutePathToAudioFile,
 		return false;
 	}
 
+}
+
+void AmbisonicsAudioEngine::cancelBounceToDisk()
+{
+    stopBounceToDisk = true;
 }
 
 bool AmbisonicsAudioEngine::addAepChannel(int aepChannel, double gain, 
@@ -878,13 +910,13 @@ void AmbisonicsAudioEngine::stop()
 	}
 }
 
-bool AmbisonicsAudioEngine::enableArrangerLoop(int loopStartInSamples, int loopEndInSamples, int loopFadeTimeInSamples)
+bool AmbisonicsAudioEngine::enableArrangerLoop(double loopStartInSeconds, 
+                                               double loopEndInSeconds, 
+                                               double loopFadeTimeInSeconds)
 {
-	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
-	double oneOverSampleRate = 1.0 / currentAudioIODevice->getCurrentSampleRate();
-	return audioTransportSource.enableArrangerLoop(oneOverSampleRate * loopStartInSamples, 
-												   oneOverSampleRate * loopEndInSamples,
-												   oneOverSampleRate * loopFadeTimeInSamples);
+	return audioTransportSource.enableArrangerLoop(loopStartInSeconds, 
+												   loopEndInSeconds,
+												   loopFadeTimeInSeconds);
 }
 
 void AmbisonicsAudioEngine::disableArrangerLoop()

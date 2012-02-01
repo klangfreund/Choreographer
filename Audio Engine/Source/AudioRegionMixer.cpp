@@ -238,17 +238,25 @@ bool AudioRegionMixer::setGainEnvelopeForRegion (const int regionID, Array<void*
 					gainEnvelope.addSorted(audioEnvelopePointComparator, newFirstGainPoint);
 				}
 				AudioEnvelopePoint* lastGainPoint = (AudioEnvelopePoint*)gainEnvelope[gainEnvelope.size()-1];
-				int lengthOfThisRegion = audioRegionToModify->endPosition - audioRegionToModify->startPosition;
-				if (lastGainPoint->getPosition() < lengthOfThisRegion )
+//				int lengthOfThisRegion = audioRegionToModify->endPosition - audioRegionToModify->startPosition;
+//				if (lastGainPoint->getPosition() < lengthOfThisRegion )
+                int endOfRegionInTheAudioFile = audioRegionToModify->endPosition - audioRegionToModify->startPositionOfAudioFileInTimeline;
+				if (lastGainPoint->getPosition() < endOfRegionInTheAudioFile)
 				{
-					AudioEnvelopePoint* newLastGainPoint = new AudioEnvelopePoint(lengthOfThisRegion,
+//					AudioEnvelopePoint* newLastGainPoint = new AudioEnvelopePoint(lengthOfThisRegion,
+//																				  lastGainPoint->getValue());
+                    AudioEnvelopePoint* newLastGainPoint = new AudioEnvelopePoint(endOfRegionInTheAudioFile,
 																				  lastGainPoint->getValue());
 					gainEnvelope.addSorted(audioEnvelopePointComparator, newLastGainPoint);
 				}
 				
 				//temp: for debugging only
-				// firstGainPoint = (AudioEnvelopePoint*)gainEnvelope[0];
-				// DEB(String(firstGainPoint->getPosition()) + T(", ") + String(firstGainPoint->getValue()));
+				firstGainPoint = (AudioEnvelopePoint*)gainEnvelope[0];
+				DEB("AudioRegionMixer: firstGainPoint.pos = " + String(firstGainPoint->getPosition()) 
+                    + ", firstGainPoint.value = " + String(firstGainPoint->getValue()));
+                lastGainPoint = (AudioEnvelopePoint*)gainEnvelope[gainEnvelope.size()-1];
+                DEB("AudioRegionMixer: lastGainPoint.pos = " + String(lastGainPoint->getPosition()) 
+                    + ", lastGainPoint.value = " + String(lastGainPoint->getValue()));
 			}
 
 			audioRegionToModify->audioSourceAmbipanning->setGainEnvelope (gainEnvelope);

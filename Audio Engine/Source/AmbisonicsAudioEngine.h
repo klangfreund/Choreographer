@@ -162,7 +162,7 @@ public:
 	 
 	 @return						True, if the operation was successful.
 	 */	
-	bool bounceToDisc(String absolutePathToAudioFile, 
+	bool bounceToDisk(String absolutePathToAudioFile, 
 					  int bitsPerSample, 
 					  String description,
 					  String originator,
@@ -170,6 +170,8 @@ public:
 					  String codingHistory,
 					  int startSample,
 					  int numberOfSamplesToRead);
+    
+    void cancelBounceToDisk();
 	
 	/** Adds a new AEP channel to the array of AEP channels.
 	 
@@ -320,16 +322,18 @@ public:
 	/**
 	 Turns the loop (as specified in the arranger) on.
 	 
-	 @param loopFadeTimeInSamples	min(audioBlockLength, loopFadeTimeInSamples) is
-									used as the fade out and fade in time - around the jump
-									from the end to the start marker of the loop (to avoid clicks).
+	 @param loopFadeTimeInSeconds	Is used as the fade out and fade in time -
+                                    around the jump from the end to the start 
+                                    marker of the loop (to avoid clicks).
 	 
 	 @return	True, if the input data is a valid set.
 	 */
-	bool enableArrangerLoop(int loopStartInSamples, int loopEndInSamples, int loopFadeTimeInSamples);
+	bool enableArrangerLoop(double loopStartInSeconds, 
+                            double loopEndInSeconds, 
+                            double loopFadeTimeInSeconds = 0.005);
 	
 	/**
-	 Turns the loop (as specified in the arranger) off.
+	 Turns the loop off.
 	 */
 	void disableArrangerLoop();
 	
@@ -542,6 +546,11 @@ private:
 							///  there are less available hardware outputs
 							///  then speakers. This is done in 
 							///  AmbisonicsAudioEngine::setSpeakerPositions.
+    
+    /** This can be set by cancelBounceToDisk to interrupt the
+     bouncing process and delete the output file.
+     */
+    bool stopBounceToDisk;
 	
 	/** Used for scope locking in enableNewRouting. */
     CriticalSection lock;

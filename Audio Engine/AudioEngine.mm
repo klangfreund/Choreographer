@@ -197,7 +197,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end
 {
-	ambisonicsAudioEngine->enableArrangerLoop(ambisonicsAudioEngine->getCurrentSampleRate() * 0.001 * (double)start, ambisonicsAudioEngine->getCurrentSampleRate() * 0.001 * (double)end, 0.005);
+	ambisonicsAudioEngine->enableArrangerLoop(0.001 * (double)start, 0.001 * (double)end, 0.005);
 }
 
 - (void)unsetLoop
@@ -238,9 +238,6 @@ static AudioEngine *sharedAudioEngine = nil;
 - (void)bounceToDiskThread
 {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-    [self unsetLoop];
-    
     String absolutePathToAudioFile = [[bounceURL path] cStringUsingEncoding:NSASCIIStringEncoding];
 	int bitsPerSample = 16;
 	String description("Test bounce");
@@ -251,7 +248,7 @@ static AudioEngine *sharedAudioEngine = nil;
 	double fromMsToSamples = 0.001 * sampleRate;
 	int startSample = bounceStart * fromMsToSamples;
 	int numberOfSamplesToRead = bounceDuration * fromMsToSamples;
-	bool succ = ambisonicsAudioEngine->bounceToDisc(absolutePathToAudioFile, 
+	bool succ = ambisonicsAudioEngine->bounceToDisk(absolutePathToAudioFile, 
 													bitsPerSample, 
 													description,
 													originator, 
@@ -269,6 +266,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)bounceToDiskCancel;
 {
+    ambisonicsAudioEngine->cancelBounceToDisk();
     [NSApp stopModal];
 }
 
@@ -426,7 +424,11 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setGainAutomation:(id)audioRegion
 {
+    int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+    double fromMsToSamples = 0.001*sampleRate;
+    
 	unsigned int index = [[audioRegion valueForKey:@"playbackIndex"] unsignedIntValue];
+    unsigned long  offsetInFile = [[audioRegion valueForKeyPath:@"audioItem.offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
 	Array<void*> gainEnvelope;
 	float gain;
 	
@@ -437,12 +439,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	}
 	else
 	{
-		int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 		for(id bp in [audioRegion valueForKeyPath:@"gainBreakpointArray"])
 		{
 			//NSLog(@"gain bp: %d %f", [[bp valueForKey:@"time"] longValue], [[bp valueForKey:@"value"] floatValue]);
 			gain = pow(10, 0.05 * [[bp valueForKey:@"value"] floatValue]);
-			AudioEnvelopePoint* audioEnvelopePoint = new AudioEnvelopePoint([[bp valueForKey:@"time"] longValue] * 0.001 * sampleRate, gain);
+			AudioEnvelopePoint* audioEnvelopePoint = new AudioEnvelopePoint([[bp valueForKey:@"time"] longValue] * fromMsToSamples + offsetInFile, gain);
 			gainEnvelope.add(audioEnvelopePoint);		
 		}
 	}

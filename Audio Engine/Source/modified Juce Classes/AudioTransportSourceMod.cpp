@@ -223,9 +223,28 @@ bool AudioTransportSourceMod::enableArrangerLoop(double loopStart_inSeconds, dou
 
 }
 
+bool AudioTransportSourceMod::reenableArrangerLoop()
+{
+	if (loopStart < loopEnd && loopFadeTime >= 0.0 && sampleRate > 0.0) // this is a valid configuration
+	{		
+		arrangerIsLooping = true;
+		return true;
+	}
+	else // if the input is not a valid configuration
+	{
+		return false;
+	}
+    
+}
+
 void AudioTransportSourceMod::disableArrangerLoop()
 {
 	arrangerIsLooping = false;
+}
+
+bool AudioTransportSourceMod::getArrangerLoopStatus()
+{
+	return arrangerIsLooping;
 }
 
 
