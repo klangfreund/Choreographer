@@ -978,7 +978,7 @@ void AmbisonicsAudioEngine::setMasterGain(const float newGain)
 	audioTransportSource.setGain(newGain);
 }
 
-void AmbisonicsAudioEngine::setAEPOrder (const int order)
+void AmbisonicsAudioEngine::setAEPOrder (const double order)
 {
 	AudioSourceAmbipanning::setOrder(order);
 }
@@ -990,23 +990,23 @@ void setAEPDistanceModeTo0 ()
 
 void setAEPDistanceModeTo1 (double centerRadius, 
 							double centerExponent,
-							double centerAttenuation,
+							double centerAttenuationInDB,
 							double dBFalloffPerUnit)
 {
 	AudioSourceAmbipanning::setDistanceModeTo1(centerRadius, 
 											   centerExponent,
-											   centerAttenuation,
+											   centerAttenuationInDB,
 											   dBFalloffPerUnit);
 }
 
 void setAEPDistanceModeTo2 (double centerRadius, 
 							double centerExponent,
-							double centerAttenuation,
+							double centerAttenuationInDB,
 							double outsideCenterExponent)
 {
 	AudioSourceAmbipanning::setDistanceModeTo1(centerRadius, 
 											   centerExponent,
-											   centerAttenuation,
+											   centerAttenuationInDB,
 											   outsideCenterExponent);
 }
 

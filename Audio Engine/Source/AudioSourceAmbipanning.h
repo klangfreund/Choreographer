@@ -225,7 +225,7 @@ public:
 	/**
 	 Sets the order used in the Ambipanning calculation.
 	 */
-	static void setOrder(int order_);
+	static void setOrder(double order_);
 
 	/** 
 	 Sets the positions of the speakers.
@@ -242,7 +242,7 @@ public:
 	 */
 	static void setDistanceModeTo1(double centerRadius_, 
 								   double centerExponent_,
-								   double centerAttenuation_,
+								   double centerAttenuationInDB_,
 								   double dBFalloffPerUnit_);
 	
 	/** 
@@ -250,7 +250,7 @@ public:
 	 */
 	static void setDistanceModeTo2(double centerRadius_, 
 								   double centerExponent_,
-								   double centerAttenuation_,
+								   double centerAttenuationInDB_,
 								   double outsideCenterExponent_);
 	
 private:
@@ -275,7 +275,7 @@ private:
 									double& distanceGain, 
                                     double& modifiedOrder);
 	
-	static int order;
+	static double order;
 	static Array<SpeakerPosition> positionOfSpeaker;	
 	// for the distance calculations
 	static int distanceMode;		///< Determines which algorithm is chosen to 
