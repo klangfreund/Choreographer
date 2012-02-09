@@ -456,7 +456,7 @@ public:
 	 Sets the order used in AudioSourceAmbipanning.
 	 
 	 */
-	void setAEPOrder (const int order);
+	void setAEPOrder (const double order);
 	
 	/**
 	 Sets the distanceMode used in AudioSourceAmbipanning to 0.	 
@@ -472,7 +472,7 @@ public:
 	 */
 	void setAEPDistanceModeTo1 (double centerRadius, 
 								double centerExponent,
-								double centerAttenuation,
+								double centerAttenuationInDB,
 								double dBFalloffPerUnit);
 
 	/**
@@ -484,7 +484,7 @@ public:
 	 */
 	void setAEPDistanceModeTo2 (double centerRadius, 
 								double centerExponent,
-								double centerAttenuation,
+								double centerAttenuationInDB,
 								double outsideCenterExponent);
 	
 	/**

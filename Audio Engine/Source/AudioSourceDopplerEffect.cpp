@@ -10,6 +10,8 @@
 #include "AudioSourceDopplerEffect.h"
 #include <float.h> // To be able to use DBL_MAX
 
+const double SpacialPosition::oneOverSpeedOfSound = 0.00294; // = 1.0/340.0 m/s
+
 //==============================================================================
 
 AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& audioSourceGainEnvelope_, double sampleRate_)
@@ -383,6 +385,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             int numberOfSamplesForAudioBlock = highestPositionToRequest - lowestPositionToRequest + 1;
                 // Why "+1"?
                 // Example: h=2, l=0  =>  numberOfSamples must be 3 (0,1 and 2).
+            
             // The sourceInfo.buffer should actually be big enough.
             // This has been ensured in the method setSpacialEnvelope.
             // But if the info.buffer->getNumSamples() is much bigger than

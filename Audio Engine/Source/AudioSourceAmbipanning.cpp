@@ -486,7 +486,7 @@ void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
 // ------------ \/ \/ \/ \/ \/ \/ \/ \/ \/ \/   ------------
 // ATTENTION! "static void ..." would be wrong here in the definition (put it only in the declaration)!.
 //  See "Prata - C++ primer", p.583
-void AudioSourceAmbipanning::setOrder( int order_)
+void AudioSourceAmbipanning::setOrder(double order_)
 {
 	order = order_;
 }
@@ -504,7 +504,7 @@ void AudioSourceAmbipanning::setDistanceModeTo0()
 
 void AudioSourceAmbipanning::setDistanceModeTo1(double centerRadius_, 
 												double centerExponent_,
-												double centerAttenuation_,
+												double centerAttenuationInDB_,
 												double dBFalloffPerUnit_)
 {
 	distanceMode = 1;
@@ -512,14 +512,14 @@ void AudioSourceAmbipanning::setDistanceModeTo1(double centerRadius_,
 	centerRadius = centerRadius_;
 	oneOverCenterRadius = 1.0 / centerRadius;
 	centerExponent = centerExponent_;
-	centerAttenuation = centerAttenuation_;
+	centerAttenuation = pow(10.0, 0.05 * centerAttenuationInDB_);
 	oneMinusCenterAttenuation = 1.0 - centerAttenuation;
 	dBFalloffPerUnit = dBFalloffPerUnit_;
 }
 
 void AudioSourceAmbipanning::setDistanceModeTo2(double centerRadius_, 
 												double centerExponent_,
-												double centerAttenuation_,
+												double centerAttenuationInDB_,
 												double outsideCenterExponent_)
 {
 	distanceMode = 2;
@@ -527,7 +527,7 @@ void AudioSourceAmbipanning::setDistanceModeTo2(double centerRadius_,
 	centerRadius = centerRadius_;
 	oneOverCenterRadius = 1.0 / centerRadius;
 	centerExponent = centerExponent_;
-	centerAttenuation = centerAttenuation_;
+	centerAttenuation = pow(10.0, 0.05 * centerAttenuationInDB_);
 	oneMinusCenterAttenuation = 1.0 - centerAttenuation;
 	outsideCenterExponent = outsideCenterExponent_;
 }
@@ -616,15 +616,16 @@ inline void AudioSourceAmbipanning::calculationsForAEP (double& x, double& y, do
 		if (distanceMode == 0)
 		{
 			distanceGain = 1.0;
-			modifiedOrder = (double)order;
+			modifiedOrder = order;
 		}
 		else if (distanceMode == 1 || distanceMode == 2)
 		{
-			distanceGain = pow(r * oneOverCenterRadius, centerExponent) * oneMinusCenterAttenuation + centerAttenuation;
+			distanceGain = pow(r * oneOverCenterRadius, centerExponent) * 
+                            oneMinusCenterAttenuation + centerAttenuation;
 			
 			// calculate order decrease within center_size: 
 			// goes from order to 0
-			modifiedOrder = (double)order * r * oneOverCenterRadius;
+			modifiedOrder = order * r * oneOverCenterRadius;
 		}
 	}
 	// if the position is outside the center zone
@@ -647,13 +648,13 @@ inline void AudioSourceAmbipanning::calculationsForAEP (double& x, double& y, do
 			distanceGain = pow(r - centerRadius + 1, -outsideCenterExponent);
 			// in the max external it is: pow((dist + x->s_center_size3), -x->s_source[idx]->dist_att);
 		}
-		modifiedOrder = (double)order;
+		modifiedOrder = order;
 	}
 	
 }
 
 // Initialisation (and memory allocation) of the static variables
-int AudioSourceAmbipanning::order = 1;
+double AudioSourceAmbipanning::order = 1.0;
 //int AudioSourceAmbipanning::numberOfSpeakers = 1;
 Array<SpeakerPosition> AudioSourceAmbipanning::positionOfSpeaker;
 	

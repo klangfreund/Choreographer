@@ -14,15 +14,20 @@
 #include "SpacialEnvelopePoint.h"
 #include "AudioSourceGainEnvelope.h"
 
-// Constants:
-#define ONEOVERSPEEDOFSOUND 0.00294 //1.0/340.0 m/s
-
-
+/** Defines a position in space.
+ 
+ It's exclusively used in AudioSourceDopplerEffect.
+ */
 struct SpacialPosition
 {
+    /** x coordinate in space. */
     double x;
     double y;
     double z;
+    
+    /** The constant value of 1/(speed of sound) in meters per second. */
+    // Initialized in the file AudioSourceDopplerEffect.cpp.
+    static const double oneOverSpeedOfSound; // = 1.0/340.0 = = 0.00294 m/s
     
     /** Constructor */
     SpacialPosition ()
@@ -113,7 +118,7 @@ struct SpacialPosition
     double delay()
     {
 //        return sqrt(*this * *this)*ONEOVERSPEEDOFSOUND;
-        return 100. * sqrt(*this * *this) * ONEOVERSPEEDOFSOUND;
+        return 100. * sqrt(*this * *this) * oneOverSpeedOfSound;
     }
 
 };
