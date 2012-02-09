@@ -1037,7 +1037,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="532221831">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1208,7 +1208,6 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{250, 295}</string>
-					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
@@ -3709,6 +3708,7 @@
 							<string>playbackController</string>
 							<string>regionContextMenu</string>
 							<string>repeatRegionPanel</string>
+							<string>repeatRegionTextField</string>
 							<string>trajectoryContextMenu</string>
 							<string>xGridLinesMenu</string>
 							<string>yGridLinesMenu</string>
@@ -3721,6 +3721,7 @@
 							<string>id</string>
 							<string>NSMenu</string>
 							<string>NSWindow</string>
+							<string>NSTextField</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3736,6 +3737,7 @@
 							<string>playbackController</string>
 							<string>regionContextMenu</string>
 							<string>repeatRegionPanel</string>
+							<string>repeatRegionTextField</string>
 							<string>trajectoryContextMenu</string>
 							<string>xGridLinesMenu</string>
 							<string>yGridLinesMenu</string>
@@ -3765,6 +3767,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">repeatRegionPanel</string>
 								<string key="candidateClassName">NSWindow</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">repeatRegionTextField</string>
+								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">trajectoryContextMenu</string>

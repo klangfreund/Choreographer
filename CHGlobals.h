@@ -44,12 +44,14 @@ typedef enum _ArrangerDisplayMode
 typedef enum _ArrangerEditMode
 {
 	arrangerModeNone = 0,
+	arrangerModeDrag,
 	arrangerModeSelectMultiple,
 	arrangerModeDuplicate,
+	arrangerModeDuplicateDrag,
 	arrangerModeMarquee,
 	arrangerModeCropLeft,
 	arrangerModeCropRight,
-	arrangerModeCursor
+	arrangerModeGain
 } ArrangerEditMode;
 
 
