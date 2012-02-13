@@ -1,0 +1,71 @@
+{
+    "content": {
+        "001": {
+            "title": "Get started"
+        },
+        "002": {
+            "title": "Editors"
+        },
+        "003": {
+            "title": "Menu Reference"
+        },
+        "004": {
+            "title": "More..."
+        },
+        "101": {
+            "title": "About Choreographer",
+            "content": "blah"
+        },
+        "102": {
+            "title": "Create a new project",
+            "content": "blah"
+        },
+        "103": {
+            "title": "Import audio",
+            "content": "blah"
+        },
+        "104": {
+            "title": "Place audio in time",
+            "content": "blah"
+        },
+        "105": {
+            "title": "Place audio in space",
+            "content": "blah"
+        },
+        "106": {
+            "title": "Trajectories",
+            "content": "blah"
+        },
+        "201": {
+            "title": "Main arranger window",
+            "content": "blah"
+        },
+        "202": {
+            "title": "Radar editor window",
+            "content": "blah"
+        },
+        "203": {
+            "title": "List editor window",
+            "content": "blah"
+        },
+        "204": {
+            "title": "Breakpoint editor window",
+            "content": "blah"
+        },
+        "401": {
+            "title": "Ambisonics equivalent panning",
+            "content": "blah"
+        },
+        "402": {
+            "title": "SpatDIF",
+            "content": "blah"
+        }
+    },
+    "navigation": {
+        "001": ["101","102","103","104","105","106"],
+        "002": ["201","202","203","204"],
+        "003": [],
+        "004": ["401","402"]
+    }
+}
+
