@@ -97,7 +97,9 @@
                        centerRadius:(double)cRadius 
                      centerExponent:(double)cExponent
                   centerAttenuation:(double)cAttenuation
-                   dBFalloffPerUnit:(double)dBFalloff;
+                   dBFalloffPerUnit:(double)dBFalloff
+                attenuationExponent:(double)exponent;
+
 
 - (void)setUseHipassFilter:(BOOL)filter;
 - (void)setUseDelay:(BOOL)delay;

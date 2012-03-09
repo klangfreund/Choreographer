@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11C74</string>
+		<string key="IBDocument.SystemVersion">11D50b</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1617</string>
-		<string key="IBDocument.AppKitVersion">1138.23</string>
-		<string key="IBDocument.HIToolboxVersion">567.00</string>
+		<string key="IBDocument.AppKitVersion">1138.32</string>
+		<string key="IBDocument.HIToolboxVersion">568.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">1617</string>
@@ -52,12 +52,13 @@
 			<object class="NSWindowTemplate" id="608527442">
 				<int key="NSWindowStyleMask">7</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{839, 800}, {527, 551}}</string>
+				<string key="NSWindowRect">{{671, 800}, {527, 551}}</string>
 				<int key="NSWTFlags">1685586944</int>
 				<string key="NSWindowTitle">Project Audio Settings</string>
 				<string key="NSWindowClass">NSPanel</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
+				<string key="NSWindowContentMinSize">{527, 551}</string>
 				<object class="NSView" key="NSWindowView" id="363169774">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -163,7 +164,7 @@
 										<object class="NSPopUpButton" id="125751128">
 											<reference key="NSNextResponder" ref="429193765"/>
 											<int key="NSvFlags">267</int>
-											<string key="NSFrame">{{235, 149}, {179, 22}}</string>
+											<string key="NSFrame">{{235, 149}, {235, 22}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="901529546"/>
@@ -179,18 +180,18 @@
 												<string key="NSKeyEquivalent"/>
 												<int key="NSPeriodicDelay">400</int>
 												<int key="NSPeriodicInterval">75</int>
-												<object class="NSMenuItem" key="NSMenuItem" id="500924633">
+												<object class="NSMenuItem" key="NSMenuItem" id="461058150">
 													<reference key="NSMenu" ref="504769277"/>
-													<string key="NSTitle">inverse proportional decrease</string>
+													<string key="NSTitle">exponential decrease</string>
 													<string key="NSKeyEquiv"/>
 													<int key="NSKeyEquivModMask">1048576</int>
 													<int key="NSMnemonicLoc">2147483647</int>
 													<int key="NSState">1</int>
-													<object class="NSCustomResource" key="NSOnImage" id="580461333">
+													<object class="NSCustomResource" key="NSOnImage" id="443130085">
 														<string key="NSClassName">NSImage</string>
 														<string key="NSResourceName">NSMenuCheckmark</string>
 													</object>
-													<object class="NSCustomResource" key="NSMixedImage" id="863610053">
+													<object class="NSCustomResource" key="NSMixedImage" id="550987753">
 														<string key="NSClassName">NSImage</string>
 														<string key="NSResourceName">NSMenuMixedState</string>
 													</object>
@@ -202,18 +203,18 @@
 													<string key="NSTitle">OtherViews</string>
 													<object class="NSMutableArray" key="NSMenuItems">
 														<bool key="EncodedWithXMLCoder">YES</bool>
-														<object class="NSMenuItem" id="461058150">
+														<reference ref="461058150"/>
+														<object class="NSMenuItem" id="500924633">
 															<reference key="NSMenu" ref="504769277"/>
-															<string key="NSTitle">exponential decrease</string>
+															<string key="NSTitle">inverse proportional decrease</string>
 															<string key="NSKeyEquiv"/>
 															<int key="NSKeyEquivModMask">1048576</int>
 															<int key="NSMnemonicLoc">2147483647</int>
-															<reference key="NSOnImage" ref="580461333"/>
-															<reference key="NSMixedImage" ref="863610053"/>
+															<reference key="NSOnImage" ref="443130085"/>
+															<reference key="NSMixedImage" ref="550987753"/>
 															<string key="NSAction">_popUpItemAction:</string>
 															<reference key="NSTarget" ref="891964682"/>
 														</object>
-														<reference ref="500924633"/>
 													</object>
 													<object class="NSFont" key="NSMenuFont" id="331303750">
 														<string key="NSName">LucidaGrande</string>
@@ -433,7 +434,6 @@
 															<string>allowsFloats</string>
 															<string>formatterBehavior</string>
 															<string>locale</string>
-															<string>maximum</string>
 															<string>minimum</string>
 															<string>negativeInfinitySymbol</string>
 															<string>nilSymbol</string>
@@ -445,7 +445,6 @@
 															<boolean value="YES"/>
 															<integer value="1040"/>
 															<reference ref="334848117"/>
-															<real value="1"/>
 															<real value="0.0"/>
 															<string>-∞</string>
 															<string/>
@@ -466,7 +465,14 @@
 														<reference key="NSAttributes" ref="487816371"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
-													<real value="1" key="NS.max"/>
+													<object class="NSDecimalNumberPlaceholder" key="NS.max" id="213234043">
+														<int key="NS.exponent">0</int>
+														<int key="NS.length">0</int>
+														<bool key="NS.negative">YES</bool>
+														<bool key="NS.compact">NO</bool>
+														<int key="NS.mantissa.bo">1</int>
+														<bytes key="NS.mantissa">AAAAAAAAAAAAAAAAAAAAAA</bytes>
+													</object>
 													<object class="NSDecimalNumberHandler" key="NS.rounding">
 														<int key="NS.roundingmode">3</int>
 														<bool key="NS.raise.overflow">YES</bool>
@@ -558,14 +564,7 @@
 														<string key="NSString">NaN</string>
 														<reference key="NSAttributes" ref="487816371"/>
 													</object>
-													<object class="NSDecimalNumberPlaceholder" key="NS.min" id="709541784">
-														<int key="NS.exponent">0</int>
-														<int key="NS.length">0</int>
-														<bool key="NS.negative">YES</bool>
-														<bool key="NS.compact">NO</bool>
-														<int key="NS.mantissa.bo">1</int>
-														<bytes key="NS.mantissa">AAAAAAAAAAAAAAAAAAAAAA</bytes>
-													</object>
+													<reference key="NS.min" ref="213234043"/>
 													<real value="0.0" key="NS.max"/>
 													<object class="NSDecimalNumberHandler" key="NS.rounding">
 														<int key="NS.roundingmode">3</int>
@@ -658,7 +657,7 @@
 														<string key="NSString">NaN</string>
 														<reference key="NSAttributes" ref="487816371"/>
 													</object>
-													<reference key="NS.min" ref="709541784"/>
+													<reference key="NS.min" ref="213234043"/>
 													<real value="0.0" key="NS.max"/>
 													<object class="NSDecimalNumberHandler" key="NS.rounding">
 														<int key="NS.roundingmode">3</int>
@@ -682,7 +681,7 @@
 										<object class="NSTextField" id="6913781">
 											<reference key="NSNextResponder" ref="429193765"/>
 											<int key="NSvFlags">268</int>
-											<string key="NSFrame">{{274, 121}, {52, 14}}</string>
+											<string key="NSFrame">{{274, 121}, {91, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
 											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="767684888"/>
@@ -691,7 +690,7 @@
 											<object class="NSTextFieldCell" key="NSCell" id="386168232">
 												<int key="NSCellFlags">68288064</int>
 												<int key="NSCellFlags2">272761856</int>
-												<string key="NSContents">dB falloff</string>
+												<string key="NSContents">Attenuation (dB)</string>
 												<reference key="NSSupport" ref="26"/>
 												<string key="NSCellIdentifier">_NS:3936</string>
 												<reference key="NSControlView" ref="6913781"/>
@@ -721,7 +720,6 @@
 															<string>allowsFloats</string>
 															<string>formatterBehavior</string>
 															<string>locale</string>
-															<string>maximum</string>
 															<string>minimum</string>
 															<string>negativeInfinitySymbol</string>
 															<string>nilSymbol</string>
@@ -733,7 +731,6 @@
 															<boolean value="YES"/>
 															<integer value="1040"/>
 															<reference ref="334848117"/>
-															<real value="1"/>
 															<real value="0.0"/>
 															<string>-∞</string>
 															<string/>
@@ -754,7 +751,7 @@
 														<reference key="NSAttributes" ref="487816371"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
-													<real value="1" key="NS.max"/>
+													<reference key="NS.max" ref="213234043"/>
 													<object class="NSDecimalNumberHandler" key="NS.rounding">
 														<int key="NS.roundingmode">3</int>
 														<bool key="NS.raise.overflow">YES</bool>
@@ -1052,7 +1049,7 @@
 										<reference key="NSAttributes" ref="487816371"/>
 									</object>
 									<real value="0.0" key="NS.min"/>
-									<reference key="NS.max" ref="709541784"/>
+									<reference key="NS.max" ref="213234043"/>
 									<object class="NSDecimalNumberHandler" key="NS.rounding">
 										<int key="NS.roundingmode">3</int>
 										<bool key="NS.raise.overflow">YES</bool>
@@ -1104,6 +1101,7 @@
 					<string key="NSReuseIdentifierKey">_NS:2837</string>
 				</object>
 				<string key="NSScreenRect">{{-372, 800}, {1920, 1080}}</string>
+				<string key="NSMinSize">{527, 573}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
@@ -2087,8 +2085,8 @@
 			</object>
 			<object class="NSMutableArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
-				<string>{9, 8}</string>
-				<string>{7, 2}</string>
+				<string>{11, 11}</string>
+				<string>{10, 3}</string>
 				<string>{15, 15}</string>
 			</object>
 		</object>

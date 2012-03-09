@@ -82,6 +82,20 @@
         [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:ambisonicsOrder];
     else if([keyPath isEqualToString:@"distanceBasedAttenuation"])
         [attenuationCurveView setEnabled:distanceBasedAttenuation];
+    else if([keyPath isEqualToString:@"distanceBasedAttenuationMode"])
+        NSLog(@"....................%i",distanceBasedAttenuationMode);
+    
+    NSRange range = [keyPath rangeOfString:@"distanceBased"];
+    if(range.location != NSNotFound)
+    {
+        int mode = distanceBasedAttenuation ? distanceBasedAttenuationMode + 1 : 0;
+        [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
+                                                        centerRadius:distanceBasedAttenuationCentreZoneSize
+                                                      centerExponent:distanceBasedAttenuationCentreExponent
+                                                   centerAttenuation:distanceBasedAttenuationCentreExponent
+                                                    dBFalloffPerUnit:distanceBasedAttenuationDbFalloff
+                                                 attenuationExponent:distanceBasedAttenuationExponent];
+    }
 }
 
 @end

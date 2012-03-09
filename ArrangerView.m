@@ -1372,7 +1372,7 @@
     else if(hitAudioRegion && ![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
     {
         // region deselected by a shift click
-        arrangerEditMode == arrangerModeNone;
+        arrangerEditMode = arrangerModeNone;
     }
     else
     {

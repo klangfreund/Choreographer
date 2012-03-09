@@ -97,6 +97,15 @@
 	
 	// playback controller
 	[playbackController setValue:projectSettings forKey:@"projectSettings"];
+    
+    // audio engine
+    int mode = [[projectSettings valueForKey:@"distanceBasedAttenuation"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedAttenuationMode"] intValue] + 1 : 0;
+    [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
+                                                    centerRadius:[[projectSettings valueForKey:@"distanceBasedCentreRadius"] doubleValue]
+                                                  centerExponent:[[projectSettings valueForKey:@"distanceBasedCentreExponent"] doubleValue]
+                                               centerAttenuation:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreDB"] doubleValue]
+                                                dBFalloffPerUnit:[[projectSettings valueForKey:@"distanceBasedAttenuationDbFalloff"] doubleValue]
+                                             attenuationExponent:[[projectSettings valueForKey:@"distanceBasedAttenuationExponent"] doubleValue]];
 
 	// everything that has been done until now (setup, init...)
 	// is NOT put on the undo stack

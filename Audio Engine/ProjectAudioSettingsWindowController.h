@@ -25,6 +25,7 @@
     int   distanceBasedAttenuationMode;
     float distanceBasedAttenuationDbFalloff;
     float distanceBasedAttenuationExponent;
+
     BOOL distanceBasedFiltering;
     BOOL distanceBasedDelay;
 }
