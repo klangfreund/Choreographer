@@ -332,7 +332,6 @@ static AudioEngine *sharedAudioEngine = nil;
                    dBFalloffPerUnit:(double)dBFalloff
                 attenuationExponent:(double)exponent;
 {
-    NSLog(@"---------set attenuation %i",type);
     switch(type)
     {
         case 1:
