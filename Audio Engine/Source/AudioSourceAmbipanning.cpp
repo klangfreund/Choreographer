@@ -111,7 +111,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
     // By default: No doppler effect
     //enableDopplerEffect(false);
     // TEMP
-    enableDopplerEffect(true);
+    //enableDopplerEffect(true);
 	
 	// Define an initial spacial envelope.
 	// It is also neccessary to set up the newSpacialEnvelope,
@@ -639,13 +639,13 @@ inline void AudioSourceAmbipanning::calculationsForAEP (double& x, double& y, do
 		// distanceMode 1: exponential decrease
 		else if (distanceMode == 1)
 		{
-			distanceGain = pow( 10.0, (r - centerRadius)*dBFalloffPerUnit*0.05);
+			distanceGain = pow( 10.0, (r - centerRadius)*10.0*dBFalloffPerUnit*0.05);
 			// in the max external it is: pow(10, (dist - x->s_center_size) * x->s_source[idx]->dbunit * 0.05);
 		}
 		// distanceMode 2: inverse proportional decrease
 		else if (distanceMode == 2)
 		{
-			distanceGain = pow(r - centerRadius + 1, -outsideCenterExponent);
+			distanceGain = pow(10.0*(r - centerRadius) + 1.0, -outsideCenterExponent);
 			// in the max external it is: pow((dist + x->s_center_size3), -x->s_source[idx]->dist_att);
 		}
 		modifiedOrder = order;
