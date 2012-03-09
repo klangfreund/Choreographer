@@ -322,7 +322,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setAmbisonicsOrder:(float)order
 {
-	ambisonicsAudioEngine->setAEPOrder((int)order);
+	ambisonicsAudioEngine->setAEPOrder(order);
 }
 
 - (void)setDistanceBasedAttenuation:(int)type
@@ -330,7 +330,18 @@ static AudioEngine *sharedAudioEngine = nil;
                      centerExponent:(double)cExponent
                   centerAttenuation:(double)cAttenuation
                    dBFalloffPerUnit:(double)dBFalloff
-{}
+                attenuationExponent:(double)exponent;
+{
+    switch(type)
+    {
+        case 1:
+            ambisonicsAudioEngine->setAEPDistanceModeTo1(cRadius, cExponent, cAttenuation, dBFalloff); break;
+        case 2:
+            ambisonicsAudioEngine->setAEPDistanceModeTo2(cRadius, cExponent, cAttenuation, exponent); break;
+        default:
+            ambisonicsAudioEngine->setAEPDistanceModeTo0();
+    }
+}
 
 - (void)setUseHipassFilter:(BOOL)filter
 {

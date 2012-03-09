@@ -73,7 +73,7 @@
     for(i=0;i<centreZoneSize * 1000;i++)
     {
         x = i * r.size.width * 0.001;
-        y = (pow(i * 0.01 * (0.1/centreZoneSize), centreExponent) * (1.0 - centreGain) + centreGain) * r.size.height;
+        y = (pow(i * 0.001 / centreZoneSize, centreExponent) * (1.0 - centreGain) + centreGain) * r.size.height;
         [curve lineToPoint:NSMakePoint(x,y)];
     }
     
@@ -83,7 +83,7 @@
         for(;i<1000;i++)
         {
             x = i * r.size.width * 0.001;
-            y = pow(10, (i * 0.01 - 10. * centreZoneSize) * dbFalloff * 0.05) * r.size.height;
+            y = pow(10, (i * 0.001 - centreZoneSize) * 10. * dbFalloff * 0.05) * r.size.height;
             [curve lineToPoint:NSMakePoint(x,y)];
         }
     }

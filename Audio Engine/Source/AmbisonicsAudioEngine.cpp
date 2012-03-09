@@ -983,15 +983,15 @@ void AmbisonicsAudioEngine::setAEPOrder (const double order)
 	AudioSourceAmbipanning::setOrder(order);
 }
 
-void setAEPDistanceModeTo0 ()
+void AmbisonicsAudioEngine::setAEPDistanceModeTo0 ()
 {
 	AudioSourceAmbipanning::setDistanceModeTo0();
 }
 
-void setAEPDistanceModeTo1 (double centerRadius, 
-							double centerExponent,
-							double centerAttenuationInDB,
-							double dBFalloffPerUnit)
+void AmbisonicsAudioEngine::setAEPDistanceModeTo1 (double centerRadius, 
+                                                   double centerExponent,
+                                                   double centerAttenuationInDB,
+                                                   double dBFalloffPerUnit)
 {
 	AudioSourceAmbipanning::setDistanceModeTo1(centerRadius, 
 											   centerExponent,
@@ -999,10 +999,10 @@ void setAEPDistanceModeTo1 (double centerRadius,
 											   dBFalloffPerUnit);
 }
 
-void setAEPDistanceModeTo2 (double centerRadius, 
-							double centerExponent,
-							double centerAttenuationInDB,
-							double outsideCenterExponent)
+void AmbisonicsAudioEngine::setAEPDistanceModeTo2 (double centerRadius, 
+                                                   double centerExponent,
+                                                   double centerAttenuationInDB,
+                                                   double outsideCenterExponent)
 {
 	AudioSourceAmbipanning::setDistanceModeTo1(centerRadius, 
 											   centerExponent,
