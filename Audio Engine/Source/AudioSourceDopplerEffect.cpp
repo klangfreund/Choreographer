@@ -427,10 +427,9 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
 //            DEB("AudioSourceDopplerEffect::getNextAudioBlock: highestPositionToRequest = " + String(highestPositionToRequest))
             
             // TEMP:
-            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
+//            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
 //            audioSourceGainEnvelope.setNextReadPosition(audioBlockStartPosition);
-            audioSourceGainEnvelope.getNextAudioBlock(info);
-/*
+//            audioSourceGainEnvelope.getNextAudioBlock(info);
             
             int numberOfSamplesForAudioBlock = highestPositionToRequest - lowestPositionToRequest + 1;
                 // Why "+1"?
@@ -440,6 +439,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             // This has been ensured in the method setSpacialEnvelope.
             // But if the info.buffer->getNumSamples() is much bigger than
             // the samplesPerBlockExpected, we need to allocate more memory.
+            // Remark: Memory allocation is something we don't like in the
+            // audio thread. But this one here seems necessary.
             if (sourceInfo.buffer->getNumSamples() < numberOfSamplesForAudioBlock)
             {
                 DEB("AudioSourceDopplerEffect: MEMORY ALLOCATION in the "
@@ -452,6 +453,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                            numberOfSamplesForAudioBlock, 
                                            keepExistingContent);
             }
+/*            
+            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
             sourceInfo.startSample = 0;
             sourceInfo.numSamples = numberOfSamplesForAudioBlock;
             audioSourceGainEnvelope.getNextAudioBlock(sourceInfo);
@@ -463,7 +466,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             
             // For every sample in the AudioSampleBuffer info, figure out the
             // (delayed) position in the audio file.
-            
+
+// TODO: Remove this
             // Even thought this is not necessary, 
 //            prepareForNewPosition(currentPosition, 
 //                                  &nextSpacialPointIndex,
