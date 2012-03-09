@@ -238,7 +238,19 @@ public:
 	static void setDistanceModeTo0();
 	
 	/** 
-	 Sets the distanceMode to 1. All parameters used in this mode need to be specified.
+     Sets the distanceMode used in AudioSourceAmbipanning to 1:
+     Exponential decrease.
+     
+     @param centerRadius            Specified in units. At this distance, the
+                                    gain factor will be 1. 
+     @param centerExponent          Sets the slope of the exponential curve
+                                    between the center and the centerRadius.
+                                    For the intended use set it >= 0.
+     @param centerAttenuationInDB   Defines the gain factor at the center. For
+                                    the intended use set a value < 0.
+     @param dBFalloffPerUnit        Describes the gain falloff outside the
+                                    center zone. For the intended use set a 
+                                    value < 0.     
 	 */
 	static void setDistanceModeTo1(double centerRadius_, 
 								   double centerExponent_,
@@ -246,7 +258,19 @@ public:
 								   double dBFalloffPerUnit_);
 	
 	/** 
-	 Sets the distanceMode to 2. All parameters used in this mode need to be specified.
+	 Sets the distanceMode used in AudioSourceAmbipanning to 2:
+     Inverse proportional decrease.
+     
+     @param centerRadius            Specified in units. At this distance, the
+                                    gain factor will be 1. 
+     @param centerExponent          Sets the slope of the exponential curve
+                                    between the center and the centerRadius.
+                                    For the intended use set it >= 0.
+     @param centerAttenuationInDB   Defines the gain factor at the center. For
+                                    the intended use set a value < 0.
+     @param outsideCenterExponent   Describes the gain falloff outside the
+                                    center zone. For the intended use set it 
+                                    >= 0.
 	 */
 	static void setDistanceModeTo2(double centerRadius_, 
 								   double centerExponent_,

@@ -1,5 +1,5 @@
 /*
- *  AudioSourceAmbipanning.h
+ *  AudioSourceDopplerEffect.h
  *  Choreographer
  *
  *  Created by Samuel Gaehwiler on 120104.
@@ -28,7 +28,7 @@ struct SpacialPosition
     /** The constant value of 1/(speed of sound) in meters per second. */
     // Initialized in the file AudioSourceDopplerEffect.cpp.
     static const double oneOverSpeedOfSound; // = 1.0/340.0 = = 0.00294 m/s
-    
+
     /** Constructor */
     SpacialPosition ()
     : x (0.0),
