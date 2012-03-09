@@ -101,8 +101,6 @@
 
 - (void)cropStart:(float)start duration:(float)duration
 {
-	NSLog(@"Breakpoint Array: crop");
-	
 	NSMutableArray *tempArray = [breakpoints copy];
     Breakpoint *bp;
     

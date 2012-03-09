@@ -22,8 +22,14 @@
 {
 	if([[[NSDocumentController sharedDocumentController] documents] count])
 	{
-		NSLog(@"only one open file at once");
-		NSBeep();
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Multiple projects not allowed"
+										 defaultButton:@"OK"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:@"There cannot be more than one open project at a time."];
+        
+		// show alert in a modal dialog
+		[alert runModal];
 	}
 	else
 	{
@@ -59,13 +65,41 @@
 {
 	if([[[NSDocumentController sharedDocumentController] documents] count])
 	{
-		NSLog(@"only one open file at once");
-		NSBeep();
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Multiple projects not allowed"
+										 defaultButton:@"OK"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:@"There cannot be more than one open project at a time."];
+        
+		// show alert in a modal dialog
+		[alert runModal];
 	}
 	else
 	{
 		[[NSDocumentController sharedDocumentController] openDocument:sender];
 	}
+}
+
+// open recent:
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename
+{
+	if([[[NSDocumentController sharedDocumentController] documents] count])
+	{
+		NSAlert *alert = [NSAlert alertWithMessageText:@"Multiple projects not allowed"
+										 defaultButton:@"OK"
+									   alternateButton:nil
+										   otherButton:nil
+							 informativeTextWithFormat:@"There cannot be more than one open project at a time."];
+        
+		// show alert in a modal dialog
+		[alert runModal];
+	}
+	else
+	{
+		NSError *err;
+        [[NSDocumentController sharedDocumentController] openDocumentWithContentsOfURL:[NSURL fileURLWithPath:filename] display:YES error:&err];
+	}
+    return YES;
 }
 
 - (void)applicationWillFinishLaunching:(NSNotification *)notification
@@ -149,6 +183,9 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+	// empty the engine's schedule
+	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
+    
 	// release and free the audio engine
 	[AudioEngine release];
 }

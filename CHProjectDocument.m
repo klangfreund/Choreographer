@@ -29,19 +29,12 @@
 	self = [super initWithType:type error:error];
     if (self != nil)
 	{
-        if([[[NSDocumentController sharedDocumentController] documents] count])
-        {
-            NSLog(@"only one open file at once");
-            NSBeep();
-            return nil;
-        }        
+        NSLog(@"CHProjectDocument: initWithType %@", self);
+
+        NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+        projectData = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectData" inManagedObjectContext:managedObjectContext];
+        
     }
-
-	NSLog(@"CHProjectDocument: initWithType %@", self);
-
-	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
-    projectData = [NSEntityDescription insertNewObjectForEntityForName:@"ProjectData" inManagedObjectContext:managedObjectContext];
-    
     return self;	
 }
 
@@ -50,7 +43,7 @@
     self = [super init];
     if (self != nil)
 	{
-		keyboardModifierKeys = modifierNone;
+        keyboardModifierKeys = modifierNone;
 		[[NSApplication sharedApplication] setValue:self forKeyPath:@"delegate.currentProjectDocument"];
 	}
 
@@ -160,9 +153,6 @@
 	// stop playback
     [playbackController stopPlayback];
     
-	// empty the engine's schedule
-	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
-
 	[super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo]; 
 }
 

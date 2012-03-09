@@ -47,7 +47,7 @@
 
 	arrangerEditMode = arrangerModeNone;
 
-	dragging = 0;
+	draggingDirtyFlag = NO;
 	arrangerSizeX = arrangerSizeY = 0;
 
 
@@ -115,9 +115,7 @@
 	[audioRegions release];
 	audioRegions = [[context executeFetchRequest:request error:&error] retain];
 		
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
-	while((region = [enumerator nextObject]))
+    for (Region *region in audioRegions)
 	{
 		// set superview for all regions
 		[region setValue:self forKey:@"superview"];
@@ -180,7 +178,7 @@
 
 - (void)drawRect:(NSRect)rect
 {	
-	// colors
+    // colors
 	NSColor *backgroundColor	= [NSColor colorWithCalibratedRed: 0.3 green: 0.3 blue: 0.3 alpha: 1];
 
 	NSColor *xGridColor			= [NSColor colorWithCalibratedRed: 0.5 green: 0.6 blue: 0.6 alpha: 0.15];  
@@ -235,11 +233,8 @@
 		[yGridPath stroke];
 	}
 	
-	// region
-    NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
-	
-    while ((region = [enumerator nextObject]))
+	// regions
+    for (Region *region in audioRegions)
 	{
         if ([self needsToDrawRect:[region frame]])
 		{
@@ -248,10 +243,7 @@
     }
 	
 	// placeholder regions
-    enumerator = [placeholderRegions objectEnumerator];
-	PlaceholderRegion *placeholderRegion;
-	
-    while ((placeholderRegion = [enumerator nextObject]))
+    for (PlaceholderRegion *placeholderRegion in placeholderRegions)
 	{
 		[placeholderRegion draw];
     }	
@@ -271,21 +263,9 @@
 	// i.e. the top left corner is the origin
 }
 
-- (void)resetCursorRects
-{
-	NSRect r = [self bounds];
-	
-	if(document.keyboardModifierKeys == modifierCommand)
-		[self addCursorRect:r cursor:[NSCursor crosshairCursor]];
-	else if(document.keyboardModifierKeys == modifierAlt)
-		[self addCursorRect:r cursor:[NSCursor dragCopyCursor]];
-	else if(document.keyboardModifierKeys == modifierAltCommand)
-		[self addCursorRect:r cursor:[NSCursor resizeLeftCursor]];
-	else if(document.keyboardModifierKeys == modifierShiftAltCommand)
-		[self addCursorRect:r cursor:[NSCursor resizeRightCursor]];
-	else
-		[self addCursorRect:r cursor:[NSCursor arrowCursor]];
-}	
+//- (void)resetCursorRects
+//{
+//}	
 
 
 - (void)recalculateYGridPath
@@ -566,11 +546,9 @@
 
 	NSRect r = NSMakeRect(insertionPoint.x + ARRANGER_OFFSET, insertionPoint.y, 0, 0);
 
-	NSEnumerator *enumerator = [placeholderRegions objectEnumerator];
-	PlaceholderRegion *placeholderRegion;
 	NSPoint maxPoint = NSMakePoint(0, 0);
  
-	while ((placeholderRegion = [enumerator nextObject]))
+    for(Region *placeholderRegion in placeholderRegions)
 	{
 		r.size.width = [placeholderRegion frame].size.width;
 		r.size.height = [placeholderRegion frame].size.height;
@@ -766,11 +744,9 @@
 
 - (void)updateZIndexInModel
 {
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
 	int zIndex;
 	
-	while((region = [enumerator nextObject]))
+	for(Region *region in audioRegions)
 	{
 		zIndex = [audioRegions indexOfObject:region];
 		[region setValue:[NSNumber numberWithInt:zIndex] forKey:@"zIndexInArranger"];
@@ -781,47 +757,40 @@
 - (NSPoint)moveSelectedRegionsBy:(NSPoint)delta restricted:(BOOL)magnetism
 {
 	NSRect r;
-	NSEnumerator *enumerator;
-	id region;
 	
 	if(![self selectionIsEditable])
 		return NSMakePoint(0,0);
 
-	if(!dragging < 2) // this method is called is the first time in a dragging session
-					  // or there is no dragging session
-	{
-		//NSPoint minPoint, maxPoint;
-		BOOL first = YES;
-	
-		enumerator = [selectedRegions objectEnumerator] ;
-		while ((region = [enumerator nextObject]))
-		{
-			r = [region frame];
-		
-			if(first)
-			{
-				draggingParameter[0] = r.origin.x;
-				draggingParameter[1] = r.origin.y;
-				draggingParameter[2] = r.origin.x + r.size.width;
-				draggingParameter[3] = r.origin.y + r.size.height;
-				first = NO;
-			}
-			else
-			{
-				if(r.origin.x < draggingParameter[0]) // min X
-					draggingParameter[0] = r.origin.x;		
-			
-				if(r.origin.y < draggingParameter[1]) // min Y
-					draggingParameter[1] = r.origin.y;		
-			
-				if(r.origin.x + r.size.width > draggingParameter[2])	// max X
-					draggingParameter[2] = r.origin.x + r.size.width;
-			
-				if(r.origin.y + r.size.height > draggingParameter[3])	// max Y
-					draggingParameter[3] = r.origin.y + r.size.height;			
-			}
-		}
-	}
+    BOOL first = YES;
+
+	for(Region *region in selectedRegions)
+    {
+        r = [region frame];
+    
+        if(first)
+        {
+            draggingParameter[0] = r.origin.x;
+            draggingParameter[1] = r.origin.y;
+            draggingParameter[2] = r.origin.x + r.size.width;
+            draggingParameter[3] = r.origin.y + r.size.height;
+            first = NO;
+        }
+        else
+        {
+            if(r.origin.x < draggingParameter[0]) // min X
+                draggingParameter[0] = r.origin.x;		
+        
+            if(r.origin.y < draggingParameter[1]) // min Y
+                draggingParameter[1] = r.origin.y;		
+        
+            if(r.origin.x + r.size.width > draggingParameter[2])	// max X
+                draggingParameter[2] = r.origin.x + r.size.width;
+        
+            if(r.origin.y + r.size.height > draggingParameter[3])	// max Y
+                draggingParameter[3] = r.origin.y + r.size.height;			
+        }
+    }
+
 
 	// restrict minimum to 0
 	if(draggingParameter[0] + delta.x < 0 + ARRANGER_OFFSET)
@@ -853,15 +822,14 @@
 	}
 	
 	// move all selected regions by delta
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		[region moveByDeltaX:delta.x deltaY:delta.y];	
 	}
 	
-	[self setNeedsDisplayInRect:NSMakeRect(draggingParameter[0] - 1,
+	[self setNeedsDisplayInRect:NSMakeRect(draggingParameter[0] - 4,
 										   draggingParameter[1] - 1,
-										   draggingParameter[2] - draggingParameter[0] + 2,
+										   draggingParameter[2] - draggingParameter[0] + 8,
 										   draggingParameter[3] - draggingParameter[1] + 2)];
 
 	// move parameters too
@@ -894,8 +862,6 @@
 
 - (float)cropSelectedRegionsBy:(NSPoint)delta
 {
-	NSEnumerator *enumerator;
-	Region *region;
 	float width, minWidth = -1;
 	float extendRight, maxExtendRight = -1;
 	float offset, maxExtendLeft = -1;
@@ -903,8 +869,7 @@
 	if(![self selectionIsEditable])
 		return 0.0;
 
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		// find minimum width
 		width = [region frame].size.width;
@@ -938,8 +903,7 @@
 		delta.y = maxExtendRight;
 	
 
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		[region cropByDeltaX1:delta.x deltaX2:delta.y];	
 	}
@@ -956,10 +920,7 @@
 
 	if([selectedRegions count])
 	{
-		NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-		AudioRegion *region;
-
-		while((region = [enumerator nextObject]))
+        for(Region *region in selectedRegions)
 		{
 			[self recursivelyDeleteRegions:region];
 		}
@@ -984,11 +945,8 @@
 }
 
 - (void)recursivelyDeleteRegions:(Region *)region
-{
-    NSEnumerator *enumerator = [[region valueForKey:@"childRegions"] objectEnumerator];
-	Region *child;
-		
-    while ((child = [enumerator nextObject]))
+{		
+    for(Region *child in [region valueForKey:@"childRegions"])
 	{
 		[self recursivelyDeleteRegions:child];
     }
@@ -1095,10 +1053,7 @@
 		[newRegion setValue:[originalRegion valueForKey:@"trajectoryItem"] forKey:@"trajectoryItem"];
 //		[newRegion setValue:self forKey:@"superview"];
 
-		NSEnumerator *enumerator = [[originalRegion valueForKey:@"childRegions"] objectEnumerator];
-		Region *region;
-		
-		while ((region = [enumerator nextObject]))
+		for(Region *region in [originalRegion valueForKey:@"childRegions"])
 		{
 			[(GroupRegion *)newRegion addChildRegion:[self makeCopyOf:region]];
 		}
@@ -1117,13 +1072,6 @@
 #pragma mark -
 #pragma mark keyboard events
 // -----------------------------------------------------------
-
-- (void)flagsChanged:(NSEvent *)event
-{
-	[[self window] invalidateCursorRectsForView:self];
-
-	[super flagsChanged:event];
-}
 
 - (void)keyDown:(NSEvent *)event
 {
@@ -1224,7 +1172,6 @@
 - (BOOL)becomeFirstResponder
 {
 	NSLog(@"ArrangerView -- becomeFirstResponder...");
-	[self flagsChanged:nil]; // reset all modifier keys
 	return YES;
 }
 
@@ -1244,10 +1191,7 @@
 
 - (id)pointInRegion:(NSPoint)point
 {
-	NSEnumerator *enumerator = [audioRegions reverseObjectEnumerator]; // reverse = frontmost first
-	Region *region;
-	
-	while ((region = [enumerator nextObject]))
+	for(Region *region in audioRegions)
 	{
 		if (NSPointInRect(point, [region frame]))
 		{
@@ -1257,6 +1201,27 @@
 	
 	return NULL;
 }
+
+- (int)detailsAboutPoint:(NSPoint)point inRegion:(id)region
+{
+    NSRect frame = [region frame];
+    
+    if(frame.size.height < REGION_NAME_BLOCK_HEIGHT + 5 ||
+       frame.size.width < 10)
+        return 1;
+    
+    if(point.y < frame.origin.y + REGION_NAME_BLOCK_HEIGHT)
+        return 1;
+    
+    if(point.x < frame.origin.x + 5) return 2;
+    if(point.x > frame.origin.x + frame.size.width - 5) return 3;
+    
+    
+    return 0;
+    
+    // 0 = anywhere, 1 = name, 2 = left edge, 3 = right edge
+}
+
 
 - (void)rightMouseDown:(NSEvent *)event
 {
@@ -1305,153 +1270,135 @@
      */
 
     
-	/* on mouse down: check the modifier
-	   (it might have changed while the focus was on another view
-		eg. an context menu)
-	 */
-	
-	[[self window] flagsChanged:event];
-	
-	/* convert the mouse location
-	   and find out if the click hits a region
-	*/
+	// find out if the click hits a region
 	
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	storedEventLocation = localPoint;
 	
 	hitAudioRegion = [self pointInRegion:localPoint];
-	
-	switch(document.keyboardModifierKeys)
-	{
-//		case modifierControl:	
-//			if(hitAudioRegion)
-//			{
-//				if(![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
-//				{
-//					[self deselectAllRegions];
-//					[self deselectAllTrajectories];
-//				}
-//				[self addRegionToSelection:hitAudioRegion];
-//
-//				[self setNeedsDisplay:YES]; // before context menu is shown!
-//				[NSMenu popUpContextMenu:regionContextMenu withEvent:event forView:self];
-//			}
-//			else
-//			{
-//				[NSMenu popUpContextMenu:arrangerContextMenu withEvent:event forView:self];
-//			}
-//			break;
+    
 
-		case modifierNone:		// selection or ordinary dragging
-		case modifierAlt:		// duplicate
-		case modifierCommand:	// marquee or magnetic cursor
+    // select / deselect regions
+    
+    if([event modifierFlags] & NSShiftKeyMask)
+    {
+        if(hitAudioRegion)
+        {
+            if([[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+            {
+                [self removeRegionFromSelection:hitAudioRegion];
+            }
+            else
+            {
+                [self addRegionToSelection:hitAudioRegion];
+            }
+        }
+        else
+        {
+            [[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
+        }    
+    }
+    else
+    {
+        if(hitAudioRegion)
+        {
+            if(![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+            {
+                [self deselectAllRegions];
+                [self deselectAllTrajectories];
+            }
+            [self addRegionToSelection:hitAudioRegion];
+        }
+        else
+        {
+            [self deselectAllRegions];
+            [self deselectAllTrajectories];
 
-			if(hitAudioRegion)
-			{
-				if(![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
-				{
-					[self deselectAllRegions];
-					[self deselectAllTrajectories];
-				}
-				[self addRegionToSelection:hitAudioRegion];
-				dragging = 1;
-			}
-			else
-			{
-				[self deselectAllRegions];
-				[self deselectAllTrajectories];
+            [[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
+        }
+    }
+    
+    // notification
+    [document selectionInArrangerDidChange];
 
-				if(document.keyboardModifierKeys == modifierAlt)
-					[marqueeView dismiss];
-
-				[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
-			}
-			break;
-	
-		case modifierAltCommand:
-		case modifierShiftAltCommand:
-
-			[self addRegionToSelection:hitAudioRegion];
-			dragging = 1;
-			break;
-            
-        default:
-            break;
+    
+    // decide upon the type of mouse action
+    // and set the cursor accordingly
+    if(hitAudioRegion && [[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+    {
+        if([event modifierFlags] & NSAlternateKeyMask)        
+        {    
+            [[NSCursor dragCopyCursor] push];
+            arrangerEditMode = arrangerModeDuplicate;
+        }
+        else
+        {    
+            if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeRegions)
+            {
+                // arranger is in region mode
+                switch ([self detailsAboutPoint:localPoint inRegion:hitAudioRegion])
+                {
+                    case 2:
+                        [[NSCursor resizeRightCursor] push];
+                        arrangerEditMode = arrangerModeCropLeft;
+                        break;
+                    case 3:
+                        [[NSCursor resizeLeftCursor] push];
+                        arrangerEditMode = arrangerModeCropRight;
+                        break;
+                        
+                    default:
+                        [[NSCursor openHandCursor] push];
+                        arrangerEditMode = arrangerModeDrag;
+                }
+            }
+            if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
+            {
+                // arranger is in gain mode
+                switch ([self detailsAboutPoint:localPoint inRegion:hitAudioRegion])
+                {
+                    case 1:
+                        [[NSCursor openHandCursor] push];
+                        arrangerEditMode = arrangerModeDrag;
+                        break;
+                    default:
+                        [[NSCursor pointingHandCursor] push];
+                        arrangerEditMode = arrangerModeGain;
+                        break;
+                }
+            }            
+        }
 	}
-
-
-	/*	arranger is in region mode
-	 -----------------------------------------------------------------------------
-	 
-	 */
-
-	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeRegions)
-	{
-		switch(document.keyboardModifierKeys)
-		{				
-			case modifierShift:		// multiple selection
-				
-				if(hitAudioRegion)
-				{
-					if([[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
-						[self removeRegionFromSelection:hitAudioRegion];
-					else
-						[self addRegionToSelection:hitAudioRegion];
-					
-					dragging = 1;
-				}
-				else
-				{
-					[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
-				}
-				break;
-                
-            default:
-                break;
-		}
-		
-		// notification
-		[document selectionInArrangerDidChange];
-	}
-	
-
-	/*	arranger is in gain mode
-	 -----------------------------------------------------------------------------
-	 
-	 */
-	
+    else if(hitAudioRegion && ![[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
+    {
+        // region deselected by a shift click
+        arrangerEditMode == arrangerModeNone;
+    }
+    else
+    {
+        if([event modifierFlags] & NSCommandKeyMask)
+        {
+            [marqueeView dismiss];
+            [[NSCursor crosshairCursor] push];
+            [[self window] disableCursorRects]; // needed only here
+            arrangerEditMode = arrangerModeMarquee;        
+        }
+        else
+        {
+            arrangerEditMode = arrangerModeSelectMultiple;
+        }
+    }
+    
+    // pass the mouse event
+    // if arranger in gain mode
+    
 	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
 	{
-		
-		switch(document.keyboardModifierKeys)
-		{				
-			case modifierShift:		// multiple selection
-				
-				if(hitAudioRegion)
-				{
-					if([[hitAudioRegion valueForKeyPath:@"selected"] boolValue])
-						[self removeRegionFromSelection:hitAudioRegion];
-					else
-						[self addRegionToSelection:hitAudioRegion];
-					
-					dragging = 1;
-				}
-				else
-				{
-					[[SelectionRectangle sharedSelectionRectangle] addRectangleWithOrigin:[self convertPoint:[event locationInWindow] fromView:nil] forView:self];
-				}
-				break;
-                
-            default:
-                break;
-		}
-
-		// pass the mouse event
-		[hitAudioRegion mouseDown:localPoint];
+        [hitAudioRegion mouseDown:localPoint];
 	}
 
-
 	// on mouse down always redraw everything
+    
 	[self setNeedsDisplay:YES];
 }
 
@@ -1465,205 +1412,164 @@
 	delta.x = localPoint.x - storedEventLocation.x;
 	delta.y = localPoint.y - storedEventLocation.y;
 
-	/*	arranger is in region mode
-	 -----------------------------------------------------------------------------
-	 
-	 */
-	
-	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeRegions)
-	{
-		if(dragging < 2)
-		{
-			switch(document.keyboardModifierKeys)
-			{
-				case modifierNone:
-				case modifierShift:
-					arrangerEditMode = arrangerModeNone; break;
-				case modifierAlt:
-					arrangerEditMode = arrangerModeDuplicate; break;
-				case modifierCommand:
-					if(dragging) arrangerEditMode = arrangerModeCursor;
-					else arrangerEditMode = arrangerModeMarquee;
-					break;
-				case modifierAltCommand:
-					arrangerEditMode = arrangerModeCropRight; break;
-				case modifierShiftAltCommand:
-					arrangerEditMode = arrangerModeCropLeft; break;
-				default:
-					return;
-			}
-		}
-		
-		
-		if(arrangerEditMode == arrangerModeCropLeft)
-		{
-			delta.x = [self cropSelectedRegionsBy:NSMakePoint(delta.x, 0)];
-		}
+    if(arrangerEditMode == arrangerModeCropLeft)
+    {
+        delta.x = [self cropSelectedRegionsBy:NSMakePoint(delta.x, 0)];
+    }
 
-		else if(arrangerEditMode == arrangerModeCropRight)
-		{
-			delta.x = [self cropSelectedRegionsBy:NSMakePoint(0, delta.x)];
-		}
+    else if(arrangerEditMode == arrangerModeCropRight)
+    {
+        delta.x = [self cropSelectedRegionsBy:NSMakePoint(0, delta.x)];
+    }
 
-		else if(dragging == 0)
-		{
-			[self showSelectionRectangle:event];
-			return;
-		}
+    else if(arrangerEditMode == arrangerModeSelectMultiple || arrangerEditMode == arrangerModeMarquee)
+    {
+        [self showSelectionRectangle:event];
+        return;
+    }
 
-		else if(dragging == 1 && arrangerEditMode == arrangerModeDuplicate)
-		{
-			NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-			Region *region1, *region2;
-			NSMutableSet *tempSelection = [[[NSMutableSet alloc] init] autorelease];
-			
-			while ((region1 = [enumerator nextObject]))
-			{
-				region2 = [self makeCopyOf:region1];
-				[tempSelection addObject: region2];
-				[region1 setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-				[region2 setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
-			}
-			
-			[selectedRegions removeAllObjects];
-			[selectedRegions unionSet:tempSelection];
+    else if(arrangerEditMode == arrangerModeDuplicate)
+    {
+        Region *region1, *region2;
+        NSMutableSet *tempSelection = [[[NSMutableSet alloc] init] autorelease];
+        
+        for(region1 in selectedRegions)
+        {
+            region2 = [self makeCopyOf:region1];
+            [tempSelection addObject: region2];
+            [region1 setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+            [region2 setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
+        }
+        
+        [selectedRegions removeAllObjects];
+        [selectedRegions unionSet:tempSelection];
 
-			// start undo group (combined duplication and dragging)
-			[[context undoManager] beginUndoGrouping];
-		}
-		
-		else
-			delta = [self moveSelectedRegionsBy:delta restricted:YES];
-
-
-		if(dragging == 1)
-		{
-			dragging = 2;
-		}
-		
-		// support automatic scrolling during a drag
-		NSRect r = NSMakeRect(localPoint.x - 10, localPoint.y - 10, 20, 20);
-		[self scrollRectToVisible:r];
-		
-		// reflect altered start time in editors
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
-	}
-
-	/*	arranger is in gain mode
-	 -----------------------------------------------------------------------------
-	 
-	 */
-	
-	else if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
-	{
+        // start undo group (combined duplication and dragging)
+        [[context undoManager] beginUndoGrouping];
+        
+        arrangerEditMode = arrangerModeDuplicateDrag;
+    }
+    
+    else if(arrangerEditMode == arrangerModeDrag || arrangerEditMode == arrangerModeDuplicateDrag)
+    {
+        delta = [self moveSelectedRegionsBy:delta restricted:YES];
+    }
+    
+    else if(arrangerEditMode == arrangerModeGain)
+    {
 		for(Region *region in selectedRegions)
 		{
 			delta = [region proposedMouseDrag:delta];
 		}
-
+        
 		for(Region *region in selectedRegions)
 		{
 			[region mouseDragged:delta];
 		}
-		
-		if([selectedRegions count])
-			dragging = 2;
-		
-		[self setNeedsDisplay:YES];
-	}
+
+        [self setNeedsDisplay:YES];    
+    }
+
+
+   // support automatic scrolling during a drag
+    NSRect r = NSMakeRect(localPoint.x - 10, localPoint.y - 10, 20, 20);
+    [self scrollRectToVisible:r];
+
+    // reflect altered start time in editors
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
 
 	storedEventLocation.x += delta.x;
 	storedEventLocation.y += delta.y;
+    
+    draggingDirtyFlag = YES;
 }
 		
 
-- (void)mouseUp:(NSEvent *)theEvent
+- (void)mouseUp:(NSEvent *)event
 {
-	NSEnumerator *enumerator;
-	id aRegion, region1;
-	
-	/*	arranger is in region mode
-	 -----------------------------------------------------------------------------
-	 
-	 */
-	
-	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeRegions)
-	{
-		if(dragging == 2)
-		{
-			if(arrangerEditMode == arrangerModeNone)
-			{
-				enumerator = [selectedRegions objectEnumerator];
-				while ((aRegion = [enumerator nextObject]))
-				{
-					[aRegion updateTimeInModel];
-				}
-				
-				// undo
-				if([selectedRegions count] == 1)
-					[[context undoManager] setActionName:@"drag audio region"];
-				else if([selectedRegions count] > 1)
-					[[context undoManager] setActionName:@"drag audio regions"];
-			}
-			else if(arrangerEditMode == arrangerModeDuplicate)
-			{
-				enumerator = [selectedRegions objectEnumerator] ;
-				while ((aRegion = [enumerator nextObject]))
-				{
-					[aRegion updateTimeInModel];
-                    [aRegion archiveData];
-				}
-				
-				// undo
-				if([selectedRegions count] == 1)
-					[[context undoManager] setActionName:@"duplicate audio region"];
-				else if([selectedRegions count] > 1)
-					[[context undoManager] setActionName:@"duplicate audio regions"];
-				[[context undoManager] endUndoGrouping];
-			}
-			else if(arrangerEditMode == arrangerModeCropLeft || arrangerEditMode == arrangerModeCropRight)
-			{
-				NSMutableSet *tempSet = [[[NSMutableSet alloc] init] autorelease];
-				
-				for (aRegion in selectedRegions)
-				{
-					region1 = [self makeUniqueCopyOf:aRegion];
-					
-					[self removeRegionFromView:aRegion];
+	Region *aRegion, *region1;
+
+    if(draggingDirtyFlag)
+    {
+        if(arrangerEditMode == arrangerModeDrag)
+        {
+            for (aRegion in selectedRegions)
+            {
+                [aRegion updateTimeInModel];
+            }
+            
+            // undo
+            if([selectedRegions count] == 1)
+                [[context undoManager] setActionName:@"drag audio region"];
+            else if([selectedRegions count] > 1)
+                [[context undoManager] setActionName:@"drag audio regions"];
+        }
+        else if(arrangerEditMode == arrangerModeDuplicateDrag)
+        {
+            for (aRegion in selectedRegions)
+            {
+                [aRegion updateTimeInModel];
+                [aRegion archiveData];
+            }
+            
+            // undo
+            if([selectedRegions count] == 1)
+                [[context undoManager] setActionName:@"duplicate audio region"];
+            else if([selectedRegions count] > 1)
+                [[context undoManager] setActionName:@"duplicate audio regions"];
+            [[context undoManager] endUndoGrouping];
+        }
+        else if(arrangerEditMode == arrangerModeCropLeft || arrangerEditMode == arrangerModeCropRight)
+        {   
+            Region *anyRegion = [selectedRegions anyObject];
+            
+            // proceed only if the duration has actually changed
+            if([[anyRegion valueForKey:@"duration"] intValue] != (int)(anyRegion.frame.size.width / zoomFactorX))
+            {                
+                NSMutableSet *tempSet = [[[NSMutableSet alloc] init] autorelease];
+                
+                for (aRegion in selectedRegions)
+                {
+                    region1 = [self makeUniqueCopyOf:aRegion];
+                    
+                    [self removeRegionFromView:aRegion];
 
                     [region1 archiveData];
                     [region1 updateTimeInModel];
-					
-					[tempSet addObject:region1];
-				}
-				
-				[self deselectAllRegions];
-				for (aRegion in tempSet)
-				{
-					[self addRegionToSelection:region1];
-				}
-			
-				
-				// undo
-				if([selectedRegions count] == 1)
-					[[context undoManager] setActionName:@"crop audio region"];
-				else if([selectedRegions count] > 1)
-					[[context undoManager] setActionName:@"crop audio regions"];
-			}
-				
-			[self recalculateArrangerProperties];
+                    
+                    [tempSet addObject:region1];
+                }
+                
+                [self deselectAllRegions];
+                for (aRegion in tempSet)
+                {
+                    [self addRegionToSelection:region1];
+                }
+            
+                
+                // undo
+                if([selectedRegions count] == 1)
+                    [[context undoManager] setActionName:@"crop audio region"];
+                else if([selectedRegions count] > 1)
+                    [[context undoManager] setActionName:@"crop audio regions"];
+            
+                    
+                [self recalculateArrangerProperties];
+                draggingDirtyFlag = NO;
+            }
+        }
+    }
 
-		}
-		if(arrangerEditMode == arrangerModeMarquee)
-		{
-			NSRect frame = [[SelectionRectangle sharedSelectionRectangle] frame];
-			
-			[marqueeView setStart:frame.origin.x
-						yPosition:frame.origin.y
-						duration:frame.size.width
-						height:frame.size.height];
-		}
-	}
+    if(arrangerEditMode == arrangerModeMarquee)
+    {
+        NSRect frame = [[SelectionRectangle sharedSelectionRectangle] frame];
+        
+        [marqueeView setStart:frame.origin.x
+                    yPosition:frame.origin.y
+                    duration:frame.size.width
+                    height:frame.size.height];
+    }
+
 	
 	/*	arranger is in gain mode
 	 -----------------------------------------------------------------------------
@@ -1673,7 +1579,7 @@
 	if([[projectSettings valueForKey:@"arrangerDisplayMode"] integerValue] == arrangerDisplayModeGain)
 	{
 		// pass the mouse event
-		[hitAudioRegion mouseUp:theEvent];
+		[hitAudioRegion mouseUp:event];
 	}
 	
 
@@ -1683,12 +1589,11 @@
 	[tempSelectedRegions release];
 	tempSelectedRegions = nil;
 
-	dragging = 0;
 	arrangerEditMode = arrangerModeNone;
 	
 	
-	// re-enable cursor rects (after a dragging session)
-	[[self window] enableCursorRects];
+	// reset the cursor
+	[NSCursor pop];
 	
 	// notification
 	[document selectionInArrangerDidChange];
@@ -1708,11 +1613,9 @@
 	}
 
 	// hit test
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	id region;
 	NSRect r;
 
-	while((region = [enumerator nextObject]))
+	for(id region in audioRegions)
 	{
 		if([region valueForKey:@"parentRegion"])
 			continue;
@@ -1778,17 +1681,13 @@
 
 - (void)selectAllRegions
 {
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
- 
-	while((region = [enumerator nextObject]))
+	for(Region *region in audioRegions)
 	{
 		[region setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
 		[selectedRegions addObject:region];
 	}
 
 	[self setNeedsDisplay:YES];
-    NSLog(@"select all %@", selectedRegions);
 }
 
 - (BOOL)selectionIsEditable
@@ -1796,13 +1695,10 @@
 	// make sure that the
 	// selection contains only unlocked files
 
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	Region *region;
-	while((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		if([[region valueForKey:@"locked"] boolValue])
 		{
-			NSBeep();
 			return NO;
 		}
 	}
@@ -1813,12 +1709,9 @@
 
 - (void)deselectAllRegions
 {
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	id aRegion;
- 
-	while((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		[aRegion setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
+		[region setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
 	}
 	
 	[selectedRegions removeAllObjects];
@@ -1850,40 +1743,16 @@
 
 
 - (void)addTrajectoryToSelection:(id)aRegion
-{
-	[self deselectAllRegions];
-
-	if([aRegion valueForKey:@"Region"] != regionForSelectedTrajectories)
-	{
-		[self deselectAllTrajectories];
-		regionForSelectedTrajectories = [aRegion valueForKey:@"Region"];
-	}
-	
-	[selectedTrajectories addObject:aRegion];
-	[aRegion setValue:[NSNumber numberWithBool:YES] forKey:@"selected"];
-}
+{}
 
 - (void)removeTrajectoryFromSelection:(id)aRegion
-{
-	[selectedTrajectories removeObject:aRegion];
-	[aRegion setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-}
+{}
 
 - (void)selectAllTrajectories
 {}
 
 - (void)deselectAllTrajectories
-{
-	NSEnumerator *enumerator = [selectedTrajectories objectEnumerator];
-	id aRegion;
- 
-	while((aRegion = [enumerator nextObject]))
-	{
-		[aRegion setValue:[NSNumber numberWithBool:NO] forKey:@"selected"];
-	}
-	
-	[selectedTrajectories removeAllObjects];
-}
+{}
 
 - (void)synchronizeSelection
 {
@@ -1917,26 +1786,15 @@
 	}
 	
 	[document newTrajectoryItem:trajectoryName forRegions:selectedRegions];
-//	if (!trajectory) return; // user canceled
-//	
-//	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-//	Region *region;
-//	
-//	while((region = [enumerator nextObject]))
-//	{
-//		[region setValue:trajectory forKey:@"trajectoryItem"];
-//	}
-	
+
 	[self setNeedsDisplay:YES];
 }
 
 - (void)removeTrajectory:(id)sender
 {
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	Region *region;
 	int dirty = 0;
 	
-	while((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		if([region valueForKey:@"trajectoryItem"])
 		{
@@ -1984,11 +1842,9 @@
 
 - (void)mute:(id)sender
 {
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	int status = -1;
-	Region *region;
 	
-	while((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		if(status == -1)
 			status = 1 - [[region valueForKey:@"muted"] intValue];
@@ -2007,11 +1863,9 @@
 
 - (void)lock:(id)sender
 {
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	int status = -1;
-	Region *region;
  
-	while((region = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
 		if(status == -1)
 			status = 1 - [[region valueForKey:@"locked"] intValue];
@@ -2030,27 +1884,23 @@
 
 - (void)alignY:(id)sender
 {
-	NSEnumerator *enumerator;
-	id aRegion;
 	float y, minY = -1;
 	NSRect frame;
 	
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		y = [aRegion frame].origin.y;
+		y = [region frame].origin.y;
 		
 		if(y < minY || minY == -1)
 			minY = y;
 	}
 	
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		frame = [aRegion frame];
+		frame = [region frame];
 		frame.origin.y = minY;
-		[aRegion setFrame:frame];
-		[aRegion updateTimeInModel];
+		[region setFrame:frame];
+		[region updateTimeInModel];
 	}
 	
 	[self recalculateArrangerProperties];
@@ -2062,27 +1912,23 @@
 
 - (void)alignX:(id)sender
 {
-	NSEnumerator *enumerator;
-	id aRegion;
 	float x, minX = -1;
 	NSRect frame;
 
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		x = [aRegion frame].origin.x;
+		x = [region frame].origin.x;
 		
 		if(x < minX || minX == -1)
 			minX = x;
 	}
 		
-	enumerator = [selectedRegions objectEnumerator] ;
-	while ((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		frame = [aRegion frame];
+		frame = [region frame];
 		frame.origin.x = minX;
-		[aRegion setFrame:frame];
-		[aRegion updateTimeInModel];
+		[region setFrame:frame];
+		[region updateTimeInModel];
 	}
 	
 	[self recalculateArrangerProperties];
@@ -2098,18 +1944,12 @@
 	NSMutableSet *newRegions = [[[NSMutableSet alloc] init] autorelease];
 	//NSRect r;
 	NSPoint delta = NSMakePoint(20, 20); // offset of duplicate
-	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	id aRegion;
-	
-	while((aRegion = [enumerator nextObject]))
+		
+	for(Region *region in selectedRegions)
 	{
-		newRegion = [self makeCopyOf:aRegion];
+		newRegion = [self makeCopyOf:region];
 		if(!newRegion)
 			return;
-		
-		//r = [aRegion frame];
-		//[self setNeedsDisplayInRect:r];
 		
 		[newRegion moveByDeltaX:delta.x deltaY:delta.y];
         [newRegion archiveData];
@@ -2120,10 +1960,9 @@
 	
 	[self deselectAllRegions];
 	
-	enumerator = [newRegions objectEnumerator];
-	while((aRegion = [enumerator nextObject]))
+	for(Region *region in newRegions)
 	{
-		[self addRegionToSelection:aRegion];
+		[self addRegionToSelection:region];
 	}
 	
 	[self recalculateArrangerProperties];
@@ -2138,32 +1977,56 @@
 
 - (void)repeat:(id)sender
 {
-	Region *newRegion;
+    NSModalSession session = [NSApp beginModalSessionForWindow:repeatRegionPanel];
+    int i, count = 1;
+    int dirty = [selectedRegions count];
+    
+    NSPoint origin = [[self window] frame].origin;
+    origin.x += [[self window] frame].size.width * 0.5 - [repeatRegionPanel frame].size.width * 0.5;
+    origin.y += [[self window] frame].size.height * 0.5 - [repeatRegionPanel frame].size.height * 0.5;
+    [repeatRegionPanel setFrameOrigin:origin];
+
+    [repeatRegionTextField setIntegerValue:count];
+    
+    for (;;)
+    {
+        if ([NSApp runModalSession:session] != NSRunContinuesResponse)
+            break;
+    }
+    [NSApp endModalSession:session];
+	[repeatRegionPanel orderOut:nil];
+
+    if ([NSApp runModalSession:session] == NSRunAbortedResponse)
+        return;
+    if ([NSApp runModalSession:session] == NSRunStoppedResponse)
+        count = [repeatRegionTextField intValue];
+	
+    Region *newRegion;
 	NSMutableSet *newRegions = [[[NSMutableSet alloc] init] autorelease];
 	NSPoint delta = NSMakePoint(0, 0);
-	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	id aRegion;
-	
-	while((aRegion = [enumerator nextObject]))
+		
+	for(id aRegion in selectedRegions)
 	{
-		newRegion = [self makeCopyOf:aRegion];
-		if(!newRegion)
-			return;
-		
-		delta.x = [[aRegion valueForKey:@"duration"] unsignedLongValue] * zoomFactorX;
+        delta.x = [[aRegion valueForKey:@"duration"] unsignedLongValue] * zoomFactorX;
+
+		for(i=0;i<count;i++)
+        {
+            newRegion = [self makeCopyOf:aRegion];
+            if(!newRegion)
+                return;
+
 				
-		[newRegion moveByDeltaX:delta.x deltaY:delta.y];
-        [newRegion archiveData];
-		[newRegion updateTimeInModel];
+            [newRegion moveByDeltaX:delta.x * (i + 1) deltaY:delta.y];
+            [newRegion archiveData];
+            [newRegion updateTimeInModel];
 		
-		[newRegions addObject:newRegion];
-	}
+            [newRegions addObject:newRegion];
+        }
+    }
 	
 	[self deselectAllRegions];
 	
-	enumerator = [newRegions objectEnumerator];
-	while((aRegion = [enumerator nextObject]))
+	for(id aRegion in newRegions)
 	{
 		[self addRegionToSelection:aRegion];
 	}
@@ -2172,9 +2035,9 @@
 	[self setNeedsDisplay:YES];
 	
 	// undo
-	if([selectedRegions count] == 1)
+	if(dirty == 1)
 		[[context undoManager] setActionName:@"repeat audio region"];
-	else if([selectedRegions count] > 1)
+	else if(dirty > 1)
 		[[context undoManager] setActionName:@"repeat audio regions"];
 }
 
@@ -2188,10 +2051,9 @@
 	NSRect r, intersection, marqueeRect = [marqueeView frame];
 	float deltaX1, deltaX2, deltaX3;
 	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
 	Region *region0, *region1, *region2;
 	
-	while((region0 = [enumerator nextObject]))
+	for(region0 in selectedRegions)
 	{
 		r = [region0 frame];
 		intersection = NSIntersectionRect(r, marqueeRect);
@@ -2250,17 +2112,16 @@
 	NSRect r, marqueeRect = [marqueeView frame];
 	float deltaX1, deltaX2;
 	
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	id aRegion, region1;
+	id region1;
 	
-	while((aRegion = [enumerator nextObject]))
+	for(Region *region in selectedRegions)
 	{
-		r = [aRegion frame];
+		r = [region frame];
 		if(NSIntersectsRect(r, marqueeRect))
 		{
-			region1 = [self makeUniqueCopyOf:aRegion];
+			region1 = [self makeUniqueCopyOf:region];
 			
-			[self removeRegionFromView:aRegion];
+			[self removeRegionFromView:region];
 
 			if(r.origin.x < marqueeRect.origin.x)
 				deltaX1 = marqueeRect.origin.x - r.origin.x;
@@ -2346,10 +2207,8 @@
 - (void)bringToFront:(id)sender
 {
 	NSMutableArray *temp = [NSMutableArray arrayWithArray:audioRegions];
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
 	
-	while ((region = [enumerator nextObject]))
+	for (Region *region in audioRegions)
 	{
 		if([selectedRegions containsObject:region])
 		{
@@ -2368,10 +2227,8 @@
 - (void)sendToBack:(id)sender
 {
 	NSMutableArray *temp = [NSMutableArray arrayWithArray:audioRegions];
-	NSEnumerator *enumerator = [audioRegions reverseObjectEnumerator];
-	Region *region;
 	
-	while ((region = [enumerator nextObject]))
+	for (Region *region in audioRegions)
 	{
 		if([selectedRegions containsObject:region])
 		{
@@ -2402,10 +2259,8 @@
 //	[newGroupRegion setValue:self forKey:@"superview"];
 
 	// turn all selected regions into children
-	NSEnumerator *enumerator = [selectedRegions objectEnumerator];
-	Region *region;
 
-	while((region = [enumerator nextObject]))
+	for (Region *region in selectedRegions)
 	{		
 		[newGroupRegion addChildRegion:region];
 	}
@@ -2520,7 +2375,11 @@
 		return NO;
 	
 	if (![selectedRegions count] &&
-		([item action] == @selector(delete:) ||
+		([item action] == @selector(repeat:) ||
+         [item action] == @selector(duplicate:) ||
+         
+		 [item action] == @selector(remove:) ||
+         [item action] == @selector(delete:) ||
 		 [item action] == @selector(split:) ||
 		 [item action] == @selector(trim:) ||
 		
@@ -2556,13 +2415,9 @@
 	{
 		if(![selectedRegions count])
 			return NO;
-		
-		NSEnumerator *enumerator;
-		Region *region;
-	
+
 		// all selected regions have to be groups
-		enumerator = [selectedRegions objectEnumerator];
-		while((region = [enumerator nextObject]))
+        for (Region *region in selectedRegions)
 		{		
 			if(![region isKindOfClass:[GroupRegion class]])
 			return NO;
@@ -2637,11 +2492,8 @@
 	
 	[audioRegions release];
 	audioRegions = [[context executeFetchRequest:request error:&error] retain];
-	
-	
-	NSEnumerator *enumerator = [audioRegions objectEnumerator];
-	Region *region;
-	while((region = [enumerator nextObject]))
+		
+    for (Region *region in audioRegions)
 	{
 		// set superview for all regions
 		[region setValue:self forKey:@"superview"];

@@ -55,6 +55,9 @@ typedef enum _ArrangerViewDragAndDropAction
 	IBOutlet id xGridLinesMenu;
 
 	IBOutlet id arrangerDisplayModePopupButton;
+    IBOutlet NSWindow *repeatRegionPanel;
+    
+    IBOutlet NSTextField *repeatRegionTextField;
 
 	// regions
 	NSMutableArray *placeholderRegions;
@@ -74,7 +77,7 @@ typedef enum _ArrangerViewDragAndDropAction
 
 	// mouse actions
 	ArrangerEditMode arrangerEditMode;
-	int dragging;
+	BOOL draggingDirtyFlag;
 	float draggingParameter[4];
 	NSPoint storedEventLocation;
 	
@@ -136,6 +139,7 @@ typedef enum _ArrangerViewDragAndDropAction
 
 // mouse
 - (id)pointInRegion:(NSPoint)point;
+- (int)detailsAboutPoint:(NSPoint)point inRegion:(id)region;
 - (void)showSelectionRectangle:(NSEvent *)event;
 
 // menu actions
