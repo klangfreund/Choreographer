@@ -78,11 +78,11 @@
     [trajectoryTableView registerForDraggedTypes:[NSArray arrayWithObjects: CHTrajectoryType, nil]];
 
 	// double click behaviour
-	[userOutlineView setDoubleAction:@selector(doubleClick:)];
+	[userOutlineView setDoubleAction:@selector(showTrajectoryInspector:)];
 	[userOutlineView setTarget:self];
-	[audioItemTableView setDoubleAction:@selector(doubleClick:)];
+	[audioItemTableView setDoubleAction:@selector(showTrajectoryInspector:)];
 	[audioItemTableView setTarget:self];
-	[trajectoryTableView setDoubleAction:@selector(doubleClick:)];
+	[trajectoryTableView setDoubleAction:@selector(showTrajectoryInspector:)];
 	[trajectoryTableView setTarget:self];
 
 	// register for notifications
@@ -249,8 +249,28 @@
 {
 	if ([item action] == @selector(poolAddFolder:) && [[projectSettings valueForKey:@"poolSelectedTab"] intValue] != 0)
 		return NO;
-	else
-		return YES;
+    
+    else if ([item action] == @selector(showTrajectoryInspector:))
+    {
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0 && [[treeController selectedObjects] count] == 0)
+            return NO;    
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1)
+            return NO;
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2 && [[trajectoryArrayController selectedObjects] count] == 0)
+            return NO;
+    }
+    
+    else if ([item action] == @selector(deleteSelected:))
+    {
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0 && [[treeController selectedObjects] count] == 0)
+            return NO;    
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1 && [[audioItemArrayController selectedObjects] count] == 0)
+            return NO;
+        if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2 && [[trajectoryArrayController selectedObjects] count] == 0)
+            return NO;
+    }
+    
+	return YES;
 }
 
 
@@ -258,20 +278,28 @@
 #pragma mark actions
 // -----------------------------------------------------------
 
-- (void)doubleClick:(id)sender
+- (IBAction)showTrajectoryInspector:(id)sender
 {
-	// set selection to one single item and send show inspector
-	if([sender isKindOfClass:[PoolOutlineView class]])
-	{
-		[treeController setSelectionIndexPath:[NSIndexPath indexPathWithIndex:[sender clickedRow]]];
+    id item = nil;
+    
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user tab
+    {
+		//[treeController setSelectionIndexPath:[NSIndexPath indexPathWithIndex:[sender clickedRow]]];
 		
-		id item = [[[treeController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
-		
-		if([item isKindOfClass:[TrajectoryItem class]])
+		item = [[[treeController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
+    
+		if(![item isKindOfClass:[TrajectoryItem class]])
 		{
-			[[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
+			item = nil;
 		}
 	}
+
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) // trajectory tab
+    {
+		item = [[[trajectoryArrayController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
+    }
+        
+    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
 }
 
 - (AudioItem *)importFile:(NSURL *)absoluteFilePath

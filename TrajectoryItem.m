@@ -88,7 +88,7 @@
 		[bp setBreakpointType:breakpointTypeAdaptiveInitial];
 	}
 	
-	NSMutableArray *tempArray = [[trajectory positionBreakpoints] copy];
+	NSMutableArray *tempArray = [[trajectory positionBreakpoints] mutableCopy];
 	
 	[tempArray replaceObjectAtIndex:0 withObject:bp];
 	

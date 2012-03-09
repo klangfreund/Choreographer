@@ -406,6 +406,7 @@
 		151525E80DDB01CE00BB5114 /* Pool */ = {
 			isa = PBXGroup;
 			children = (
+				15EAB2B30FF49A0200A41A79 /* Pool.xib */,
 				15EA47551042CC0200F1A7BB /* AudioFile.h */,
 				15EA47561042CC0200F1A7BB /* AudioFile.m */,
 				15F077C30DDB6B4D00A207D0 /* AudioItem.h */,
@@ -641,9 +642,9 @@
 		1596D44F1297D2D0001D7E8E /* Trajectory Inspector */ = {
 			isa = PBXGroup;
 			children = (
+				15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */,
 				15E48AE81296E36F0058DDDD /* TrajectoryInspectorWindowController.h */,
 				15E48AE91296E36F0058DDDD /* TrajectoryInspectorWindowController.m */,
-				15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */,
 			);
 			name = "Trajectory Inspector";
 			sourceTree = "<group>";
@@ -871,7 +872,6 @@
 				15155E54139CE34200A8BC0D /* MarkersWindow.xib */,
 				15A82A37111B952900F31B92 /* images */,
 				15A3FC8C10416364001092FD /* CHProjectDocument.xib */,
-				15EAB2B30FF49A0200A41A79 /* Pool.xib */,
 				15DEFC260EC30B9800BBE6A8 /* MainMenu.xib */,
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
@@ -1247,7 +1247,7 @@
 				26FC0AA70875C8B900E6366F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		26FC0AA90875C8B900E6366F /* Build configuration list for PBXProject "Choreographer" */ = {
 			isa = XCConfigurationList;
@@ -1256,7 +1256,7 @@
 				26FC0AAB0875C8B900E6366F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 

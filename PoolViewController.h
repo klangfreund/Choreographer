@@ -53,6 +53,7 @@
 - (IBAction)poolTab:(id)sender;
 
 // actions
+- (IBAction)showTrajectoryInspector:(id)sender;
 - (id)importFile:(NSURL *)absoluteFilePath;
 - (void)newTrajectoryItem:(NSString *)name;
 - (void)newTrajectorySheetOK;
