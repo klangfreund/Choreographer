@@ -27,9 +27,15 @@ body
 	text-align: left;
 }
 
+.main
+{
+  max-width: 700px;
+	margin: auto;
+}
+
 .container
 {
-    margin: 10px 30px 0px 30px;
+  margin: 10px 30px 0px 30px;
 }
 
 
@@ -106,6 +112,7 @@ body
 	left: 0px;
 	padding-top: 10px;
 	margin-right: 20px;
+	padding-bottom: 20px;
 }
 
 li
@@ -171,13 +178,15 @@ li
 #footer
 {
   padding: 5px 0 0 5px;
-  margin: 50px 30px 0px 30px;
+  margin: 30px 30px 0px 30px;
 	border-top: 1px solid #939393;
 }
 
+p { padding-top: 5px; padding-bottom: 5px; }
+
 hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
 
-
+em { font-style: italic; }
 /* links */
 
 a {

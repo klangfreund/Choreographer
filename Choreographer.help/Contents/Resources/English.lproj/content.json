@@ -14,23 +14,24 @@
         },
         "101": {
             "title": "About Choreographer",
-            "content": "blah"
+            "content": "<p>Choreographer is a sequencer / composition environment for spatial music. It is aimed at composers or sound artists seeking a flexible and intuitive tool for 3D sound source placement.</p><p>The audio rendering engine which is integrated in this software, is designed for sound spatialisation in Ambisonics and implements Ambisonics Equivalent Panning, a technique conceived at the ICST.</p>"
         },
         "102": {
             "title": "Create a new project",
-            "content": "blah"
+            "content": "<p>Open Choreographer and select <em>New project...</em> from the File Menu (cmd-N). This opens a new window where you can name your project and select where to save it and set the sample rate.</p><p>It is recommendable but not necessary to keep the project file and all audio files in the same folder.</p>"
         },
         "103": {
             "title": "Import audio",
-            "content": "blah"
+            "content": "<p>Select <em>Import audio...</em> from the File Menu (cmd-shift-I) or drag the audio files directly to the arranger window from the finder.</p><p>This might be the right moment to have a look at the hardware settings.</a>"
         },
         "104": {
             "title": "Place audio in time",
-            "content": "blah"
+            "content": "Drag the audio regions from the pool in the arranger window.</p><p>Different from other audio programs you might know, Choreographer's arranger window is not organized in multiple tracks.</p><p>Grid as an replacement for tracks, how to align audio regions, possibilities to edit audio regions (cut, split, crop).</p>"
         },
         "105": {
             "title": "Place audio in space",
-            "content": "blah"
+            "content": "<p>Select the audio region to be located in the virtual space. Open the radar editor window.</p><p><img src='../img/radarEditor.png' /></p><p>If you prefer to have numeric control over the positions of the audio regions, open the list editor window.</p>",
+            "related": ["202","203"]
         },
         "106": {
             "title": "Trajectories",

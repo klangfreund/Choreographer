@@ -107,6 +107,12 @@ var dataController = {};
 		if(item) 	return item.content;
 	};
 
+	dataController.getRelationsForID = function (id)
+	{
+		var item = content[id];
+		if(item) 	return item.related;
+	};
+
 	dataController.getFirstID = function ()
 	{
 		return firstID;
@@ -136,7 +142,9 @@ var browseController = {};
 		
 		var title = dataController.getTitleForID(id);
 		var content = dataController.getContentForID(id);
-				
+		var related = dataController.getRelationsForID(id);
+		var html = '';
+						
 		// check if title exists
 		if(title == null)
 		{ 
@@ -153,10 +161,9 @@ var browseController = {};
 			currentMainID = id;
 
 			// show the navigation and hide the content
+			$("#breadcrumb").hide();
 			$("#navigationView").show();
 			$("#contentView").hide();
-
-			$("#breadcrumb").hide();
 
 			$('.nav-main').removeClass('sel');
 			$('#nav-'+ id).addClass('sel');
@@ -169,11 +176,23 @@ var browseController = {};
 			$('#contentTitle').html(title);
 
 			// hide the navigation and show the content
+			$("#breadcrumb").show();		
 			$("#content").html(content);
 			$("#navigationView").hide();
 			$("#contentView").show();
+			
+			if(related)
+			{
+				html += '<hr /><p>RELATED TOPICS</p>';
 
-			$("#breadcrumb").show();		
+				$.each(related, function(index, item)
+				{
+					html += '<p><a href="#'+item+'">'+dataController.getTitleForID(item)+'</a></p>';
+				});
+			}
+			
+			$('#related').html(html);
+
 		}
 	};
 
