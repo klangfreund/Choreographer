@@ -179,7 +179,7 @@
 - (IBAction)newTrajectory:(id)sender
 {	
 	regionsForNewTrajectoryItem = nil;
-	[self newTrajectoryItem:@"untitled"];
+	[self showSheetForNewTrajectoryItem:@"untitled"];
 	
 	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio items view
 	{
@@ -194,6 +194,38 @@
 		
 // todo: select new trajectory
 
+}
+
+- (IBAction)trajectoriesFromSpatDIF:(id)sender
+{
+	// choose XML file in an open panel
+	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    
+    [openPanel setTreatsFilePackagesAsDirectories:NO];
+    [openPanel setAllowsMultipleSelection:YES];
+    [openPanel setCanChooseDirectories:NO];
+    [openPanel setCanChooseFiles:YES];
+	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
+    
+	[openPanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
+     {
+         if (result == NSOKButton)
+         {
+             [openPanel orderOut:self]; // close panel before we might present an error
+             for(NSURL *url in [openPanel URLs])
+             {
+                 [self importSpatDIF:url];
+             }
+         }
+     }];
+	
+    
+	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio view
+	{
+		[tabControl setSelectedSegment:1];	
+		[tabView selectTabViewItemAtIndex:1];		
+	}
+    
 }
 
 - (IBAction)deleteSelected:(id)sender
@@ -230,6 +262,7 @@
 
 }
 
+
 - (IBAction)renameSelected:(id)sender
 {
 
@@ -243,6 +276,30 @@
 	[projectSettings setValue:[NSNumber numberWithInt:[sender selectedSegment]] forKey:@"poolSelectedTab"];
 	
 	[tabView selectTabViewItemAtIndex:[sender selectedSegment]];
+}
+
+- (IBAction)showTrajectoryInspector:(id)sender
+{
+    id item = nil;
+    
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user tab
+    {
+		//[treeController setSelectionIndexPath:[NSIndexPath indexPathWithIndex:[sender clickedRow]]];
+		
+		item = [[[treeController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
+        
+		if(![item isKindOfClass:[TrajectoryItem class]])
+		{
+			item = nil;
+		}
+	}
+    
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) // trajectory tab
+    {
+		item = [[[trajectoryArrayController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
+    }
+    
+    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
@@ -277,30 +334,6 @@
 #pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
-
-- (IBAction)showTrajectoryInspector:(id)sender
-{
-    id item = nil;
-    
-    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user tab
-    {
-		//[treeController setSelectionIndexPath:[NSIndexPath indexPathWithIndex:[sender clickedRow]]];
-		
-		item = [[[treeController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
-    
-		if(![item isKindOfClass:[TrajectoryItem class]])
-		{
-			item = nil;
-		}
-	}
-
-    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) // trajectory tab
-    {
-		item = [[[trajectoryArrayController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
-    }
-        
-    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
-}
 
 - (AudioItem *)importFile:(NSURL *)absoluteFilePath
 {
@@ -398,10 +431,8 @@
 }
 
 
-- (void)newTrajectoryItem:(NSString *)name
+- (void)showSheetForNewTrajectoryItem:(NSString *)name
 {
-	// show the new trajectory sheet
-	
 	[self setValue:name forKey:@"newTrajectoryName"];	
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"newTrajectoryType"];
 	
@@ -426,35 +457,21 @@
 
 - (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	if(returnCode == NSCancelButton)
-	{
-		return;
-	}
-	
-	NSManagedObject *parentNode = nil;
-	NSTreeNode *selectedTreeNode = nil;
-	
-	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user view
-	{
-		// get (last) selected item
-		NSIndexSet *selectedIndices = [userOutlineView selectedRowIndexes];
-		selectedTreeNode = [userOutlineView itemAtRow:[selectedIndices lastIndex]];
-		NSManagedObject *selectedNode = [selectedTreeNode representedObject];
+	if(returnCode == NSCancelButton)	return;
+    else                                [self createNewTrajectoryItem];
+    
+}	
 
-		if([selectedIndices count] == 1 && ![[selectedNode valueForKey:@"isLeaf"] boolValue])
-		{
-			// the only selected item is a group
-			parentNode = selectedNode;
-		}
-		else
-		{
-			// insert as sibling of the last selected item
-			parentNode = [selectedNode valueForKey:@"parent"];
-		}
-	}
-	
-	
-	// check if the name is unique
+- (void)importSpatDIF:(NSURL *)absoluteFilePath
+{
+    newTrajectoryName = @"spatDIF";
+    newTrajectoryType = breakpointType;
+    [self createNewTrajectoryItem];
+}
+
+- (void)createNewTrajectoryItem
+{	
+    // check if the name is unique
 	
 	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:[document managedObjectContext]];
 	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
@@ -477,6 +494,28 @@
 				newName = [newTrajectoryName stringByAppendingString:[NSString stringWithFormat:@" %i", i]];
 				unique = YES;
 			}
+		}
+	}
+	
+	NSManagedObject *parentNode = nil;
+	NSTreeNode *selectedTreeNode = nil;
+	
+	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) // user view
+	{
+		// get (last) selected item
+		NSIndexSet *selectedIndices = [userOutlineView selectedRowIndexes];
+		selectedTreeNode = [userOutlineView itemAtRow:[selectedIndices lastIndex]];
+		NSManagedObject *selectedNode = [selectedTreeNode representedObject];
+        
+		if([selectedIndices count] == 1 && ![[selectedNode valueForKey:@"isLeaf"] boolValue])
+		{
+			// the only selected item is a group
+			parentNode = selectedNode;
+		}
+		else
+		{
+			// insert as sibling of the last selected item
+			parentNode = [selectedNode valueForKey:@"parent"];
 		}
 	}
 	
@@ -505,6 +544,7 @@
 	
 	// todo: select the new trajectory
 }
+
 
 - (BOOL)recursivelyDeleteNode:(id)node
 {		

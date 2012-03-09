@@ -369,7 +369,7 @@
 - (void)newTrajectoryItem:(NSString *)name forRegions:(NSSet *)regions
 {
 	[poolViewController setValue:regions forKey:@"regionsForNewTrajectoryItem"];
-	[poolViewController newTrajectoryItem:name];
+	[poolViewController showSheetForNewTrajectoryItem:name];
 }
 
 - (IBAction)showPool:(id)sender
