@@ -464,11 +464,19 @@ public:
 	void setAEPDistanceModeTo0 ();
 	
 	/**
-	 Sets the distanceMode used in AudioSourceAmbipanning to 1.
-	 In this mode, some values are needed, which have to be
-	 specified here.
-     
+	 Sets the distanceMode used in AudioSourceAmbipanning to 1:
      Exponential decrease.
+     
+     @param centerRadius            Specified in units. At this distance, the
+                                    gain factor will be 1. 
+     @param centerExponent          Sets the slope of the exponential curve
+                                    between the center and the centerRadius.
+                                    For the intended use set it >= 0.
+     @param centerAttenuationInDB   Defines the gain factor at the center. For
+                                    the intended use set a value < 0.
+     @param dBFalloffPerUnit        Describes the gain falloff outside the
+                                    center zone. For the intended use set a 
+                                    value < 0.
 	 */
 	void setAEPDistanceModeTo1 (double centerRadius, 
 								double centerExponent,
@@ -476,11 +484,19 @@ public:
 								double dBFalloffPerUnit);
 
 	/**
-	 Sets the distanceMode used in AudioSourceAmbipanning to 2.
-	 In this mode, some values are needed, which have to be
-	 specified here.
-     
+	 Sets the distanceMode used in AudioSourceAmbipanning to 2:
      Inverse proportional decrease.
+     
+     @param centerRadius            Specified in units. At this distance, the
+                                    gain factor will be 1. 
+     @param centerExponent          Sets the slope of the exponential curve
+                                    between the center and the centerRadius.
+                                    For the intended use set it >= 0.
+     @param centerAttenuationInDB   Defines the gain factor at the center. For
+                                    the intended use set a value < 0.
+     @param outsideCenterExponent   Describes the gain falloff outside the
+                                    center zone. For the intended use set it 
+                                    >= 0.
 	 */
 	void setAEPDistanceModeTo2 (double centerRadius, 
 								double centerExponent,
