@@ -90,7 +90,7 @@
         [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
                                                         centerRadius:distanceBasedAttenuationCentreZoneSize
                                                       centerExponent:distanceBasedAttenuationCentreExponent
-                                                   centerAttenuation:distanceBasedAttenuationCentreExponent
+                                                   centerAttenuation:distanceBasedAttenuationCentreDB
                                                     dBFalloffPerUnit:distanceBasedAttenuationDbFalloff
                                                  attenuationExponent:distanceBasedAttenuationExponent];
     }
