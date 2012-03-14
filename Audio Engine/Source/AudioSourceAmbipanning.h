@@ -135,8 +135,11 @@ private:
  The signal for the n-th speaker is
  \f[ \textrm{output}_{n}(t) = \textrm{gain}_{n}(t) \cdot \textrm{input}(t). \f]
  This is done in AudioSourceAmbipanning::getNextAudioBlock.
-
-
+ 
+ To save ressources, the AEP calculations are not done on every
+ sample. Instead they are linearly approximated.
+ Points for this linearisation are: The first sample of every audio block
+ as well as every point in the spacial envelope.
  */
 class JUCE_API  AudioSourceAmbipanning  : public PositionableAudioSource
 {
@@ -363,8 +366,20 @@ private:
 	SpacialEnvelopePoint * previousSpacialPoint;
 	SpacialEnvelopePoint * nextSpacialPoint;
 	int nextSpacialPointIndex;
-	Array<double> channelFactorAtPreviousSpacialPoint;
-	Array<double> channelFactorAtNextSpacialPoint;
+    
+    /* To save ressources, the AEP calculations are not done on every
+     sample. Instead they are linearly approximated.
+     Points for this linearisation are: The first sample of every audio block
+     as well as each point in the spacial envelope.
+     */
+    /** A "Point" is eather a point of the spacial envelope or the point in time
+     of the first sample in an audio block. */
+	Array<double> channelFactorAtPreviousPoint;
+    int positionOfPreviousPoint; /* The position in time. */
+    /** A "Point" is eather a point of the spacial envelope or the point in time
+     of the first sample in an audio block. */
+	Array<double> channelFactorAtNextPoint;
+    int positionOfNextPoint; /* The position in time. */
 	Array<double> channelFactor;
 	Array<double> previousChannelFactor; // used in getNextAudioBlock(..) if there is a
 	// transition to a new envelope going on.
