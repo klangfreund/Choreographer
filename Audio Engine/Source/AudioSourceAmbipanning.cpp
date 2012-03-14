@@ -179,11 +179,15 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 
 	// This will be executed when a new spacial envelope has been set with 
     // setSpacialEnvelope(..) or when the number of speakers has changed.
+    // We will apply a fade from the old spacialEnvelope (from the currentPosition,
+    // with the corresponding array channelFactorAtPreviousPoint) to the new one
+    // (to the currentPosition + info.numSamples, with the corresponding array
+    // channelFactor).
 	if (newSpacialEnvelopeSet || numberOfSpeakersChanged)
 	{
 		if (newSpacialEnvelopeSet)
 		{
-			previousChannelFactor = channelFactorAtNextPoint;
+			channelFactorAtPreviousPoint = channelFactorAtNextPoint;
                 // This is the channelFactor for the current position.
                 // Used in the 
                 // info.buffer->applyGainRamp(..) a couple of lines below to 
@@ -241,11 +245,14 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 			info.buffer->applyGainRamp(channel, 
 									   info.startSample, 
 									   info.numSamples, 
-									   previousChannelFactor[channel], 
+									   channelFactorAtPreviousPoint[channel], 
 									   channelFactor[channel]);
 		}
 		newSpacialEnvelopeSet = false;
 		numberOfSpeakersChanged = false;
+        
+        channelFactorAtNextPoint = channelFactor;
+            // It now corresponds to the first sample of the next audio block.
 	}
 	
 	// This is the regular case
@@ -534,7 +541,6 @@ void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
     channelFactorAtPreviousPoint.clear();
     channelFactorAtNextPoint.clear();
     channelFactor.clear();
-    previousChannelFactor.clear();
     channelFactorDelta.clear();
     
     int indexToInsertAt = 0;
@@ -543,7 +549,6 @@ void AudioSourceAmbipanning::reallocateMemoryForTheArrays ()
     channelFactorAtPreviousPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
     channelFactorAtNextPoint.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
     channelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
-    previousChannelFactor.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);
     channelFactorDelta.insertMultiple(indexToInsertAt, newElement,numberOfTimesToInsertIt);		
 	
 	numberOfSpeakersChanged = true; // This will trigger the section in
@@ -622,7 +627,7 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
         // First we need to determine the coordinates at that
         // moment in time.
         double relativePositionBetweenTheSpacialPoints
-        = (positionOfNextPoint - previousSpacialPoint->getPosition())/(nextSpacialPoint->getPosition() - previousSpacialPoint->getPosition());
+        = double(positionOfNextPoint - previousSpacialPoint->getPosition())/double(nextSpacialPoint->getPosition() - previousSpacialPoint->getPosition());
         double x = previousSpacialPoint->getX() + relativePositionBetweenTheSpacialPoints * (nextSpacialPoint->getX() - previousSpacialPoint->getX());
         double y = previousSpacialPoint->getY() + relativePositionBetweenTheSpacialPoints * (nextSpacialPoint->getY() - previousSpacialPoint->getY());
         double z = previousSpacialPoint->getZ() + relativePositionBetweenTheSpacialPoints * (nextSpacialPoint->getZ() - previousSpacialPoint->getZ());
