@@ -1004,7 +1004,7 @@ void AmbisonicsAudioEngine::setAEPDistanceModeTo2 (double centerRadius,
                                                    double centerAttenuationInDB,
                                                    double outsideCenterExponent)
 {
-	AudioSourceAmbipanning::setDistanceModeTo1(centerRadius, 
+	AudioSourceAmbipanning::setDistanceModeTo2(centerRadius, 
 											   centerExponent,
 											   centerAttenuationInDB,
 											   outsideCenterExponent);

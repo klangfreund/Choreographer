@@ -469,8 +469,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	Array<SpacialEnvelopePoint> spacialEnvelope;
 	
 //	NSLog(@"setSpatialAutomation for AudioRegion(%d) %@", index, [audioRegion valueForKeyPath:@"audioItem.node.name"]);
-    
-    const double spacialFactor = 10.0; // 1 unit in the GUI = 10 units in the audio engine.
+
+// TODO: Remove the next line
+//    const double spacialFactor = 10.0; // 1 unit in the GUI = 10 units in the audio engine.
+    const double spacialFactor = 1.0; // 1 unit in the GUI = 10 units in the audio engine.
+
 	
 	int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 	double fromMsToSamples = 0.001*sampleRate;
