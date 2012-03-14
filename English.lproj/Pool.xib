@@ -59,7 +59,7 @@
 				<string key="NSClassName">NSApplication</string>
 			</object>
 			<object class="NSCustomView" id="1005">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -581,6 +581,7 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{200, 229}</string>
+				<reference key="NSSuperview"/>
 				<string key="NSClassName">PoolView</string>
 			</object>
 			<object class="NSTreeController" id="1067141223">
@@ -654,15 +655,48 @@
 						<reference key="NSOnImage" ref="933443247"/>
 						<reference key="NSMixedImage" ref="752987621"/>
 					</object>
-					<object class="NSMenuItem" id="581955214">
+					<object class="NSMenuItem" id="630395554">
 						<reference key="NSMenu" ref="852140785"/>
-						<string key="NSTitle">Trajectories from SpatDIF</string>
+						<bool key="NSIsDisabled">YES</bool>
+						<bool key="NSIsSeparator">YES</bool>
+						<string key="NSTitle"/>
 						<string key="NSKeyEquiv"/>
 						<int key="NSMnemonicLoc">2147483647</int>
 						<reference key="NSOnImage" ref="933443247"/>
 						<reference key="NSMixedImage" ref="752987621"/>
 					</object>
-					<object class="NSMenuItem" id="630395554">
+					<object class="NSMenuItem" id="41943372">
+						<reference key="NSMenu" ref="852140785"/>
+						<string key="NSTitle">SpatDIF</string>
+						<string type="base64-UTF8" key="NSKeyEquiv">DQ</string>
+						<int key="NSMnemonicLoc">2147483647</int>
+						<reference key="NSOnImage" ref="933443247"/>
+						<reference key="NSMixedImage" ref="752987621"/>
+						<string key="NSAction">submenuAction:</string>
+						<object class="NSMenu" key="NSSubmenu" id="32772469">
+							<string key="NSTitle">SpatDIF</string>
+							<object class="NSMutableArray" key="NSMenuItems">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSMenuItem" id="581955214">
+									<reference key="NSMenu" ref="32772469"/>
+									<string key="NSTitle">Import Trajectories</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="933443247"/>
+									<reference key="NSMixedImage" ref="752987621"/>
+								</object>
+								<object class="NSMenuItem" id="1039825804">
+									<reference key="NSMenu" ref="32772469"/>
+									<string key="NSTitle">Export Trajectories</string>
+									<string key="NSKeyEquiv"/>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="933443247"/>
+									<reference key="NSMixedImage" ref="752987621"/>
+								</object>
+							</object>
+						</object>
+					</object>
+					<object class="NSMenuItem" id="893663795">
 						<reference key="NSMenu" ref="852140785"/>
 						<bool key="NSIsDisabled">YES</bool>
 						<bool key="NSIsSeparator">YES</bool>
@@ -819,7 +853,7 @@
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="106589255">
-					<nil key="NSNextResponder"/>
+					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -984,10 +1018,18 @@
 						</object>
 					</object>
 					<string key="NSFrameSize">{344, 248}</string>
+					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
+			</object>
+			<object class="NSMenuItem" id="722821598">
+				<string key="NSTitle">Item</string>
+				<string key="NSKeyEquiv"/>
+				<int key="NSMnemonicLoc">2147483647</int>
+				<reference key="NSOnImage" ref="933443247"/>
+				<reference key="NSMixedImage" ref="752987621"/>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -1419,11 +1461,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
-						<string key="label">trajectoriesFromSpatDIF:</string>
+						<string key="label">SpatDifExportTrajectories:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="1039825804"/>
+					</object>
+					<int key="connectionID">336</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">SpatDifImportTrajectories:</string>
 						<reference key="source" ref="1001"/>
 						<reference key="destination" ref="581955214"/>
 					</object>
-					<int key="connectionID">327</int>
+					<int key="connectionID">337</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1495,12 +1545,13 @@
 							<reference ref="617056122"/>
 							<reference ref="288354751"/>
 							<reference ref="542718083"/>
-							<reference ref="630395554"/>
 							<reference ref="4308093"/>
 							<reference ref="609971903"/>
 							<reference ref="383128755"/>
 							<reference ref="331853115"/>
-							<reference ref="581955214"/>
+							<reference ref="893663795"/>
+							<reference ref="630395554"/>
+							<reference ref="41943372"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -1758,11 +1809,6 @@
 						<reference key="parent" ref="852140785"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">222</int>
-						<reference key="object" ref="581955214"/>
-						<reference key="parent" ref="852140785"/>
-					</object>
-					<object class="IBObjectRecord">
 						<int key="objectID">223</int>
 						<reference key="object" ref="630395554"/>
 						<reference key="parent" ref="852140785"/>
@@ -1927,6 +1973,45 @@
 						<reference key="object" ref="765157558"/>
 						<reference key="parent" ref="310468054"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">328</int>
+						<reference key="object" ref="893663795"/>
+						<reference key="parent" ref="852140785"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">331</int>
+						<reference key="object" ref="41943372"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="32772469"/>
+						</object>
+						<reference key="parent" ref="852140785"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">332</int>
+						<reference key="object" ref="32772469"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="581955214"/>
+							<reference ref="1039825804"/>
+						</object>
+						<reference key="parent" ref="41943372"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">333</int>
+						<reference key="object" ref="722821598"/>
+						<reference key="parent" ref="0"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">222</int>
+						<reference key="object" ref="581955214"/>
+						<reference key="parent" ref="32772469"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">329</int>
+						<reference key="object" ref="1039825804"/>
+						<reference key="parent" ref="32772469"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2008,6 +2093,11 @@
 					<string>309.IBPluginDependency</string>
 					<string>310.IBPluginDependency</string>
 					<string>323.IBPluginDependency</string>
+					<string>328.IBPluginDependency</string>
+					<string>329.IBPluginDependency</string>
+					<string>331.IBPluginDependency</string>
+					<string>332.IBPluginDependency</string>
+					<string>333.IBPluginDependency</string>
 					<string>62.CustomClassName</string>
 					<string>62.IBPluginDependency</string>
 					<string>62.ibExternalFetchPredicateFormat</string>
@@ -2102,6 +2192,11 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>UserTreeController</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>parent == nil</string>
@@ -2125,7 +2220,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">327</int>
+			<int key="maxID">337</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2188,6 +2283,8 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>SpatDifExportTrajectories:</string>
+							<string>SpatDifImportTrajectories:</string>
 							<string>deleteSelected:</string>
 							<string>importAudioFiles:</string>
 							<string>newTrajectory:</string>
@@ -2195,10 +2292,10 @@
 							<string>poolTab:</string>
 							<string>renameSelected:</string>
 							<string>showTrajectoryInspector:</string>
-							<string>trajectoriesFromSpatDIF:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2213,6 +2310,8 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>SpatDifExportTrajectories:</string>
+							<string>SpatDifImportTrajectories:</string>
 							<string>deleteSelected:</string>
 							<string>importAudioFiles:</string>
 							<string>newTrajectory:</string>
@@ -2220,10 +2319,17 @@
 							<string>poolTab:</string>
 							<string>renameSelected:</string>
 							<string>showTrajectoryInspector:</string>
-							<string>trajectoriesFromSpatDIF:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">SpatDifExportTrajectories:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">SpatDifImportTrajectories:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">deleteSelected:</string>
 								<string key="candidateClassName">id</string>
@@ -2250,10 +2356,6 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">showTrajectoryInspector:</string>
-								<string key="candidateClassName">id</string>
-							</object>
-							<object class="IBActionInfo">
-								<string key="name">trajectoriesFromSpatDIF:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 						</object>

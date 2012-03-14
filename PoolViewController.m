@@ -17,6 +17,7 @@
 #import "SettingsMenu.h"
 #import "ImageAndTextCell.h"
 #import "Path.h"
+#import "SpatDIF.h"
 
 
 @implementation PoolViewController
@@ -196,37 +197,49 @@
 
 }
 
-- (IBAction)trajectoriesFromSpatDIF:(id)sender
+- (IBAction)SpatDifImportTrajectories:(id)sender
 {
-	// choose XML file in an open panel
-	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
-    
+    // choose XML file in an open panel
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+
     [openPanel setTreatsFilePackagesAsDirectories:NO];
     [openPanel setAllowsMultipleSelection:YES];
     [openPanel setCanChooseDirectories:NO];
     [openPanel setCanChooseFiles:YES];
-	[openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
-    
-	[openPanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
-     {
-         if (result == NSOKButton)
-         {
-             [openPanel orderOut:self]; // close panel before we might present an error
-             for(NSURL *url in [openPanel URLs])
-             {
-                 [self importSpatDIF:url];
-             }
-         }
-     }];
-	
-    
-	if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio view
-	{
-		[tabControl setSelectedSegment:1];	
-		[tabView selectTabViewItemAtIndex:1];		
-	}
-    
+    [openPanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
+
+    [openPanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
+    {
+        if (result == NSOKButton)
+        {
+            [openPanel orderOut:self]; // close panel before we might present an error
+            for(NSURL *url in [openPanel URLs])
+            {
+                [self importSpatDIF:url];
+            }
+        }
+    }];
 }
+
+- (IBAction)SpatDifExportTrajectories:(id)sender
+{
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
+	[savePanel setNameFieldStringValue:@"Trajectories.xml"];
+	[savePanel setPrompt:@"Save"];
+	[savePanel setExtensionHidden:NO];
+	
+	[savePanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
+     {
+		 if (result == NSOKButton)
+		 {
+			 [savePanel orderOut:self];
+             // do it
+		 }
+	 }];
+
+}
+
 
 - (IBAction)deleteSelected:(id)sender
 {
@@ -306,11 +319,12 @@
 {
 	if ([item action] == @selector(poolAddFolder:) && [[projectSettings valueForKey:@"poolSelectedTab"] intValue] != 0)
 		return NO;
-    
-    else if ([item action] == @selector(showTrajectoryInspector:))
+        
+    else if ([item action] == @selector(showTrajectoryInspector:) ||
+             [item action] == @selector(SpatDifExportTrajectories:))
     {
         if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0 && [[treeController selectedObjects] count] == 0)
-            return NO;    
+            return NO;     
         if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1)
             return NO;
         if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2 && [[trajectoryArrayController selectedObjects] count] == 0)
@@ -464,12 +478,69 @@
 
 - (void)importSpatDIF:(NSURL *)absoluteFilePath
 {
-    newTrajectoryName = @"spatDIF";
-    newTrajectoryType = breakpointType;
-    [self createNewTrajectoryItem];
+    NSError *err;
+    NSXMLDocument *xmlDoc;
+    
+    xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
+                                                  options:(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA)
+                                                    error:&err];
+    if (xmlDoc == nil)
+    {
+        NSLog(@"2nd attempt");
+        xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
+                                                      options:NSXMLDocumentTidyXML
+                                                        error:&err];
+    }
+    if (xmlDoc == nil)
+    {
+        NSLog(@"failed opening: %@", [absoluteFilePath path]);
+        if (err)
+        {
+            // handle error
+        }
+        return;
+    }
+    
+    SpatDIF *spatDif = [[SpatDIF alloc] initWithXmlDoc:xmlDoc];
+    int count;
+    
+    if (![spatDif validate])
+    {
+        NSLog(@"no valid spatDIF in: %@", [absoluteFilePath path]);
+        return;    
+    }
+    if ((count = [spatDif countTrajectoryDefinitions]) == 0)
+    {
+        NSLog(@"no trajectory descriptions in: %@", [absoluteFilePath path]);
+        return;    
+    }
+
+    NSLog(@"count %i",count);
+          
+    // present all trajectories in a list to
+    // pick the ones to be imported
+    // (show proposed names)
+    
+    int i;
+    for(i=0;i<count;i++)
+    {
+        // new trajectory
+        newTrajectoryName = @"spatDIF";
+        newTrajectoryType = breakpointType;
+        /* TrajectoryItem *trajectoryItem = */[self createNewTrajectoryItem];
+    }
+
+    
+	// change pool view
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio view
+	{
+		[tabControl setSelectedSegment:1];	
+		[tabView selectTabViewItemAtIndex:1];		
+	}
+    
 }
 
-- (void)createNewTrajectoryItem
+- (TrajectoryItem *)createNewTrajectoryItem
 {	
     // check if the name is unique
 	
@@ -543,6 +614,9 @@
 	[userOutlineView expandItem:selectedTreeNode];
 	
 	// todo: select the new trajectory
+    
+    
+    return newItem;
 }
 
 

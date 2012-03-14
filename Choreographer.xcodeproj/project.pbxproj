@@ -43,6 +43,7 @@
 		1560817511CECAA00033C628 /* RandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 1560817411CECAA00033C628 /* RandomTrajectory.m */; };
 		1569872911B12DAB00E4325A /* BreakpointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1569872811B12DAB00E4325A /* BreakpointView.m */; };
 		157B8B1614699101001B247B /* juce_amalgamated.mm in Sources */ = {isa = PBXBuildFile; fileRef = 157B8B1514699101001B247B /* juce_amalgamated.mm */; };
+		157D40091510BD9B0028818C /* SpatDIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 157D40081510BD9B0028818C /* SpatDIF.m */; };
 		1581A1F814BCA04400071656 /* ProjectSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 1581A1F714BCA04400071656 /* ProjectSettings.m */; };
 		1584502013EAE2240066CC94 /* BounceToDiskController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1584501F13EAE2240066CC94 /* BounceToDiskController.m */; };
 		1586A8CC13B3B45100262B02 /* AudioEngine.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1586A7BF13B3B45100262B02 /* AudioEngine.mm */; };
@@ -198,6 +199,8 @@
 		1569872711B12DAB00E4325A /* BreakpointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointView.h; sourceTree = "<group>"; };
 		1569872811B12DAB00E4325A /* BreakpointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BreakpointView.m; sourceTree = "<group>"; };
 		157B8B1514699101001B247B /* juce_amalgamated.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = juce_amalgamated.mm; sourceTree = "<group>"; };
+		157D40071510BD9B0028818C /* SpatDIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpatDIF.h; sourceTree = "<group>"; };
+		157D40081510BD9B0028818C /* SpatDIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SpatDIF.m; sourceTree = "<group>"; };
 		1581A1F614BCA04400071656 /* ProjectSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectSettings.h; sourceTree = "<group>"; };
 		1581A1F714BCA04400071656 /* ProjectSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProjectSettings.m; sourceTree = "<group>"; };
 		1584501E13EAE2240066CC94 /* BounceToDiskController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BounceToDiskController.h; sourceTree = "<group>"; };
@@ -535,6 +538,15 @@
 			name = Arranger;
 			sourceTree = "<group>";
 		};
+		157D40061510BD6D0028818C /* SpatDIF */ = {
+			isa = PBXGroup;
+			children = (
+				157D40071510BD9B0028818C /* SpatDIF.h */,
+				157D40081510BD9B0028818C /* SpatDIF.m */,
+			);
+			name = SpatDIF;
+			sourceTree = "<group>";
+		};
 		1586A7BB13B3B45100262B02 /* Audio Engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -850,6 +862,7 @@
 				15F005270ED5EBCA00DFC414 /* Regions */,
 				155725170DD891C800FA16E2 /* Arranger */,
 				15204C290E4AFC51005E66F0 /* Editors */,
+				157D40061510BD6D0028818C /* SpatDIF */,
 				158E9C8E0EAE2E4600435D25 /* Other Windows */,
 				153F17870DF729040037238D /* Misc */,
 			);
@@ -1068,6 +1081,7 @@
 				1500639A14C47225001361BF /* HardwareSettingsWindowController.m in Sources */,
 				1500639D14C4725D001361BF /* ProjectAudioSettingsWindowController.m in Sources */,
 				15A88DB414C5CE9700CCAFC6 /* AttenuationCurveView.m in Sources */,
+				157D40091510BD9B0028818C /* SpatDIF.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

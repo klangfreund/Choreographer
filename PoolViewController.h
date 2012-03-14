@@ -48,7 +48,8 @@
 - (IBAction)poolAddFolder:(id)sender;
 - (IBAction)importAudioFiles:(id)sender;
 - (IBAction)newTrajectory:(id)sender;
-- (IBAction)trajectoriesFromSpatDIF:(id)sender;
+- (IBAction)SpatDifImportTrajectories:(id)sender;
+- (IBAction)SpatDifExportTrajectories:(id)sender;
 - (IBAction)deleteSelected:(id)sender;
 - (IBAction)renameSelected:(id)sender;
 - (IBAction)poolTab:(id)sender;
@@ -61,7 +62,7 @@
 - (void)newTrajectorySheetCancel;
 - (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)importSpatDIF:(NSURL *)absoluteFilePath;
-- (void)createNewTrajectoryItem;
+- (TrajectoryItem *)createNewTrajectoryItem;
 
 - (BOOL)recursivelyDeleteNode:(id)node;
 
