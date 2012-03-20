@@ -92,14 +92,16 @@
 
 - (void)setLocator:(unsigned long)sampleTime
 {
-	//NSLog(@"setLocator: %d", sampleTime);
 	locator = sampleTime;
 	[self updateLocator];
 
-	if(![[AudioEngine sharedAudioEngine] isPlaying] && !loopMode)
-	{
+	// set playback to new position immediately
+    if([[AudioEngine sharedAudioEngine] isPlaying])
+        [[AudioEngine sharedAudioEngine] startAudio:locator];
+
+	// set start locator
+    if(!loopMode)
 		startLocator = sampleTime;
-	}
 }
 
 - (unsigned long)locator
@@ -202,8 +204,7 @@
 		}
 		else
 		{
-			[self setValue:[NSNumber numberWithUnsignedInt:[[AudioEngine sharedAudioEngine] playbackLocation]]
-					forKey:@"locator"];
+            locator = [[AudioEngine sharedAudioEngine] playbackLocation];
 			[self updateLocator];
 		}
 	}
