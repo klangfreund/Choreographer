@@ -162,13 +162,16 @@
 	// stop playback
     [playbackController stopPlayback];
     
+	// empty the engine's schedule
+	[[AudioEngine sharedAudioEngine] deleteAllAudioRegions];
+    
 	[super canCloseDocumentWithDelegate:delegate shouldCloseSelector:shouldCloseSelector contextInfo:contextInfo]; 
 }
 
 
 - (void)close
 {
-//	NSLog(@"CHProjectDocument: close %@", self);
+	NSLog(@"CHProjectDocument: close %@", self);
 
 	[[NSNotificationCenter defaultCenter] removeObserver:self]; // here, not in dealloc!
 
