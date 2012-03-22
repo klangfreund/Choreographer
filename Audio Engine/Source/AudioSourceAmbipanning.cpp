@@ -109,7 +109,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	DEB("AudioSourceAmbipanning: constructor called.");
     
     // By default: No doppler effect
-    //enableDopplerEffect(false);
+    enableDopplerEffect(false);
     // TEMP
     // enableDopplerEffect(true);
 	
@@ -119,9 +119,9 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	// newSpacialEnvelopeSet = true. (Which leads to the use
 	// of newSpacialEnvelope in getNextAudioBlock(..)).
 	newSpacialEnvelope.add(new SpacialEnvelopePoint(0,      // time (in samples)
-                                                0,      // x
-                                                0,      // y
-                                                0));	// z);
+                                                0.0,      // x
+                                                0.0,      // y
+                                                0.0));	// z);
 	spacialEnvelope.addCopiesOf(newSpacialEnvelope);
 	
 	constantSpacialPosition = true;
