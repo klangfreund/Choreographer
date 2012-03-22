@@ -7,17 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "TrajectoryItem.h"
 
 @interface SpatDIF : NSObject
 {
     NSXMLDocument *xmlDoc;
+    
+    NSArray *trajectoryNames;
+    NSArray *trajectories;
 }
 
 - (id)initWithXmlDoc:(NSXMLDocument *)xmlDoc_;
-- (BOOL)validate;
+- (BOOL)parse;
 
-- (int)countTrajectoryDefinitions;
+- (NSArray *)trajectoryNames;
+- (NSArray *)trajectories;
 
-//+ (void)trajectory:(TrajectoryItem *)trajectoryItem toSpatDifXML:(NSXMLDocument *)xmlDoc;
+- (void)addTrajectories:(NSArray *)trajectories_;
+- (BOOL)writeXmlToURL:(NSURL *)url;
+
 @end

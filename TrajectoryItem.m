@@ -12,6 +12,8 @@
 
 @implementation TrajectoryItem
 
+@synthesize trajectory;
+
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
@@ -70,8 +72,11 @@
 - (NSArray *)positionBreakpointsWithInitialPosition:(SpatialPosition *)pos
 {
 	if(![[self valueForKey:@"adaptiveInitialPosition"] boolValue])
-		return [trajectory positionBreakpoints];
-	
+    {
+        [[[trajectory positionBreakpoints] objectAtIndex:0] setBreakpointType:breakpointTypeInitial];
+        return [trajectory positionBreakpoints];
+	}
+    
 	// adaptive initial breakpoint
 	Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 	

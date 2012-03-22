@@ -17,6 +17,15 @@
 {
 	if((self = [super init]))
 	{
+        positionBreakpointArray = [[BreakpointArray alloc] init];
+	}
+	return self;	
+}
+
+- (id)initWithDefaultBreakpoint
+{
+	if((self = [super init]))
+	{
 		Breakpoint *bp = [[[Breakpoint alloc] init] autorelease];
 		[bp setPosition:[SpatialPosition positionWithX:0 Y:0 Z:0]];
 		[bp setTime:0];
@@ -49,12 +58,10 @@
 	[super dealloc];
 }
 
-
 - (NSArray *)positionBreakpoints
 {
 	return positionBreakpointArray.breakpoints;
 }
-
 
 
 #pragma mark -

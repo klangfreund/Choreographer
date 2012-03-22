@@ -18,6 +18,8 @@
 	TrajectoryType	trajectoryType;
 }
 
+@property (retain) Trajectory *trajectory;
+
 // accessors
 - (TrajectoryType)trajectoryType;
 - (void)setTrajectoryType:(TrajectoryType)type;
