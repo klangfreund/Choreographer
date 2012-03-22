@@ -101,9 +101,9 @@
     // audio engine
     int mode = [[projectSettings valueForKey:@"distanceBasedAttenuation"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedAttenuationMode"] intValue] + 1 : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
-                                                    centerRadius:[[projectSettings valueForKey:@"distanceBasedCentreRadius"] doubleValue]
-                                                  centerExponent:[[projectSettings valueForKey:@"distanceBasedCentreExponent"] doubleValue]
-                                               centerAttenuation:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreDB"] doubleValue]
+                                                  centreZoneSize:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreZoneSize"] doubleValue]
+                                                  centreExponent:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreExponent"] doubleValue]
+                                               centreAttenuation:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreDB"] doubleValue]
                                                 dBFalloffPerUnit:[[projectSettings valueForKey:@"distanceBasedAttenuationDbFalloff"] doubleValue]
                                              attenuationExponent:[[projectSettings valueForKey:@"distanceBasedAttenuationExponent"] doubleValue]];
 

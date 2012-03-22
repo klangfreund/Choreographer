@@ -326,9 +326,9 @@ static AudioEngine *sharedAudioEngine = nil;
 }
 
 - (void)setDistanceBasedAttenuation:(int)type
-                       centerRadius:(double)cRadius 
-                     centerExponent:(double)cExponent
-                  centerAttenuation:(double)cAttenuation
+                     centreZoneSize:(double)cRadius 
+                     centreExponent:(double)cExponent
+                  centreAttenuation:(double)cAttenuation
                    dBFalloffPerUnit:(double)dBFalloff
                 attenuationExponent:(double)exponent;
 {

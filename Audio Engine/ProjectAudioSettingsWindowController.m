@@ -88,9 +88,9 @@
     {
         int mode = distanceBasedAttenuation ? distanceBasedAttenuationMode + 1 : 0;
         [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
-                                                        centerRadius:distanceBasedAttenuationCentreZoneSize
-                                                      centerExponent:distanceBasedAttenuationCentreExponent
-                                                   centerAttenuation:distanceBasedAttenuationCentreDB
+                                                      centreZoneSize:distanceBasedAttenuationCentreZoneSize
+                                                      centreExponent:distanceBasedAttenuationCentreExponent
+                                                   centreAttenuation:distanceBasedAttenuationCentreDB
                                                     dBFalloffPerUnit:distanceBasedAttenuationDbFalloff
                                                  attenuationExponent:distanceBasedAttenuationExponent];
     }
