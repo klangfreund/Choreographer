@@ -27,6 +27,18 @@
 	return pos;
 }
 
++ (SpatialPosition *)positionFromString:(NSString *)string
+{
+	NSArray *stringComponents = [string componentsSeparatedByString:@" "];
+	SpatialPosition *pos = [[[SpatialPosition alloc] init] autorelease];
+	
+	[pos setX:[[stringComponents objectAtIndex:0] doubleValue]];
+	[pos setY:[[stringComponents objectAtIndex:1] doubleValue]];
+	[pos setZ:[[stringComponents objectAtIndex:2] doubleValue]];
+	
+	return pos;
+}
+
 
 - (id)init
 {    
@@ -143,5 +155,16 @@
 	y = sin((90 - a) / 180 * PI) * cos(e / 180 * PI) * d;
 	z = sin(e / 180 * PI) * d;
 }
+
+
+#pragma mark -
+#pragma mark conversion
+// -----------------------------------------------------------
+
+- (NSString *)stringValue
+{
+    return [NSString stringWithFormat:@"%f %f %f",x,y,z];
+}
+
 
 @end

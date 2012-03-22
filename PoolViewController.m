@@ -148,15 +148,6 @@
     [openPanel setCanChooseFiles:YES];
 	[openPanel setAllowedFileTypes:[AudioFile allowedFileTypes]];
 
-	// 10.5.
-	/*
-	if([openPanel runModalForTypes:fileTypes] == NSOKButton)
-	{
-		[openPanel orderOut:self]; // close panel before we might present an error
-		[self openAudioFiles:[openPanel filenames]];
-	}
-	*/
-	
 	[openPanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
 	{
         if (result == NSOKButton)
@@ -223,20 +214,29 @@
 
 - (IBAction)SpatDifExportTrajectories:(id)sender
 {
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	[savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
-	[savePanel setNameFieldStringValue:@"Trajectories.xml"];
-	[savePanel setPrompt:@"Save"];
-	[savePanel setExtensionHidden:NO];
-	
-	[savePanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
-     {
-		 if (result == NSOKButton)
-		 {
-			 [savePanel orderOut:self];
-             // do it
-		 }
-	 }];
+    NSArray *selectedTrajectories;
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) selectedTrajectories = [treeController selectedObjects];
+    if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) selectedTrajectories = [trajectoryArrayController selectedObjects];
+
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    [savePanel setAllowedFileTypes:[NSArray arrayWithObjects:@"xml",nil]];
+    [savePanel setNameFieldStringValue:@"Trajectories.xml"];
+    [savePanel setPrompt:@"Save"];
+    [savePanel setExtensionHidden:NO];
+
+    [savePanel beginSheetModalForWindow:[document windowForSheet] completionHandler:^(NSInteger result)
+    {
+        if (result == NSOKButton)
+        {
+            [savePanel orderOut:self];
+
+            // write selected trajectories to xml formatted file
+            
+            SpatDIF *spatDif = [[SpatDIF alloc] init];
+            [spatDif addTrajectories:selectedTrajectories];
+            [spatDif writeXmlToURL:[savePanel URL]];
+        }
+    }];
 
 }
 
@@ -502,20 +502,21 @@
     }
     
     SpatDIF *spatDif = [[SpatDIF alloc] initWithXmlDoc:xmlDoc];
-    int count;
     
-    if (![spatDif validate])
+    if (![spatDif parse])
     {
         NSLog(@"no valid spatDIF in: %@", [absoluteFilePath path]);
         return;    
     }
-    if ((count = [spatDif countTrajectoryDefinitions]) == 0)
+
+    NSArray *trajectoryNames = [spatDif trajectoryNames];
+    NSArray *trajectories = [spatDif trajectories];
+    int count;
+    if ((count = [trajectories count]) == 0)
     {
-        NSLog(@"no trajectory descriptions in: %@", [absoluteFilePath path]);
+        NSLog(@"no trajectory descriptions found in: %@", [absoluteFilePath path]);
         return;    
     }
-
-    NSLog(@"count %i",count);
           
     // present all trajectories in a list to
     // pick the ones to be imported
@@ -525,12 +526,14 @@
     for(i=0;i<count;i++)
     {
         // new trajectory
-        newTrajectoryName = @"spatDIF";
+        newTrajectoryName = [trajectoryNames objectAtIndex:i];
         newTrajectoryType = breakpointType;
-        /* TrajectoryItem *trajectoryItem = */[self createNewTrajectoryItem];
+        TrajectoryItem *trajectoryItem = [self createNewTrajectoryItem];
+        [trajectoryItem setTrajectory:[trajectories objectAtIndex:i]];
+        if([[[[trajectories objectAtIndex:i] positionBreakpointArray] objectAtIndex:0] breakpointType] == breakpointTypeAdaptiveInitial)
+			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
     }
 
-    
 	// change pool view
     if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 1) // audio view
 	{

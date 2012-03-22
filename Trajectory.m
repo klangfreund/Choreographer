@@ -24,7 +24,7 @@
 	switch(trajectoryType)
 	{
 		case breakpointType:
-			trajectory = [[[BreakpointTrajectory alloc] init] autorelease];
+			trajectory = [[[BreakpointTrajectory alloc] initWithDefaultBreakpoint] autorelease];
 			break;
 		case rotationType:
 			trajectory = [[[RotationTrajectory alloc] init] autorelease];
@@ -52,7 +52,8 @@
 {
 }
 
-// breakpoints for visualisation
+#pragma mark -
+
 - (NSArray *)positionBreakpoints { return nil; }
 
 - (NSArray *)parameterBreakpoints
@@ -60,21 +61,17 @@
     return parameterBreakpointArray.breakpoints;
 }
 
+- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos
+                                               duration:(long)dur
+                                                   mode:(int)mode { return nil; }
+
+- (id)trajectoryAttributeForKey:(NSString *)key { return [self valueForKey:key]; }
 
 - (void)sortBreakpoints
 {
 	[positionBreakpointArray sort];
 	[parameterBreakpointArray sort];
 }
-
-- (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode { return nil; }
-
-- (id)trajectoryAttributeForKey:(NSString *)key { return [self valueForKey:key]; }
-
-
-#pragma mark -
-#pragma mark actions
-// -----------------------------------------------------------------------------
 
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 {
