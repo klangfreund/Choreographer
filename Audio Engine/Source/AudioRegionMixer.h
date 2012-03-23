@@ -205,6 +205,13 @@ public:
      to disk), buffering should be disabled.
      */
     void enableBuffering(bool enable);
+    
+    /**
+     Enables or disables the doppler effect.
+     
+     It is disabled by default.
+     */  
+    void enableDopplerEffect (bool enable);
 	
 
     //==============================================================================

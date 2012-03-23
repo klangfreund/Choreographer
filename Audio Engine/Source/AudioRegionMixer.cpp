@@ -375,6 +375,17 @@ void AudioRegionMixer::enableBuffering(bool enable)
 	}
 }
 
+void AudioRegionMixer::enableDopplerEffect (bool enable)
+{
+    DEB("AudioRegionMixer: enableDopplerEffect called.");
+	
+	for (int i = 0; i < regions.size(); i++)
+	{
+		AudioRegion* audioRegion = (AudioRegion*)regions[i];
+		audioRegion->audioSourceAmbipanning->enableDopplerEffect(enable);
+	}
+}
+
 void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
 	DEB("AudioRegionMixer: prepareToPlay called.");

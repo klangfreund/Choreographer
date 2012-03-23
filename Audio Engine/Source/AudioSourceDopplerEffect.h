@@ -135,7 +135,7 @@ private:
     void calculateDelay()
     {
         // return sqrt(*this * *this) * oneOverSpeedOfSound;
-        delay = 100. * sqrt(*this * *this) * oneOverSpeedOfSound;
+        delay = 1000. * sqrt(*this * *this) * oneOverSpeedOfSound;
     }
     
 

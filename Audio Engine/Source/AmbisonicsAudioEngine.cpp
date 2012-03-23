@@ -978,6 +978,11 @@ void AmbisonicsAudioEngine::setMasterGain(const float newGain)
 	audioTransportSource.setGain(newGain);
 }
 
+void AmbisonicsAudioEngine::enableDopplerEffect (bool enable)
+{
+    audioRegionMixer.enableDopplerEffect(enable);
+}
+
 void AmbisonicsAudioEngine::setAEPOrder (const double order)
 {
 	AudioSourceAmbipanning::setOrder(order);
