@@ -18,13 +18,13 @@ static void addToolbarItem(NSMutableDictionary *theDict,NSString *identifier,NSS
     [item setPaletteLabel:paletteLabel];
     [item setToolTip:toolTip];
     [item setTarget:target];
-    // the settingSelector parameter can either be @selector(setView:) or @selector(setImage:).  Pass in the right
+    // the settingSelector parameter can either be @selector(setView:) or @selector(setImage:). Pass in the right
     // one depending upon whether your NSToolbarItem will have a custom view or an image, respectively
     // (in the itemContent parameter).  Then this next line will do the right thing automatically.
     [item performSelector:settingSelector withObject:itemContent];
     [item setAction:action];
     // If this NSToolbarItem is supposed to have a menu "form representation" associated with it (for text-only mode),
-    // we set it up here.  Actually, you have to hand an NSMenuItem (not a complete NSMenu) to the toolbar item,
+    // we set it up here. Actually, you have to hand an NSMenuItem (not a complete NSMenu) to the toolbar item,
     // so we create a dummy NSMenuItem that has our real menu as a submenu.
     if (menu!=NULL)
     {
@@ -54,15 +54,17 @@ static void addToolbarItem(NSMutableDictionary *theDict,NSString *identifier,NSS
 	addToolbarItem(toolbarItems,@"Counter",@"Counter",@"Counter",NULL,self,@selector(setView:),counterView,NULL,NULL);
 	addToolbarItem(toolbarItems,@"Loop Counter",@"Loop Counter",@"Loop Counter",NULL,self,@selector(setView:),loopCounterView,NULL,NULL);
 	addToolbarItem(toolbarItems,@"Transport",@"Transport",@"Transport",NULL,self,@selector(setView:),transportView,NULL,NULL);
-	addToolbarItem(toolbarItems,@"Loop Mode",@"Loop Mode",@"Loop Mode",NULL,self,@selector(setView:),loopModeView,NULL,NULL);
 	addToolbarItem(toolbarItems,@"Master Volume",@"Master Volume",@"Master Volume",NULL,self,@selector(setView:),masterVolumeSlider,NULL,NULL);
 
+	addToolbarItem(toolbarItems,@"Duplicate",@"Duplicate",@"Duplicate",NULL,self,@selector(setView:),duplicateButton,NULL,NULL);
+	addToolbarItem(toolbarItems,@"Repeat",@"Repeat",@"Repeat",NULL,self,@selector(setView:),repeatButton,NULL,NULL);
+	addToolbarItem(toolbarItems,@"Delete",@"Delete",@"Delete",NULL,self,@selector(setView:),deleteAudioButton,NULL,NULL);
 	addToolbarItem(toolbarItems,@"Split",@"Split",@"Split",NULL,self,@selector(setView:),splitButton,NULL,NULL);
 	addToolbarItem(toolbarItems,@"Trim",@"Trim",@"Trim",NULL,self,@selector(setView:),trimButton,NULL,NULL);
 
 	
 	// create the toolbar
-	NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"myToolbar"] autorelease];
+	NSToolbar *toolbar = [[[NSToolbar alloc] initWithIdentifier:@"choreographerToolbar"] autorelease];
 
 	// the toolbar wants to know who is going to handle processing of NSToolbarItems for it. This controller will.
 	[toolbar setDelegate:self];
@@ -70,6 +72,7 @@ static void addToolbarItem(NSMutableDictionary *theDict,NSString *identifier,NSS
 	// toolbar settings
 	[toolbar setAllowsUserCustomization:YES];
 	[toolbar setDisplayMode: NSToolbarDisplayModeIconOnly];
+    [toolbar setAutosavesConfiguration:YES];
 
 	// install the toolbar.
 	[window setToolbar:toolbar];
@@ -81,6 +84,12 @@ static void addToolbarItem(NSMutableDictionary *theDict,NSString *identifier,NSS
     [toolbarItems release];
     [super dealloc];
 }
+
+- (IBAction)duplicate { [arrangerView performSelector:@selector(duplicate:) withObject:self]; }
+- (IBAction)repeat { [arrangerView performSelector:@selector(repeat:) withObject:self]; }
+- (IBAction)deleteAudio { [arrangerView performSelector:@selector(delete:) withObject:self]; }
+- (IBAction)split { [arrangerView performSelector:@selector(split:) withObject:self]; }
+- (IBAction)trim { [arrangerView performSelector:@selector(trim:) withObject:self]; }
 
 
 #pragma mark -
@@ -126,11 +135,11 @@ static void addToolbarItem(NSMutableDictionary *theDict,NSString *identifier,NSS
 // set of toolbar items.  It can also be called by the customization palette to display the default toolbar.    
 - (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
-	return [NSArray arrayWithObjects:@"Transport",@"Loop Mode",@"Counter",@"Loop Counter",NSToolbarFlexibleSpaceItemIdentifier,@"Master Volume",nil];
+	return [NSArray arrayWithObjects:@"Transport",@"Counter",@"Loop Counter",NSToolbarFlexibleSpaceItemIdentifier,@"Master Volume",nil];
 }
 
 // This method is required of NSToolbar delegates.  It returns an array holding identifiers for all allowed
-// toolbar items in this toolbar.  Any not listed here will not be available in the customization palette.
+// toolbar items in this toolbar. Any not listed here will not be available in the customization palette.
 - (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
 {
 	NSMutableArray *tempArray = [NSMutableArray arrayWithObjects: NSToolbarSeparatorItemIdentifier, NSToolbarSpaceItemIdentifier, NSToolbarFlexibleSpaceItemIdentifier, nil];
