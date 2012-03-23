@@ -132,7 +132,6 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (IBAction)showHardwareSettings:(id)sender
 {	
-	[self stopAudio];
 	[hardwareSettingsWindowController showWindow:nil];
 }
 

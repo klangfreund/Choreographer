@@ -170,6 +170,13 @@
         [[TableEditorWindowController sharedTableEditorWindowController] showWindow:nil];
     if([[NSUserDefaults standardUserDefaults] boolForKey:@"timelineEditorVisible"])
         [[TimelineEditorWindowController sharedTimelineEditorWindowController] showWindow:nil];
+    
+    // show audio engine windows as stored in preferences
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"meterBridgeVisible"])
+        [[AudioEngine sharedAudioEngine] showMeterBridge:self];
+    if([[NSUserDefaults standardUserDefaults] boolForKey:@"HardwareSettingsWindowVisible"])
+        [[AudioEngine sharedAudioEngine] showHardwareSettings:self];
+    
 
 	[startupSplashWindow orderOut:nil];
 }
