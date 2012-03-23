@@ -34,9 +34,10 @@
 	int testNoiseChannel;
 
 	NSTimer *refreshGUITimer;
+	NSArray *availableOutputDeviceNames;    
 }
 
-//- (void)setSelectedOutputDeviceIndex:(NSUInteger)index;
+@property (retain) NSArray *availableOutputDeviceNames;
 
 - (void)setSelectedIndex:(NSUInteger)index;
 - (void)updateGUI;

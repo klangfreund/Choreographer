@@ -11,6 +11,8 @@
 
 @implementation HardwareSettingsWindowController
 
+@synthesize availableOutputDeviceNames;
+
 - (id)init
 {
 	self = [self initWithWindowNibName:@"HardwareSettingsWindow"];
@@ -20,7 +22,7 @@
 
         bufferSizes = [[[AudioEngine sharedAudioEngine] availableBufferSizes] retain];
 		NSUInteger bufferSize = [[AudioEngine sharedAudioEngine] bufferSize];
-        
+                
         // find current buffer size and set appropriate index
         for (NSNumber *num in bufferSizes)
         {
@@ -30,7 +32,6 @@
                 break;
             }
         }
-		
 
         [self setWindowFrameAutosaveName:@"HardwareSettingsWindow"];
     }

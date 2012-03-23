@@ -17,6 +17,8 @@
 
 @property NSUInteger trajectoryDuration;
 
+- (id)initWithDefaultBreakpoint;
+
 // accessors
 - (NSUInteger)trajectoryDuration;
 - (void)setTrajectoryDuration:(NSUInteger)val;

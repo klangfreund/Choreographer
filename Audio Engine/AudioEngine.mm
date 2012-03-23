@@ -80,10 +80,13 @@ static AudioEngine *sharedAudioEngine = nil;
 	[self setTestNoiseVolume:-12];
     
 
-    // output device
-    selectedOutputDeviceIndex = 0;
     // find preferred output device and set it
-    for (NSString *device in [self availableOutputDeviceNames])
+    selectedOutputDeviceIndex = 0; // default
+    
+    NSArray *availableDevices = [self availableOutputDeviceNames];
+    numberOfAvailableOutputDevices = [availableDevices count];
+
+    for (NSString *device in availableDevices)
     {
         if([device isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"audioOutputDevice"]])
         {
@@ -91,6 +94,14 @@ static AudioEngine *sharedAudioEngine = nil;
             break;
         }
     }
+    
+    // poll hardware state 
+    hardwareStateTimer = [NSTimer scheduledTimerWithTimeInterval:2
+                                                      target:self
+                                                    selector:@selector(checkHardwareState)
+                                                    userInfo:nil
+                                                     repeats:YES];
+
 
 	
     regionIndex = 0;	
@@ -99,6 +110,8 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)dealloc
 {
+    [hardwareStateTimer invalidate];
+    
 	// Juce
 	delete ambisonicsAudioEngine;
 	
@@ -132,8 +145,8 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (IBAction)showHardwareSettings:(id)sender
 {	
-	[self stopAudio];
 	[hardwareSettingsWindowController showWindow:nil];
+    [hardwareSettingsWindowController setAvailableOutputDeviceNames:[self availableOutputDeviceNames]];
 }
 
 - (IBAction)showProjectAudioSettings:(id)sender
@@ -144,6 +157,7 @@ static AudioEngine *sharedAudioEngine = nil;
 - (IBAction)showSpeakerSetup:(id)sender
 {	
 	[speakerSetupWindowController showWindow:nil];
+    [speakerSetupWindowController setAvailableOutputDeviceNames:[self availableOutputDeviceNames]];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
@@ -326,9 +340,9 @@ static AudioEngine *sharedAudioEngine = nil;
 }
 
 - (void)setDistanceBasedAttenuation:(int)type
-                       centerRadius:(double)cRadius 
-                     centerExponent:(double)cExponent
-                  centerAttenuation:(double)cAttenuation
+                     centreZoneSize:(double)cRadius 
+                     centreExponent:(double)cExponent
+                  centreAttenuation:(double)cAttenuation
                    dBFalloffPerUnit:(double)dBFalloff
                 attenuationExponent:(double)exponent;
 {
@@ -513,13 +527,9 @@ static AudioEngine *sharedAudioEngine = nil;
 	const StringArray juceStringArray = ambisonicsAudioEngine->getAvailableAudioDeviceNames();
 	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
 	
-	int maxBufferSizeBytes = 120;
-	char audioDeviceName[maxBufferSizeBytes];
-	
 	for (int i = 0; i < juceStringArray.size(); ++i)
 	{
-		juceStringArray[i].copyToUTF8(audioDeviceName, maxBufferSizeBytes);
-		[array addObject:[NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding]];
+		[array addObject:[NSString stringWithCString:juceStringArray[i].toUTF8() encoding:NSUTF8StringEncoding]];
 	}
 	
 	return [NSArray arrayWithArray:array];
@@ -546,10 +556,10 @@ static AudioEngine *sharedAudioEngine = nil;
 }
 
 - (void)setSelectedOutputDeviceIndex:(NSUInteger)val
-{
+{    
     selectedOutputDeviceIndex = val;
     
-    [self setHardwareOutputDevice:[[self availableOutputDeviceNames] objectAtIndex:selectedOutputDeviceIndex]];
+    [self setHardwareOutputDevice:[[self availableOutputDeviceNames] objectAtIndex:val]];
 
     // send notification
     [[NSNotificationCenter defaultCenter] postNotificationName:@"hardwareDidChange" object:self];
@@ -578,7 +588,30 @@ static AudioEngine *sharedAudioEngine = nil;
     return ambisonicsAudioEngine->getCurrentBufferSize();
 }
 
+- (void)checkHardwareState
+{
+    NSArray *availableDevices = [self availableOutputDeviceNames];
+    if(numberOfAvailableOutputDevices != [availableDevices count])
+    {
+        numberOfAvailableOutputDevices = [availableDevices count];
+        [hardwareSettingsWindowController setAvailableOutputDeviceNames:availableDevices];
+        [speakerSetupWindowController setAvailableOutputDeviceNames:availableDevices];
+	
+        String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice();
 
+        BOOL deviceExists = NO;
+        for (NSString *device in availableDevices)
+        {
+            if([device isEqualToString:[[NSUserDefaults standardUserDefaults] valueForKey:@"audioOutputDevice"]])
+            {
+                [self setSelectedOutputDeviceIndex:[[self availableOutputDeviceNames] indexOfObject:device]];
+                deviceExists = YES;
+                break;
+            }
+        }
+        if(!deviceExists) [self setSelectedOutputDeviceIndex:0];
+    }
+ }
 
 
 

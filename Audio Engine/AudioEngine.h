@@ -43,6 +43,10 @@
 	NSUInteger volumeLevelMeasurementClientCount;
 
     NSUInteger selectedOutputDeviceIndex;
+    NSString *selectedOutputDeviceName;
+    int numberOfAvailableOutputDevices;
+
+	NSTimer *hardwareStateTimer;
 }
 
 + (AudioEngine *)sharedAudioEngine;
@@ -94,9 +98,9 @@
 - (void)setAmbisonicsOrder:(float)order;
 
 - (void)setDistanceBasedAttenuation:(int)type
-                       centerRadius:(double)cRadius 
-                     centerExponent:(double)cExponent
-                  centerAttenuation:(double)cAttenuation
+                     centreZoneSize:(double)cRadius 
+                     centreExponent:(double)cExponent
+                  centreAttenuation:(double)cAttenuation
                    dBFalloffPerUnit:(double)dBFalloff
                 attenuationExponent:(double)exponent;
 
@@ -127,6 +131,7 @@
 - (NSArray *)availableBufferSizes;
 - (void)setBufferSize:(NSUInteger)size;
 - (NSUInteger)bufferSize;
+- (void)checkHardwareState;
 
 
 //  Speaker Setup
