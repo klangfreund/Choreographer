@@ -306,29 +306,37 @@ bool AudioRegionMixer::setSpacialEnvelopeForRegion (const int& regionID, Array<S
 			// if we are dealing with a non constant envelope
 			if (spacialEnvelope.size() > 1)
 			{
-				// to make getNextAudioBlock(..) in AudioSourceAmbipanning work, the first point
-				// in the envelope must be at position 0 and the last point must be at a position
+				// to make getNextAudioBlock(..) in AudioSourceAmbipanning work,
+                // the first point in the envelope must be at 
+                // audioRegionToModify->startPosition and the last point must be at a position
 				// after the last sample of this region.
 				// If this is not the case, this code adds additional points with the same value
 				// as the closest point.
 				spacialEnvelope.sort(spacialEnvelopePointComparator);
 				
+                // First point.
 				SpacialEnvelopePoint firstSpacialPoint = spacialEnvelope.getFirst();
-				if (firstSpacialPoint.getPosition() > 0)
+				if (firstSpacialPoint.getPosition() > audioRegionToModify->startPosition - audioRegionToModify->startPositionOfAudioFileInTimeline)
 				{
-					SpacialEnvelopePoint newFirstSpacialPoint(0, firstSpacialPoint.getX(),
+					SpacialEnvelopePoint newFirstSpacialPoint(audioRegionToModify->startPosition - audioRegionToModify->startPositionOfAudioFileInTimeline, 
+                                                              firstSpacialPoint.getX(),
                                                               firstSpacialPoint.getY(),
                                                               firstSpacialPoint.getZ());
 					spacialEnvelope.addSorted(spacialEnvelopePointComparator, newFirstSpacialPoint);
 				}
+                // Last point.
 				SpacialEnvelopePoint lastSpacialPoint = spacialEnvelope.getLast();
-				int lengthOfThisRegion = audioRegionToModify->endPosition - audioRegionToModify->startPosition;
-				if (lastSpacialPoint.getPosition() < lengthOfThisRegion )
+                // We put the last point 2 sample-positions after the last real
+                // audio sample. (This ensures that even the position of the
+                // first sample of the next audio block will always lie in
+                // between two envelope points - even if at this position there
+                // is no real audio sample anymore.)
+				if (lastSpacialPoint.getPosition() < audioRegionToModify->endPosition - audioRegionToModify->startPositionOfAudioFileInTimeline + 1)
 				{
-					SpacialEnvelopePoint newLastSpacialPoint(lengthOfThisRegion,
-                                                             firstSpacialPoint.getX(),
-                                                             firstSpacialPoint.getY(),
-                                                             firstSpacialPoint.getZ());
+					SpacialEnvelopePoint newLastSpacialPoint(audioRegionToModify->endPosition - audioRegionToModify->startPositionOfAudioFileInTimeline + 1,
+                                                             lastSpacialPoint.getX(),
+                                                             lastSpacialPoint.getY(),
+                                                             lastSpacialPoint.getZ());
 					spacialEnvelope.addSorted(spacialEnvelopePointComparator, newLastSpacialPoint);
 				}
 				
@@ -364,6 +372,17 @@ void AudioRegionMixer::enableBuffering(bool enable)
 	{
 		AudioRegion* audioRegion = (AudioRegion*)regions[i];
 		audioRegion->audioSourceAmbipanning->enableBuffering(enable);
+	}
+}
+
+void AudioRegionMixer::enableDopplerEffect (bool enable)
+{
+    DEB("AudioRegionMixer: enableDopplerEffect called.");
+	
+	for (int i = 0; i < regions.size(); i++)
+	{
+		AudioRegion* audioRegion = (AudioRegion*)regions[i];
+		audioRegion->audioSourceAmbipanning->enableDopplerEffect(enable);
 	}
 }
 

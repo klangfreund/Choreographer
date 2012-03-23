@@ -190,7 +190,7 @@ public:
     /**
      Enables or disables the doppler effect.
      
-     After instanciation it is disabled.
+     It is disabled by default.
      */    
     void enableDopplerEffect (bool enable);
     

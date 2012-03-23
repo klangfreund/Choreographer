@@ -363,7 +363,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setUseDelay:(BOOL)delay
 {
-    NSLog(@"set use delay %i", delay);
+    ambisonicsAudioEngine->enableDopplerEffect(delay);
 }
 
 - (void)setTestNoiseVolume:(float)dbValue
@@ -384,7 +384,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)addAudioRegion:(id)audioRegion
 {
-	// first this region is given a unique index to identify it in the future
+	// this region is given a unique index to identify it in the future
 	unsigned int index = regionIndex++;
 		
 	[audioRegion setValue:[NSNumber numberWithInt:index] forKey:@"playbackIndex"];

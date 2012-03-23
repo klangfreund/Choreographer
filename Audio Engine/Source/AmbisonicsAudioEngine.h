@@ -451,6 +451,13 @@ public:
 	 				multiplied by this value.
 	 */	
 	void setMasterGain(const float newGain);
+    
+    /**
+     Enables or disables the doppler effect.
+     
+     It is disabled by default.
+     */    
+    void enableDopplerEffect (bool enable);
 	
 	/**
 	 Sets the order used in AudioSourceAmbipanning.
