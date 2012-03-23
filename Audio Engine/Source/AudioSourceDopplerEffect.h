@@ -16,7 +16,7 @@
 
 /** Defines a position in space.
  
- It's exclusively used in AudioSourceDopplerEffect.
+ Exclusively used in AudioSourceDopplerEffect.
  */
 struct SpacialPosition
 {
@@ -33,7 +33,8 @@ struct SpacialPosition
     SpacialPosition ()
     : x (0.0),
     y (0.0),
-    z (0.0)
+    z (0.0),
+    delay (0.0)
     {
     }
     
@@ -43,6 +44,7 @@ struct SpacialPosition
       y (y_),
       z (z_)
     {
+        calculateDelay();
     }
     
     /** Constructor */
@@ -51,6 +53,14 @@ struct SpacialPosition
       y (spacialEnvPoint.getY()),
       z (spacialEnvPoint.getZ())
     {
+        calculateDelay();
+    }
+    
+    /** Returns the delay time (in seconds) from this spacial position (x,y,z)
+     to the origin (0,0,0). */
+    double getDelay()
+    {
+        return delay;
     }
         
     /** Comparison operator to check for equality. */    
@@ -74,6 +84,7 @@ struct SpacialPosition
         result.x += other.x;
         result.y += other.y;
         result.z += other.z;
+        result.calculateDelay();
         return result;
     }
     
@@ -83,6 +94,7 @@ struct SpacialPosition
         result.x += other.x;
         result.y += other.y;
         result.z += other.z;
+        result.calculateDelay();
         return result;
     }
 
@@ -92,6 +104,7 @@ struct SpacialPosition
         result.x -= other.x;
         result.y -= other.y;
         result.z -= other.z;
+        result.calculateDelay();
         return result;
     }
     
@@ -108,6 +121,7 @@ struct SpacialPosition
         result.x *= scalar;
         result.y *= scalar;
         result.z *= scalar;
+        result.calculateDelay();
         return result;
     }
     
@@ -115,11 +129,15 @@ struct SpacialPosition
     friend SpacialPosition operator*(double scalar, const SpacialPosition & rhs)
     {return rhs * scalar;}
     
-    double delay()
+private:
+    
+    double delay;
+    void calculateDelay()
     {
-//        return sqrt(*this * *this)*ONEOVERSPEEDOFSOUND;
-        return 100. * sqrt(*this * *this) * oneOverSpeedOfSound;
+        // return sqrt(*this * *this) * oneOverSpeedOfSound;
+        delay = 100. * sqrt(*this * *this) * oneOverSpeedOfSound;
     }
+    
 
 };
 
@@ -185,7 +203,8 @@ private:
                                     If the value is lower, then it will be
                                     increased until it is this index.
      @param previousSpacialPoint_   Will be modified.
-                                    The envelope point that comes before the
+                                    The envelope point that comes before (or at
+                                    the same time as the)
                                     point at the newPosition (in time).
      @param nextSpacialPoint_       Will be modified.
                                     The envelope point that comes after the

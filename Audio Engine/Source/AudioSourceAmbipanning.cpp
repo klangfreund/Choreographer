@@ -111,7 +111,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
     // By default: No doppler effect
     enableDopplerEffect(false);
     // TEMP
-    // enableDopplerEffect(true);
+    enableDopplerEffect(true);
 	
 	// Define an initial spacial envelope.
 	// It is also neccessary to set up the newSpacialEnvelope,

@@ -369,7 +369,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)addAudioRegion:(id)audioRegion
 {
-	// first this region is given a unique index to identify it in the future
+	// this region is given a unique index to identify it in the future
 	unsigned int index = regionIndex++;
 		
 	[audioRegion setValue:[NSNumber numberWithInt:index] forKey:@"playbackIndex"];
