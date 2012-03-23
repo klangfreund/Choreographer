@@ -306,6 +306,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             
             // Store the values of the start position for later use.
             int sampleOffsetCausedByDelay = ceil(currentSpacialPosition.getDelay()*sampleRate);
+// DEB("Delay = " + String(currentSpacialPosition.getDelay()))
             int audioBlockStartPositionInclDelay = audioBlockStartPosition - sampleOffsetCausedByDelay;
             double audioBlockStartPositionRemainder = double(sampleOffsetCausedByDelay) - currentSpacialPosition.getDelay()*sampleRate; // in [0, 1[. unit: samples.
             
@@ -449,7 +450,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             
             // The sourceInfo.buffer needs to be big enough.
             // This has been ensured in the method setSpacialEnvelope.
-            // But if the info.buffer->getNumSamples() is much bigger than
+            // But if the info.numSamples is much bigger than
             // the samplesPerBlockExpected, we need to allocate more memory.
             // Remark: Memory allocation is something we don't like in the
             // audio thread. But this one here seems necessary.
@@ -457,8 +458,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             {
                 DEB("AudioSourceDopplerEffect: Crap, MEMORY ALLOCATION in the "
                     "getNextAudioBlock!!! "
-                    "info.buffer->getNumSamples() = " 
-                    + String(info.buffer->getNumSamples()))
+                    "sourceInfo.buffer->getNumSamples() = " 
+                    + String(sourceInfo.buffer->getNumSamples()))
                 
                 bool keepExistingContent = false;
                 sourceInfo.buffer->setSize(1, 
@@ -499,10 +500,14 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                 *sampleOfDestination = *sampleOfSource;
                 
                 // The distance between two sample positions in the source:
-                double sampleOffsetBetweenNeighbours = (double(audioBlockEndPositionInclDelay) + audioBlockEndPositionRemainder - (double(audioBlockStartPosition) + audioBlockStartPositionRemainder))/double(info.buffer->getNumSamples());
+                double sampleOffsetBetweenNeighbours = (double(audioBlockEndPositionInclDelay) + audioBlockEndPositionRemainder - (double(audioBlockStartPositionInclDelay) + audioBlockStartPositionRemainder))/double(info.numSamples);
+DEB("audioBlockEndPositionInclDelay = " + String(audioBlockEndPositionInclDelay))
+DEB("audioBlockStartPositionInclDelay = " + String(audioBlockStartPositionInclDelay))
+DEB("info.numSamples = " + String(info.numSamples))
+DEB("sampleOffsetBetweenNeighbours = " + String(sampleOffsetBetweenNeighbours))
                 
                 // Take care of the remaining samples.
-                for (int i = 1; i != info.buffer->getNumSamples(); i++)
+                for (int i = 1; i != info.numSamples; i++)
                 {
                     // Go to the next sample in the destination.
                     sampleOfDestination++;
@@ -936,6 +941,7 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
     currentSpacialPosition_->x = (*previousSpacialPoint_)->getX() + factor * ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX());
     currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
     currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
+    currentSpacialPosition_->calculateDelay();
 
     deltaSpacialPosition_->x = ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX())/distance;
     deltaSpacialPosition_->y = ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY())/distance;

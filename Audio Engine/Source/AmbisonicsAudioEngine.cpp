@@ -239,7 +239,7 @@ StringArray AmbisonicsAudioEngine::getAvailableAudioDeviceNames()
 	{
 		if (audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i)->getTypeName() == coreAudioString)
 		{
-			DEB("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Got the AudioIODeviceType for the CoreAudio.");
+			// DEB("AmbisonicsAudioEngine::getAvailableCoreAudioDeviceNames(): Got the AudioIODeviceType for the CoreAudio.");
 			audioIODeviceTypeCoreAudio = audioDeviceManager.getAvailableDeviceTypes().getUnchecked(i);			
 		}
 	}

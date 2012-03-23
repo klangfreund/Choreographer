@@ -24,6 +24,7 @@ struct SpacialPosition
     double x;
     double y;
     double z;
+    double delay;
     
     /** The constant value of 1/(speed of sound) in meters per second. */
     // Initialized in the file AudioSourceDopplerEffect.cpp.
@@ -56,8 +57,14 @@ struct SpacialPosition
         calculateDelay();
     }
     
-    /** Returns the delay time (in seconds) from this spacial position (x,y,z)
-     to the origin (0,0,0). */
+    void calculateDelay()
+    {
+        // return sqrt(*this * *this) * oneOverSpeedOfSound;
+        delay = 1000. * sqrt(*this * *this) * oneOverSpeedOfSound;
+    }
+    
+    /** Returns the delay time (in seconds), measured from this spacial position
+     (x,y,z) to the origin (0,0,0). */
     double getDelay()
     {
         return delay;
@@ -128,16 +135,6 @@ struct SpacialPosition
     /** The product with a scalar on the left hand side. */
     friend SpacialPosition operator*(double scalar, const SpacialPosition & rhs)
     {return rhs * scalar;}
-    
-private:
-    
-    double delay;
-    void calculateDelay()
-    {
-        // return sqrt(*this * *this) * oneOverSpeedOfSound;
-        delay = 1000. * sqrt(*this * *this) * oneOverSpeedOfSound;
-    }
-    
 
 };
 

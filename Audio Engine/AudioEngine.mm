@@ -363,7 +363,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setUseDelay:(BOOL)delay
 {
-    NSLog(@"set use delay %i", delay);
+    ambisonicsAudioEngine->enableDopplerEffect(delay);
 }
 
 - (void)setTestNoiseVolume:(float)dbValue
