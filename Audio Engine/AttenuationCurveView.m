@@ -36,13 +36,12 @@
     float attenuationExponent  = [[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationExponent"] floatValue];
 
 	// colors
-    float alpha = enabled ? 1 : 0.5;
-	NSColor *backgroundColor	= [NSColor colorWithCalibratedRed: 0.1 green: 0.1 blue: 0.1 alpha: alpha];
-	NSColor *lineColor			= [NSColor colorWithCalibratedRed: 0.7 green: 0.7 blue: 0.9 alpha: alpha];
-	NSColor *centreZoneColor    = [NSColor colorWithCalibratedRed: 0.25 green: 0.25 blue: 0.45 alpha: alpha];
-    NSColor *curveColor			= [NSColor colorWithCalibratedRed: 1.0 green: 1.0 blue: 1.0 alpha: alpha];
+    float factor = enabled ? 1 : 0.5;
+	NSColor *backgroundColor	= [NSColor colorWithCalibratedRed: 0.10*factor green: 0.10*factor blue: 0.10*factor alpha: 1];
+	NSColor *lineColor			= [NSColor colorWithCalibratedRed: 0.70*factor green: 0.70*factor blue: 0.90*factor alpha: 1];
+	NSColor *centreZoneColor    = [NSColor colorWithCalibratedRed: 0.35*factor green: 0.35*factor blue: 0.70*factor alpha: 1];
+    NSColor *curveColor			= [NSColor colorWithCalibratedRed: 1.00*factor green: 1.00*factor blue: 1.00*factor alpha: 1];
 
-	
     // background
     NSRect r = [self bounds];
     [backgroundColor set];
