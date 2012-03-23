@@ -43,6 +43,10 @@
 	NSUInteger volumeLevelMeasurementClientCount;
 
     NSUInteger selectedOutputDeviceIndex;
+    NSString *selectedOutputDeviceName;
+    int numberOfAvailableOutputDevices;
+
+	NSTimer *hardwareStateTimer;
 }
 
 + (AudioEngine *)sharedAudioEngine;
@@ -127,6 +131,7 @@
 - (NSArray *)availableBufferSizes;
 - (void)setBufferSize:(NSUInteger)size;
 - (NSUInteger)bufferSize;
+- (void)checkHardwareState;
 
 
 //  Speaker Setup

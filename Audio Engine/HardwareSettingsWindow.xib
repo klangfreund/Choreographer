@@ -91,7 +91,6 @@
 							<int key="NSvFlags">267</int>
 							<string key="NSFrame">{{20, 46}, {87, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="345788281"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="232638432">
@@ -173,7 +172,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{112, 50}, {61, 14}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="583054327"/>
 							<string key="NSReuseIdentifierKey">_NS:3936</string>
 							<bool key="NSEnabled">YES</bool>
@@ -209,7 +207,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{187, 24}, {79, 14}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:3936</string>
 							<bool key="NSEnabled">YES</bool>
@@ -229,7 +226,6 @@
 							<int key="NSvFlags">267</int>
 							<string key="NSFrame">{{20, 20}, {162, 22}}</string>
 							<reference key="NSSuperview" ref="1006"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="390775655"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSPopUpButtonCell" key="NSCell" id="324824213">
@@ -296,14 +292,13 @@
 					</object>
 					<string key="NSFrameSize">{335, 88}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="1019762126"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
-			<object class="NSUserDefaultsController" id="242551316">
+			<object class="NSUserDefaultsController" id="1041954519">
 				<bool key="NSSharedInstance">YES</bool>
 			</object>
 		</object>
@@ -419,22 +414,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">contentArray: audioEngine.availableOutputDeviceNames</string>
-						<reference key="source" ref="148817528"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="148817528"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">contentArray: audioEngine.availableOutputDeviceNames</string>
-							<string key="NSBinding">contentArray</string>
-							<string key="NSKeyPath">audioEngine.availableOutputDeviceNames</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">66</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">contentArray: bufferSizes</string>
 						<reference key="source" ref="58550639"/>
 						<reference key="destination" ref="1001"/>
@@ -453,10 +432,10 @@
 					<object class="IBBindingConnection" key="connection">
 						<string key="label">visible: values.HardwareSettingsWindowVisible</string>
 						<reference key="source" ref="1005"/>
-						<reference key="destination" ref="242551316"/>
+						<reference key="destination" ref="1041954519"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="1005"/>
-							<reference key="NSDestination" ref="242551316"/>
+							<reference key="NSDestination" ref="1041954519"/>
 							<string key="NSLabel">visible: values.HardwareSettingsWindowVisible</string>
 							<string key="NSBinding">visible</string>
 							<string key="NSKeyPath">values.HardwareSettingsWindowVisible</string>
@@ -464,6 +443,22 @@
 						</object>
 					</object>
 					<int key="connectionID">72</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentArray: availableOutputDeviceNames</string>
+						<reference key="source" ref="148817528"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="148817528"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">contentArray: availableOutputDeviceNames</string>
+							<string key="NSBinding">contentArray</string>
+							<string key="NSKeyPath">availableOutputDeviceNames</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">73</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -644,7 +639,7 @@
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">70</int>
-						<reference key="object" ref="242551316"/>
+						<reference key="object" ref="1041954519"/>
 						<reference key="parent" ref="0"/>
 					</object>
 				</object>
@@ -722,7 +717,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">72</int>
+			<int key="maxID">73</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

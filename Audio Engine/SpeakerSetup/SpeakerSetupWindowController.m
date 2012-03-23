@@ -14,6 +14,8 @@
 
 @implementation SpeakerSetupWindowController
 
+@synthesize availableOutputDeviceNames;
+
 #pragma mark -
 #pragma mark initialisation and setup
 // -----------------------------------------------------------
