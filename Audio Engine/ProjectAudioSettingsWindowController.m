@@ -82,6 +82,8 @@
         [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:ambisonicsOrder];
     else if([keyPath isEqualToString:@"distanceBasedAttenuation"])
         [attenuationCurveView setEnabled:distanceBasedAttenuation];
+    else if([keyPath isEqualToString:@"distanceBasedDelay"])
+        [[AudioEngine sharedAudioEngine] setUseDelay:distanceBasedDelay];
     
     NSRange range = [keyPath rangeOfString:@"distanceBased"];
     if(range.location != NSNotFound)

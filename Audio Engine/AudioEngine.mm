@@ -363,6 +363,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setUseDelay:(BOOL)delay
 {
+    NSLog(@"set use delay %i", delay);
 }
 
 - (void)setTestNoiseVolume:(float)dbValue
