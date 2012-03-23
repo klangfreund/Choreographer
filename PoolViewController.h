@@ -40,6 +40,8 @@
     NSArray *draggedNodes;
 }
 
+@property (retain) NSString *newTrajectoryName;
+
 + (PoolViewController *)poolViewControllerForDocument:(NSPersistentDocument *)document;
 
 //- (void)setup;

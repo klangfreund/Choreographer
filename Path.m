@@ -15,7 +15,7 @@
 {
 	NSArray *pathComponents = [path pathComponents];
 	NSArray *baseComponents = [base pathComponents];
-	NSMutableString *relativePath = [NSMutableString new];
+	NSMutableString *relativePath = [[NSMutableString new] autorelease];
 	int i = 0, j;
 	
 	while([[pathComponents objectAtIndex:i] isEqualToString:[baseComponents objectAtIndex:i]])

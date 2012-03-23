@@ -22,6 +22,8 @@
 
 @implementation PoolViewController
 
+@synthesize newTrajectoryName;
+
 + (PoolViewController *)poolViewControllerForDocument:(NSPersistentDocument *)document
 {
 	PoolViewController *instance = [[[self alloc] initWithNibName:@"Pool" bundle:nil] autorelease];
@@ -59,8 +61,8 @@
 	[audioItemTableView setBackgroundColor:background];
 	[trajectoryTableView setBackgroundColor:background];
 	
-	[[audioItemTableView tableColumnWithIdentifier: @"audioItem"] setDataCell: [[ImageAndTextCell alloc] init]];
-	[[trajectoryTableView tableColumnWithIdentifier: @"trajectoryItem"] setDataCell: [[ImageAndTextCell alloc] init]];
+	[[audioItemTableView tableColumnWithIdentifier:  @"audioItem"]      setDataCell: [[[ImageAndTextCell alloc] init] autorelease]];
+	[[trajectoryTableView tableColumnWithIdentifier: @"trajectoryItem"] setDataCell: [[[ImageAndTextCell alloc] init] autorelease]];
 
 	// initialise context menu
 	[dropOrderMenu setModel:projectSettings key:@"poolDropOrder"];
@@ -214,7 +216,7 @@
 
 - (IBAction)SpatDifExportTrajectories:(id)sender
 {
-    NSArray *selectedTrajectories;
+    NSArray *selectedTrajectories = nil;
     if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 0) selectedTrajectories = [treeController selectedObjects];
     if([[projectSettings valueForKey:@"poolSelectedTab"] intValue] == 2) selectedTrajectories = [trajectoryArrayController selectedObjects];
 
@@ -232,7 +234,7 @@
 
             // write selected trajectories to xml formatted file
             
-            SpatDIF *spatDif = [[SpatDIF alloc] init];
+            SpatDIF *spatDif = [[[SpatDIF alloc] init] autorelease];
             [spatDif addTrajectories:selectedTrajectories];
             [spatDif writeXmlToURL:[savePanel URL]];
         }
@@ -447,7 +449,7 @@
 
 - (void)showSheetForNewTrajectoryItem:(NSString *)name
 {
-	[self setValue:name forKey:@"newTrajectoryName"];	
+	[self setNewTrajectoryName:name];	
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"newTrajectoryType"];
 	
 	[NSApp beginSheet:newTrajectorySheet
@@ -481,15 +483,15 @@
     NSError *err;
     NSXMLDocument *xmlDoc;
     
-    xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
-                                                  options:(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA)
-                                                    error:&err];
+    xmlDoc = [[[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
+                                                   options:(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA)
+                                                     error:&err] autorelease];
     if (xmlDoc == nil)
     {
         NSLog(@"2nd attempt");
-        xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
-                                                      options:NSXMLDocumentTidyXML
-                                                        error:&err];
+        xmlDoc = [[[NSXMLDocument alloc] initWithContentsOfURL:absoluteFilePath
+                                                       options:NSXMLDocumentTidyXML
+                                                         error:&err] autorelease];
     }
     if (xmlDoc == nil)
     {
@@ -501,7 +503,7 @@
         return;
     }
     
-    SpatDIF *spatDif = [[SpatDIF alloc] initWithXmlDoc:xmlDoc];
+    SpatDIF *spatDif = [[[SpatDIF alloc] initWithXmlDoc:xmlDoc] autorelease];
     
     if (![spatDif parse])
     {
@@ -526,7 +528,7 @@
     for(i=0;i<count;i++)
     {
         // new trajectory
-        newTrajectoryName = [trajectoryNames objectAtIndex:i];
+        [self setNewTrajectoryName:[trajectoryNames objectAtIndex:i]];
         newTrajectoryType = breakpointType;
         TrajectoryItem *trajectoryItem = [self createNewTrajectoryItem];
         [trajectoryItem setTrajectory:[trajectories objectAtIndex:i]];
@@ -552,7 +554,7 @@
 	[request setEntity:entityDescription];
 	[request setPredicate:[NSPredicate predicateWithFormat:@"node.name == %@", newTrajectoryName]];
 	NSError *error;
-	NSString *newName = [newTrajectoryName copy];
+	NSString *newName = [[newTrajectoryName copy] autorelease];
 	
 	if([[document managedObjectContext] countForFetchRequest:request error:&error])
 	{
@@ -709,7 +711,7 @@
 			}
 
 			// nullify relations to regions
-			for (region in regions)
+			for (region in [[regions copy] autorelease])
 			{
 				[region setValue:NULL forKey:@"trajectoryItem"];
 			}

@@ -93,6 +93,7 @@ static ToolTip	*sharedToolTip = nil;
 {
     [window release];
     [textAttributes release];
+    [textField release];
 
 //	NSLog(@"removeMonitor");
 	[NSEvent removeMonitor:eventMonitor];

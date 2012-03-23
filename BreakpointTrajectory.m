@@ -121,7 +121,7 @@
 	NSUInteger timeOffset = 0, time = 0;
 	NSUInteger count, i = 0, direction = 0;
 
-	NSMutableArray *tempArray;
+	NSMutableArray *tempArray = nil;
 	
 	if(mode == durationModeScaled)
 	{
@@ -130,7 +130,7 @@
 			  
 		for(bp in positionBreakpointArray)
 		{	
-			scaledBp = [bp copy];
+			scaledBp = [[bp copy] autorelease];
 			scaledBp.time = bp.time * scalingFactor;
 			
 			[tempArray addObject:scaledBp];
@@ -138,7 +138,7 @@
 	}
 	else if(mode == durationModeOriginal)
 	{
-		tempArray = [positionBreakpointArray.breakpoints copy];
+		tempArray = [[positionBreakpointArray.breakpoints copy] autorelease];
 	}
 	else if(mode == durationModeLoop)
 	{
@@ -147,7 +147,7 @@
         if(originalDur == 0) originalDur = dur; // avoid endless loop when there is only one bp
 		while (time < dur)
 		{
-			bp = [[positionBreakpointArray objectAtIndex:(i++ % count)] copy];
+			bp = [[[positionBreakpointArray objectAtIndex:(i++ % count)] copy] autorelease];
 			if(bp.time == 0 && i != 1) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
 			{
 				timeOffset += originalDur;
@@ -170,7 +170,7 @@
         if(originalDur == 0) originalDur = dur; // avoid endless loop when there is only one bp
 		while (time < dur)
 		{
-			bp = [[positionBreakpointArray objectAtIndex:(i % count)] copy];
+			bp = [[[positionBreakpointArray objectAtIndex:(i % count)] copy] autorelease];
 			if(bp.time == 0 && direction != 0) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
 			{
 				timeOffset += originalDur;

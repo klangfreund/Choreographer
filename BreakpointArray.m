@@ -55,7 +55,7 @@
 
 - (BreakpointArray *)filteredBreakpointArrayUsingDescriptor:(NSString *)descriptor
 {
-    BreakpointArray* filteredArray = [[BreakpointArray alloc] init];
+    BreakpointArray* filteredArray = [[[BreakpointArray alloc] init] autorelease];
     
     for(Breakpoint *bp in breakpoints)
     {

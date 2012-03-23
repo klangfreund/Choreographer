@@ -20,6 +20,7 @@
 - (void)drawRect:(NSRect)rect;
 
 // position
+- (void)setPosition:(SpatialPosition *)position;
 - (SpatialPosition *)regionPosition;
 - (SpatialPosition *)regionPositionAtTime:(NSUInteger)time;
 - (SpatialPosition *)interpolatedPosition:(NSUInteger)time

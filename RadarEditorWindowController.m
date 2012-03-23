@@ -32,24 +32,23 @@ static RadarEditorWindowController *sharedRadarEditorWindowController = nil;
 		
 		ratio = 1;
 		titleToolbarHeight = 0;
-    }
-
     
-	// get view mode from ratio
-	float approximativeRatio = [[self window] frame].size.height / [[self window] frame].size.width;
-	
-	if (approximativeRatio < 1.5)
-	{
-		[self setViewMode:0];
-	}
-	else if (approximativeRatio < 2.0)
-	{
-		[self setViewMode:1];
-	}
-	else
-	{
-		[self setViewMode:2];
-	}
+        // get view mode from ratio
+        float approximativeRatio = [[self window] frame].size.height / [[self window] frame].size.width;
+        
+        if (approximativeRatio < 1.5)
+        {
+            [self setViewMode:0];
+        }
+        else if (approximativeRatio < 2.0)
+        {
+            [self setViewMode:1];
+        }
+        else
+        {
+            [self setViewMode:2];
+        }
+    }
 		
 	return self;
 }

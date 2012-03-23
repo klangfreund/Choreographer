@@ -164,6 +164,12 @@
 #pragma mark position
 // -----------------------------------------------------------
 
+- (void)setPosition:(SpatialPosition *)position_
+{
+    [position release];
+    position = [position_ retain];
+}
+
 - (SpatialPosition *)regionPosition
 {
 	if([self valueForKey:@"trajectoryItem"] && ![[self valueForKeyPath:@"trajectoryItem.adaptiveInitialPosition"] boolValue])
