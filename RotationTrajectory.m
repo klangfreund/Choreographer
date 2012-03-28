@@ -98,11 +98,11 @@
 	int azimuthIncrement;
 
 	if(pos)
-		startPosition = [pos copy];
+		startPosition = [[pos copy] autorelease];
 	else
-		startPosition = [[initialPosition position] copy];
+		startPosition = [[[initialPosition position] copy] autorelease];
     
-    tempPosition = [startPosition copy];
+    tempPosition = [[startPosition copy] autorelease];
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 
@@ -117,7 +117,7 @@
 	while(time < duration)
 	{
 		bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setPosition:[tempPosition copy]];
+		[bp setPosition:[[tempPosition copy] autorelease]];
 		[bp setTime:time];
 		[tempArray addObject:bp];
         

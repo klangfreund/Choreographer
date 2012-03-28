@@ -18,7 +18,6 @@
 
 + (AudioFileID)idOfAudioFileAtPath:(NSString *)filePath
 {
-	OSStatus err;
 	AudioFileID audioFileID;
 	
 	// make CFURLRef from path
@@ -27,7 +26,7 @@
 	
 	// open audio file
 	memset(&audioFileID, 0, sizeof(AudioFileID));
-	err = AudioFileOpenURL(fileRef, fsRdPerm, 0, &audioFileID);
+	/* OSStatus err = */AudioFileOpenURL(fileRef, fsRdPerm, 0, &audioFileID);
 	
 	return audioFileID;
 }

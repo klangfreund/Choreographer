@@ -1036,7 +1036,7 @@
 		[newRegion setValue:[originalRegion valueForKey:@"audioItem"] forKey:@"audioItem"];
 		[newRegion setValue:[originalRegion valueForKey:@"startTime"] forKey:@"startTime"];
 
-		[newRegion setValue:[[originalRegion valueForKey:@"position"] copy] forKey:@"position"];
+		[newRegion setValue:[[[originalRegion valueForKey:@"position"] copy] autorelease] forKey:@"position"];
 
 		[newRegion setValue:[originalRegion valueForKey:@"yPosInArranger"] forKey:@"yPosInArranger"];
 		[newRegion setValue:[originalRegion valueForKey:@"trajectoryItem"] forKey:@"trajectoryItem"];
@@ -1191,7 +1191,10 @@
 
 - (id)pointInRegion:(NSPoint)point
 {
-	for(Region *region in audioRegions)
+	NSEnumerator *enumerator = [audioRegions reverseObjectEnumerator]; // reverse = frontmost first
+	Region *region;
+	
+	while ((region = [enumerator nextObject]))
 	{
 		if (NSPointInRect(point, [region frame]))
 		{
@@ -1784,6 +1787,10 @@
 		trajectoryName = [NSString stringWithString:@"trajectory for "];
 		trajectoryName = [trajectoryName stringByAppendingString:[[selectedRegions anyObject] valueForKeyPath:@"audioItem.node.name"]];
 	}
+    else
+    {
+        trajectoryName = @"trajectory for multiple regions";
+    }
 	
 	[document newTrajectoryItem:trajectoryName forRegions:selectedRegions];
 
@@ -2109,7 +2116,8 @@
 	if(![self selectionIsEditable])
 		return;
 
-	NSRect r, marqueeRect = [marqueeView frame];
+	NSRect r = NSMakeRect(0,0,0,0);
+    NSRect marqueeRect = [marqueeView frame];
 	float deltaX1, deltaX2;
 	
 	id region1;

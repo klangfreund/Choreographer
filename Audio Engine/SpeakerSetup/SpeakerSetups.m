@@ -94,10 +94,10 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	SpeakerChannel *copy = [[[SpeakerChannel alloc] init] autorelease];
+	SpeakerChannel *copy = [[SpeakerChannel alloc] init];
 	
 	[copy setValue:[NSNumber numberWithFloat:dbGain] forKey:@"dbGain"];
-	[copy setValue:[[position copy] retain] forKey:@"position"];
+	[copy setValue:[[position copy] autorelease] forKey:@"position"];
 	[copy setValue:[NSNumber numberWithInt:hardwareDeviceOutputChannel] forKey:@"hardwareDeviceOutputChannel"];
 	
 	return copy;

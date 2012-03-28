@@ -162,6 +162,7 @@ typedef enum _ArrangerViewDragAndDropAction
 - (IBAction)remove:(id)sender;
 - (IBAction)duplicate:(id)sender;
 - (IBAction)repeat:(id)sender;
+- (IBAction)delete:(id)sender;
 - (IBAction)trim:(id)sender;
 - (IBAction)split:(id)sender;
 

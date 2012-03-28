@@ -83,8 +83,8 @@
 
     }
         
-    trajectoryNames = [NSArray arrayWithArray:tempTrajectoryNames];
-    trajectories = [NSArray arrayWithArray:tempTrajectories];
+    trajectoryNames = [[NSArray arrayWithArray:tempTrajectoryNames] retain];
+    trajectories = [[NSArray arrayWithArray:tempTrajectories] retain];
     
     return YES;
 }

@@ -536,17 +536,6 @@ static AudioEngine *sharedAudioEngine = nil;
 	return [NSArray arrayWithArray:array];
 }
 
-//- (NSString *)nameOfHardwareOutputDevice
-//{
-//	String nameOfCurrentAudioDevice = ambisonicsAudioEngine->getNameOfCurrentAudioDevice ();
-//	
-//	int maxBufferSizeBytes = 120;
-//	char audioDeviceName[maxBufferSizeBytes];
-//	nameOfCurrentAudioDevice.copyToUTF8(audioDeviceName, maxBufferSizeBytes);
-//	
-//	return [NSString stringWithCString:audioDeviceName encoding:NSUTF8StringEncoding];
-//}
-
 - (void)setHardwareOutputDevice:(NSString *)deviceName
 {
 	String audioDeviceName = [deviceName UTF8String];

@@ -107,9 +107,9 @@
     float maxSpeed = [initialMaxSpeed value];
 	
 	if(pos)
-		tempPosition = [pos copy];
+		tempPosition = [[pos copy] autorelease];
 	else
-		tempPosition = [[initialPosition position] copy];
+		tempPosition = [[[initialPosition position] copy] autorelease];
 	
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	
@@ -131,7 +131,7 @@
 		}
 		
 		bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setPosition:[tempPosition copy]];
+		[bp setPosition:[[tempPosition copy] autorelease]];
 		[bp setTime:time];
 		[tempArray addObject:bp];
 		

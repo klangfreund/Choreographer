@@ -17,7 +17,7 @@
 	keyPaths = [NSMutableDictionary new];
 	currentItems = [NSMutableDictionary new];
 	highestIndexPerSection = [NSMutableArray new];
-	int index;
+	int index = 0;
 	
 	NSMenuItem *menuItem;
 	
@@ -120,7 +120,7 @@
 	int hiIndex = [[highestIndexPerSection objectAtIndex:section] intValue];
 	int i;
 	NSMenuItem *item;
-	NSInteger selectedTag;
+	NSInteger selectedTag = 0;
 	
 	for(i=loIndex;i<=hiIndex;i++)
 	{

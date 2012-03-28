@@ -105,7 +105,7 @@
 
 - (id)copyWithZone:(NSZone *)zone
 {
-	SpatialPosition *copy = [[[SpatialPosition alloc] init] autorelease];
+	SpatialPosition *copy = [[SpatialPosition alloc] init];
 	[copy setX:x];
 	[copy setY:y];
 	[copy setZ:z];

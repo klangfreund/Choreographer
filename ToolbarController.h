@@ -18,11 +18,21 @@
 	IBOutlet NSView *counterView; //the counter view (ends up in an NSToolbarItem)
 	IBOutlet NSView *loopCounterView; //the loop counter view (ends up in an NSToolbarItem)
 	IBOutlet NSView *transportView; //the transport view (ends up in an NSToolbarItem)
-	IBOutlet NSView *loopModeView; //the transport view (ends up in an NSToolbarItem)
 	IBOutlet NSView *masterVolumeSlider;
 	
+	IBOutlet NSButton *duplicateButton;
+	IBOutlet NSButton *repeatButton;
+	IBOutlet NSButton *deleteAudioButton;
 	IBOutlet NSButton *splitButton;
 	IBOutlet NSButton *trimButton;
+
+	IBOutlet id arrangerView;
 }
+
+- (IBAction)duplicate;
+- (IBAction)repeat;
+- (IBAction)deleteAudio;
+- (IBAction)split;
+- (IBAction)trim;
 
 @end
