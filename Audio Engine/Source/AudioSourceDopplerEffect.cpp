@@ -10,6 +10,7 @@
 #include "AudioSourceDopplerEffect.h"
 #include <float.h> // To be able to use DBL_MAX
 
+
 const double SpacialPosition::oneOverSpeedOfSound = 0.00294; // = 1.0/340.0 m/s
 
 //==============================================================================
@@ -35,8 +36,12 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
                                                     0,      // y
                                                     0));	// z);
 	spacialEnvelope.addCopiesOf(newSpacialEnvelope);
-	
 	constantSpacialPosition = true;
+    
+    // This is quite crappy, since every time a new instance is created, the
+    // static array valuesOfH will be recalculated.
+    // But I couldn't figure out a more elegant solution...
+    recalculateH(sampleRate_);
 }
 
 AudioSourceDopplerEffect::~AudioSourceDopplerEffect()
@@ -298,15 +303,9 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             // Get enough samples from the audioSourceGainEnvelope to interpolate.
             // -------------------------------------------------------------------
 
-// TODO: Remove comment.
-            // Remember the nextSpacialPointIndex.
-            // (Needed a couple of lines below when calling
-            // prepareForNewPosition for the audioBlockStartPosition.)
-//            int nextSpacialPointIndexForAudioBlockStartPosition = nextSpacialPointIndex;
             
             // Store the values of the start position for later use.
             int sampleOffsetCausedByDelay = ceil(currentSpacialPosition.getDelay()*sampleRate);
-// DEB("Delay = " + String(currentSpacialPosition.getDelay()))
             int audioBlockStartPositionInclDelay = audioBlockStartPosition - sampleOffsetCausedByDelay;
             double audioBlockStartPositionRemainder = double(sampleOffsetCausedByDelay) - currentSpacialPosition.getDelay()*sampleRate; // in [0, 1[. unit: samples.
             
@@ -392,26 +391,6 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                 highestPositionRemainder = sampleOffsetCausedByDelay - currentSpacialPosition.getDelay()*sampleRate;
             }
             
-// TODO: Remove this comment
-            // Figure out the position (incl. delay) of audioBlockStartPosition:
-//            nextSpacialPointIndex = nextSpacialPointIndexForAudioBlockStartPosition;
-//            prepareForNewPosition(audioBlockStartPosition, 
-//                                  &nextSpacialPointIndex,
-//                                  &previousSpacialPoint,
-//                                  &nextSpacialPoint,
-//                                  &currentSpacialPosition,
-//                                  &deltaSpacialPosition);
-                // This will also reset the parameters as needed in the upcoming code.
-                // It will also increase precision.
-                // How come? Imagine we are between two spacial points that are
-                // far away from each other. Of course the positions (incl. the
-                // delay from the envelope) of all samples in between are well
-                // defined by the position (incl. delay) of the first sample and
-                // the timeDifference... if doubles would be totally accurate.
-                // The error of timeDifference will grow linear in time. To avoid
-                // big errors, on every first sample in an audio block the 
-                // position (incl. delay) will be recalculated.
-            
             // Also take the audioBlockStartPosition into account
             if (audioBlockStartPositionInclDelay < lowestPositionToRequest)
             {
@@ -436,17 +415,14 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
 
             // Fill the sourceBuffer with samples
             // ----------------------------------
-//            DEB("AudioSourceDopplerEffect::getNextAudioBlock: lowestPositionToRequest = " + String(lowestPositionToRequest))
-//            DEB("AudioSourceDopplerEffect::getNextAudioBlock: highestPositionToRequest = " + String(highestPositionToRequest))
-            
-// TODO: Remove this comment.
-//            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
-//            audioSourceGainEnvelope.setNextReadPosition(audioBlockStartPosition);
-//            audioSourceGainEnvelope.getNextAudioBlock(info);
             
             int numberOfSamplesForAudioBlock = highestPositionToRequest - lowestPositionToRequest + 1;
                 // Why "+1"?
                 // Example: h=2, l=0  =>  numberOfSamples must be 3 (0,1 and 2).
+            
+            // We also need to take into account some additional samples on both
+            // sides to be able to do interpolation.
+            numberOfSamplesForAudioBlock = numberOfSamplesForAudioBlock + 2*halfTheInterpolationOrder;
             
             // The sourceInfo.buffer needs to be big enough.
             // This has been ensured in the method setSpacialEnvelope.
@@ -467,7 +443,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                            keepExistingContent);
             }
            
-            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest);
+            audioSourceGainEnvelope.setNextReadPosition(lowestPositionToRequest - halfTheInterpolationOrder);
             sourceInfo.startSample = 0;
             sourceInfo.numSamples = numberOfSamplesForAudioBlock;
             audioSourceGainEnvelope.getNextAudioBlock(sourceInfo);
@@ -480,6 +456,11 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             // (delayed) position in the audio file.
             
             float * sampleOfSource = sourceInfo.buffer->getSampleData(0);
+            // Since we have requested some additional samples on both borders
+            // for the sake of interpolation, we need to set the pointer
+            // to the first requested sample.
+            sampleOfSource += halfTheInterpolationOrder;
+            
             float * sampleOfDestination = info.buffer->getSampleData(0);
             // Maybe there is an offset for the source buffer, so take care
             // of that:
@@ -495,16 +476,13 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                 sampleOfSource += startSampleInSource;
                 double interSampleRemainder = audioBlockStartPositionRemainder; // In [0, 1[. Unit: Samples.
                 
-                // TODO: INTERPOLATION (using interSampleRemainder)
+                // THE ACTUAL INTERPOLATION
                 // \/  \/  \/  \/  \/  \/  \/
-                *sampleOfDestination = *sampleOfSource;
+                *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
+
                 
                 // The distance between two sample positions in the source:
                 double sampleOffsetBetweenNeighbours = (double(audioBlockEndPositionInclDelay) + audioBlockEndPositionRemainder - (double(audioBlockStartPositionInclDelay) + audioBlockStartPositionRemainder))/double(info.numSamples);
-DEB("audioBlockEndPositionInclDelay = " + String(audioBlockEndPositionInclDelay))
-DEB("audioBlockStartPositionInclDelay = " + String(audioBlockStartPositionInclDelay))
-DEB("info.numSamples = " + String(info.numSamples))
-DEB("sampleOffsetBetweenNeighbours = " + String(sampleOffsetBetweenNeighbours))
                 
                 // Take care of the remaining samples.
                 for (int i = 1; i != info.numSamples; i++)
@@ -522,9 +500,9 @@ DEB("sampleOffsetBetweenNeighbours = " + String(sampleOffsetBetweenNeighbours))
                     // Go to the next sample in the source.
                     sampleOfSource += sampleOffset;
                     
-                    // TODO: INTERPOLATION (using interSampleRemainder)
+                    // THE ACTUAL INTERPOLATION
                     // \/  \/  \/  \/  \/  \/  \/
-                    *sampleOfDestination = *sampleOfSource;
+                    *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
                 }
             }
             else
@@ -947,3 +925,73 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
     deltaSpacialPosition_->y = ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY())/distance;
     deltaSpacialPosition_->z = ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ())/distance;
 }
+
+float AudioSourceDopplerEffect::interpolate (float * sampleRightBefore, double remainder)
+{
+    double result = 0.0;
+    for (int k = -halfTheInterpolationOrder; k <= halfTheInterpolationOrder; k++)
+    {
+        result += *(sampleRightBefore+k) * h(remainder - k);
+    }
+    return result;
+}
+
+double AudioSourceDopplerEffect::h(double t)
+{
+    int pos = (t + double(halfTheInterpolationOrder))*double(interpolationStepsPerUnit);
+    return valuesOfH[pos];
+}
+
+bool AudioSourceDopplerEffect::recalculateH(double samplerate)
+{
+    int numberOfElements = (2*halfTheInterpolationOrder + 1) * interpolationStepsPerUnit;
+    valuesOfH.ensureStorageAllocated(numberOfElements);
+    
+    // The normalized cutoff frequency
+    double fcn = cutoffFrequencyOfInterpolationLPF/samplerate;
+    
+    double stepSize = 1.0/double(interpolationStepsPerUnit);
+    
+    for (int i = - halfTheInterpolationOrder; i<halfTheInterpolationOrder; i++)
+    {
+        
+        // Take care of the integer arguments: h(i)=...
+        if (i != 0)
+        {
+            double argument = 2.0*pi*fcn*double(i);
+            double value = sin(argument)/argument;
+            valuesOfH.set((i + halfTheInterpolationOrder)*interpolationStepsPerUnit, value);
+        }
+        else // h(0) = 1. Here we have to provide the value of sinc(0)=1.
+            // Otherwise we would have a division by zero.
+        {
+            double value = 1.0;
+            valuesOfH.set(halfTheInterpolationOrder*interpolationStepsPerUnit, value);
+        }
+        
+        // Take care of the remaining arguments
+        for (int k=1; k<interpolationStepsPerUnit; k++)
+        {
+            double argument = 2.0*pi*fcn*(double(i) + k*stepSize);
+            double value = sin(argument)/argument;
+            valuesOfH.set((i + halfTheInterpolationOrder)*interpolationStepsPerUnit + k, value);
+        }
+    }
+    
+    return true;
+}
+
+
+
+// Initialisation (and memory allocation) of the static variables
+int AudioSourceDopplerEffect::halfTheInterpolationOrder = 5;
+int AudioSourceDopplerEffect::interpolationStepsPerUnit = 128;
+double AudioSourceDopplerEffect::cutoffFrequencyOfInterpolationLPF = 20000.0; // Hz
+double AudioSourceDopplerEffect::pi = 4.0 * atan(1.0);
+Array<double> AudioSourceDopplerEffect::valuesOfH;
+
+// All we would have liked to do is to call AudioSourceDopplerEffect::recalculateH(). 
+// Sadly, the C++ compiler doesn't allow this directly. Thats why the dummy 
+// variable __recalculateH exists.
+bool AudioSourceDopplerEffect::__recalculateH = AudioSourceDopplerEffect::recalculateH(44100);
+    // recalculateH will be called again in the constructor with the correct sampleRate

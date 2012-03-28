@@ -222,15 +222,45 @@ private:
                                        SpacialPosition * deltaSpacialPosition_);
     
     /**
-     Figures out the closest point on a line to the origin.
-     The line is defined by the two points firstPoint and secondPoint.
+     Calculates the value of the continuous signal at an arbitrary position,
+     using the formula
      
-     @return If the closest point lies in between the first and the
-             second point.
+     \f[ y(t) = \sum_{k \in \mathbb{Z}} x[k]h(t-kT) \f]
+     
+     where \f$h(.)\f$ is the impulse response of an LTI filter and \f$T\f$ is a
+     real number. (This is equation (2.16) in the lecture note by Hans-Andrea
+     Loeliger ZSSV 2011)
+     We choose T = 1/samplerate and \f$h(.)\f$ as the impulse response of the
+     ideal lowpass filter with cutoff frequency f_c = 20kHz.
+     
+     We normalize the parameters and h
+     (see 120327_ambipanning_interpolation.tif) and get
+     
+     \f[ y(t_n) = \sum_{k \in \mathbb{Z}} x[k]h(t_n - k) \f]
+     
+     \f[ h(t_n) = \frac{sin(2 \pi f_{cn} t_n)}{2 \pi f_{cn} t_n}
+                = \sinc(2 f_{cn} t_n) \f]
+     
+     where:
+     - \f$t_n\f$ is measured in samples. E.g. \f$t_n = 30.5\f$ means the time
+       exactly between samples 30 and 31.
+     - \f$f_{cn} = f_c / SR \f$ is the normalized cutoff frequency.
+
+     Remark: By de l'Hopital: h(0) = 1.
+     
+     @param sampleRightBefore   The sample that comes right before the position
+                                t_n we are looking for.
+     @param remainder           Together with the sampleRightBefore, this
+                                specifies t_n.
+                                t_n = (position of sampleRightBefore) + remainder.
      */
-    inline bool closestPointInBetween (const SpacialPosition & firstPoint, 
-                                       const SpacialPosition & secondPoint,
-                                       SpacialPosition & closestPoint);
+    float interpolate (float * sampleRightBefore, double remainder);
+    
+    /**
+     The windowed impulse response of the ideal low pass filter. Used by the
+     interpolate method.
+     */
+    double h(double t);
     
     double sampleRate;
     double oneOverSampleRate;
@@ -281,6 +311,48 @@ private:
      for the interpolation.
      */
     AudioSourceChannelInfo sourceInfo;  // used in getNextAudioBlock(..).
+    
+    
+    // Interpolation
+    // -------------
+    
+    /** Half the value of the interpolation order. */
+    static int halfTheInterpolationOrder;
+    
+    static int interpolationStepsPerUnit;
+    
+    /** Cutoff frequency for the (close to) ideal low pass filter
+     used for the interpolation.
+     
+     Please choose its value below the nyquist frequency
+     sampleRate/2.
+     */
+    static double cutoffFrequencyOfInterpolationLPF;
+    
+    static double pi;
+
+    /** Holds the values of the impulse response h. */
+    static Array<double> valuesOfH;
+    
+    /** This will calculate (2*halfTheInterpolationOrder+1)*interpolationStepsPerUnit values of the impulse response h.
+     
+     Set the desired values for halfTheInterpolationOrder and interpolationStepsPerUnit before calling this.
+     
+     @return    always true. See __recalculateH.
+     */
+    static bool recalculateH(double sampleRate);
+    
+    /** A dummy variable which enables us to call recalculateH()
+     at the end of the cpp file.
+     
+     All we would have liked to do is to call AudioSourceDopplerEffect::recalculateH(). 
+     Sadly, the C++ compiler doesn't allow this directly. Thats why the dummy 
+     variable __recalculateH exists. Thanks to this we can call
+     bool AudioSourceDopplerEffect::__recalculateH = AudioSourceDopplerEffect::recalculateH();
+     
+     source: http://www.codeproject.com/Articles/18314/Static-Initialization-Function-in-Classes
+     */
+    static bool __recalculateH;
 		
 	JUCE_LEAK_DETECTOR (AudioSourceDopplerEffect);
 };
