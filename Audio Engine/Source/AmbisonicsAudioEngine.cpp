@@ -586,6 +586,9 @@ bool AmbisonicsAudioEngine::bounceToDisk(String absolutePathToAudioFile,
         // When set by the cancelBounceToDisk method during the upcoming
         // bounce process, it will be interrupted and the file will be deleted.
         stopBounceToDisk = false;
+        
+        // Remember the buffering state.
+        bool bufferingWasEnabled = audioRegionMixer.getBufferingState();
 		
 		bool success = false; // This will be returned if virtualNumberOfActiveOutputChannels = 0.
 		
@@ -626,8 +629,11 @@ bool AmbisonicsAudioEngine::bounceToDisk(String absolutePathToAudioFile,
 															   metadataValues, 
 															   qualityOptionIndex);
             
-            // Disable the buffering for the audio format readers...
-			audioRegionMixer.enableBuffering(false);
+            // Disable the buffering for the audio format readers if needed...
+            if (bufferingWasEnabled) {
+                audioRegionMixer.enableBuffering(false);
+            }
+            
             // ...as well as the buffering for the audio transport source.
             // And also set the virtualNumberOfActiveOutputChannels.
 			audioTransportSource.setSource (&audioRegionMixer,
@@ -692,7 +698,10 @@ bool AmbisonicsAudioEngine::bounceToDisk(String absolutePathToAudioFile,
 		int numberOfActiveOutputChannels = audioSpeakerGainAndRouting.switchToBounceMode(false);
 		
         // Reenable the buffering.
-        audioRegionMixer.enableBuffering(true);
+        if (bufferingWasEnabled)
+        {
+            audioRegionMixer.enableBuffering(true);
+        }
 		audioTransportSource.setSource (&audioRegionMixer,
 										numberOfActiveOutputChannels,
 										AUDIOTRANSPORT_BUFFER); // tells it to buffer this many samples ahead (choose a value >1024)
@@ -981,6 +990,14 @@ void AmbisonicsAudioEngine::setMasterGain(const float newGain)
 void AmbisonicsAudioEngine::enableDopplerEffect (bool enable)
 {
     audioRegionMixer.enableDopplerEffect(enable);
+//    if (enable)
+//    {
+//        audioRegionMixer.enableBuffering(false);
+//    }
+//    else
+//    {
+//        audioRegionMixer.enableBuffering(true);
+//    }
 }
 
 void AmbisonicsAudioEngine::setAEPOrder (const double order)

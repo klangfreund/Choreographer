@@ -11,7 +11,8 @@
 #include "AudioSourceGainEnvelope.h"
 
 AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audioFormatReader, 
-												  double sampleRateOfTheAudioDevice)
+												  double sampleRateOfTheAudioDevice,
+                                                  bool enableBuffering_)
     : nextPlayPosition (-1),         // such that the values in setNextReadPosition(..) will be set.
       audioBlockEndPosition (-2),
       previousGainPoint (0),
@@ -26,7 +27,7 @@ AudioSourceGainEnvelope::AudioSourceGainEnvelope (AudioFormatReader* const audio
 {
 	DEB("AudioSourceGainEnvelope: constructor called.")
 	
-    bufferOrReaderAudioSource = &bufferingAudioSource;
+    enableBuffering(enableBuffering_);
 
 	newGainEnvelopeSet = false;
 	constantGain = true;

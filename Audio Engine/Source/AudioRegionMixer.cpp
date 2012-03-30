@@ -19,7 +19,8 @@ AudioRegionMixer::AudioRegionMixer()
 	  nextPlayPosition (0),
       totalLength (0),
       samplesPerBlockExpected (512),
-      sampleRate (44100.0)
+      sampleRate (44100.0),
+      bufferingEnabled (false)
 {
 	DEB("AudioRegionMixer: constructor called.");
 }
@@ -93,7 +94,8 @@ bool AudioRegionMixer::addRegion (const int& regionID,
 		audioRegionToAdd->endPosition = endPosition;
 		audioRegionToAdd->startPositionOfAudioFileInTimeline = startPositionOfAudioFileInTimeline;		
 		AudioSourceAmbipanning *audioSourceAmbipanning = new AudioSourceAmbipanning (audioFormatReader,
-             sampleRateOfTheAudioDevice);		
+             sampleRateOfTheAudioDevice,
+             bufferingEnabled);		
 		audioRegionToAdd->audioSourceAmbipanning = audioSourceAmbipanning;
 		
 		// add the region
@@ -373,6 +375,13 @@ void AudioRegionMixer::enableBuffering(bool enable)
 		AudioRegion* audioRegion = (AudioRegion*)regions[i];
 		audioRegion->audioSourceAmbipanning->enableBuffering(enable);
 	}
+    
+    bufferingEnabled = enable;
+}
+
+bool AudioRegionMixer::getBufferingState()
+{
+    return bufferingEnabled;
 }
 
 void AudioRegionMixer::enableDopplerEffect (bool enable)

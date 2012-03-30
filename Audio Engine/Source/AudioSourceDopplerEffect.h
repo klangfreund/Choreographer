@@ -218,8 +218,7 @@ private:
                                        int * nextSpacialPointIndex_,
                                        SpacialEnvelopePoint ** previousSpacialPoint_,
                                        SpacialEnvelopePoint ** nextSpacialPoint_,
-                                       SpacialPosition * currentSpacialPosition_,
-                                       SpacialPosition * deltaSpacialPosition_);
+                                       SpacialPosition * currentSpacialPosition_);
     
     /**
      Calculates the value of the continuous signal at an arbitrary position,
@@ -303,8 +302,6 @@ private:
 //    double timeDifference;
     
     SpacialPosition currentSpacialPosition;
-    
-    SpacialPosition deltaSpacialPosition;
     
     AudioSampleBuffer sourceBuffer;
     /** This stores the samples from the audioSourceGainEnvelope needed

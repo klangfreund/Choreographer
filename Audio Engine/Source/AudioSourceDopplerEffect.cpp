@@ -22,7 +22,6 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
     previousSpacialPoint (),
     nextSpacialPoint (),
     currentSpacialPosition (),
-    deltaSpacialPosition (),
     sourceBuffer(1,0)
 {
 	DEB("AudioSourceDopplerEffect: constructor called.");
@@ -92,8 +91,7 @@ void AudioSourceDopplerEffect::setNextReadPosition (int64 newPosition)
                                   &nextSpacialPointIndex,
                                   &previousSpacialPoint,
                                   &nextSpacialPoint,
-                                  &currentSpacialPosition,
-                                  &deltaSpacialPosition);
+                                  &currentSpacialPosition);
         }
 	}
 	
@@ -129,13 +127,13 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
     audioBlockEndPosition = nextPlayPosition + info.numSamples;
     
     // Note:
-    // Thanks to setNextReadPosition() we can be asured that
+    // Thanks to the previous call of getNextAudioBlock or setNextReadPosition()
+    // we can be asured that
     // - nextSpacialPointIndex
     // - previousSpacialPoint
     // - nextSpacialPoint
     // - currentSpacialPosition
-    // - deltaSpacialPosition
-    // correspond to the audioBlockStartPosition.
+    // correspond to the audioBlockStartPosition (of the current audio block).
     
     if (newSpacialEnvelopeSet)
     {
@@ -160,12 +158,6 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
             nextSpacialPoint = spacialEnvelope[0];
 //            delayOnLastSample = nextSpacialPoint->getDistanceDelay();
             spacialPositionOfLastSample = SpacialPosition(*nextSpacialPoint);
-            deltaSpacialPosition = SpacialPosition(0,0,0);
-                // deltaSpacialPosition = The difference in space between
-                // two adjacent samples AFTER this audio block. I.e. the
-                // deltaSpacialPosition for the new spacialEnvelope.
-                // It's not actually used in this case, but for convenience
-                // it is set.
             
             constantSpacialPosition = true;
             constantSpacialPositionDelayTimeInSamples = int ( floor(sampleRate*SpacialPosition(*nextSpacialPoint).getDelay()) );
@@ -180,8 +172,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                   &nextSpacialPointIndex,
                                   &previousSpacialPoint,
                                   &nextSpacialPoint,
-                                  &currentSpacialPosition,
-                                  &deltaSpacialPosition);
+                                  &currentSpacialPosition);
                 // deltaSpacialPosition = The difference between
                 // two adjacent samples AFTER this audio block. I.e. the
                 // deltaSpacialPosition for the new spacialEnvelope.
@@ -194,9 +185,8 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         
         // Determine the deltaSpacialPosition needed for this audioBlock.
 //        double timeDifferenceForTheNextAudioBlock = timeDifference;
-        SpacialPosition deltaSpacialPositionForTheNextAudioBlock = deltaSpacialPosition;
+
 //        timeDifference = oneOverSampleRate + (delayOnLastSample - delayOnFirstSample) / info.numSamples;
-        deltaSpacialPosition = (spacialPositionOfLastSample - spacialPositionOfFirstSample)*(1.0/info.numSamples);
         
         // Figure out the lowest and highest sample positions needed.
         // (such that we can request a corresponding audio block from the
@@ -271,11 +261,10 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
 //            relativeSamplePositionInSeconds += timeDifference;
             // To determine the next source sample:
             currentRelativePositionWithoutDelay += oneOverSampleRate;
-            currentSpacialPosition += deltaSpacialPosition;
+            // currentSpacialPosition += deltaSpacialPosition;
         }
 
 //        timeDifference = timeDifferenceForTheNextAudioBlock;
-        deltaSpacialPosition = deltaSpacialPositionForTheNextAudioBlock;
         currentSpacialPosition = spacialPositionOfLastSample;
         newSpacialEnvelopeSet = false;
     }
@@ -301,7 +290,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
         else
         {
             // Get enough samples from the audioSourceGainEnvelope to interpolate.
-            // -------------------------------------------------------------------
+            // ===================================================================
 
             
             // Store the values of the start position for later use.
@@ -342,8 +331,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                           &nextSpacialPointIndex,
                                           &previousSpacialPoint,
                                           &nextSpacialPoint,
-                                          &currentSpacialPosition,
-                                          &deltaSpacialPosition);
+                                          &currentSpacialPosition);
                         // This will set the nextSpacialPoint to
                         // the previousSpacialPoint!
                         // And the nextSpacialPoint to the next one.
@@ -374,8 +362,7 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                                   &nextSpacialPointIndex,
                                   &previousSpacialPoint,
                                   &nextSpacialPoint,
-                                  &currentSpacialPosition,
-                                  &deltaSpacialPosition);
+                                  &currentSpacialPosition);
                 // To set the currentSpacialPosition
             sampleOffsetCausedByDelay = ceil(currentSpacialPosition.getDelay()*sampleRate);
             int audioBlockEndPositionInclDelay = audioBlockEndPosition - sampleOffsetCausedByDelay;
@@ -505,141 +492,129 @@ void AudioSourceDopplerEffect::getNextAudioBlock (const AudioSourceChannelInfo& 
                     *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
                 }
             }
+            
+            // If there are one or more envelope points in this audio block.
+            // (Remark: This block would also cover the case: no envelope point
+            // in the audio block. But the previous block is easier to 
+            // read/understand and therefore it is kept for the moment.)
             else
             {
-                // TODO
-            }
-            
-            
-/*
-// TODO: Remove this
-            // Even thought this is not necessary, 
-//            prepareForNewPosition(currentPosition, 
-//                                  &nextSpacialPointIndex,
-//                                  &previousSpacialPoint,
-//                                  &nextSpacialPoint,
-//                                  &currentSpacialPosition,
-//                                  &deltaSpacialPosition);
-            
-            // The position of the current sample (the one that is requested)
-            // in the audio file.
-//            double absolutePositionInSeconds = currentPosition * oneOverSampleRate
-//                                                        + currentSpacialPosition.delay();
-//            double relativePositionInSeconds = absolutePositionInSeconds -
-//                                               lowestPositionToRequestInSeconds;  
-            
-            // The absolute position in the audio file without any delay. In seconds.
-            double currentPositionWithoutDelay = currentPosition*oneOverSampleRate;
-            // The relative position in the audio file, relative to the 
-            // firstSampleOfDesiredAudioBlock. In seconds.
-            double currentRelativePositionWithoutDelay = currentPositionWithoutDelay 
-            - lowestPositionToRequestInSeconds;
-            
-            float * sampleOfSource = sourceInfo.buffer->getSampleData(0);
-            float * sampleOfDestination = info.buffer->getSampleData(0);
-            // Maybe there is an offset for the source buffer, so take care
-            // of that:
-            sampleOfDestination += info.startSample;
-           
-            // Go through all spacial points lying inside of this audio block.
-			while (true)
-			{
-                // If the next spacial point is outside of the current audio block
-				// (audioBlockEndPosition is the position of to the first sample
-				//  after the current block)
-				if (nextSpacialPoint->getPosition() >= audioBlockEndPosition )
-				{
-                    while (currentPosition != audioBlockEndPosition) 
-                    {
-                        // \/  \/  \/  \/  \/  \/  \/
-                        // TODO: Implement proper interpolation!
-                        // HERE (the dirty implementation): Take the closest 
-                        //      sample before.
-                        int posInSource = int(floor((currentRelativePositionWithoutDelay + currentSpacialPosition.delay())*sampleRate));
-                        *sampleOfDestination = sampleOfSource[ posInSource ];
-// temp
-//                        *sampleOfDestination = *sampleOfSource;
-//                        ++sampleOfSource;
-// end temp
-                        // ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
-                        
-                        // Determine the next destination sample:
-                        ++sampleOfDestination; // Point to the next sample
-                        // To determine the next source sample:
-                        currentRelativePositionWithoutDelay += oneOverSampleRate;
-                        currentSpacialPosition += deltaSpacialPosition;
-                        
-                        ++currentPosition;
-                    }
-                    
-                    // temp
-//                    sampleOfDestination = info.buffer->getSampleData(0);
-//                    for (int pos=0; pos!=info.numSamples; ++pos)
-//                    {
-//                        if (sampleOfDestination[pos] == 0.0)
-//                        {
-//                            DEB("A zero at pos = " + String(pos));
-//                        }
-//                    }
-                    // end temp
-                    
-					break;
-				}
+                // Set the startSampleInSource to the correct position
+                int startSampleInSource = audioBlockStartPositionInclDelay - lowestPositionToRequest;
+                sampleOfSource += startSampleInSource;
+                double interSampleRemainder = audioBlockStartPositionRemainder; // In [0, 1[. Unit: Samples.
                 
-                // If the next gain point is inside the current audio block
-				else
-				{
-					// Apply the delay from the spacial envelope up to the 
-                    // sample before the nextSpacialPoint
-					while (currentPosition != nextSpacialPoint->getPosition())
-					{
-						// \/  \/  \/  \/  \/  \/  \/
-                        // TODO: Implement proper interpolation!
-                        // HERE (the dirty implementation): Take the closest 
-                        //      sample before.
-                        int posInSource = int(floor((currentRelativePositionWithoutDelay + currentSpacialPosition.delay())*sampleRate));
-                        *sampleOfDestination = sampleOfSource[ posInSource ];
-                        // ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
+                // Prepare for the upcoming while-loop
+                int currentPosition = audioBlockStartPosition;
+                int currentPositionInclDelay = audioBlockStartPositionInclDelay;
+                int currentPositionRemainder = audioBlockStartPositionRemainder;
+                
+                while (true)
+                {    
+                    if (nextSpacialPoint->getPosition() >= audioBlockEndPosition )
+                    {
+                        // Take care of the first sample.
+                        // THE ACTUAL INTERPOLATION
+                        // \/  \/  \/  \/  \/  \/  \/
+                        *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
                         
-                        // Determine the next destination sample:
-                        ++sampleOfDestination; // Point to the next sample
-                        // To determine the next source sample:
-                        currentRelativePositionWithoutDelay += oneOverSampleRate;
-                        currentSpacialPosition += deltaSpacialPosition;
+                        // Take care of the remaining samples.
                         
-                        ++currentPosition;
-					}
-                    
-                    // Also process the sample at the nextSpacialPoint and set
-                    // up the parameters for further processing.
-                    prepareForNewPosition(currentPosition,
-                                          &nextSpacialPointIndex,
-                                          &previousSpacialPoint,
-                                          &nextSpacialPoint,
-                                          &currentSpacialPosition,
-                                          &deltaSpacialPosition);
-                    currentPositionWithoutDelay = currentPosition*oneOverSampleRate;
-                    currentRelativePositionWithoutDelay = currentPositionWithoutDelay 
-                    - highestPositionToRequestInSeconds;
-                    // \/  \/  \/  \/  \/  \/  \/
-                    // TODO: Implement proper interpolation!
-                    // HERE (the dirty implementation): Take the closest 
-                    //      sample before.
-                    double delay = currentSpacialPosition.delay();
-                    int posInSource = int(floor((currentRelativePositionWithoutDelay + delay)*sampleRate));
-                    *sampleOfDestination = sampleOfSource[ posInSource ];
-                    // ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
-                    
-                    // Determine the next destination sample:
-                    ++sampleOfDestination; // Point to the next sample
-                    // To determine the next source sample:
-                    currentRelativePositionWithoutDelay += oneOverSampleRate;
-                    currentSpacialPosition += deltaSpacialPosition;
-                    
-                    ++currentPosition;
+                        // The distance between two sample positions in the source:
+                        int numberOfSamplesBetweenPoints = audioBlockEndPosition - currentPosition;
+                        double sampleOffsetBetweenNeighbours = (double(audioBlockEndPositionInclDelay) + audioBlockEndPositionRemainder - (double(currentPositionInclDelay) + currentPositionRemainder))/double(numberOfSamplesBetweenPoints);
+                        
+                        currentPosition++;
+                        // Go to the next sample in the destination.
+                        sampleOfDestination++;
+                        while (currentPosition != audioBlockEndPosition)
+                        {
+                            // Figure out the fraction of samples we have to move in 
+                            // the source.
+                            interSampleRemainder += sampleOffsetBetweenNeighbours;
+                            int sampleOffset = floor(interSampleRemainder);
+                            // Be aware that e.g. floor(-1.5) = -2
+                            interSampleRemainder = interSampleRemainder - double(sampleOffset);
+                            
+                            // Go to the next sample in the source.
+                            sampleOfSource += sampleOffset;
+                            
+                            // THE ACTUAL INTERPOLATION
+                            // \/  \/  \/  \/  \/  \/  \/
+                            *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
+                            
+                            currentPosition++;
+                            // Go to the next sample in the destination.
+                            sampleOfDestination++;
+                        }                        
+                        break;
+                    }
+                    else
+                    {
+                        // Take care of the first sample.
+                        // ------------------------------
+                        // THE ACTUAL INTERPOLATION
+                        // \/  \/  \/  \/  \/  \/  \/
+                        *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
+                        
+                        // Preparations for the upcoming loop.
+                        // -----------------------------------
+                        // Figure out
+                        // - nextSpacialPointPositionInclDelay and
+                        // - nextSpacialPointPositionRemainder
+                        SpacialPosition nextSpacialPointPosition(*nextSpacialPoint);
+                        sampleOffsetCausedByDelay = ceil(nextSpacialPointPosition.getDelay()*sampleRate);
+                        int nextSpacialPointPositionInclDelay = nextSpacialPoint->getPosition() - sampleOffsetCausedByDelay;
+                        double nextSpacialPointPositionRemainder = double(sampleOffsetCausedByDelay) - nextSpacialPointPosition.getDelay()*sampleRate;
+                        int numberOfSamplesBetweenPoints = nextSpacialPoint->getPosition() - currentPosition;                        
+                        // The distance between two sample positions in the source:
+                        double sampleOffsetBetweenNeighbours = (double(nextSpacialPointPositionInclDelay) + nextSpacialPointPositionRemainder - (double(currentPositionInclDelay) + currentPositionRemainder))/double(numberOfSamplesBetweenPoints);
+                        
+                        // Take care of the remaining samples.
+                        // -----------------------------------
+                        currentPosition++;
+                        // Go to the next sample in the destination.
+                        sampleOfDestination++;
+                        while (currentPosition != nextSpacialPoint->getPosition())
+                        {
+                            // Figure out the fraction of samples we have to move in 
+                            // the source.
+                            interSampleRemainder += sampleOffsetBetweenNeighbours;
+                            int sampleOffset = floor(interSampleRemainder);
+                            // Be aware that e.g. floor(-1.5) = -2
+                            interSampleRemainder = interSampleRemainder - double(sampleOffset);
+                            
+                            // Go to the next sample in the source.
+                            sampleOfSource += sampleOffset;
+                            
+                            // THE ACTUAL INTERPOLATION
+                            // \/  \/  \/  \/  \/  \/  \/
+                            *sampleOfDestination = interpolate(sampleOfSource, interSampleRemainder);
+                            
+                            currentPosition++;
+                            // Go to the next sample in the destination.
+                            sampleOfDestination++;
+                        }
+                        
+                        // Now we are at the position currentPosition = next spacial point.
+                        
+                        // Get the parameters of the current position (= next spacial point).
+                        prepareForNewPosition(nextSpacialPoint->getPosition(),
+                                              &nextSpacialPointIndex,
+                                              &previousSpacialPoint,
+                                              &nextSpacialPoint,
+                                              &currentSpacialPosition);
+                        // This will set the nextSpacialPoint to
+                        // the previousSpacialPoint!
+                        // And the nextSpacialPoint to the next one.
+                        // It will also set currentSpacialPosition which
+                        // corresponds to the (newly set) previousSpacialPoint.
+                        sampleOffsetCausedByDelay = ceil(currentSpacialPosition.getDelay()*sampleRate);
+                        currentPositionInclDelay = previousSpacialPoint->getPosition() - sampleOffsetCausedByDelay;
+                        currentPositionRemainder = double(sampleOffsetCausedByDelay) - currentSpacialPosition.getDelay()*sampleRate;
+                    }
                 }
-            }  
- */
+            }
         }
     }
 }
@@ -888,8 +863,7 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
                                    int * nextSpacialPointIndex_,
                                    SpacialEnvelopePoint ** previousSpacialPoint_,
                                    SpacialEnvelopePoint ** nextSpacialPoint_,
-                                   SpacialPosition * currentSpacialPosition_,
-                                   SpacialPosition * deltaSpacialPosition_)
+                                   SpacialPosition * currentSpacialPosition_)
 {    
     // Figure out between which audioEnvelopePoints we are right now
 	// and set up
@@ -903,9 +877,8 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
 	*previousSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_ - 1];
 	*nextSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_];
 
-	// Figure out
-    // - *currentSpacialPosition_
-    // - *deltaSpacialPosition_
+	// Figure out the *currentSpacialPosition_
+    // ---------------------------------------
     
     // The distance in time. In samples.
 	double distance = double ((*nextSpacialPoint_)->getPosition() 
@@ -920,10 +893,6 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
     currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
     currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
     currentSpacialPosition_->calculateDelay();
-
-    deltaSpacialPosition_->x = ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX())/distance;
-    deltaSpacialPosition_->y = ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY())/distance;
-    deltaSpacialPosition_->z = ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ())/distance;
 }
 
 float AudioSourceDopplerEffect::interpolate (float * sampleRightBefore, double remainder)

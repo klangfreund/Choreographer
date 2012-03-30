@@ -200,11 +200,16 @@ public:
     /**
      Enables or disables the buffering for each individual audio region.
      
-     By default, buffering is enabled. For realtime operation, buffering
-     should always be engaged. For non-realtime operation (e.g. bounce 
-     to disk), buffering should be disabled.
+     For realtime operation, buffering
+     should always be engaged at some point. For non-realtime operation
+     (e.g. bounce to disk), buffering should be disabled.
      */
     void enableBuffering(bool enable);
+    
+    /**
+     Returns true, if buffering is enabled and false otherwise.
+     */
+    bool getBufferingState();
     
     /**
      Enables or disables the doppler effect.
@@ -287,6 +292,10 @@ private:
     double sampleRate; ///< Used in AudioRegionMixer::addRegion 
                        ///< (for prepareToPlay(..) of the new region).
                        ///< Set in AudioRegionMixer::prepareToPlay.
+    
+    /** Tells, if an audioSourceBuffer object is used in front of the audio file
+     reader of each audio region. */
+    bool bufferingEnabled;
 
     /** Used in AudioRegionMixer::setGainEnvelopeForRegion. */
     AudioEnvelopePointComparator audioEnvelopePointComparator; 

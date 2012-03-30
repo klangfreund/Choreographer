@@ -122,7 +122,8 @@ public:
 	 *   The audioFormatReader argument is used by the audioFormatReaderSource.
 	 */
     AudioSourceGainEnvelope (AudioFormatReader* const audioFormatReader,
-							 double sampleRateOfTheAudioDevice);
+							 double sampleRateOfTheAudioDevice,
+                             bool enableBuffering);
 	
     /** Destructor. */
     ~AudioSourceGainEnvelope();

@@ -93,7 +93,8 @@ double SpeakerPosition::getZ ()
 //==============================================================================
 
 AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFormatReader,
-												double sampleRateOfTheAudioDevice)
+												double sampleRateOfTheAudioDevice,
+                                                bool enableBuffering)
     : monoBuffer (1,0),
       nextPlayPosition (-1),
       audioBlockEndPosition (-2),
@@ -102,7 +103,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  nextSpacialPointIndex (0),
 	  newSpacialEnvelopeSet (false),
 	  numberOfSpeakersChanged (false),
-      audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice),
+      audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice, enableBuffering),
       audioSourceDopplerEffect(audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
       audioSourceGainEnvOrDopplerFX (&audioSourceGainEnvelope)
 {
