@@ -10,8 +10,11 @@
 #include "AudioSourceDopplerEffect.h"
 #include <float.h> // To be able to use DBL_MAX
 
-
+//==============================================================================
+// SpacialPosition
 const double SpacialPosition::oneOverSpeedOfSound = 0.00294; // = 1.0/340.0 m/s
+// Initialisation (and memory allocation) of the static variables
+double SpacialPosition::unitScaleFactor = 1000.0;
 
 //==============================================================================
 

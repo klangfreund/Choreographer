@@ -458,6 +458,8 @@ public:
      It is disabled by default.
      */    
     void enableDopplerEffect (bool enable);
+    
+    void setUnitScaleFactorForDopplerEffect (double unitScaleFactor);
 	
 	/**
 	 Sets the order used in AudioSourceAmbipanning.

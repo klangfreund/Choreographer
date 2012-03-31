@@ -24,11 +24,6 @@ struct SpacialPosition
     double x;
     double y;
     double z;
-    double delay;
-    
-    /** The constant value of 1/(speed of sound) in meters per second. */
-    // Initialized in the file AudioSourceDopplerEffect.cpp.
-    static const double oneOverSpeedOfSound; // = 1.0/340.0 = = 0.00294 m/s
 
     /** Constructor */
     SpacialPosition ()
@@ -68,6 +63,11 @@ struct SpacialPosition
     double getDelay()
     {
         return delay;
+    }
+    
+    static void setUnitScaleFactor(double unitScaleFactor_)
+    {
+        unitScaleFactor = unitScaleFactor_;
     }
         
     /** Comparison operator to check for equality. */    
@@ -135,6 +135,15 @@ struct SpacialPosition
     /** The product with a scalar on the left hand side. */
     friend SpacialPosition operator*(double scalar, const SpacialPosition & rhs)
     {return rhs * scalar;}
+    
+private:
+    double delay;
+    
+    /** The constant value of 1/(speed of sound) in meters per second. */
+    // Initialized in the file AudioSourceDopplerEffect.cpp.
+    static const double oneOverSpeedOfSound; // = 1.0/340.0 = = 0.00294 m/s
+    
+    static double unitScaleFactor; // = 1000.0, set in the cpp file.
 
 };
 

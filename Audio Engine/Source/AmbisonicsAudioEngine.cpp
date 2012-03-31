@@ -990,14 +990,11 @@ void AmbisonicsAudioEngine::setMasterGain(const float newGain)
 void AmbisonicsAudioEngine::enableDopplerEffect (bool enable)
 {
     audioRegionMixer.enableDopplerEffect(enable);
-//    if (enable)
-//    {
-//        audioRegionMixer.enableBuffering(false);
-//    }
-//    else
-//    {
-//        audioRegionMixer.enableBuffering(true);
-//    }
+}
+
+void AmbisonicsAudioEngine::setUnitScaleFactorForDopplerEffect (double unitScaleFactor)
+{
+    SpacialPosition::setUnitScaleFactor(unitScaleFactor);
 }
 
 void AmbisonicsAudioEngine::setAEPOrder (const double order)
