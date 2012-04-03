@@ -107,7 +107,7 @@
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
-	//NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
+//	NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
 	[self reopenAudioFile];
 }
 
@@ -261,9 +261,9 @@
 	
 	if([openPanel runModal] == NSOKButton)
 	{
+		[self setValue:[[[openPanel URLs] objectAtIndex:0] relativeString] forKey:@"relativeFilePath"];
 		[openPanel orderOut:self];
-		[self setValue:[[openPanel filenames] objectAtIndex:0] forKey:@"relativeFilePath"];
-		[self openAudioFile];	
+		[self openAudioFile];
 	}
 }
 
