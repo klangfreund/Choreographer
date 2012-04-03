@@ -50,7 +50,9 @@
         [theDictionary setValue:[NSNumber numberWithFloat:1] forKey:@"distanceBasedAttenuationExponent"];
         
         [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedFiltering"];       
-        [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedDelay"];       
+
+        [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedDelay"]; 
+        [theDictionary setValue:[NSNumber numberWithDouble:1000] forKey:@"distanceBasedDelayUnitScaleFactor"]; 
     }
     return self;
 }

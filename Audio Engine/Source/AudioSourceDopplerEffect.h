@@ -55,7 +55,7 @@ struct SpacialPosition
     void calculateDelay()
     {
         // return sqrt(*this * *this) * oneOverSpeedOfSound;
-        delay = 1000. * sqrt(*this * *this) * oneOverSpeedOfSound;
+        delay = unitScaleFactor * sqrt(*this * *this) * oneOverSpeedOfSound;
     }
     
     /** Returns the delay time (in seconds), measured from this spacial position

@@ -98,7 +98,7 @@
 	// playback controller
 	[playbackController setValue:projectSettings forKey:@"projectSettings"];
     
-    // audio engine
+    // initialize audio engine
     int mode = [[projectSettings valueForKey:@"distanceBasedAttenuation"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedAttenuationMode"] intValue] + 1 : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
                                                   centreZoneSize:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreZoneSize"] doubleValue]
@@ -107,7 +107,10 @@
                                                 dBFalloffPerUnit:[[projectSettings valueForKey:@"distanceBasedAttenuationDbFalloff"] doubleValue]
                                              attenuationExponent:[[projectSettings valueForKey:@"distanceBasedAttenuationExponent"] doubleValue]];
 
-	// everything that has been done until now (setup, init...)
+    double factor = [[projectSettings valueForKey:@"distanceBasedDelay"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedDelayUnitScaleFactor"] doubleValue] : 0;
+    [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
+
+     // everything that has been done until now (setup, init...)
 	// is NOT put on the undo stack
 	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
 	[[managedObjectContext undoManager] removeAllActions];	
