@@ -964,7 +964,6 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
     currentSpacialPosition_->x = (*previousSpacialPoint_)->getX() + factor * ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX());
     currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
     currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
-    currentSpacialPosition_->calculateDelay();
 }
 
 float AudioSourceDopplerEffect::interpolate (float * sampleRightBefore, double remainder)

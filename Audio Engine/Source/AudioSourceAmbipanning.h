@@ -14,6 +14,7 @@
 #include "SpacialEnvelopePoint.h"
 #include "AudioSourceGainEnvelope.h"
 #include "AudioSourceDopplerEffect.h"
+#include "AudioSourceLowPassFilter.h"
 
 //==============================================================================
 /**
@@ -189,6 +190,13 @@ public:
     void enableBuffering (bool enable);
     
     /**
+     Enables or disables the distance based lowpass filtering.
+     
+     It is disabled by default.
+     */    
+    void enableLowPassFilter (bool enable);
+    
+    /**
      Enables or disables the doppler effect.
      
      It is disabled by default.
@@ -322,16 +330,30 @@ private:
 	  // used in distanceMode 2
 	static double outsideCenterExponent; // = 1
     
-    bool dopplerEffectEnabled;
+	AudioSourceGainEnvelope audioSourceGainEnvelope;
     
+    bool dopplerEffectEnabled;
+    AudioSourceDopplerEffect audioSourceDopplerEffect;
     /** Will point to
         audioSourceGainEnvelope or to
         audioSourceDopplerEffect
         dependant of if the doppler effect is disabled or enabled.
      */
-    PositionableAudioSource* audioSourceGainEnvOrDopplerFX;
-	AudioSourceDopplerEffect audioSourceDopplerEffect;
-	AudioSourceGainEnvelope audioSourceGainEnvelope;
+    PositionableAudioSource* audioSourceDopplerEffectOrNot;
+    
+    bool lowPassFilterEnabled;
+    AudioSourceLowPassFilter audioSourceLowPassFilter;
+    /** Will point to
+     audioSourceLowPassFilter or to
+     audioSourceDopplerEffectOrNot
+     dependant of the enabled or disabled lowpass filter.
+     */
+    PositionableAudioSource* audioSourceLowPassFilterOrNot;
+    /** Only used to reinitialize the audioSourceLowPassFilter in the
+     enableDopplerEffect method. */
+    double sampleRate;
+    int samplesPerBlockExpected;
+    
 	AudioSourceChannelInfo monoInfo;  // used in getNextAudioBlock(..).
 	AudioSampleBuffer monoBuffer;  // used in getNextAudioBlock(..).
 	
