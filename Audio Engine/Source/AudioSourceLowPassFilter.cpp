@@ -102,9 +102,9 @@ void AudioSourceLowPassFilter::getNextAudioBlock (const AudioSourceChannelInfo& 
                               &previousSpacialPoint,
                               &nextSpacialPoint,
                               &currentSpacialPosition);
-        double distanceWithHalfTheCutoffFrequency = 0.1;
-        double lambda = log(2.0)/distanceWithHalfTheCutoffFrequency;
-        double cutoffFrequency = 21000.0 * exp(-lambda * currentSpacialPosition.getDistance());
+        // Determine the cutoff frequency and set the filter coefficients.
+        double cutoffAtOrigin = 21000.0;
+        double cutoffFrequency = cutoffAtOrigin * exp(-lambda * currentSpacialPosition.getDistance());
         // Set the filter with this cutoffFrequency
         iirFilter.makeLowPass(sampleRate, cutoffFrequency);
     }
@@ -159,10 +159,9 @@ void AudioSourceLowPassFilter::setSpacialEnvelope (const Array<SpacialEnvelopePo
             currentSpacialPosition = SpacialPosition(*(spacialEnvelope[0]));
             
             // Determine the cutoff frequency and set the filter coefficients.
-            double distanceWithHalfTheCutoffFrequency = 0.1;
-            double lambda = log(2.0)/distanceWithHalfTheCutoffFrequency;
-            double cutoffFrequency = 21000.0 * exp(-lambda * currentSpacialPosition.getDistance());
-            DEB("cutoffFreq = " + String(cutoffFrequency))
+            double cutoffAtOrigin = 21000.0;
+            double cutoffFrequency = cutoffAtOrigin * exp(-lambda * currentSpacialPosition.getDistance());
+            // DEB("cutoffFreq = " + String(cutoffFrequency))
             iirFilter.makeLowPass(sampleRate, cutoffFrequency);
         }
         else
@@ -183,6 +182,13 @@ void AudioSourceLowPassFilter::setSource (PositionableAudioSource * positionable
     positionableAudioSource = positionableAudioSource_;
     positionableAudioSource->setNextReadPosition(nextPlayPosition);
 }
+
+// static
+void AudioSourceLowPassFilter::setDistanceWithHalfTheOpenCutoffFrequency(double distance)
+{
+    lambda = log(2.0)/distance;
+}
+
 
 
 inline void AudioSourceLowPassFilter::prepareForNewPosition (int newPosition,
@@ -219,3 +225,5 @@ inline void AudioSourceLowPassFilter::prepareForNewPosition (int newPosition,
     currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
     currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
 }
+
+double AudioSourceLowPassFilter::lambda = 0.0;

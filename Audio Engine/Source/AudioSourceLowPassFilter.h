@@ -17,7 +17,7 @@
 
 //==============================================================================
 /**
- TODO
+ Distance based low pass filter.
  */
 class JUCE_API AudioSourceLowPassFilter  : public PositionableAudioSource
 {
@@ -65,6 +65,8 @@ public:
 	void setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope);
     
     void setSource (PositionableAudioSource * positionableAudioSource_);
+    
+    static void setDistanceWithHalfTheOpenCutoffFrequency(double distance);
 	
 private:
 	/**
@@ -121,6 +123,8 @@ private:
     int nextPlayPosition;
     
     SpacialPosition currentSpacialPosition;
+    
+    static double lambda;
 
     /** The actual filter. */
     IIRFilter iirFilter;
