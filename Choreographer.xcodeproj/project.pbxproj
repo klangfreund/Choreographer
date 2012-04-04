@@ -1087,11 +1087,8 @@
 				1500639D14C4725D001361BF /* ProjectAudioSettingsWindowController.m in Sources */,
 				15A88DB414C5CE9700CCAFC6 /* AttenuationCurveView.m in Sources */,
 				157D40091510BD9B0028818C /* SpatDIF.m in Sources */,
-<<<<<<< HEAD
 				15FAE2E6152B703B00357D56 /* ProjectDocument.xcdatamodeld in Sources */,
-=======
 				22E5A10B1529E67B00E987BA /* AudioSourceLowPassFilter.cpp in Sources */,
->>>>>>> d2d8664332056047e61398a9ce205e90dd20f617
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
