@@ -357,7 +357,7 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setDistanceBasedFiltering:(double)amount
 {
-    // ambisonicsAudioEngine->enableFilter(amount != 0);
+    ambisonicsAudioEngine->enableDistanceBasedFiltering(amount != 0);
 }
 
 - (void)setDistanceBasedDelay:(double)unitScaleFactor
