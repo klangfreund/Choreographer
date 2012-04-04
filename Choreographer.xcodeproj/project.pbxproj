@@ -123,6 +123,7 @@
 		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
 		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
 		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
+		22E5A10B1529E67B00E987BA /* AudioSourceLowPassFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 22E5A1091529E67B00E987BA /* AudioSourceLowPassFilter.cpp */; };
 		775DFF38067A968500C5B868 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
@@ -337,6 +338,9 @@
 		22E2ACE5144C621C001D94A3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
 		22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		22E5A1091529E67B00E987BA /* AudioSourceLowPassFilter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceLowPassFilter.cpp; sourceTree = "<group>"; };
+		22E5A10A1529E67B00E987BA /* AudioSourceLowPassFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioSourceLowPassFilter.h; sourceTree = "<group>"; };
+		22E5A10D152AE75300E987BA /* SpacialPosition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpacialPosition.h; sourceTree = "<group>"; };
 		2A37F4ACFDCFA73011CA2CEA /* CHProjectDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHProjectDocument.m; sourceTree = "<group>"; };
 		2A37F4AEFDCFA73011CA2CEA /* CHProjectDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHProjectDocument.h; sourceTree = "<group>"; };
 		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -590,6 +594,8 @@
 		1586A8A413B3B45100262B02 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				22E5A1091529E67B00E987BA /* AudioSourceLowPassFilter.cpp */,
+				22E5A10A1529E67B00E987BA /* AudioSourceLowPassFilter.h */,
 				1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */,
 				1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */,
 				1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */,
@@ -607,6 +613,7 @@
 				1586A8BB13B3B45100262B02 /* PinkNoiseGeneratorAudioSource.h */,
 				15D9C24B14C44B5F00941A40 /* SpacialEnvelopePoint.cpp */,
 				15D9C24C14C44B5F00941A40 /* SpacialEnvelopePoint.h */,
+				22E5A10D152AE75300E987BA /* SpacialPosition.h */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -1080,7 +1087,11 @@
 				1500639D14C4725D001361BF /* ProjectAudioSettingsWindowController.m in Sources */,
 				15A88DB414C5CE9700CCAFC6 /* AttenuationCurveView.m in Sources */,
 				157D40091510BD9B0028818C /* SpatDIF.m in Sources */,
+<<<<<<< HEAD
 				15FAE2E6152B703B00357D56 /* ProjectDocument.xcdatamodeld in Sources */,
+=======
+				22E5A10B1529E67B00E987BA /* AudioSourceLowPassFilter.cpp in Sources */,
+>>>>>>> d2d8664332056047e61398a9ce205e90dd20f617
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

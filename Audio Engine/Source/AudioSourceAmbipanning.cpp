@@ -104,15 +104,22 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
 	  newSpacialEnvelopeSet (false),
 	  numberOfSpeakersChanged (false),
       audioSourceGainEnvelope (audioFormatReader, sampleRateOfTheAudioDevice, enableBuffering),
-      audioSourceDopplerEffect(audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
-      audioSourceGainEnvOrDopplerFX (&audioSourceGainEnvelope)
+      dopplerEffectEnabled (false),
+      audioSourceDopplerEffect (audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
+      audioSourceDopplerEffectOrNot (&audioSourceGainEnvelope),
+      lowPassFilterEnabled (false),
+      audioSourceLowPassFilter (&audioSourceGainEnvelope, sampleRateOfTheAudioDevice),
+      audioSourceLowPassFilterOrNot (audioSourceDopplerEffectOrNot),
+      sampleRate (sampleRateOfTheAudioDevice),
+      samplesPerBlockExpected(512)
 {
 	DEB("AudioSourceAmbipanning: constructor called.");
     
-    // By default: No doppler effect
-    enableDopplerEffect(false);
+    // By default: No doppler effect and no low pass filtering
+    
     // TEMP
     // enableDopplerEffect(true);
+    // enableLowPassFilter(true);
 	
 	// Define an initial spacial envelope.
 	// It is also neccessary to set up the newSpacialEnvelope,
@@ -136,10 +143,13 @@ AudioSourceAmbipanning::~AudioSourceAmbipanning()
 }
 
 /** Implementation of the AudioSource method. */
-void AudioSourceAmbipanning::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
+void AudioSourceAmbipanning::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
-	audioSourceGainEnvelope.prepareToPlay (samplesPerBlockExpected, sampleRate);
-    audioSourceDopplerEffect.prepareToPlay (samplesPerBlockExpected, sampleRate);
+	audioSourceGainEnvelope.prepareToPlay (samplesPerBlockExpected_, sampleRate_);
+    audioSourceDopplerEffect.prepareToPlay (samplesPerBlockExpected_, sampleRate_);
+    audioSourceLowPassFilter.prepareToPlay(samplesPerBlockExpected_, sampleRate_);
+    sampleRate = sampleRate_;
+    samplesPerBlockExpected = samplesPerBlockExpected_;
 }
 
 /** Implementation of the AudioSource method. */
@@ -147,6 +157,7 @@ void AudioSourceAmbipanning::releaseResources()
 {
 	audioSourceGainEnvelope.releaseResources();
     audioSourceDopplerEffect.releaseResources();
+    audioSourceLowPassFilter.releaseResources();
 }
 
 /** Implementation of the AudioSource method. */
@@ -166,8 +177,9 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 	monoInfo.numSamples = info.numSamples;
 	monoInfo.buffer = &monoBuffer;
 	
-    audioSourceGainEnvOrDopplerFX->getNextAudioBlock(monoInfo);
-	  // the gain envelope is now applied.
+    audioSourceLowPassFilterOrNot->getNextAudioBlock(monoInfo);
+	  // the gain envelope and maybe the dopplerfx and maybe the low pass filter
+      // are now applied.
 	
 	// copy the samples of the first channel (with index 0) to the other channels
 	for (int chan = 1; chan < info.buffer->getNumChannels(); ++chan)
@@ -463,31 +475,44 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 	}
 	
 	nextPlayPosition = newPosition;
-	audioSourceGainEnvOrDopplerFX->setNextReadPosition (newPosition);
+	audioSourceLowPassFilterOrNot->setNextReadPosition (newPosition);
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getNextReadPosition () const
 {
-	// return audioSourceGainEnvOrDopplerFX.getNextReadPosition();
-    return audioSourceGainEnvOrDopplerFX->getNextReadPosition();
+    return audioSourceLowPassFilterOrNot->getNextReadPosition();
 }
 
 /** Implements the PositionableAudioSource method. */
 int64 AudioSourceAmbipanning::getTotalLength () const
 {
-	return audioSourceGainEnvOrDopplerFX->getTotalLength();
+	return audioSourceLowPassFilterOrNot->getTotalLength();
 }
 
 /** Implements the PositionableAudioSource method. */
 bool AudioSourceAmbipanning::isLooping () const
 {
-	return audioSourceGainEnvOrDopplerFX->isLooping();
+	return audioSourceLowPassFilterOrNot->isLooping();
 }
 
-void AudioSourceAmbipanning::enableBuffering(bool enable)
+void AudioSourceAmbipanning::enableBuffering (bool enable)
 {
 	audioSourceGainEnvelope.enableBuffering(enable);
+}
+
+void AudioSourceAmbipanning::enableLowPassFilter (bool enable)
+{
+    lowPassFilterEnabled = enable;
+    
+    if (enable)
+    {
+        audioSourceLowPassFilterOrNot = &audioSourceLowPassFilter;
+    }
+    else
+    {
+        audioSourceLowPassFilterOrNot = audioSourceDopplerEffectOrNot;
+    }
 }
 
 void AudioSourceAmbipanning::enableDopplerEffect (bool enable)
@@ -496,11 +521,22 @@ void AudioSourceAmbipanning::enableDopplerEffect (bool enable)
     
     if (enable)
     {
-        audioSourceGainEnvOrDopplerFX = &audioSourceDopplerEffect;
+        audioSourceDopplerEffectOrNot = &audioSourceDopplerEffect;
     }
     else
     {
-        audioSourceGainEnvOrDopplerFX = &audioSourceGainEnvelope;
+        audioSourceDopplerEffectOrNot = &audioSourceGainEnvelope;
+    }
+    
+    // Important! Also refresh the targets of this pointers:
+    if (lowPassFilterEnabled)
+    {
+        // Set the right source for the lowpass filter:
+        audioSourceLowPassFilter.setSource(audioSourceDopplerEffectOrNot);
+    }
+    else
+    {
+        audioSourceLowPassFilterOrNot = audioSourceDopplerEffectOrNot;
     }
 }
 
@@ -530,6 +566,7 @@ void AudioSourceAmbipanning::setSpacialEnvelope(const Array<SpacialEnvelopePoint
         // Let the doppler effect audio source also know about the new
         // spacial envelope.
         audioSourceDopplerEffect.setSpacialEnvelope(newSpacialEnvelope_);
+        audioSourceLowPassFilter.setSpacialEnvelope(newSpacialEnvelope_);
 	}
 	else
 	{

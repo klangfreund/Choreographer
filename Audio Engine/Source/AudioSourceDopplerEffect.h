@@ -12,6 +12,7 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "SpacialEnvelopePoint.h"
+#include "SpacialPosition.h"
 #include "AudioSourceGainEnvelope.h"
 
 /** Defines a position in space.
