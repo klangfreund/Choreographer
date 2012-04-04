@@ -997,6 +997,16 @@ void AmbisonicsAudioEngine::setUnitScaleFactorForDopplerEffect (double unitScale
     SpacialPosition::setUnitScaleFactor(unitScaleFactor);
 }
 
+void AmbisonicsAudioEngine::enableDistanceBasedFiltering (bool enable)
+{
+    audioRegionMixer.enableDistanceBasedFiltering(enable);
+}
+
+void AmbisonicsAudioEngine::setDistanceWithHalfTheOpenCutoffFrequency (double distance)
+{
+    AudioSourceLowPassFilter::setDistanceWithHalfTheOpenCutoffFrequency(distance);
+}
+
 void AmbisonicsAudioEngine::setAEPOrder (const double order)
 {
 	AudioSourceAmbipanning::setOrder(order);

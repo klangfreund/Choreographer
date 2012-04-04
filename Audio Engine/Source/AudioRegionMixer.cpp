@@ -395,6 +395,17 @@ void AudioRegionMixer::enableDopplerEffect (bool enable)
 	}
 }
 
+void AudioRegionMixer::enableDistanceBasedFiltering (bool enable)
+{
+    DEB("AudioRegionMixer: enableDistanceBasedFiltering called.");
+	
+	for (int i = 0; i < regions.size(); i++)
+	{
+		AudioRegion* audioRegion = (AudioRegion*)regions[i];
+		audioRegion->audioSourceAmbipanning->enableLowPassFilter(enable);
+	}
+}
+
 void AudioRegionMixer::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
 	DEB("AudioRegionMixer: prepareToPlay called.");

@@ -217,6 +217,13 @@ public:
      It is disabled by default.
      */  
     void enableDopplerEffect (bool enable);
+    
+    /**
+     Enables or disables the distance based filtering.
+     
+     Disabled by default.
+     */  
+    void enableDistanceBasedFiltering(bool enable);
 	
 
     //==============================================================================

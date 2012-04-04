@@ -460,6 +460,15 @@ public:
     void enableDopplerEffect (bool enable);
     
     void setUnitScaleFactorForDopplerEffect (double unitScaleFactor);
+    
+    /**
+     Enables or disables the distance based filtering.
+     
+     It is disabled by default.
+     */    
+    void enableDistanceBasedFiltering (bool enable);
+    
+    void setDistanceWithHalfTheOpenCutoffFrequency (double distance);
 	
 	/**
 	 Sets the order used in AudioSourceAmbipanning.

@@ -357,7 +357,9 @@ static AudioEngine *sharedAudioEngine = nil;
 
 - (void)setDistanceBasedFiltering:(double)halfCutoffUnit
 {
-    // ambisonicsAudioEngine->enableFilter(halfCutoffUnit != 0);
+    ambisonicsAudioEngine->enableDistanceBasedFiltering(halfCutoffUnit != 0);
+
+    ambisonicsAudioEngine->setDistanceWithHalfTheOpenCutoffFrequency(halfCutoffUnit);
     NSLog(@"setDistanceBasedFiltering %f", halfCutoffUnit);
 }
 
