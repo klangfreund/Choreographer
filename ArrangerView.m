@@ -1555,12 +1555,12 @@
                     [[context undoManager] setActionName:@"crop audio region"];
                 else if([selectedRegions count] > 1)
                     [[context undoManager] setActionName:@"crop audio regions"];
-            
-                    
-                [self recalculateArrangerProperties];
+                                
                 draggingDirtyFlag = NO;
             }
         }
+        
+        [self recalculateArrangerProperties];
     }
 
     if(arrangerEditMode == arrangerModeMarquee)

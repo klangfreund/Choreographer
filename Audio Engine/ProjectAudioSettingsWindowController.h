@@ -18,7 +18,7 @@
     
     float ambisonicsOrder;
     
-    BOOL distanceBasedAttenuation;
+    BOOL  distanceBasedAttenuation;
     float distanceBasedAttenuationCentreZoneSize;
     float distanceBasedAttenuationCentreDB;
     float distanceBasedAttenuationCentreExponent;
@@ -26,8 +26,11 @@
     float distanceBasedAttenuationDbFalloff;
     float distanceBasedAttenuationExponent;
 
-    BOOL distanceBasedFiltering;
-    BOOL distanceBasedDelay;
+    BOOL  distanceBasedFiltering;
+    float distanceBasedFilteringAmount;
+
+    BOOL  distanceBasedDelay;
+    float distanceBasedDelayUnitScaleFactor;
 }
 
 - (IBAction)closeWindow:(id)sender;

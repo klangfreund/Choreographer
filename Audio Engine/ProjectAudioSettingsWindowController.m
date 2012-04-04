@@ -28,8 +28,12 @@
     	[self addObserver:self forKeyPath:@"distanceBasedAttenuationMode" options:0 context:nil];
     	[self addObserver:self forKeyPath:@"distanceBasedAttenuationDbFalloff" options:0 context:nil];
     	[self addObserver:self forKeyPath:@"distanceBasedAttenuationExponent" options:0 context:nil];
+
     	[self addObserver:self forKeyPath:@"distanceBasedFiltering" options:0 context:nil];
+    	//[self addObserver:self forKeyPath:@"distanceBasedFilteringAmount" options:0 context:nil];
+        
     	[self addObserver:self forKeyPath:@"distanceBasedDelay" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedDelayUnitScaleFactor" options:0 context:nil];
 
         //audioEngine = [AudioEngine sharedAudioEngine];
     }
@@ -62,8 +66,12 @@
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationMode"] forKeyPath:@"distanceBasedAttenuationMode"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationDbFalloff"] forKeyPath:@"distanceBasedAttenuationDbFalloff"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationExponent"] forKeyPath:@"distanceBasedAttenuationExponent"];
+
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFiltering"] forKeyPath:@"distanceBasedFiltering"];
+    //[self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFilteringAmount"] forKeyPath:@"distanceBasedFilteringAmount"];
+
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelay"] forKeyPath:@"distanceBasedDelay"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelayUnitScaleFactor"] forKeyPath:@"distanceBasedDelayUnitScaleFactor"];
 }
 
 - (IBAction)closeWindow:(id)sender
@@ -82,10 +90,15 @@
         [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:ambisonicsOrder];
     else if([keyPath isEqualToString:@"distanceBasedAttenuation"])
         [attenuationCurveView setEnabled:distanceBasedAttenuation];
-    else if([keyPath isEqualToString:@"distanceBasedDelay"])
-        [[AudioEngine sharedAudioEngine] setUseDelay:distanceBasedDelay];
+    else if([keyPath isEqualToString:@"distanceBasedDelay"] || [keyPath isEqualToString:@"distanceBasedDelayUnitScaleFactor"])
+    {
+        double factor = distanceBasedDelay ? distanceBasedDelayUnitScaleFactor : 0;
+        [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
+    }
+    else if([keyPath isEqualToString:@"distanceBasedFiltering"])
+        [[AudioEngine sharedAudioEngine] setDistanceBasedFiltering:distanceBasedFiltering];
     
-    NSRange range = [keyPath rangeOfString:@"distanceBased"];
+    NSRange range = [keyPath rangeOfString:@"distanceBasedAttenuation"];
     if(range.location != NSNotFound)
     {
         int mode = distanceBasedAttenuation ? distanceBasedAttenuationMode + 1 : 0;

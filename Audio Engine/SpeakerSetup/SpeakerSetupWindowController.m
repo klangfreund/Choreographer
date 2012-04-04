@@ -460,51 +460,35 @@
     [openPanel setAllowsMultipleSelection:YES];
     [openPanel setCanChooseDirectories:NO];
     [openPanel setCanChooseFiles:YES];
+    [openPanel setAllowedFileTypes:fileTypes];
 	
-	[openPanel beginSheetForDirectory:nil
-								 file:nil
-								types:fileTypes
-					   modalForWindow:[self window]
-						modalDelegate:self
-					   didEndSelector:@selector(importPanelDidEnd:
-												returnCode:
-												contextInfo:)
-						  contextInfo:nil];
-}
-
-- (void)importPanelDidEnd:(NSOpenPanel *)openPanel returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	if(returnCode == NSOKButton)
-	{
-		NSLog(@"...do import");
-		[speakerSetups importXMLData:[openPanel filenames]];
-	}
+	[openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
+    {
+        if (result == NSOKButton)
+        {
+            NSLog(@"...do import");
+            [speakerSetups importXMLData:[openPanel URLs]];
+            [openPanel orderOut:self];
+        }
+	}];
 }
 
 - (void)export
 {
 	NSLog(@"export");
 
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
 
 	//    [savePanel setAllowsMultipleSelection:NO];
 
-	[savePanel beginSheetForDirectory:nil
-								 file:nil
-					   modalForWindow:[self window]
-						modalDelegate:self
-					   didEndSelector:@selector(exportPanelDidEnd:
-												returnCode:
-												contextInfo:)
-						  contextInfo:nil];
-}
-
-- (void)exportPanelDidEnd:(NSSavePanel *)savePanel returnCode:(int)returnCode contextInfo:(void *)contextInfo
-{
-	if(returnCode == NSOKButton)
-	{
-		[speakerSetups exportDataAsXML:[savePanel URL]];
-	}
+    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result)
+    {
+        if (result == NSOKButton)
+        {
+            [speakerSetups exportDataAsXML:[savePanel URL]];
+            [savePanel orderOut:self];
+        }
+    }];
 }
 
 - (void)saveSelectedPreset

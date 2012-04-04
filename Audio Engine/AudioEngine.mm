@@ -101,8 +101,6 @@ static AudioEngine *sharedAudioEngine = nil;
                                                     selector:@selector(checkHardwareState)
                                                     userInfo:nil
                                                      repeats:YES];
-
-
 	
     regionIndex = 0;	
 	volumeLevelMeasurementClientCount = 0;
@@ -357,13 +355,17 @@ static AudioEngine *sharedAudioEngine = nil;
     }
 }
 
-- (void)setUseHipassFilter:(BOOL)filter
+- (void)setDistanceBasedFiltering:(double)amount
 {
+    // ambisonicsAudioEngine->enableFilter(amount != 0);
 }
 
-- (void)setUseDelay:(BOOL)delay
+- (void)setDistanceBasedDelay:(double)unitScaleFactor
 {
-    ambisonicsAudioEngine->enableDopplerEffect(delay);
+    ambisonicsAudioEngine->enableDopplerEffect(unitScaleFactor != 0);
+
+    ambisonicsAudioEngine->setUnitScaleFactorForDopplerEffect(unitScaleFactor);
+    NSLog(@"setDistanceBasedDelay %f", unitScaleFactor);
 }
 
 - (void)setTestNoiseVolume:(float)dbValue

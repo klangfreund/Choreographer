@@ -105,8 +105,8 @@
                 attenuationExponent:(double)exponent;
 
 
-- (void)setUseHipassFilter:(BOOL)filter;
-- (void)setUseDelay:(BOOL)delay;
+- (void)setDistanceBasedFiltering:(double)amount;
+- (void)setDistanceBasedDelay:(double)unitScaleFactor;
 
 - (void)setTestNoiseVolume:(float)dbValue;
 
