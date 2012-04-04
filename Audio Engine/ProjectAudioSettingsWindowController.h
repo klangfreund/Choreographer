@@ -27,7 +27,7 @@
     float distanceBasedAttenuationExponent;
 
     BOOL  distanceBasedFiltering;
-    float distanceBasedFilteringAmount;
+    float distanceBasedFilteringHalfCutoffUnit;
 
     BOOL  distanceBasedDelay;
     float distanceBasedDelayUnitScaleFactor;

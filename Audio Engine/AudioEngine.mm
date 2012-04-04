@@ -355,9 +355,10 @@ static AudioEngine *sharedAudioEngine = nil;
     }
 }
 
-- (void)setDistanceBasedFiltering:(double)amount
+- (void)setDistanceBasedFiltering:(double)halfCutoffUnit
 {
-    // ambisonicsAudioEngine->enableFilter(amount != 0);
+    // ambisonicsAudioEngine->enableFilter(halfCutoffUnit != 0);
+    NSLog(@"setDistanceBasedFiltering %f", halfCutoffUnit);
 }
 
 - (void)setDistanceBasedDelay:(double)unitScaleFactor

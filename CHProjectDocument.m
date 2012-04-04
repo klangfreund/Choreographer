@@ -109,6 +109,8 @@
 
     double factor = [[projectSettings valueForKey:@"distanceBasedDelay"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedDelayUnitScaleFactor"] doubleValue] : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
+    double halfCutoff = [[projectSettings valueForKey:@"distanceBasedDelay"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedFilteringHalfCutoffUnit"] doubleValue] : 0;
+    [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:halfCutoff];
 
      // everything that has been done until now (setup, init...)
 	// is NOT put on the undo stack

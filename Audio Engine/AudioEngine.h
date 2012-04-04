@@ -105,7 +105,7 @@
                 attenuationExponent:(double)exponent;
 
 
-- (void)setDistanceBasedFiltering:(double)amount;
+- (void)setDistanceBasedFiltering:(double)halfCutoffUnit;
 - (void)setDistanceBasedDelay:(double)unitScaleFactor;
 
 - (void)setTestNoiseVolume:(float)dbValue;

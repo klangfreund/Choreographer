@@ -30,7 +30,7 @@
     	[self addObserver:self forKeyPath:@"distanceBasedAttenuationExponent" options:0 context:nil];
 
     	[self addObserver:self forKeyPath:@"distanceBasedFiltering" options:0 context:nil];
-    	//[self addObserver:self forKeyPath:@"distanceBasedFilteringAmount" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedFilteringHalfCutoffUnit" options:0 context:nil];
         
     	[self addObserver:self forKeyPath:@"distanceBasedDelay" options:0 context:nil];
     	[self addObserver:self forKeyPath:@"distanceBasedDelayUnitScaleFactor" options:0 context:nil];
@@ -68,7 +68,7 @@
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedAttenuationExponent"] forKeyPath:@"distanceBasedAttenuationExponent"];
 
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFiltering"] forKeyPath:@"distanceBasedFiltering"];
-    //[self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFilteringAmount"] forKeyPath:@"distanceBasedFilteringAmount"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFilteringHalfCutoffUnit"] forKeyPath:@"distanceBasedFilteringHalfCutoffUnit"];
 
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelay"] forKeyPath:@"distanceBasedDelay"];
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelayUnitScaleFactor"] forKeyPath:@"distanceBasedDelayUnitScaleFactor"];
@@ -96,7 +96,10 @@
         [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
     }
     else if([keyPath isEqualToString:@"distanceBasedFiltering"])
-        [[AudioEngine sharedAudioEngine] setDistanceBasedFiltering:distanceBasedFiltering];
+    {
+        double halfCutoff = distanceBasedFiltering ? distanceBasedFilteringHalfCutoffUnit : 0;
+        [[AudioEngine sharedAudioEngine] setDistanceBasedFiltering:halfCutoff];
+    }
     
     NSRange range = [keyPath rangeOfString:@"distanceBasedAttenuation"];
     if(range.location != NSNotFound)

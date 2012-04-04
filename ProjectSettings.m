@@ -49,7 +49,8 @@
         [theDictionary setValue:[NSNumber numberWithFloat:-3] forKey:@"distanceBasedAttenuationDbFalloff"];
         [theDictionary setValue:[NSNumber numberWithFloat:1] forKey:@"distanceBasedAttenuationExponent"];
         
-        [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedFiltering"];       
+        [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedFiltering"];   
+        [theDictionary setValue:[NSNumber numberWithDouble:0.2] forKey:@"distanceBasedFilteringHalfCutoffUnit"]; 
 
         [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedDelay"]; 
         [theDictionary setValue:[NSNumber numberWithDouble:1000] forKey:@"distanceBasedDelayUnitScaleFactor"]; 
