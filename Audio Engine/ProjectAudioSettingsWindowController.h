@@ -30,9 +30,14 @@
     float distanceBasedFilteringHalfCutoffUnit;
 
     BOOL  distanceBasedDelay;
-    float distanceBasedDelayUnitScaleFactor;
+    float distanceBasedDelayMilisecondsPerUnit;
 }
 
 - (IBAction)closeWindow:(id)sender;
 
+@end
+
+
+@interface MilisecondsPerUnitToDistanceFactor : NSValueTransformer
+{}
 @end

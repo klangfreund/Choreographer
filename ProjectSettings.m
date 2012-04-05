@@ -53,7 +53,7 @@
         [theDictionary setValue:[NSNumber numberWithDouble:0.2] forKey:@"distanceBasedFilteringHalfCutoffUnit"]; 
 
         [theDictionary setValue:[NSNumber numberWithBool:NO] forKey:@"distanceBasedDelay"]; 
-        [theDictionary setValue:[NSNumber numberWithDouble:1000] forKey:@"distanceBasedDelayUnitScaleFactor"]; 
+        [theDictionary setValue:[NSNumber numberWithDouble:10] forKey:@"distanceBasedDelayMilisecondsPerUnit"]; 
     }
     return self;
 }

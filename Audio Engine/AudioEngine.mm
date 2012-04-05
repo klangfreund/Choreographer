@@ -363,14 +363,14 @@ static AudioEngine *sharedAudioEngine = nil;
     NSLog(@"setDistanceBasedFiltering %f", halfCutoffUnit);
 }
 
-- (void)setDistanceBasedDelay:(double)unitScaleFactor
+- (void)setDistanceBasedDelay:(double)milisecondsPerUnit
 {
-    ambisonicsAudioEngine->enableDopplerEffect(unitScaleFactor != 0);
+    ambisonicsAudioEngine->enableDopplerEffect(milisecondsPerUnit != 0);
 
-    ambisonicsAudioEngine->setUnitScaleFactorForDopplerEffect(unitScaleFactor);
-    NSLog(@"setDistanceBasedDelay %f", unitScaleFactor);
+    ambisonicsAudioEngine->setUnitScaleFactorForDopplerEffect(milisecondsPerUnit * 3.4);
+    NSLog(@"setDistanceBasedDelay %f", milisecondsPerUnit * 3.4);
 }
-
+ 
 - (void)setTestNoiseVolume:(float)dbValue
 {
 	float gain = pow(10, 0.05 * dbValue);

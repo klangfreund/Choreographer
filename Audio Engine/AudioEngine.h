@@ -106,7 +106,7 @@
 
 
 - (void)setDistanceBasedFiltering:(double)halfCutoffUnit;
-- (void)setDistanceBasedDelay:(double)unitScaleFactor;
+- (void)setDistanceBasedDelay:(double)milisecondsPerUnit;
 
 - (void)setTestNoiseVolume:(float)dbValue;
 

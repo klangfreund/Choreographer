@@ -33,7 +33,7 @@
     	[self addObserver:self forKeyPath:@"distanceBasedFilteringHalfCutoffUnit" options:0 context:nil];
         
     	[self addObserver:self forKeyPath:@"distanceBasedDelay" options:0 context:nil];
-    	[self addObserver:self forKeyPath:@"distanceBasedDelayUnitScaleFactor" options:0 context:nil];
+    	[self addObserver:self forKeyPath:@"distanceBasedDelayMilisecondsPerUnit" options:0 context:nil];
 
         //audioEngine = [AudioEngine sharedAudioEngine];
     }
@@ -71,7 +71,7 @@
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedFilteringHalfCutoffUnit"] forKeyPath:@"distanceBasedFilteringHalfCutoffUnit"];
 
     [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelay"] forKeyPath:@"distanceBasedDelay"];
-    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelayUnitScaleFactor"] forKeyPath:@"distanceBasedDelayUnitScaleFactor"];
+    [self setValue:[document valueForKeyPath:@"projectSettings.distanceBasedDelayMilisecondsPerUnit"] forKeyPath:@"distanceBasedDelayMilisecondsPerUnit"];
 }
 
 - (IBAction)closeWindow:(id)sender
@@ -83,19 +83,20 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {    
+    // update document preferences
     [document setValue:[self valueForKeyPath:keyPath] forKeyPath:[NSString stringWithFormat:@"projectSettings.%@", keyPath]];
-    [attenuationCurveView setNeedsDisplay:YES];
     
+    // update audio engine
     if([keyPath isEqualToString:@"ambisonicsOrder"])
         [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:ambisonicsOrder];
     else if([keyPath isEqualToString:@"distanceBasedAttenuation"])
         [attenuationCurveView setEnabled:distanceBasedAttenuation];
-    else if([keyPath isEqualToString:@"distanceBasedDelay"] || [keyPath isEqualToString:@"distanceBasedDelayUnitScaleFactor"])
+    else if([keyPath isEqualToString:@"distanceBasedDelay"] || [keyPath isEqualToString:@"distanceBasedDelayMilisecondsPerUnit"])
     {
-        double factor = distanceBasedDelay ? distanceBasedDelayUnitScaleFactor : 0;
-        [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
+        double time = distanceBasedDelay ? distanceBasedDelayMilisecondsPerUnit : 0;
+        [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:time];
     }
-    else if([keyPath isEqualToString:@"distanceBasedFiltering"])
+    else if([keyPath isEqualToString:@"distanceBasedFiltering"] || [keyPath isEqualToString:@"distanceBasedFilteringHalfCutoffUnit"])
     {
         double halfCutoff = distanceBasedFiltering ? distanceBasedFilteringHalfCutoffUnit : 0;
         [[AudioEngine sharedAudioEngine] setDistanceBasedFiltering:halfCutoff];
@@ -111,7 +112,25 @@
                                                    centreAttenuation:distanceBasedAttenuationCentreDB
                                                     dBFalloffPerUnit:distanceBasedAttenuationDbFalloff
                                                  attenuationExponent:distanceBasedAttenuationExponent];
+
+        [attenuationCurveView setNeedsDisplay:YES];
     }
 }
 
 @end
+
+
+@implementation MilisecondsPerUnitToDistanceFactor
+
++ (Class)transformedValueClass { return [NSNumber class]; }
++ (BOOL)allowsReverseTransformation { return YES; }
+- (id)transformedValue:(id)value
+{
+    return (value == nil) ? nil : [NSNumber numberWithDouble:[value doubleValue] * 3.4];
+}
+- (id)reverseTransformedValue:(id)value
+{
+    return (value == nil) ? nil : [NSNumber numberWithDouble:[value doubleValue] / 3.4];
+}
+
+@end 
