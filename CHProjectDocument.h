@@ -20,7 +20,6 @@
 
 	IBOutlet id toolbarController;
 	IBOutlet NSSplitView *splitView;
-	IBOutlet NSTreeController *treeController;
 	IBOutlet ArrangerView *arrangerView;
 	IBOutlet id playbackController;
 	IBOutlet id bounceToDiskController;
@@ -37,9 +36,9 @@
 @property (assign) PoolViewController *poolViewController;
 @property Modifiers keyboardModifierKeys;
 
-- (void)setup;
 - (void)archiveProjectSettings;
 - (void)unarchiveProjectSettings;
+- (void)findUnlinkedAudioFiles;
 
 // actions (menu)
 - (IBAction)bounceToDisk:(id)sender;

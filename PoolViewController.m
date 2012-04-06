@@ -74,7 +74,7 @@
     [audioItemArrayController setFilterPredicate:[NSPredicate predicateWithFormat:@"type == %@", CHAudioItemType]];
     sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
     [audioItemArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	
+    	
 	// register for drag and drop
     [userOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, CHTrajectoryType, CHFolderType, NSFilenamesPboardType, nil]];
     [audioItemTableView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, NSFilenamesPboardType, nil]];
@@ -93,20 +93,6 @@
 											 selector:@selector(refresh:)
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 }
-
-//- (void)setup
-//{
-//	// get stored data
-//	NSManagedObjectContext *context = [document managedObjectContext];
-//	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-//	NSError *error;
-//	
-//	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:context];
-//	
-//	[request setEntity:entityDescription];
-//	[request setReturnsObjectsAsFaults:NO];
-//	[context executeFetchRequest:request error:&error];
-//}	
 
 
 #pragma mark -
@@ -430,7 +416,7 @@
 	{
 		// for newly imported audio files:
 		// audio item has original length
-		[newAudioItem setValue:[newAudioFile valueForKey:@"duration"] forKey:@"duration"];
+		[newAudioItem setValue:[NSNumber numberWithLongLong:[AudioFile durationOfAudioFileAtPath:filePath]] forKey:@"duration"];
 		
 		// expand parent node
 		//				[userOutlineView expandItem:parentNode];

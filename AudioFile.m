@@ -8,6 +8,7 @@
 
 #import "AudioFile.h"
 #import "ProgressPanel.h"
+#import "Path.h"
 
 
 @implementation AudioFile
@@ -101,14 +102,15 @@
 - (void)awakeFromInsert
 {
 	[super awakeFromInsert];
+    duration = 0;
 	//NSLog(@"AudioFile %x awakeFromInsert", self);
 }
 
 - (void)awakeFromFetch
 {
 	[super awakeFromFetch];
+    duration = 0;
 //	NSLog(@"AudioFile awakeFromFetch, path: %@", [self valueForKey:@"relativeFilePath"]);
-	[self reopenAudioFile];
 }
 
 - (void)dealloc
@@ -121,11 +123,19 @@
 #pragma mark -
 #pragma mark accessors
 
+- (NSUInteger)duration
+{
+    if(duration == 0) duration = [AudioFile durationOfAudioFileAtPath:[self filePathString]];
+
+    return duration;
+}
+
+
 - (AudioFileID)audioFileID
 {
     if(audioFileID) return audioFileID;
     
-	audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
+    audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
     return audioFileID;
 }
 
@@ -163,10 +173,9 @@
 	}
 	
 	
-	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
-	UInt64 dataPackets = [AudioFile dataPacketsOfAudioFile:audioFileID];
 	
 	// check sample rate
+	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
 	if(basicDescription.mSampleRate != [[[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument.projectSettings.projectSampleRate"] intValue])
 	{
 		NSAlert *alert = [NSAlert alertWithMessageText:@"Wrong sample rate"
@@ -197,59 +206,58 @@
 		return NO;
 	}
 	
-	// get duration
-	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;
-	
-	// [self calculateOverviewImage];
+	//[self calculateOverviewImage];
 	return YES;
 }
 
-- (void)reopenAudioFile
+- (void)handleUnlinkedFile
 {	
-	audioFileID = [AudioFile idOfAudioFileAtPath:[self filePathString]];
+    // get filename from path
+    NSArray *listPath = [[self filePathString] componentsSeparatedByString:@"/"];
+    NSString *theName = [NSString stringWithString:[listPath objectAtIndex:[listPath count]-1]];
 
-	// file successfully opened?
-	if(!audioFileID)
-	{
-		// get filename from path
-		NSArray *listPath = [[self filePathString] componentsSeparatedByString:@"/"];
-		NSString *theName = [NSString stringWithString:[listPath objectAtIndex:[listPath count]-1]];
+    NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Can't find audio file %@", theName]
+                                     defaultButton:@"Relink"
+                                   alternateButton:nil //@"Delete"
+                                       otherButton:@"Skip"
+                         informativeTextWithFormat:[NSString stringWithFormat:@"%@", [self filePathString]]];
+    
+    // show alert in a modal dialog
+    int button = [alert runModal];
+    
+    
+    switch(button)
+    {
+        case NSAlertDefaultReturn: // relink
+            [self relinkAudioFile];
+            break;
+                        
+        case NSAlertAlternateReturn: // delete reference
+            break;
 
-		NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Can't find audio file %@", theName]
-										 defaultButton:@"Relink"
-									   alternateButton:nil //@"Delete"
-										   otherButton:@"Skip"
-							 informativeTextWithFormat:[NSString stringWithFormat:@"%@", [self filePathString]]];
-		
-		// show alert in a modal dialog
-		int button = [alert runModal];
-		
-		
-		switch(button)
-		{
-			case NSAlertDefaultReturn: // relink
-				[self relinkAudioFile];
-				break;
-							
-			case NSAlertAlternateReturn: // delete reference
-				break;
-
-			default: // skip (that is, do nothing)
-				break;
-		}
-		
-		return;
-	}
-	
-	// get duration
-	AudioStreamBasicDescription basicDescription = [AudioFile descriptionOfAudioFile:audioFileID];
-	UInt64 dataPackets = [AudioFile dataPacketsOfAudioFile:audioFileID];
-	duration = dataPackets * basicDescription.mFramesPerPacket / basicDescription.mSampleRate * 1000;
+        default: // skip (that is, do nothing)
+            break;
+    }
+    
+    return;
 }
 
 - (void)relinkAudioFile
 {
-	// choose audio file in an open panel
+    NSUInteger actualDuration, proposedDuration;
+    id originalAudioItem; 
+
+	for(id audioItem in [self valueForKey:@"audioItems"])
+	{
+		if([[audioItem valueForKey:@"isOriginal"] boolValue])
+		{
+            originalAudioItem = audioItem;
+            proposedDuration = [[audioItem valueForKey:@"duration"] unsignedLongValue];
+            break;
+		}
+	}
+	
+    // choose audio file in an open panel
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
 	
     [openPanel setTreatsFilePackagesAsDirectories:NO];
@@ -261,9 +269,48 @@
 	
 	if([openPanel runModal] == NSOKButton)
 	{
-		[self setValue:[[[openPanel URLs] objectAtIndex:0] relativeString] forKey:@"relativeFilePath"];
 		[openPanel orderOut:self];
-		[self openAudioFile];
+
+        NSDocument *document = [[NSApplication sharedApplication] valueForKeyPath:@"delegate.currentProjectDocument"];
+        NSString *newRelativeFilePath = [Path path:[[openPanel URLs] objectAtIndex:0]
+                                        relativeTo:[document fileURL]];
+        
+        actualDuration = [AudioFile durationOfAudioFileAtPath:[[[openPanel URLs] objectAtIndex:0] path]];
+        
+//        NSLog(@"proposed duration %lu", proposedDuration);
+//        NSLog(@"actual duration %lu", actualDuration);
+      
+        if(proposedDuration != actualDuration)
+        {
+            NSAlert *alert = [NSAlert alertWithMessageText:@"Are you sure this is the right sound file?"
+                                             defaultButton:@"no, try again"
+                                           alternateButton:@"yes, continue"
+                                               otherButton:@"cancel"
+                                 informativeTextWithFormat:@"The duration of %@ does not match the stored duration", newRelativeFilePath];
+
+            // show alert in a modal dialog
+            int button = [alert runModal];
+
+            switch(button)
+            {
+                case NSAlertDefaultReturn: // try again
+                    [self relinkAudioFile];
+                    break;
+                    
+                case NSAlertAlternateReturn: // continue
+                    [self setValue:newRelativeFilePath forKey:@"relativeFilePath"];
+                    [self openAudioFile];
+                    break;
+                    
+                default: // cancel, do nothing
+                    break;
+            }
+        }
+        else
+        {
+            [self setValue:newRelativeFilePath forKey:@"relativeFilePath"];
+            [self openAudioFile];
+        }
 	}
 }
 

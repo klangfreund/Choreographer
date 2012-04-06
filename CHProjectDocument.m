@@ -11,6 +11,7 @@
 #import "EditorContent.h"
 #import "ProjectWindow.h"
 #import "ArrangerView.h"
+#import "AudioFile.h"
 #import "ToolbarController.h"
 #import "PlaybackController.h"
 
@@ -64,7 +65,8 @@
     [super windowControllerDidLoadNib:theWindowController];
 
 	// fetch project settings from model
-	[self setup];
+	[self unarchiveProjectSettings];
+	[self setProjectSampleRate:[[projectSettings valueForKey:@"projectSampleRate"] intValue]];
 	
 	// project window
 	NSWindow *window = [theWindowController window];
@@ -91,11 +93,13 @@
 	[[poolViewController view] setFrame:r];
 	[splitSubview addSubview:[poolViewController view]];
 //	[poolViewController setup];
+    
+    [self findUnlinkedAudioFiles];
 	
 	// setup arranger view (rebuild from data model)
 	[arrangerView setup];
-	
-	// playback controller
+		
+    // playback controller
 	[playbackController setValue:projectSettings forKey:@"projectSettings"];
     
     // initialize audio engine
@@ -129,12 +133,28 @@
     
 }
 
-- (void)setup
+- (void)findUnlinkedAudioFiles
 {
-	NSLog(@"Project setup");
+	NSManagedObjectContext *managedObjectContext = [self managedObjectContext];
+    NSFetchRequest *fetchRequest = [[[NSFetchRequest alloc] init] autorelease];
+    NSError *fetchError = nil;
+    NSArray *fetchResults;
+	
+    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"AudioFile" inManagedObjectContext:managedObjectContext];
+    
+    [fetchRequest setEntity:entityDescription];
+ 	[fetchRequest setReturnsObjectsAsFaults:NO];
+	fetchResults = [managedObjectContext executeFetchRequest:fetchRequest error:&fetchError];
 
-	[self unarchiveProjectSettings];
-	[self setProjectSampleRate:[[projectSettings valueForKey:@"projectSampleRate"] intValue]];
+    for(AudioFile *audioFile in fetchResults)
+    {
+        if(0==[audioFile audioFileID])
+        {
+            [audioFile handleUnlinkedFile];
+            // set the document's dirty flag
+            [self updateChangeCount:NSChangeDone];
+        }
+    }
 }
 
 /* versioning:
