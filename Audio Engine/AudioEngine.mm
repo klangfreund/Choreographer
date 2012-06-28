@@ -216,6 +216,26 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->disableArrangerLoop();
 }
 
+- (void)startPrelisten:(id)audioItem
+{
+    int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
+	double fromMsToSamples = 0.001*sampleRate;
+
+	unsigned long  offsetInFile = [[audioItem valueForKeyPath:@"offsetInFile"] unsignedLongLongValue] * fromMsToSamples;
+	unsigned long  duration = [[audioItem valueForKey:@"duration"] unsignedLongValue] * fromMsToSamples;
+    
+	NSString *filePath = [audioItem valueForKeyPath:@"audioFile.filePathString"];
+    
+	NSLog(@"start prelisten:\nstart: %lu dur:%lu\nfile: %@", offsetInFile, duration, filePath);
+
+}
+
+- (void)stopPrelisten
+{
+    NSLog(@"stop prelisten");
+}
+
+
 #pragma mark -
 #pragma mark bounce to disk
 // -----------------------------------------------------------

@@ -18,6 +18,7 @@
 #import "ImageAndTextCell.h"
 #import "Path.h"
 #import "SpatDIF.h"
+#import "AudioEngine.h"
 
 
 @implementation PoolViewController
@@ -302,6 +303,7 @@
     
     if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorModalForWindow:[[self view] window] trajectoryItem:item];
 }
+
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
 {
@@ -713,6 +715,38 @@
 	
 	return YES;
 }
+
+- (void)prelisten:(id)sender index:(int)i
+{
+    if(i < 0)
+    {
+        [[AudioEngine sharedAudioEngine] stopPrelisten];
+    }
+    else if([[document valueForKey:@"keyboardModifierKeys"] intValue] == modifierAlt)
+    {
+        id item;
+        
+        switch ([[projectSettings valueForKey:@"poolSelectedTab"] intValue])
+        {
+            case 0: // user view
+                item = [[[sender itemAtRow:i] representedObject] valueForKeyPath:@"item"];
+                break;
+            case 1: // audio items view
+                item = [[[audioItemArrayController arrangedObjects] objectAtIndex:i]valueForKeyPath:@"item"];
+                break;
+            default:
+                item = nil;
+                break;
+        }
+        
+        
+        if([item isKindOfClass:[AudioItem class]])
+            [[AudioEngine sharedAudioEngine] startPrelisten:item];
+        else
+            [[AudioEngine sharedAudioEngine] stopPrelisten];  
+    }
+}
+
 
 #pragma mark -
 #pragma mark accessors

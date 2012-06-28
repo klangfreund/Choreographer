@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
 		<int key="IBDocument.SystemTarget">1050</int>
-		<string key="IBDocument.SystemVersion">11D50b</string>
+		<string key="IBDocument.SystemVersion">11E53</string>
 		<string key="IBDocument.InterfaceBuilderVersion">1617</string>
-		<string key="IBDocument.AppKitVersion">1138.32</string>
-		<string key="IBDocument.HIToolboxVersion">568.00</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
+		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
 			<string key="NS.object.0">1617</string>
@@ -68,6 +68,7 @@
 						<int key="NSvFlags">13</int>
 						<string key="NSFrame">{{19, 206}, {158, 20}}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSSegmentedCell" key="NSCell" id="494156765">
 							<int key="NSCellFlags">-2080244224</int>
@@ -103,6 +104,7 @@
 						<int key="NSvFlags">4382</int>
 						<string key="NSFrameSize">{200, 200}</string>
 						<reference key="NSSuperview" ref="1005"/>
+						<reference key="NSWindow"/>
 						<object class="NSMutableArray" key="NSTabViewItems">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="NSTabViewItem" id="582622073">
@@ -294,12 +296,14 @@
 															<int key="NSvFlags">54</int>
 															<string key="NSFrameSize">{200, 183}</string>
 															<reference key="NSSuperview" ref="313175021"/>
+															<reference key="NSWindow"/>
 															<bool key="NSEnabled">YES</bool>
 															<object class="NSTableHeaderView" key="NSHeaderView" id="765157558">
 																<reference key="NSNextResponder" ref="904305544"/>
 																<int key="NSvFlags">256</int>
 																<string key="NSFrameSize">{200, 17}</string>
 																<reference key="NSSuperview" ref="904305544"/>
+																<reference key="NSWindow"/>
 																<reference key="NSTableView" ref="302586318"/>
 															</object>
 															<object class="_NSCornerView" key="NSCornerView">
@@ -387,6 +391,7 @@
 													</object>
 													<string key="NSFrame">{{0, 17}, {200, 183}}</string>
 													<reference key="NSSuperview" ref="310468054"/>
+													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="302586318"/>
 													<reference key="NSDocView" ref="302586318"/>
 													<reference key="NSBGColor" ref="676057340"/>
@@ -397,6 +402,7 @@
 													<int key="NSvFlags">-2147483392</int>
 													<string key="NSFrame">{{85, 0}, {15, 85}}</string>
 													<reference key="NSSuperview" ref="310468054"/>
+													<reference key="NSWindow"/>
 													<reference key="NSTarget" ref="310468054"/>
 													<string key="NSAction">_doScroller:</string>
 													<double key="NSPercent">0.91500002145767212</double>
@@ -406,6 +412,7 @@
 													<int key="NSvFlags">-2147483392</int>
 													<string key="NSFrame">{{0, 185}, {200, 15}}</string>
 													<reference key="NSSuperview" ref="310468054"/>
+													<reference key="NSWindow"/>
 													<int key="NSsFlags">1</int>
 													<reference key="NSTarget" ref="310468054"/>
 													<string key="NSAction">_doScroller:</string>
@@ -420,6 +427,7 @@
 													</object>
 													<string key="NSFrameSize">{200, 17}</string>
 													<reference key="NSSuperview" ref="310468054"/>
+													<reference key="NSWindow"/>
 													<reference key="NSNextKeyView" ref="765157558"/>
 													<reference key="NSDocView" ref="765157558"/>
 													<reference key="NSBGColor" ref="676057340"/>
@@ -428,6 +436,7 @@
 											</object>
 											<string key="NSFrameSize">{200, 200}</string>
 											<reference key="NSSuperview" ref="82613708"/>
+											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="313175021"/>
 											<int key="NSsFlags">133680</int>
 											<reference key="NSVScroller" ref="497337052"/>
@@ -439,6 +448,7 @@
 									</object>
 									<string key="NSFrameSize">{200, 200}</string>
 									<reference key="NSSuperview" ref="402333558"/>
+									<reference key="NSWindow"/>
 								</object>
 								<string key="NSLabel">Audio</string>
 								<reference key="NSColor" ref="348588915"/>
@@ -582,6 +592,7 @@
 				</object>
 				<string key="NSFrameSize">{200, 229}</string>
 				<reference key="NSSuperview"/>
+				<reference key="NSWindow"/>
 				<string key="NSClassName">PoolView</string>
 			</object>
 			<object class="NSTreeController" id="1067141223">
@@ -903,7 +914,6 @@
 							<string key="NSFrame">{{234, 12}, {96, 32}}</string>
 							<reference key="NSSuperview" ref="106589255"/>
 							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="25005470">
 								<int key="NSCellFlags">67239424</int>
@@ -2053,6 +2063,7 @@
 					<string>137.CustomClassName</string>
 					<string>137.IBPluginDependency</string>
 					<string>139.IBPluginDependency</string>
+					<string>14.IBNSSegmentedControlInspectorSelectedSegmentMetadataKey</string>
 					<string>14.IBPluginDependency</string>
 					<string>142.CustomClassName</string>
 					<string>142.IBPluginDependency</string>
@@ -2152,6 +2163,7 @@
 					<string>PoolOutlineView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="0"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>ImageAndTextCell</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2232,7 +2244,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">340</int>
+			<int key="maxID">342</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2380,9 +2392,7 @@
 							<string>audioItemTableView</string>
 							<string>contextMenu</string>
 							<string>dropOrderMenu</string>
-							<string>newTrajectoryButton</string>
 							<string>newTrajectorySheet</string>
-							<string>newTrajectoryView</string>
 							<string>tabControl</string>
 							<string>tabView</string>
 							<string>trajectoryArrayController</string>
@@ -2396,9 +2406,7 @@
 							<string>NSTableView</string>
 							<string>NSMenu</string>
 							<string>id</string>
-							<string>NSButton</string>
 							<string>NSPanel</string>
-							<string>NSView</string>
 							<string>NSSegmentedControl</string>
 							<string>NSTabView</string>
 							<string>NSArrayController</string>
@@ -2415,9 +2423,7 @@
 							<string>audioItemTableView</string>
 							<string>contextMenu</string>
 							<string>dropOrderMenu</string>
-							<string>newTrajectoryButton</string>
 							<string>newTrajectorySheet</string>
-							<string>newTrajectoryView</string>
 							<string>tabControl</string>
 							<string>tabView</string>
 							<string>trajectoryArrayController</string>
@@ -2444,16 +2450,8 @@
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
-								<string key="name">newTrajectoryButton</string>
-								<string key="candidateClassName">NSButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
 								<string key="name">newTrajectorySheet</string>
 								<string key="candidateClassName">NSPanel</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">newTrajectoryView</string>
-								<string key="candidateClassName">NSView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">tabControl</string>

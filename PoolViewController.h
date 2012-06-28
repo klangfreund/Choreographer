@@ -9,10 +9,9 @@
 #import <Cocoa/Cocoa.h>
 #import "TrajectoryItem.h"
 
-
 @interface PoolViewController : NSViewController
 {
-	NSPersistentDocument *document;
+    NSPersistentDocument *document;
     NSManagedObject *projectSettings;
 	
 	IBOutlet NSOutlineView *userOutlineView;
@@ -67,6 +66,7 @@
 - (TrajectoryItem *)createNewTrajectoryItem;
 
 - (BOOL)recursivelyDeleteNode:(id)node;
+- (void)prelisten:(id)sender index:(int)i;
 
 // selection
 - (void)adaptSelection:(NSSet *)selectedAudioRegions;

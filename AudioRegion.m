@@ -303,7 +303,7 @@
 	NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 	NSArray *ctlArray = [self valueForKeyPath:@"parentRegion.playbackBreakpointArray"];
 	
-	NSLog(@"last time %u %u",[[playbackBreakpointArray lastObject] time], [[ctlArray lastObject] time]);
+	NSLog(@"last time %lu %lu",[[playbackBreakpointArray lastObject] time], [[ctlArray lastObject] time]);
 
 	NSUInteger time = 0;
 	NSUInteger ctlTimeOffset = [[self valueForKey:@"startTime"] unsignedIntValue] - [[self valueForKeyPath:@"parentRegion.startTime"] unsignedIntValue];
