@@ -74,19 +74,21 @@
             breakpointView.breakpointDescriptor = nil;
             breakpointView.yAxisMin = -1;
             breakpointView.yAxisMax = 1;
-
+            breakpointView.showMiddleLine = YES;
             
             breakpointView = [breakpointViews objectAtIndex:1];
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
             breakpointView.yAxisValueKeypath = @"y";
             breakpointView.toolTipString = @"time: %0.0f y: %0.2f";
             [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            breakpointView.showMiddleLine = YES;
 
             breakpointView = [breakpointViews objectAtIndex:2];
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
             breakpointView.yAxisValueKeypath = @"z";
             breakpointView.toolTipString = @"time: %0.0f z: %0.2f";
             [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            breakpointView.showMiddleLine = YES;
             
             numOfBreakpointViews = 3;
             
@@ -103,6 +105,7 @@
                 breakpointView.breakpointDescriptor = @"Angle";
                 breakpointView.yAxisMin = -360;
                 breakpointView.yAxisMax = 360;
+                breakpointView.showMiddleLine = YES;
             }
             else
             {
@@ -111,6 +114,7 @@
                 breakpointView.breakpointDescriptor = @"Speed";
                 breakpointView.yAxisMin = -100;
                 breakpointView.yAxisMax = 100;
+                breakpointView.showMiddleLine = YES;
             }
             
             [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
@@ -159,16 +163,19 @@
 
 	[backgroundColor set];
 	NSRectFill([self frame]);
+    
 	
 	// draw content
 	// -----------------------------------------------------------------------------
 	
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
+    
+    NSLog(@"\n\ndisplay mode %d\n", displayMode);
 
-    if(displayMode == regionDisplayMode)
-	{
-		return;
-	}
+//    if(displayMode == regionDisplayMode)
+//	{
+//		return;
+//	}
 
     editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
     

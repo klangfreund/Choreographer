@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "Trajectory.h"
+#import "TrajectoryItem.h"
 #import "BreakpointArray.h"
 
 
@@ -21,6 +22,7 @@
 
 @property int parameterMode;
 
+- (id)initWithTrajectoryItem:(TrajectoryItem *)item;
 - (void)resetParameters;
 
 // accessors

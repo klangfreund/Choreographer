@@ -32,6 +32,7 @@
 	unsigned int xAxisMax; // min is always 0
 	float zoomFactorX;
 	double yAxisMin, yAxisMax;
+    BOOL showMiddleLine;
 	
 	NSColor *backgroundColor, *keyBackgroundColor;
 	NSColor *gridColor;
@@ -53,6 +54,7 @@
 @property float zoomFactorX;
 @property double yAxisMin, yAxisMax;
 @property(retain) NSString *toolTipString;
+@property BOOL showMiddleLine;
 @property BOOL isKey;
 
 

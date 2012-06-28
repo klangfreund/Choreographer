@@ -27,14 +27,14 @@
 			trajectory = [[[BreakpointTrajectory alloc] initWithDefaultBreakpoint] autorelease];
 			break;
 		case rotationType:
-			trajectory = [[[RotationTrajectory alloc] init] autorelease];
 			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
 			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
+			trajectory = [[[RotationTrajectory alloc] initWithTrajectoryItem:trajectoryItem] autorelease];
 			break;
 		case randomType:
-			trajectory = [[[RandomTrajectory alloc] init] autorelease];
 			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
 			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
+			trajectory = [[[RandomTrajectory alloc] init] autorelease];
 			break;
 	}
 		

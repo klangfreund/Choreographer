@@ -7,16 +7,16 @@
 //
 
 #import "RotationTrajectory.h"
-#import "TrajectoryItem.h"
 
 
 @implementation RotationTrajectory
 
-- (id)init
+- (id)initWithTrajectoryItem:(TrajectoryItem *)item;
 {
     self = [super init];
 	if(self)
 	{
+        trajectoryItem = item;
         parameterBreakpointArray = [[BreakpointArray alloc] init];
 
 		initialPosition = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.5 Y:0 Z:0]] retain];
@@ -28,8 +28,9 @@
         [parameterBreakpointArray addBreakpoint:rotationCentre];
 
         parameterMode = 0; // 0=Angle, 1=Speed
+                
         [self resetParameters];
-}
+    }
 
     return self;	
 }
@@ -45,6 +46,8 @@
         [bp setTimeEditable:NO]; // initial angle, time not editable
         [parameterBreakpointArray addBreakpoint:bp];
 
+        NSUInteger dur = [[trajectoryItem valueForKey:@"duration"] intValue];
+        NSLog(@"ehuntahuseous  %lu", dur);
         bp = [Breakpoint breakpointWithTime:[[trajectoryItem valueForKey:@"duration"] unsignedLongValue] value:360];
         [bp setDescriptor:@"Angle"];
         [parameterBreakpointArray addBreakpoint:bp];

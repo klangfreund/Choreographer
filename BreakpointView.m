@@ -27,7 +27,7 @@
 @synthesize zoomFactorX;
 @synthesize yAxisMin, yAxisMax;
 @synthesize toolTipString;
-@synthesize isKey;
+@synthesize isKey, showMiddleLine;
 
 - (id)init
 {
@@ -75,6 +75,19 @@
 	double yAxisFactor = rect.size.height / (yAxisMax - yAxisMin);
 	
 
+    // middle line
+    
+    if(showMiddleLine)
+    {
+        [[NSGraphicsContext currentContext] setShouldAntialias:NO];
+        [[NSColor colorWithCalibratedWhite:1.0 alpha:0.2] set];
+        [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, rect.origin.y + rect.size.height * 0.5)
+                                  toPoint:NSMakePoint(rect.origin.x + rect.size.width, rect.origin.y + rect.size.height * 0.5)];
+        [[NSColor colorWithCalibratedWhite:0.0 alpha:0.2] set];
+        [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, rect.origin.y-1 + rect.size.height * 0.5)
+                                  toPoint:NSMakePoint(rect.origin.x + rect.size.width, rect.origin.y-1 + rect.size.height * 0.5)];
+    }
+    
 	// draw lines
 
 	[lineColor set];
