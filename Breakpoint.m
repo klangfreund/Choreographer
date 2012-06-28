@@ -47,7 +47,7 @@
 
 
 
-- (Breakpoint *)copy
+- (Breakpoint *)copyWithZone:(NSZone *)zone
 {
 	Breakpoint *newBp = [[Breakpoint alloc] init];
 	

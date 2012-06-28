@@ -10,20 +10,19 @@
 #import "TrajectoryItem.h"
 
 
-@interface TrajectoryInspectorWindowController : NSWindowController
+@interface TrajectoryInspectorWindowController : NSObject  //NSWindowController
 {
 	TrajectoryItem *currentTrajectoryItem;
-//	id breakpointTrajectoryItem;
-//	id rotationTrajectoryItem;
-//	id randomTrajectoryItem;
-
-	IBOutlet NSView *breakpointInspectorView;
-	IBOutlet NSView *rotationInspectorView;
-	IBOutlet NSView *randomInspectorView;
+    NSWindow *sheet;
+    
+	IBOutlet NSWindow *breakpointInspectorWindow;
+	IBOutlet NSWindow *rotationInspectorWindow;
+	IBOutlet NSWindow *randomInspectorWindow;
 }
 
 + (id)sharedTrajectoryInspectorWindowController;
 
-- (void)showInspectorForTrajectoryItem:(id)item;
+- (void)showInspectorModalForWindow:(NSWindow *)window trajectoryItem:(id)item;
+- (void)inspectorSheetOK;
 
 @end

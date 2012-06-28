@@ -24,39 +24,44 @@ static TrajectoryInspectorWindowController *sharedTrajectoryInspectorWindowContr
 
 - (id)init
 {
-	self = [self initWithWindowNibName:@"TrajectoryInspector"];
+	self = [super init];
 	if(self)
 	{
-		[self setWindowFrameAutosaveName:@"TrajectoryInspector"];
+        [NSBundle loadNibNamed:@"TrajectoryInspector" owner:self];
 	}
 	
 	return self;
 }
 
-- (void)showInspectorForTrajectoryItem:(id)item
+- (void)showInspectorModalForWindow:(NSWindow *)window trajectoryItem:(id)item
 {
-    [self showWindow:nil];
-	
 	[self setValue:item forKey:@"currentTrajectoryItem"];
-	
-	switch ([[item valueForKey:@"trajectoryType"] intValue])
+        
+    switch ([[currentTrajectoryItem valueForKey:@"trajectoryType"] intValue])
 	{
 		case 0:
-//			[self setValue:item forKey:@"breakpointTrajectoryItem"];
-			[[self window] setContentView:breakpointInspectorView];
+			sheet = breakpointInspectorWindow;
 			break;
 		case 1:
-//			[self setValue:item forKey:@"rotationTrajectoryItem"];
-			[[self window] setContentView:rotationInspectorView];
+			sheet = rotationInspectorWindow;
 			break;
 		case 2:
-//			[self setValue:item forKey:@"randomTrajectoryItem"];
-			[[self window] setContentView:randomInspectorView];
+			sheet = randomInspectorWindow;
 			break;
 	}
+    
+    [NSApp beginSheet:sheet
+	   modalForWindow:window
+		modalDelegate:nil
+	   didEndSelector:nil
+		  contextInfo:nil];
 }
 
-	
+- (void)inspectorSheetOK
+{
+	[NSApp endSheet:sheet returnCode:NSOKButton];
+	[sheet orderOut:nil];
+}
 
 // text field delegate method
 - (void)controlTextDidEndEditing:(NSNotification *)notification

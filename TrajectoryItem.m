@@ -159,10 +159,10 @@
 		return [trajectory playbackBreakpointArrayWithInitialPosition:nil duration:dur mode:mode];
 }
 
-- (id)trajectoryAttributeForKey:(NSString *)key
-{
-	return [trajectory trajectoryAttributeForKey:key];
-}
+//- (id)trajectoryAttributeForKey:(NSString *)key
+//{
+//	return [trajectory trajectoryAttributeForKey:key];
+//}
 
 
 #pragma mark -

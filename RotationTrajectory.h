@@ -15,11 +15,16 @@
 {
     Breakpoint *rotationCentre;
     Breakpoint *initialPosition;
-    Breakpoint *initialSpeed;
+
+    int parameterMode; // 0=Circle Sector, 1=Angular Speed
 }
 
-// accessors
-- (void)setInitialSpeed:(float)val;
+@property int parameterMode;
 
+- (void)resetParameters;
+
+// accessors
+- (int)parameterMode;
+- (void)setParameterMode:(int)val;
 
 @end

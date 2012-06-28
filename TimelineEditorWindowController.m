@@ -80,9 +80,9 @@ static TimelineEditorWindowController *sharedTimelineEditorWindowController = ni
 	if (trajectory != tempTrajectory)
 	{
 		trajectory = tempTrajectory;
-        [view setupSubviews];
 	} 
 	
+    [view setupSubviews];
 	[view setNeedsDisplay:YES];
 }
 

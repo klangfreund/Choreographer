@@ -95,12 +95,25 @@
         case rotationType:
             breakpointView = [breakpointViews objectAtIndex:0];
             breakpointView.breakpointArray = [trajectory parameterBreakpointArray];
-            breakpointView.yAxisValueKeypath = @"value";
-            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            
+            if([[trajectory valueForKey:@"parameterMode"] intValue] == 0)
+            {
+                breakpointView.yAxisValueKeypath = @"value";
+                breakpointView.toolTipString = @"time: %0.0f angle: %0.2f";
+                breakpointView.breakpointDescriptor = @"Angle";
+                breakpointView.yAxisMin = -360;
+                breakpointView.yAxisMax = 360;
+            }
+            else
+            {
+                breakpointView.yAxisValueKeypath = @"value";
+                breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+                breakpointView.breakpointDescriptor = @"Speed";
+                breakpointView.yAxisMin = -100;
+                breakpointView.yAxisMax = 100;
+            }
+            
             [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
-            breakpointView.breakpointDescriptor = @"Speed";
-            breakpointView.yAxisMin = -100;
-            breakpointView.yAxisMax = 100;
             
             numOfBreakpointViews = 1;
             

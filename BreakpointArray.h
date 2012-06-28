@@ -23,6 +23,7 @@
 - (void)addBreakpoint:(Breakpoint *)bp;
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 - (void)removeBreakpoint:(id)bp;
+- (void)removeBreakpointsWithDescriptor:(NSString *)descriptor;
 - (void)sort;
 
 // accessors

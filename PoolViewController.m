@@ -75,7 +75,7 @@
     sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
     [audioItemArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
     	
-	// register for drag and drop
+    // register for drag and drop
     [userOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, CHTrajectoryType, CHFolderType, NSFilenamesPboardType, nil]];
     [audioItemTableView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, NSFilenamesPboardType, nil]];
     [trajectoryTableView registerForDraggedTypes:[NSArray arrayWithObjects: CHTrajectoryType, nil]];
@@ -300,7 +300,7 @@
 		item = [[[trajectoryArrayController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
     }
     
-    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
+    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorModalForWindow:[[self view] window] trajectoryItem:item];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
@@ -437,7 +437,7 @@
 {
 	[self setNewTrajectoryName:name];	
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"newTrajectoryType"];
-	
+    
 	[NSApp beginSheet:newTrajectorySheet
 	   modalForWindow:[[self view] window]
 		modalDelegate:self
@@ -448,21 +448,22 @@
 - (void)newTrajectorySheetOK
 {
 	[NSApp endSheet:newTrajectorySheet returnCode:NSOKButton];
-	[newTrajectorySheet orderOut:nil];
 }
 
 - (void)newTrajectorySheetCancel;
 {
 	[NSApp endSheet:newTrajectorySheet returnCode:NSCancelButton];
-	[newTrajectorySheet orderOut:nil];
 }
 
 - (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	if(returnCode == NSCancelButton)	return;
-    else                                [self createNewTrajectoryItem];
-    
-}	
+	[newTrajectorySheet orderOut:nil];
+	if(returnCode == NSOKButton)
+    {
+        TrajectoryItem *trajectoryItem = [self createNewTrajectoryItem];
+        [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorModalForWindow:[[self view] window] trajectoryItem:trajectoryItem];
+    }	
+}
 
 - (void)importSpatDIF:(NSURL *)absoluteFilePath
 {
