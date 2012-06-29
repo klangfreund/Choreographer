@@ -59,9 +59,12 @@
 - (void)setupSubviews
 {
     BreakpointView *breakpointView;
-    TrajectoryItem *trajectoryItem = [[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory"];
-    Trajectory *trajectory = [trajectoryItem valueForKey:@"trajectory"];
-	TrajectoryType trajectoryType = [[[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory.trajectoryType"] intValue];
+
+    editableTrajectory = [[EditorContent sharedEditorContent] valueForKeyPath:@"editableTrajectory"];
+	displayedTrajectories = [[EditorContent sharedEditorContent] valueForKey:@"displayedTrajectories"];
+
+    Trajectory *trajectory = [editableTrajectory valueForKey:@"trajectory"];
+	TrajectoryType trajectoryType = [[editableTrajectory valueForKey:@"trajectoryType"] intValue];
     
     switch(trajectoryType)
     {
@@ -70,7 +73,7 @@
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
             breakpointView.yAxisValueKeypath = @"x";
             breakpointView.toolTipString = @"time: %0.0f x: %0.2f";
-            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             breakpointView.breakpointDescriptor = nil;
             breakpointView.yAxisMin = -1;
             breakpointView.yAxisMax = 1;
@@ -80,14 +83,14 @@
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
             breakpointView.yAxisValueKeypath = @"y";
             breakpointView.toolTipString = @"time: %0.0f y: %0.2f";
-            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             breakpointView.showMiddleLine = YES;
 
             breakpointView = [breakpointViews objectAtIndex:2];
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
             breakpointView.yAxisValueKeypath = @"z";
             breakpointView.toolTipString = @"time: %0.0f z: %0.2f";
-            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             breakpointView.showMiddleLine = YES;
             
             numOfBreakpointViews = 3;
@@ -117,7 +120,7 @@
                 breakpointView.showMiddleLine = YES;
             }
             
-            [breakpointView setUpdateCallbackObject:trajectoryItem selector:@selector(updateModel)];
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             
             numOfBreakpointViews = 1;
             
@@ -168,15 +171,8 @@
 	// draw content
 	// -----------------------------------------------------------------------------
 	
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
+    //EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
     
-    NSLog(@"\n\ndisplay mode %d\n", displayMode);
-
-//    if(displayMode == regionDisplayMode)
-//	{
-//		return;
-//	}
-
     editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
     
 	for(BreakpointView *bpView in breakpointViews)
@@ -184,7 +180,7 @@
         [bpView setSelectedBreakpoints:editorSelection];
     }
 
-	if(displayMode == trajectoryDisplayMode)
+	if([displayedTrajectories count] > 0)
     {
         float bpViewMininmumHeight = 100;
         
@@ -337,6 +333,7 @@
 {
 	unsigned short keyCode = [event keyCode];
 	NSLog(@"Timeline Editor key code: %d", keyCode);
+    NSUInteger index;
     	
 	BOOL update = NO;
     
@@ -346,6 +343,26 @@
 		case 117:	// DELETE
             
             [[EditorContent sharedEditorContent] deleteSelectedPoints];
+			break;
+
+		case 48:	// TAB
+            // cycle through trajectories, make one editable
+            
+            index = [displayedTrajectories indexOfObject:editableTrajectory];
+            
+            if([event modifierFlags] & NSShiftKeyMask)
+            {
+                [displayedTrajectories insertObject:[displayedTrajectories lastObject] atIndex:0];
+                [displayedTrajectories removeLastObject];
+            }
+            else
+            {
+                [displayedTrajectories addObject:[displayedTrajectories objectAtIndex:0]];
+                [displayedTrajectories removeObjectAtIndex:0];
+            }
+            
+            [[EditorContent sharedEditorContent] setValue:[displayedTrajectories objectAtIndex:index] forKey:@"editableTrajectory"];
+            [editorSelection removeAllObjects];
 			break;
 
 		case 123:	// ARROW keys

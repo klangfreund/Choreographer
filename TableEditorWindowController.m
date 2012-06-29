@@ -39,11 +39,11 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 //	NSLog(@"Table Editor refresh view");
 	
+	displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	[tableEditorView reloadData];
 	
 	// hide name column for trajectories
 //	NSTableColumn *column = [tableEditorView tableColumnWithIdentifier:@"name"];
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 //	
 //	if(displayMode == regionDisplayMode)
 //	{
@@ -57,27 +57,28 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 //	}
 
 	// selection
-	NSMutableIndexSet *rowIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
-
-	NSEnumerator *enumerator = [[[EditorContent sharedEditorContent] valueForKey:@"editorSelection"] objectEnumerator];
-	id item;
  
-	while ((item = [enumerator nextObject]))
-	{
-		if(displayMode == regionDisplayMode)
-			[rowIndexes addIndex:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] indexOfObject:item] + 1];
-		else if(displayMode == trajectoryDisplayMode)
-		{
-            TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
-            NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
-            [tempArray addObjectsFromArray:editableTrajectory.positionBreakpoints];
-            [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
-			NSInteger index = [tempArray indexOfObject:item];
-			if(index != NSNotFound)
-				[rowIndexes addIndex:index + 1];
-		}
-	}		
-	[tableEditorView selectRowIndexes:rowIndexes byExtendingSelection:NO];
+	if(displayMode != locatorDisplayMode)
+    {
+        NSMutableIndexSet *rowIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
+
+        for(id item in [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"])
+        {
+            if(displayMode == regionDisplayMode)
+                [rowIndexes addIndex:[[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] indexOfObject:item] + 1];
+            else if(displayMode == trajectoryDisplayMode)
+            {
+                TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+                NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
+                [tempArray addObjectsFromArray:editableTrajectory.positionBreakpoints];
+                [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
+                NSInteger index = [tempArray indexOfObject:item];
+                if(index != NSNotFound)
+                    [rowIndexes addIndex:index + 1];
+            }
+        }		
+        [tableEditorView selectRowIndexes:rowIndexes byExtendingSelection:NO];
+    }
 }
 
 #pragma mark -
@@ -92,9 +93,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 }
 
 - (BOOL)validateUserInterfaceItem:(id)item
-{
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
-    
+{    
 	if ([item action] == @selector(addBreakpoint:) && displayMode == trajectoryDisplayMode)
     {
         return YES;
@@ -113,7 +112,6 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 	id selectedIndices = [tableEditorView selectedRowIndexes];
 	id editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 
 	[editorSelection removeAllObjects];
@@ -155,9 +153,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 	// draw background for title rows
 	
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
-
-	if(displayMode == regionDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
 	{
 		[cell setDrawsBackground: (row == 0)];
 		[cell setSelectable: (row != 0)];
@@ -173,7 +169,6 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (BOOL)tableView:(NSTableView *)aTableView shouldSelectRow:(NSInteger)row
 {
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 
 	if(displayMode == regionDisplayMode)
@@ -205,10 +200,9 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	int n, sum;
 
-	if(displayMode == regionDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
 	{
 		// plus 1: title row
 		return [[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] count] + 1;
@@ -238,13 +232,12 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 //	NSLog(@"%@ objectValueForTableColumn", [self className]);
 
-	int displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	NSArray *displayedRegions = [[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	SpatialPosition *pos;
 	int n, sum;
 	
-	if(displayMode == regionDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
 	{
 		if(row == 0)
 		{
@@ -371,7 +364,6 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (void)tableView:(NSTableView *)tv setObjectValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(NSInteger)row
 {
-	int displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	id displayedRegions = [[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"];
 	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	

@@ -86,6 +86,7 @@
         [[NSColor colorWithCalibratedWhite:0.0 alpha:0.2] set];
         [NSBezierPath strokeLineFromPoint:NSMakePoint(rect.origin.x, rect.origin.y-1 + rect.size.height * 0.5)
                                   toPoint:NSMakePoint(rect.origin.x + rect.size.width, rect.origin.y-1 + rect.size.height * 0.5)];
+        [[NSGraphicsContext currentContext] setShouldAntialias:YES];
     }
     
 	// draw lines

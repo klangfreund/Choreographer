@@ -62,9 +62,9 @@ typedef enum _ArrangerEditMode
 typedef enum _EditorDisplayMode
 {
 	noDisplayMode = 0,
-	locatorDisplayMode = 1,
-	regionDisplayMode = 2,
-	trajectoryDisplayMode = 3
+	locatorDisplayMode,
+	regionDisplayMode,
+	trajectoryDisplayMode
 } EditorDisplayMode;
 
 

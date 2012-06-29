@@ -32,6 +32,7 @@ static EditorContent *sharedEditorContent = nil;
 		editorSelection = [[NSMutableSet alloc] init];
 		displayMode = noDisplayMode;
 		infoString = [[NSMutableString alloc] init];
+		infoStringTimelineEditor = [[NSMutableString alloc] init];
 		
 		[[NSUserDefaults standardUserDefaults] addObserver:self
 												forKeyPath:@"editorContentMode"
@@ -55,6 +56,7 @@ static EditorContent *sharedEditorContent = nil;
 	
 	[editorSelection release];
 	[infoString release];
+	[infoStringTimelineEditor release];
 	[super dealloc];
 }
 
@@ -99,41 +101,25 @@ static EditorContent *sharedEditorContent = nil;
 - (void)setDisplayedItems
 {
 	CHProjectDocument *document = [[NSDocumentController sharedDocumentController] currentDocument];
-	NSString *projectName = [document displayName];
+	NSMutableString *projectName;
+    
+	if(document)    projectName = [NSMutableString stringWithFormat:@"%@: ",[document displayName]];
+    else            projectName = [NSMutableString stringWithString:@""];
+    
+    displayMode = noDisplayMode; // default
+
+    if([displayedTrajectories count])   editableTrajectory = [displayedTrajectories objectAtIndex:0]; 
 	
-	if([selectedAudioRegions count])
-	{
-		displayMode = regionDisplayMode;
-		[infoString setString:[NSString stringWithFormat:@"%@: selected regions", projectName]];
-	}
-	else if([displayedTrajectories count] && [[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] != 0)
-	{
-		displayMode = trajectoryDisplayMode;
-		editableTrajectory = [displayedTrajectories objectAtIndex:0]; 
-		[infoString setString:[NSString stringWithFormat:@"%@: selected trajectories", projectName]];
-	}
-	else
-	{
-		if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 0)
-		{
-			displayMode = regionDisplayMode;  //locatorDisplayMode;
-			[infoString setString:[NSString stringWithFormat:@"%@: locator %ld", projectName, locator]];
-		}
-		else
-		{
-			displayMode = noDisplayMode;
-			[infoString setString:[NSString stringWithFormat:@"%@: -", projectName]];
-		}
-	}
-	
-	if(!document)
-	{
-		[infoString setString:@"-"];
-	}
+
+    [infoString setString:[NSString stringWithFormat:@"%@: -", projectName]];
+    [infoStringTimelineEditor setString:[NSString stringWithFormat:@"%@selected regions", projectName]];
 
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 0)
 	{
+        displayMode = locatorDisplayMode;
+        [infoString setString:[NSString stringWithFormat:@"%@ @locator %ld", projectName, locator]];
+
 		NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
 		
 		for(AudioRegion *region in allAudioRegions)
@@ -149,10 +135,21 @@ static EditorContent *sharedEditorContent = nil;
 		[displayedAudioRegions release];
 		displayedAudioRegions = [[NSArray arrayWithArray:tempArray] retain];
 	}
-	else
+	else if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 1)
 	{
 		[displayedAudioRegions release];
 		displayedAudioRegions = [selectedAudioRegions retain];
+
+        if([selectedAudioRegions count])
+        {
+            displayMode = regionDisplayMode;
+            [infoString setString:[NSString stringWithFormat:@"%@selected regions", projectName]];
+        }
+        else if([displayedTrajectories count])
+        {
+            displayMode = trajectoryDisplayMode;
+            [infoString setString:[NSString stringWithFormat:@"%@selected trajectories", projectName]];
+        }
 	}
 	
 	

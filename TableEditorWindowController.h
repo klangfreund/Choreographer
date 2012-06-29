@@ -13,6 +13,8 @@
 @interface TableEditorWindowController : EditorWindowController
 {
 	IBOutlet NSTableView	*tableEditorView;
+
+    EditorDisplayMode displayMode;
 }
 
 

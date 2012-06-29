@@ -153,12 +153,12 @@
 	// draw content
 	// -----------------------------------------------------------------------------
 
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
+	displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	editorSelection = [[EditorContent sharedEditorContent] valueForKey:@"editorSelection"];
 	displayedTrajectories = [[EditorContent sharedEditorContent] valueForKey:@"displayedTrajectories"];
 	editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	
-	if(displayMode == regionDisplayMode)// || displayMode == locatorDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
 	{
 		[self drawRegionPositions:rect];
 	}
@@ -314,7 +314,7 @@
 		[handleBezierPathXY fill];
 		DRAW_XZ([handleBezierPathXZ fill]);
 	
-		if(trajectory == editableTrajectory)
+		if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
 			[handleFrameColorEditable set];
 		else
 			[handleFrameColorNonEditable set];
@@ -345,7 +345,7 @@
 		
 		if([editorSelection containsObject:bp])
 			[handleFillColorSelected set];
-		else if(trajectory == editableTrajectory)
+		else if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
 			[handleFillColorEditable set];
 		else
 			[handleFillColorNonEditable set];
@@ -353,7 +353,7 @@
 		[breakpointBezierPathXY fill];
 		DRAW_XZ([breakpointBezierPathXZ fill]);
 		
-		if(trajectory == editableTrajectory)
+		if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
 			[handleFrameColorEditable set];
 		else
 			[handleFrameColorNonEditable set];
@@ -401,7 +401,7 @@
 				[rotationPath setLineDash: array count: 2 phase: 0.0];
 				[rotationPath appendBezierPathWithArcWithCenter:NSMakePoint(cp.x, cp.y1) radius:radarSize * 0.1 startAngle:0 endAngle:360];
 			}
-			if(trajectoryItem == editableTrajectory)
+			if(trajectoryItem == editableTrajectory && [[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] != 0)
 				[lineColorEditable set];
 			else
 				[lineColorNonEditable set];
@@ -913,7 +913,6 @@
 
 - (void)mouseDown:(NSEvent *)event
 {
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	if(displayMode == noDisplayMode) return;
 
 	SpatialPosition *showToolTip = nil;
@@ -1173,7 +1172,6 @@
 
 		NSEnumerator *enumerator; 
 
-		EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 		if(displayMode == regionDisplayMode)
 		{
 			enumerator = [[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] objectEnumerator];
@@ -1235,7 +1233,6 @@
 	unsigned short keyCode = [event keyCode];
 //	NSLog(@"Radar key code: %d", keyCode);
 
-	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	activeAreaOfDisplay = (([event modifierFlags] & NSShiftKeyMask) == 0) ? 0 : 1;
 	
 	BOOL update = NO;

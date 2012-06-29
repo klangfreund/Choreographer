@@ -73,7 +73,10 @@ static TimelineEditorWindowController *sharedTimelineEditorWindowController = ni
 {
     if(![[self window] isVisible]) return;
     
-//	NSLog(@"Timeline Editor refresh view");
+	NSString *info = [[EditorContent sharedEditorContent] valueForKey:@"infoStringTimelineEditor"];
+	[infoTextField setStringValue:info];
+
+    //	NSLog(@"Timeline Editor refresh view");
 
 	TrajectoryItem *tempTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	

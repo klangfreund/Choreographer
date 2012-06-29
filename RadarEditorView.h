@@ -35,6 +35,7 @@ typedef struct _RadarPoint
 	id editorSelection;
 	id displayedTrajectories;
 	id editableTrajectory;
+    EditorDisplayMode displayMode;
 	
 	SpatialPosition *tempAudioRegionPosition; // the region currently drawn
 	

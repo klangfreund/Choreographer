@@ -26,6 +26,7 @@
 	NSMutableSet *editorSelection;
 	
 	NSMutableString *infoString;
+	NSMutableString *infoStringTimelineEditor;
 	
 	unsigned long locator;
 }

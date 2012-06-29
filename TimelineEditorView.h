@@ -22,7 +22,8 @@
 	float nudgeAmount;
 	
 	// data from Editor Content
-//	id trajectory;
+	id displayedTrajectories;
+	id editableTrajectory;
 	NSString *selector;
 	id editorSelection;
 		
