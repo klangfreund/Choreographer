@@ -103,7 +103,7 @@ void AudioSourceLowPassFilter::getNextAudioBlock (const AudioSourceChannelInfo& 
                               &nextSpacialPoint,
                               &currentSpacialPosition);
         // Determine the cutoff frequency and set the filter coefficients.
-        double cutoffAtOrigin = 21000.0;
+        const double cutoffAtOrigin = 21000.0;
         double cutoffFrequency = cutoffAtOrigin * exp(-lambda * currentSpacialPosition.getDistance());
         // Set the filter with this cutoffFrequency
         iirFilter.makeLowPass(sampleRate, cutoffFrequency);
@@ -184,9 +184,9 @@ void AudioSourceLowPassFilter::setSource (PositionableAudioSource * positionable
 }
 
 // static
-void AudioSourceLowPassFilter::setDistanceWithHalfTheOpenCutoffFrequency(double distance)
+void AudioSourceLowPassFilter::setDistanceWithHalfTheOpenCutoffFrequency(double distanceWithHalfTheOpenCutoffFrequency)
 {
-    lambda = log(2.0)/distance;
+    lambda = log(2.0)/distanceWithHalfTheOpenCutoffFrequency;
 }
 
 

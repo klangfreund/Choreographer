@@ -18,7 +18,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioSourcePlayer(),
       audioTransportSource(),
       audioRegionMixer(),
-	  audioSpeakerGainAndRouting(&audioRegionMixer)
+	  audioSpeakerGainAndRouting(&audioTransportSource, &audioRegionMixer)
 {
 	
 	DEB("AmbisonicsAudioEngine: constructor called.");
@@ -116,7 +116,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
     // documentation):
     // (Some lines above, the audioRegionMixer and the audioTransportSource
     // have already been connected.)
-	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
+//	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
     audioSourcePlayer.setSource (&audioSpeakerGainAndRouting);
 	audioDeviceManager.addAudioCallback (&audioSourcePlayer);
 	

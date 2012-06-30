@@ -1,6 +1,5 @@
 /*
- *  AudioRegionMixer.cpp
- *  AudioPlayer
+ *  AudioSpeakerGainAndRouting.cpp
  *
  *  Created by sam (sg@klangfreund.com) on 101014.
  *  Copyright 2010. All rights reserved.
@@ -9,7 +8,7 @@
 
 #include "AudioSpeakerGainAndRouting.h"
 
-#define INITIAL_PINK_NOISE_BUFFER_SIZE 4096
+#define INITIAL_TEMP_BUFFER_SIZE 4096
 
 //==============================================================================
 AepChannelSettings::AepChannelSettings()
@@ -291,29 +290,8 @@ const int& AepChannelHardwareOutputPairs::getAepChannel(const int& positionOfPai
 
 
 //==============================================================================
-AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting()
-: audioSource (0),
-  audioRegionMixer (0),
-  aepChannelHardwareOutputPairs (),
-  numberOfHardwareOutputChannels (0),
-  numberOfMutedChannels (0),
-  numberOfSoloedChannels (0),
-  numberOfChannelsWithActivatedPinkNoise (0),
-  numberOfChannelsWithEnabledMeasurement (0),
-  pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
-  positionOfSpeakers ()
-{
-	DEB("AudioSpeakerGainAndRouting: constructor (without any argument) called.");
-	
-	// initialize the pinkNoiseInfo
-	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
-	pinkNoiseInfo.startSample = 0;
-	pinkNoiseInfo.numSamples = 0;
-}
-
-AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRegionMixer_)
-: audioSource (0),
+AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* audioTransportSource_, AudioRegionMixer* audioRegionMixer_)
+: audioTransportSource (audioTransportSource_),
   audioRegionMixer (audioRegionMixer_),
   aepChannelHardwareOutputPairs (),
   numberOfHardwareOutputChannels (0),
@@ -322,16 +300,16 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioRegionMixer* audioRe
   numberOfChannelsWithActivatedPinkNoise (0),
   numberOfChannelsWithEnabledMeasurement (0),
   pinkNoiseGeneratorAudioSource (),
-  pinkNoiseBuffer (1, INITIAL_PINK_NOISE_BUFFER_SIZE),
+  monoAudioBuffer (1, INITIAL_TEMP_BUFFER_SIZE),
   positionOfSpeakers ()
 {
 	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
         "argument) called.")
 	
 	// initialize the pinkNoiseInfo
-	pinkNoiseInfo.buffer = &pinkNoiseBuffer;
-	pinkNoiseInfo.startSample = 0;
-	pinkNoiseInfo.numSamples = 0;
+	monoChannelInfo.buffer = &monoAudioBuffer;
+	monoChannelInfo.startSample = 0;
+	monoChannelInfo.numSamples = 0;
 }
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
@@ -339,28 +317,6 @@ AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
 	DEB("AudioSpeakerGainAndRouting: destructor called.")
 	
 	removeAllRoutingsAndAllAepChannels();
-}
-
-void AudioSpeakerGainAndRouting::setSource (AudioSource* const newAudioSource)
-{
-	DEB("AudioSpeakerGainAndRouting: setSource called.")
-	
-	// sam: This part is copied from the AudioTransportSource
-    if (audioSource == newAudioSource)
-    {
-        if (audioSource == 0)
-            return;
-		
-        setSource (0); // deselect and reselect to avoid releasing resources wrongly
-    }
-	
-	AudioSource* oldAudioSource = audioSource;
-
-	audioSource = newAudioSource;
-	
-	if (oldAudioSource != 0) {
-		oldAudioSource->releaseResources();
-	}
 }
 
 int AudioSpeakerGainAndRouting::getNumberOfHardwareOutputChannels()
@@ -858,12 +814,13 @@ void AudioSpeakerGainAndRouting::prepareToPlay (int samplesPerBlockExpected_, do
 {
 	DEB("AudioSpeakerGainAndRouting: prepareToPlay called.")
 	
-	if (audioSource != 0) {
-		audioSource->prepareToPlay(samplesPerBlockExpected_, sampleRate_);
+	if (audioTransportSource != 0)
+    {
+		audioTransportSource->prepareToPlay(samplesPerBlockExpected_, sampleRate_);
 	}
 	
 	pinkNoiseGeneratorAudioSource.prepareToPlay(samplesPerBlockExpected_, sampleRate_);
-	
+    audioSourceFilePrelistener.prepareToPlay(samplesPerBlockExpected_, sampleRate_);	
 }
 
 // Implementation of the AudioSource method.
@@ -871,10 +828,12 @@ void AudioSpeakerGainAndRouting::releaseResources()
 {
 	DEB("AudioSpeakerGainAndRouting: releaseResources called.")
 	
-	if (audioSource != 0) {
-		audioSource->releaseResources();
+	if (audioTransportSource != 0) {
+		audioTransportSource->releaseResources();
 	}
-
+    
+    pinkNoiseGeneratorAudioSource.releaseResources();
+    audioSourceFilePrelistener.releaseResources();
 }
 
 // Implementation of the AudioSource method.
@@ -884,50 +843,72 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 	// DEB(T("AudioSpeakerGainAndRouting: nr of channels = ") + String(info.buffer->getNumChannels()))
 	// DEB(T("AudioSpeakerGainAndRouting::getNextAudioBlock called."))
 
-	if (audioSource != 0)
+	if (audioTransportSource != 0)
 	{
 		// To save some typing and make the code more readable.
-		int nrOfActiveHWChannels = aepChannelSettingsOrderedByActiveHardwareChannels.size();
+		const int nrOfActiveHWChannels = aepChannelSettingsOrderedByActiveHardwareChannels.size();
 
 		// Aquire a buffer of samples from the audioSource into the AudioSourceChannelInfo info.
-		audioSource->getNextAudioBlock(info);
+		audioTransportSource->getNextAudioBlock(info);
 		
-		// Before gain, mute or solo is applied to the audio stream, pink noise is
-		// added if desired. Pink noise comes before the gain, so it is controllable 
-		// on each channel via the corresponding gain.
-		// pink noise
-		// ----------
-		if (numberOfChannelsWithActivatedPinkNoise != 0)
-		{
-			// At least one of the AEP channels (maybe not even a hardware output channel)
-			// has pink noise engaged.
-			
-			// There is only one mono noise source for all channels.
-			// Or stated differently: The noise on all channels is correlated
-			// (which is good to judge the balance in loudness).
-			
-			// Generate the pink noise.
-			
-
-			if (pinkNoiseBuffer.getNumSamples() < info.buffer->getNumSamples())
-			{
-				pinkNoiseBuffer.setSize(1, info.buffer->getNumSamples());
-			}
-			
-			pinkNoiseInfo.startSample = info.startSample;
-			pinkNoiseInfo.numSamples = info.numSamples;
-			pinkNoiseGeneratorAudioSource.getNextAudioBlock(pinkNoiseInfo);
-			
-			for (int n = 0; n < nrOfActiveHWChannels; n++)
-			{
-				// Add the pink noise to the channels that wants it.
-				if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
-				{
-					info.buffer->addFrom(n, info.startSample, 
-										 pinkNoiseBuffer, 0, info.startSample, info.numSamples);
-				}
-			}
-		}
+		// Before gain, mute or solo is applied to the audio stream, pink noise
+        // or audio from the file prelistener is added if desired. They come 
+        // before the gain, so that they are controllable  on each channel via 
+        // the corresponding gain.
+        if (numberOfChannelsWithActivatedPinkNoise != 0 || audioSourceFilePrelistener.isPlaying())
+        {
+            // Set up the tempChannelInfo
+            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
+            {
+                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
+            }
+            
+            monoChannelInfo.startSample = info.startSample;
+            monoChannelInfo.numSamples = info.numSamples;
+            
+            // pink noise
+            // ----------
+            if (numberOfChannelsWithActivatedPinkNoise != 0)
+            {
+                // At least one of the AEP channels (maybe not even a hardware output channel)
+                // has pink noise engaged.
+                
+                // There is only one mono noise source for all channels.
+                // Or stated differently: The noise on all channels is correlated
+                // (which is good for judging the balance in loudness).
+                
+                // Generate the pink noise.
+                pinkNoiseGeneratorAudioSource.getNextAudioBlock(monoChannelInfo);
+                
+                // Put it on all channels
+                for (int n = 0; n < nrOfActiveHWChannels; n++)
+                {
+                    // Add the pink noise to the channels that wants it.
+                    if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
+                    {
+                        info.buffer->addFrom(n, info.startSample, 
+                                             monoAudioBuffer, 0, info.startSample, info.numSamples);
+                    }
+                }
+            }
+            
+            if (audioSourceFilePrelistener.isPlaying())
+            {
+                // Get the audio from the file prelistener
+                audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
+                
+                // Put it on all channels
+                for (int n = 0; n < nrOfActiveHWChannels; n++)
+                {
+                    // Add the pink noise to the channels that wants it.
+                    if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
+                    {
+                        info.buffer->addFrom(n, info.startSample, 
+                                             monoAudioBuffer, 0, info.startSample, info.numSamples);
+                    }
+            }
+        }
+        }
 
 		// gain	(only gain, nothing else)	
 		if (numberOfMutedChannels == 0 && numberOfSoloedChannels == 0)

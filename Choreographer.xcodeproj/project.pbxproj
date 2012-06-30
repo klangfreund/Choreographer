@@ -120,6 +120,7 @@
 		15F077C50DDB6B4D00A207D0 /* AudioItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F077C40DDB6B4D00A207D0 /* AudioItem.m */; };
 		15F5E98B0DDCD16900EA5E4A /* AudioRegion.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */; };
 		15FAE2E6152B703B00357D56 /* ProjectDocument.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 15FAE2E4152B703B00357D56 /* ProjectDocument.xcdatamodeld */; };
+		2271E028159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2271E026159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp */; };
 		22E2ACE6144C621C001D94A3 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE5144C621C001D94A3 /* AppKit.framework */; };
 		22E2ACE8144C6231001D94A3 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */; };
 		22E2ACEA144C623B001D94A3 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E2ACE9144C623B001D94A3 /* CoreFoundation.framework */; };
@@ -334,6 +335,8 @@
 		15F5E98A0DDCD16900EA5E4A /* AudioRegion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = AudioRegion.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		15FAE2E5152B703B00357D56 /* ProjectDocument 1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "ProjectDocument 1.xcdatamodel"; sourceTree = "<group>"; };
 		223F18441450032400AA6B76 /* juce_amalgamated.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = juce_amalgamated.h; sourceTree = "<group>"; };
+		2271E026159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AudioSourceFilePrelistener.cpp; sourceTree = "<group>"; };
+		2271E027159C6AAC0053E819 /* AudioSourceFilePrelistener.h */ = {isa = PBXFileReference; fileEncoding = 4; path = AudioSourceFilePrelistener.h; sourceTree = "<group>"; };
 		22E2ACE4144C6186001D94A3 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
 		22E2ACE5144C621C001D94A3 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		22E2ACE7144C6231001D94A3 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = /System/Library/Frameworks/CoreAudioKit.framework; sourceTree = "<absolute>"; };
@@ -594,8 +597,6 @@
 		1586A8A413B3B45100262B02 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				22E5A1091529E67B00E987BA /* AudioSourceLowPassFilter.cpp */,
-				22E5A10A1529E67B00E987BA /* AudioSourceLowPassFilter.h */,
 				1586A8A513B3B45100262B02 /* AmbisonicsAudioEngine.cpp */,
 				1586A8A613B3B45100262B02 /* AmbisonicsAudioEngine.h */,
 				1586A8A713B3B45100262B02 /* AudioRegionMixer.cpp */,
@@ -604,8 +605,12 @@
 				1586A8AA13B3B45100262B02 /* AudioSourceAmbipanning.h */,
 				15D9C24E14C44BA400941A40 /* AudioSourceDopplerEffect.cpp */,
 				15D9C24F14C44BA400941A40 /* AudioSourceDopplerEffect.h */,
+				2271E026159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp */,
+				2271E027159C6AAC0053E819 /* AudioSourceFilePrelistener.h */,
 				1586A8AB13B3B45100262B02 /* AudioSourceGainEnvelope.cpp */,
 				1586A8AC13B3B45100262B02 /* AudioSourceGainEnvelope.h */,
+				22E5A1091529E67B00E987BA /* AudioSourceLowPassFilter.cpp */,
+				22E5A10A1529E67B00E987BA /* AudioSourceLowPassFilter.h */,
 				1586A8AD13B3B45100262B02 /* AudioSpeakerGainAndRouting.cpp */,
 				1586A8AE13B3B45100262B02 /* AudioSpeakerGainAndRouting.h */,
 				1586A8AF13B3B45100262B02 /* modified Juce Classes */,
@@ -1089,6 +1094,7 @@
 				157D40091510BD9B0028818C /* SpatDIF.m in Sources */,
 				15FAE2E6152B703B00357D56 /* ProjectDocument.xcdatamodeld in Sources */,
 				22E5A10B1529E67B00E987BA /* AudioSourceLowPassFilter.cpp in Sources */,
+				2271E028159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

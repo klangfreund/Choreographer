@@ -1,6 +1,5 @@
 /*
- *  AudioRegionMixer.h
- *  AudioPlayer
+ *  AudioSpeakerGainAndRouting.h
  *
  *  Created by sam (sg@klangfreund.com) on 101014.
  *  Copyright 2010. All rights reserved.
@@ -11,9 +10,11 @@
 #define __AUDIOSPEAKERGAINANDROUTING_HEADER__
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "AudioTransportSourceMod.h"
 #include "AudioRegionMixer.h"
 #include "AudioSourceAmbipanning.h"  // To get access to the SpeakerPosition class
 #include "PinkNoiseGeneratorAudioSource.h"
+#include "AudioSourceFilePrelistener.h"
 
 
 //==============================================================================
@@ -261,8 +262,6 @@ private:
 //==============================================================================
 //==============================================================================
 /**
- A PositionableAudioSource that ...
- 
  TODO
  */
 class JUCE_API  AudioSpeakerGainAndRouting  : public AudioSource
@@ -270,9 +269,14 @@ class JUCE_API  AudioSpeakerGainAndRouting  : public AudioSource
 public:
     //==============================================================================
     /** Constructor: Creates an AudioSpeakerGainAndRouting.
-	 */
-	AudioSpeakerGainAndRouting();
-    AudioSpeakerGainAndRouting(AudioRegionMixer* audioRegionMixer_);
+
+     The sources passed in will not be deleted by this object, so must be managed by
+	 the caller.
+     
+     @param audioTransportSource_   TODO.
+	 @param audioRegionMixer_       TODO.
+     */
+    AudioSpeakerGainAndRouting(AudioTransportSourceMod* audioTransportSource_, AudioRegionMixer* audioRegionMixer_);
 	
     /** Destructor. */
     ~AudioSpeakerGainAndRouting();
@@ -286,7 +290,7 @@ public:
 	 
 	 @param newSource             The new input source to use. This might be zero.
 	 */
-    void setSource (AudioSource* const newAudioRegionMixer);
+//    void setSource (AudioSource* const newAudioRegionMixer);
     
     /** Get the number of available hardware output channels of the
      current audio device.
@@ -403,7 +407,7 @@ public:
 	*/	
 	void removeAllRoutings();
 	
-	/** It activates the hardware channels needed for the desired
+	/** Activates the hardware channels needed for the desired
 	 routing and assignes the corresponding AEP settings to them.
 	 
 	 Make sure the playback has been stopped before calling this.
@@ -463,7 +467,7 @@ private:
 	 */
 	bool aepChannelIsConnectedWithActiveHardwareChannel(int aepChannel);
 	
-	AudioSource* audioSource;
+	AudioTransportSourceMod* audioTransportSource;
 	AudioRegionMixer* audioRegionMixer;
 
 	AepChannelHardwareOutputPairs aepChannelHardwareOutputPairs;
@@ -497,9 +501,10 @@ private:
 			///  for the deallocation of the SpeakerPosition's. Which happens
 			///  in enableNewRouting().
 	
-	AudioSampleBuffer pinkNoiseBuffer;  ///< Used in getNextAudioBlock .
-	AudioSourceChannelInfo pinkNoiseInfo; ///< Used in getNextAudioBlock .
+	AudioSampleBuffer monoAudioBuffer;  ///< Used in getNextAudioBlock .
+	AudioSourceChannelInfo monoChannelInfo; ///< Used in getNextAudioBlock .
 	PinkNoiseGeneratorAudioSource pinkNoiseGeneratorAudioSource;
+    AudioSourceFilePrelistener audioSourceFilePrelistener;
 	
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
 	CriticalSection audioSpeakerGainAndRoutingLock;
