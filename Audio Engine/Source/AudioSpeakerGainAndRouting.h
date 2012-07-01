@@ -437,6 +437,25 @@ public:
 	 channels and they are connected one to one with the aep channels.
 	 */
 	int switchToBounceMode(bool bounceMode);
+    
+    /**
+     Prelisten an audio file on all channels.
+     
+     @param absolutePathToAudioFile		The file you want to listen to.
+     @param startPosition               Where to start. Measured in samples.
+     @param endPosition                 Where to stop. Measured in samples..
+     
+     @return                            The success of the operation.
+     */
+    bool startPrelistening(const String& absolutePathToAudioFile,
+                           const int& startPosition, 
+                           const int& endPosition);
+    
+    /**
+     Stop the playback of the prelistening audio file.
+     */
+    void stopPrelistening();
+    
 
     //==============================================================================
     /** Implements the AudioSource method. */

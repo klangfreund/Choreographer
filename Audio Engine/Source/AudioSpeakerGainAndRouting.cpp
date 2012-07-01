@@ -809,6 +809,19 @@ int AudioSpeakerGainAndRouting::switchToBounceMode(bool bounceMode_)
 	return aepChannelSettingsOrderedByActiveHardwareChannels.size();
 }
 
+bool AudioSpeakerGainAndRouting::startPrelistening(const String& absolutePathToAudioFile,
+                       const int& startPosition, 
+                       const int& endPosition)
+{
+    return audioSourceFilePrelistener.play(absolutePathToAudioFile, 
+                                           startPosition, 
+                                           endPosition);
+}
+
+void AudioSpeakerGainAndRouting::stopPrelistening()
+{
+    audioSourceFilePrelistener.stop();
+}
 
 void AudioSpeakerGainAndRouting::prepareToPlay (int samplesPerBlockExpected_, double sampleRate_)
 {
@@ -900,12 +913,8 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
                 // Put it on all channels
                 for (int n = 0; n < nrOfActiveHWChannels; n++)
                 {
-                    // Add the pink noise to the channels that wants it.
-                    if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
-                    {
-                        info.buffer->addFrom(n, info.startSample, 
+                    info.buffer->addFrom(n, info.startSample, 
                                              monoAudioBuffer, 0, info.startSample, info.numSamples);
-                    }
             }
         }
         }

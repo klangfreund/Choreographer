@@ -30,6 +30,8 @@ bool AudioSourceFilePrelistener::play(const String& absolutePathToAudioFile,
           const int& startPosition_, 
           const int& endPosition_)
 {
+    DEB("AudioSourceFilePreview::play called.");
+    
     // If a new audio file is specified,
     // delete the old bufferingAudioSource and
     // create a new bufferingAudioSource
@@ -115,6 +117,8 @@ bool AudioSourceFilePrelistener::play(const String& absolutePathToAudioFile,
 
 void AudioSourceFilePrelistener::stop()
 {
+    DEB("AudioSourceFilePreview::play called.");
+    
     runPlayback = false;
 }
 
@@ -142,7 +146,9 @@ void AudioSourceFilePrelistener::releaseResources()
 // Implementation of the AudioSource method.
 void AudioSourceFilePrelistener::getNextAudioBlock (const AudioSourceChannelInfo& info)
 {
-	if (runPlayback && info.numSamples > 0)
+    DEB("AudioSourceFilePreview::getNextAudioBlock called.");
+
+	if (info.numSamples > 0 && runPlayback)
 	{
         int audioBlockEnd = nextPlayPosition + info.numSamples;
         
@@ -153,8 +159,17 @@ void AudioSourceFilePrelistener::getNextAudioBlock (const AudioSourceChannelInfo
             bufferingAudioSource->setNextReadPosition(audioBlockEnd);
         }
         else
+            // if (audioBlockEnd > endPosition)
         {
-            // TODO
+            // We don't have enough samples left to put info.numSamples
+            // onto the buffer.
+            
+            AudioSourceChannelInfo infoWithSameBufferButLessUsedSamples = info;
+            infoWithSameBufferButLessUsedSamples.numSamples = endPosition - nextPlayPosition;
+            
+            bufferingAudioSource->getNextAudioBlock(infoWithSameBufferButLessUsedSamples);
+            nextPlayPosition = endPosition;
+            
             runPlayback = false;
         }
 	}

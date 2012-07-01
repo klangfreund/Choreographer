@@ -293,6 +293,24 @@ public:
 	 Use this with care! The playback will be stopped when calling this.
 	 */
 	void removeAllRoutingsAndAllAepChannels();
+    
+    /**
+     Prelisten an audio file on all channels.
+     
+     @param absolutePathToAudioFile		The file you want to listen to.
+     @param startPosition               Where to start. Measured in samples.
+     @param endPosition                 Where to stop. Measured in samples..
+     
+     @return                            The success of the operation.
+     */
+    bool startPrelisten(const String& absolutePathToAudioFile,
+                        const int& startPosition, 
+                        const int& endPosition);
+    
+    /**
+     Stop the playback of the prelistening audio file.
+     */
+    void stopPrelistening();
 
 	/**
 	 Returns the current position, measured in samples.

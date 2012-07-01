@@ -876,6 +876,20 @@ void AmbisonicsAudioEngine::removeAllRoutingsAndAllAepChannels()
 	audioSpeakerGainAndRouting.removeAllRoutingsAndAllAepChannels();
 }
 
+bool AmbisonicsAudioEngine::startPrelisten(const String& absolutePathToAudioFile,
+                    const int& startPosition, 
+                    const int& endPosition)
+{
+    return audioSpeakerGainAndRouting.startPrelistening(absolutePathToAudioFile,
+                                                        startPosition, 
+                                                        endPosition);
+}
+
+void AmbisonicsAudioEngine::stopPrelistening()
+{
+    audioSpeakerGainAndRouting.stopPrelistening();
+}
+
 int AmbisonicsAudioEngine::getCurrentPosition()
 {
 	AudioIODevice* currentAudioIODevice = audioDeviceManager.getCurrentAudioDevice();
