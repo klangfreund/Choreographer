@@ -65,7 +65,10 @@
                                                duration:(long)dur
                                                    mode:(int)mode { return nil; }
 
-- (id)trajectoryAttributeForKey:(NSString *)key { return [self valueForKey:key]; }
+//- (id)trajectoryAttributeForKey:(NSString *)key
+//{
+//    return [self valueForKey:key];
+//}
 
 - (void)sortBreakpoints
 {

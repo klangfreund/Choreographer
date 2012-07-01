@@ -34,12 +34,13 @@
 + (NSArray *)allowedFileTypes;
 
 // accessor
+- (NSUInteger)duration;
 - (AudioFileID)audioFileID;
 - (void)setAudioFileID:(AudioFileID)fileID;
 
 - (NSString *)filePathString;
 - (BOOL)openAudioFile;
-- (void)reopenAudioFile;
+- (void)handleUnlinkedFile;
 - (void)relinkAudioFile;
 - (void)calculateOverviewImage;
 - (void)calculateOverviewImageThread;

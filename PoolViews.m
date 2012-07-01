@@ -48,6 +48,28 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:self];
 }
 
+- (void)mouseDown:(NSEvent *)event
+{
+    if([event modifierFlags] & NSAlternateKeyMask)
+    { 
+        NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
+        float y = localPoint.y - 5;
+        float h = [self rowHeight];
+        int index = y/h;
+        
+        [(PoolViewController *)[self delegate] prelisten:self index:index];
+    }
+    else
+    {
+        [super mouseDown:event];   
+    }
+}
+
+- (void)mouseUp:(NSEvent *)event
+{
+    [(PoolViewController *)[self delegate] prelisten:self index:-1];   
+}
+
 @end
 
 
@@ -69,6 +91,28 @@
 {
 	[super textDidEndEditing:notification];
 	[[NSNotificationCenter defaultCenter] postNotificationName:NSOutlineViewSelectionDidChangeNotification object:self];
+}
+
+- (void)mouseDown:(NSEvent *)event
+{
+    if([event modifierFlags] & NSAlternateKeyMask)
+    { 
+        NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
+        float y = localPoint.y - 5;
+        float h = [self rowHeight];
+        int index = y/h;
+                
+        [(PoolViewController *)[self delegate] prelisten:self index:index];
+    }
+    else
+    {
+        [super mouseDown:event];   
+    }
+}
+
+- (void)mouseUp:(NSEvent *)event
+{
+    [(PoolViewController *)[self delegate] prelisten:self index:-1];   
 }
 
 

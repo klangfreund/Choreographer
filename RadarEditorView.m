@@ -1233,7 +1233,7 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-	NSLog(@"Radar key code: %d", keyCode);
+//	NSLog(@"Radar key code: %d", keyCode);
 
 	EditorDisplayMode displayMode = [[[EditorContent sharedEditorContent] valueForKey:@"displayMode"] intValue];
 	activeAreaOfDisplay = (([event modifierFlags] & NSShiftKeyMask) == 0) ? 0 : 1;

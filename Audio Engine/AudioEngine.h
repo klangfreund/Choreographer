@@ -75,8 +75,10 @@
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end;
 - (void)unsetLoop;
 
-- (void)bounceToDisk:(NSURL *)URL start:(NSUInteger)start end:(NSUInteger)end;
+- (void)startPrelisten:(id)audioItem;
+- (void)stopPrelisten;
 
+- (void)bounceToDisk:(NSURL *)URL start:(NSUInteger)start end:(NSUInteger)end;
 
 // Getter
 

@@ -27,6 +27,7 @@
 // breakpoints/handles for visualisation
 - (NSArray *)positionBreakpoints;
 - (NSArray *)positionBreakpointsWithInitialPosition:(SpatialPosition *)pos;
+
 - (NSArray *)parameterBreakpoints;
 - (SpatialPosition *)namePosition;
 

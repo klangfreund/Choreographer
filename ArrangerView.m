@@ -369,7 +369,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)info
 {
-	NSLog(@"ArrangerView: draggingEntered");
+	//NSLog(@"ArrangerView: draggingEntered");
 
 	// trajectory from pool
 
@@ -615,7 +615,7 @@
 	
 - (BOOL)performTrajectoryDragOperation:(id <NSDraggingInfo>)info
 {
-	NSLog(@"performTrajectoryDragOperation");
+	// NSLog(@"performTrajectoryDragOperation");
 
 	NSArray *draggedTrajectories = [document valueForKey:@"draggedTrajectories"];
 
@@ -2159,7 +2159,7 @@
 
 - (void)split:(id)sender
 {
-	NSLog(@"split");
+//	NSLog(@"split");
 	
 	if(![self selectionIsEditable])
 		return;

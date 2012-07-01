@@ -18,6 +18,7 @@
 #import "ImageAndTextCell.h"
 #import "Path.h"
 #import "SpatDIF.h"
+#import "AudioEngine.h"
 
 
 @implementation PoolViewController
@@ -74,8 +75,8 @@
     [audioItemArrayController setFilterPredicate:[NSPredicate predicateWithFormat:@"type == %@", CHAudioItemType]];
     sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES] autorelease];
     [audioItemArrayController setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
-	
-	// register for drag and drop
+    	
+    // register for drag and drop
     [userOutlineView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, CHTrajectoryType, CHFolderType, NSFilenamesPboardType, nil]];
     [audioItemTableView registerForDraggedTypes:[NSArray arrayWithObjects:CHAudioItemType, NSFilenamesPboardType, nil]];
     [trajectoryTableView registerForDraggedTypes:[NSArray arrayWithObjects: CHTrajectoryType, nil]];
@@ -93,20 +94,6 @@
 											 selector:@selector(refresh:)
 												 name:NSManagedObjectContextObjectsDidChangeNotification object:nil];		
 }
-
-//- (void)setup
-//{
-//	// get stored data
-//	NSManagedObjectContext *context = [document managedObjectContext];
-//	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
-//	NSError *error;
-//	
-//	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"TrajectoryItem" inManagedObjectContext:context];
-//	
-//	[request setEntity:entityDescription];
-//	[request setReturnsObjectsAsFaults:NO];
-//	[context executeFetchRequest:request error:&error];
-//}	
 
 
 #pragma mark -
@@ -314,8 +301,9 @@
 		item = [[[trajectoryArrayController selectedObjects] objectAtIndex:0] valueForKey:@"item"];
     }
     
-    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorForTrajectoryItem:item];
+    if(item) [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorModalForWindow:[[self view] window] trajectoryItem:item];
 }
+
 
 - (BOOL)validateMenuItem:(NSMenuItem *)item
 {
@@ -430,7 +418,7 @@
 	{
 		// for newly imported audio files:
 		// audio item has original length
-		[newAudioItem setValue:[newAudioFile valueForKey:@"duration"] forKey:@"duration"];
+		[newAudioItem setValue:[NSNumber numberWithLongLong:[AudioFile durationOfAudioFileAtPath:filePath]] forKey:@"duration"];
 		
 		// expand parent node
 		//				[userOutlineView expandItem:parentNode];
@@ -451,7 +439,7 @@
 {
 	[self setNewTrajectoryName:name];	
 	[self setValue:[NSNumber numberWithInt:0] forKey:@"newTrajectoryType"];
-	
+    
 	[NSApp beginSheet:newTrajectorySheet
 	   modalForWindow:[[self view] window]
 		modalDelegate:self
@@ -462,21 +450,22 @@
 - (void)newTrajectorySheetOK
 {
 	[NSApp endSheet:newTrajectorySheet returnCode:NSOKButton];
-	[newTrajectorySheet orderOut:nil];
 }
 
 - (void)newTrajectorySheetCancel;
 {
 	[NSApp endSheet:newTrajectorySheet returnCode:NSCancelButton];
-	[newTrajectorySheet orderOut:nil];
 }
 
 - (void)newTrajectorySheetDidEnd:(NSPanel *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
-	if(returnCode == NSCancelButton)	return;
-    else                                [self createNewTrajectoryItem];
-    
-}	
+	[newTrajectorySheet orderOut:nil];
+	if(returnCode == NSOKButton)
+    {
+        TrajectoryItem *trajectoryItem = [self createNewTrajectoryItem];
+        [[TrajectoryInspectorWindowController sharedTrajectoryInspectorWindowController] showInspectorModalForWindow:[[self view] window] trajectoryItem:trajectoryItem];
+    }	
+}
 
 - (void)importSpatDIF:(NSURL *)absoluteFilePath
 {
@@ -726,6 +715,38 @@
 	
 	return YES;
 }
+
+- (void)prelisten:(id)sender index:(int)i
+{
+    if(i < 0)
+    {
+        [[AudioEngine sharedAudioEngine] stopPrelisten];
+    }
+    else if([[document valueForKey:@"keyboardModifierKeys"] intValue] == modifierAlt)
+    {
+        id item;
+        
+        switch ([[projectSettings valueForKey:@"poolSelectedTab"] intValue])
+        {
+            case 0: // user view
+                item = [[[sender itemAtRow:i] representedObject] valueForKeyPath:@"item"];
+                break;
+            case 1: // audio items view
+                item = [[[audioItemArrayController arrangedObjects] objectAtIndex:i]valueForKeyPath:@"item"];
+                break;
+            default:
+                item = nil;
+                break;
+        }
+        
+        
+        if([item isKindOfClass:[AudioItem class]])
+            [[AudioEngine sharedAudioEngine] startPrelisten:item];
+        else
+            [[AudioEngine sharedAudioEngine] stopPrelisten];  
+    }
+}
+
 
 #pragma mark -
 #pragma mark accessors

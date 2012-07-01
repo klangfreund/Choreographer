@@ -35,7 +35,7 @@
 //- (NSArray *)renderedPositionBreakpoints;
 
 // accessors
-- (id)trajectoryAttributeForKey:(NSString *)key;
+//- (id)trajectoryAttributeForKey:(NSString *)key;
 
 // actions
 - (void)sortBreakpoints;

@@ -265,7 +265,7 @@
 		}
 		else if(key == NSUpdatedObjectsKey)
 		{
-			// NSLog(@"UPDATE  --  %@",[info objectForKey:key]);
+//            NSLog(@"UPDATE  --  %@",[info objectForKey:key]);
 			for(id object in [info objectForKey:key])
 			{		
 				if([object isKindOfClass:[TrajectoryItem class]])

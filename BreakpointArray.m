@@ -251,6 +251,24 @@
     }
 }
 
+- (void)removeBreakpointsWithDescriptor:(NSString *)descriptor
+{
+    NSMutableArray *newBreakpoints = [[NSMutableArray alloc] init];
+    
+    for(Breakpoint *bp in breakpoints)
+    {
+        if(![bp.descriptor isEqualToString:descriptor])
+        {
+            [newBreakpoints addObject:bp];
+        }
+    }
+    
+    [breakpoints release];
+    
+    breakpoints = newBreakpoints;    
+}
+
+
 - (void)sort
 {
 	NSArray *breakpointsSorted;
