@@ -62,6 +62,9 @@ typedef enum _ArrangerViewDragAndDropAction
 	// regions
 	NSMutableArray *placeholderRegions;
 	NSArray *audioRegions;
+    
+    // markers
+    //NSArray *markers;
 		
 	// selection
 	NSMutableSet *selectedRegions;
@@ -94,6 +97,8 @@ typedef enum _ArrangerViewDragAndDropAction
 
 - (void)setup;
 - (void)close;
+
+// drawing
 - (void)recalculateXGridPath;
 - (void)recalculateYGridPath;
 - (void)recalculateArrangerProperties;
@@ -105,7 +110,7 @@ typedef enum _ArrangerViewDragAndDropAction
 - (BOOL)performTrajectoryDragOperation:(id <NSDraggingInfo>)info;
 - (BOOL)performAudioDragOperation:(id <NSDraggingInfo>)info;
 
-
+// editing
 - (void)addRegionToView:(Region *)region;
 - (void)removeRegionFromView:(Region *)region;
 - (void)updateZIndexInModel;
@@ -173,6 +178,8 @@ typedef enum _ArrangerViewDragAndDropAction
 - (IBAction)contextMute:(id)sender;
 - (IBAction)contextLock:(id)sender;
 
+// markers
+- (void)recallMarker:(NSNumber *)time;
 
 // notifications
 - (void)setZoom:(NSNotification *)notification;

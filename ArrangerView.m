@@ -102,11 +102,14 @@
 	zoomFactorY = [document zoomFactorY];
 	
 	// get stored data
-	NSFetchRequest *request = [[[NSFetchRequest alloc] init] autorelease];
+	NSFetchRequest *request;
 	NSError *error;
-	
-	NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"Region" inManagedObjectContext:context];
-	NSSortDescriptor *sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"zIndexInArranger" ascending:YES] autorelease];
+	NSEntityDescription *entityDescription;
+    NSSortDescriptor *sortDescriptor;
+    
+	request = [[[NSFetchRequest alloc] init] autorelease];
+    entityDescription = [NSEntityDescription entityForName:@"Region" inManagedObjectContext:context];
+	sortDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"zIndexInArranger" ascending:YES] autorelease];
 
     [request setSortDescriptors:[NSArray arrayWithObject:sortDescriptor]];
 	[request setEntity:entityDescription];
@@ -122,7 +125,7 @@
 		[region recalcFrame];
 	}
 	
-	
+
 	[self recalculateArrangerProperties];
 	[self recalculateArrangerSize];
 
@@ -2448,6 +2451,16 @@
 	// -------------------
 	
 	return YES;
+}
+
+
+#pragma mark -
+#pragma mark markers
+// -----------------------------------------------------------
+
+- (void)recallMarker:(NSNumber *)time
+{
+    [playbackController setLocator:[time unsignedIntegerValue]];
 }
 
 

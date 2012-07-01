@@ -25,12 +25,14 @@ typedef enum _RulerMouseDraggingAction
 	IBOutlet id arrangerView;
 
 	RulerMouseDraggingAction mouseDraggingAction;
+
+    NSDictionary *labelAttribute;
 }
 
 - (void)update:(NSNotification *)notification;
 
-- (void)mouseDownInLoopRegionArea:(NSPoint)localPoint;
-- (void)mouseDownInMarkerArea:(NSPoint)localPoint;
-- (void)mouseDownInPlayheadArea:(NSPoint)localPoint;
+- (void)mouseDownInLoopRegionArea:(NSPoint)localPoint doubleClick:(BOOL)dc;
+- (void)mouseDownInMarkerArea:(NSPoint)localPoint doubleClick:(BOOL)dc;
+- (void)mouseDownInPlayheadArea:(NSPoint)localPoint doubleClick:(BOOL)dc;
 
 @end

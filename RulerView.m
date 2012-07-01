@@ -245,5 +245,11 @@
 
 - (void)setZoomFactor:(NSNotification *)notification {}
 
+- (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
+{
+	return YES;
+	// first click activates the window automatically
+	// so the user can immediately start manipulating
+}
 
 @end

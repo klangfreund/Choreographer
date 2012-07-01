@@ -651,6 +651,7 @@
 		158E9C8E0EAE2E4600435D25 /* Other Windows */ = {
 			isa = PBXGroup;
 			children = (
+				15155E54139CE34200A8BC0D /* MarkersWindow.xib */,
 				15EBEC8B12BF78E400C30D46 /* MarkersWindowController.h */,
 				15EBEC8C12BF78E400C30D46 /* MarkersWindowController.m */,
 			);
@@ -888,7 +889,6 @@
 			isa = PBXGroup;
 			children = (
 				15155E7E139CE92100A8BC0D /* Choreographer.help */,
-				15155E54139CE34200A8BC0D /* MarkersWindow.xib */,
 				15A82A37111B952900F31B92 /* images */,
 				15A3FC8C10416364001092FD /* CHProjectDocument.xib */,
 				15DEFC260EC30B9800BBE6A8 /* MainMenu.xib */,

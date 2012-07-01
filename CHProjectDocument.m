@@ -97,7 +97,7 @@
     [self findUnlinkedAudioFiles];
 	
 	// setup arranger view (rebuild from data model)
-	[arrangerView setup];
+    [arrangerView setup];
 		
     // playback controller
 	[playbackController setValue:projectSettings forKey:@"projectSettings"];

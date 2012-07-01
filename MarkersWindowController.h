@@ -11,9 +11,20 @@
 
 @interface MarkersWindowController : NSWindowController
 {
-	IBOutlet NSTableView	*markersTableView;
+	//IBOutlet NSTableView        *markersTableView;
+    IBOutlet NSArrayController  *markersArrayController;
+    NSArray                     *markerSortDescriptors;
 }
 
+@property (assign) NSArray *markerSortDescriptors;
+
 + (id)sharedMarkersWindowController;
+
+- (NSManagedObjectContext *)managedObjectContext;
+- (NSArray *)markers;
+
+// actions
+- (void)newMarkerWithName:(NSString *)name time:(NSUInteger)time;
+- (void)deleteMarker:(id)marker;
 
 @end
