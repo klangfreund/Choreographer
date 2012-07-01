@@ -334,21 +334,19 @@ private:
     
     bool dopplerEffectEnabled;
     AudioSourceDopplerEffect audioSourceDopplerEffect;
-    /** Will point to
-        audioSourceGainEnvelope or to
-        audioSourceDopplerEffect
-        dependant of if the doppler effect is disabled or enabled.
-     */
-    PositionableAudioSource* audioSourceDopplerEffectOrNot;
     
     bool lowPassFilterEnabled;
     AudioSourceLowPassFilter audioSourceLowPassFilter;
+    AudioSourceLowPassFilter audioSourceLowPassFilterAndDopplerEffect;
+    
     /** Will point to
-     audioSourceLowPassFilter or to
-     audioSourceDopplerEffectOrNot
-     dependant of the enabled or disabled lowpass filter.
+     - audioSourceGainEnvelope
+     - audioSourceDopplerEffect
+     - audioSourceLowPassFilter or to
+     - audioSourceLowPassFilterAndDopplerEffect,
+     dependant of dopplerEffectEnabled and lowPassFilterEnabled.
      */
-    PositionableAudioSource* audioSourceLowPassFilterOrNot;
+    PositionableAudioSource* appropriateAudioSource;
     /** Only used to reinitialize the audioSourceLowPassFilter in the
      enableDopplerEffect method. */
     double sampleRate;

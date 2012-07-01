@@ -18,7 +18,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
       audioSourcePlayer(),
       audioTransportSource(),
       audioRegionMixer(),
-	  audioSpeakerGainAndRouting(&audioRegionMixer)
+	  audioSpeakerGainAndRouting(&audioTransportSource, &audioRegionMixer)
 {
 	
 	DEB("AmbisonicsAudioEngine: constructor called.");
@@ -116,7 +116,7 @@ AmbisonicsAudioEngine::AmbisonicsAudioEngine ()
     // documentation):
     // (Some lines above, the audioRegionMixer and the audioTransportSource
     // have already been connected.)
-	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
+//	audioSpeakerGainAndRouting.setSource (&audioTransportSource);
     audioSourcePlayer.setSource (&audioSpeakerGainAndRouting);
 	audioDeviceManager.addAudioCallback (&audioSourcePlayer);
 	
@@ -874,6 +874,20 @@ void AmbisonicsAudioEngine::removeAllRoutingsAndAllAepChannels()
 	stop();
 	audioTransportSource.setSource (0,0,AUDIOTRANSPORT_BUFFER);
 	audioSpeakerGainAndRouting.removeAllRoutingsAndAllAepChannels();
+}
+
+bool AmbisonicsAudioEngine::startPrelisten(const String& absolutePathToAudioFile,
+                    const int& startPosition, 
+                    const int& endPosition)
+{
+    return audioSpeakerGainAndRouting.startPrelistening(absolutePathToAudioFile,
+                                                        startPosition, 
+                                                        endPosition);
+}
+
+void AmbisonicsAudioEngine::stopPrelistening()
+{
+    audioSpeakerGainAndRouting.stopPrelistening();
 }
 
 int AmbisonicsAudioEngine::getCurrentPosition()

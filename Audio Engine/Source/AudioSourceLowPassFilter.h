@@ -66,7 +66,15 @@ public:
     
     void setSource (PositionableAudioSource * positionableAudioSource_);
     
-    static void setDistanceWithHalfTheOpenCutoffFrequency(double distance);
+    /**
+     Set the distance where the low pass filter cutoff frequency is
+     at 10.5kHz.
+     The falloff curve is defined as an exponential decrease:
+        cutoffAtOrigin = 21000.0;
+        lambda = log(2.0)/distanceWithHalfTheOpenCutoffFrequency;
+        cutoffFrequency = cutoffAtOrigin * exp(-lambda * currentSpacialPosition.getDistance());
+     */
+    static void setDistanceWithHalfTheOpenCutoffFrequency(double distanceWithHalfTheOpenCutoffFrequency);
 	
 private:
 	/**

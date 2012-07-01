@@ -44,6 +44,14 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
     // static array valuesOfH will be recalculated.
     // But I couldn't figure out a more elegant solution...
     recalculateH(sampleRate_);
+    
+    // Temp
+    DEB("AudioSourceDopplerEffect constructor: ")
+    for (double k = -halfTheInterpolationOrder; k < halfTheInterpolationOrder + 1.0; k += 0.1)
+    {
+        DEB("h(" + String(k) + ") = " + String(h(k)))
+    }
+    
 }
 
 AudioSourceDopplerEffect::~AudioSourceDopplerEffect()
@@ -968,23 +976,49 @@ inline void AudioSourceDopplerEffect::prepareForNewPosition (int newPosition,
 
 float AudioSourceDopplerEffect::interpolate (float * sampleRightBefore, double remainder)
 {
+    /*
+     y(sampleRightBefore + remainder)
+     = y(t_n) 
+     = \sum_{k \in \mathbb{Z}} x[k]h(t_n - k)
+     = \sum_{k' \in \mathbb{Z}} x[sampleRightBefore + k']h(remainder - k)
+     
+     \approx \sum_{k' = -halfTheInterpolationOrder}^{halfTheInterpolationOrder}
+        x[sampleRightBefore + k']h(remainder - k)
+     */
+    
     double result = 0.0;
-    for (int k = -halfTheInterpolationOrder; k <= halfTheInterpolationOrder; k++)
+    for (int k = -halfTheInterpolationOrder+1; k <= halfTheInterpolationOrder; k++)
     {
         result += *(sampleRightBefore+k) * h(remainder - k);
     }
+    
+    // Temp
+    // result = *sampleRightBefore;
     return result;
 }
 
 double AudioSourceDopplerEffect::h(double t)
 {
-    int pos = (t + double(halfTheInterpolationOrder))*double(interpolationStepsPerUnit);
-    return valuesOfH[pos];
+    // Since h is symmetric (h(t) = h(-t) for all t)
+    // only values of h for t >=0 are stored in the array valuesOfH.
+    
+    int positionInArray = t*double(interpolationStepsPerUnit);
+    
+    // Calculate
+    // positionInArray = abs(positionInArray)
+    if (positionInArray < 0)
+    {
+        positionInArray = -positionInArray;
+    }
+    // TODO
+    // Is there a more elegant way to calculate abs(integer)?
+    
+    return valuesOfH[positionInArray];
 }
 
 bool AudioSourceDopplerEffect::recalculateH(double samplerate)
 {
-    int numberOfElements = (2*halfTheInterpolationOrder + 1) * interpolationStepsPerUnit;
+    int numberOfElements = (halfTheInterpolationOrder + 1) * interpolationStepsPerUnit;
     valuesOfH.ensureStorageAllocated(numberOfElements);
     
     // The normalized cutoff frequency
@@ -992,31 +1026,47 @@ bool AudioSourceDopplerEffect::recalculateH(double samplerate)
     
     double stepSize = 1.0/double(interpolationStepsPerUnit);
     
-    for (int i = - halfTheInterpolationOrder; i<halfTheInterpolationOrder; i++)
+    // Calculate values of the impulse response of the ideal filter between
+    // 0 and halfTheInterpolationOrder in steps of stepSize.
+    for (int i = 0; i<halfTheInterpolationOrder; i++)
     {
         
-        // Take care of the integer arguments: h(i)=...
-        if (i != 0)
+        // Take care of the integer argument: h(i)=...
+        if (i == 0)
+        {
+            // h(0) = 1. Here we have to provide the value of sinc(0)=1.
+            // Otherwise we would have a division by zero.
+            double value = 1.0;
+            valuesOfH.set(0, value);
+        }
+        else
         {
             double argument = 2.0*pi*fcn*double(i);
             double value = sin(argument)/argument;
-            valuesOfH.set((i + halfTheInterpolationOrder)*interpolationStepsPerUnit, value);
-        }
-        else // h(0) = 1. Here we have to provide the value of sinc(0)=1.
-            // Otherwise we would have a division by zero.
-        {
-            double value = 1.0;
-            valuesOfH.set(halfTheInterpolationOrder*interpolationStepsPerUnit, value);
+            valuesOfH.set(i*interpolationStepsPerUnit, value);
         }
         
-        // Take care of the remaining arguments
+        // Take care of the remaining arguments between i and i+1.
         for (int k=1; k<interpolationStepsPerUnit; k++)
         {
             double argument = 2.0*pi*fcn*(double(i) + k*stepSize);
             double value = sin(argument)/argument;
-            valuesOfH.set((i + halfTheInterpolationOrder)*interpolationStepsPerUnit + k, value);
+            valuesOfH.set(i*interpolationStepsPerUnit + k, value);
         }
     }
+    
+    // Apply a raised-cosine window.
+    for (int i = 0; i<halfTheInterpolationOrder; i++)
+    {
+        for (int k=0; k<interpolationStepsPerUnit; k++)
+        {
+            int positionInArray = i*interpolationStepsPerUnit + k;
+            double originalValue = valuesOfH[positionInArray];
+            double raisedCosineValue = 0.5 * (1.0 + cos((2*pi*(double(i)+k*stepSize))/(2.*double(halfTheInterpolationOrder) +2)));
+            valuesOfH.set(positionInArray, originalValue*raisedCosineValue);
+        }
+    }
+    
     
     return true;
 }

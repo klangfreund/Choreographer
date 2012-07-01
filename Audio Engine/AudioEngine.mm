@@ -227,12 +227,16 @@ static AudioEngine *sharedAudioEngine = nil;
 	NSString *filePath = [audioItem valueForKeyPath:@"audioFile.filePathString"];
     
 	NSLog(@"start prelisten:\nstart: %lu dur:%lu\nfile: %@", offsetInFile, duration, filePath);
+    
+    ambisonicsAudioEngine->startPrelisten([filePath UTF8String], offsetInFile, offsetInFile+duration);
 
 }
 
 - (void)stopPrelisten
 {
     NSLog(@"stop prelisten");
+    
+    ambisonicsAudioEngine->stopPrelistening();
 }
 
 

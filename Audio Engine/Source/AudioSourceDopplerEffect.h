@@ -103,10 +103,10 @@ private:
      
      \f[ y(t) = \sum_{k \in \mathbb{Z}} x[k]h(t-kT) \f]
      
-     where \f$h(.)\f$ is the impulse response of an LTI filter and \f$T\f$ is a
+     where \f$h(.)\f$ is the impulse response of a LTI filter and \f$T\f$ is a
      real number. (This is equation (2.16) in the lecture note by Hans-Andrea
      Loeliger ZSSV 2011)
-     We choose T = 1/samplerate and \f$h(.)\f$ as the impulse response of the
+     We choose T = 1/samplerate and \f$h(.)\f$ the impulse response of the
      ideal lowpass filter with cutoff frequency f_c = 20kHz.
      
      We normalize the parameters and h
@@ -133,8 +133,31 @@ private:
     float interpolate (float * sampleRightBefore, double remainder);
     
     /**
-     The windowed impulse response of the ideal low pass filter. Used by the
-     interpolate method.
+     Returns the windowed impulse response of the ideal
+     low pass filter (approximated, using a lookup table).
+     
+     Impulse response of the ideal low pass filter:
+     
+     \f[ h(t) = \frac{sin(2 \pi f_{cn} t)}{2 \pi f_{cn} t}
+     = \sinc(2 f_{cn} t) \f]
+     
+     The raised-cosine windowing is done according to equation (2.77) in the
+     lecture notes of Hans-Andrea Loeliger ZSSV 2011.
+     
+     \f[ w(t) = 0.5 + \left( 1 + \cos\left( \frac{2 \pi t)}{interpolationOrder + 2} \f]
+     
+     for -halfTheInterpolationOrder < t < halfTheInterpolationOrder.
+     Outside of this interval w(t_n) = 0.
+     
+     This interpolate method looks up the requested values in the array
+     valuesOfH.
+     This interpolate method is used exclusively by the interpolate method.
+     
+     
+     @param     t   abs(t) must be <= halfTheInterpolationOrder.
+                    h does not check this condition!
+     
+     @return    approximation of h(t)*w(t)
      */
     double h(double t);
     
@@ -210,7 +233,8 @@ private:
     
     /** This will calculate (2*halfTheInterpolationOrder+1)*interpolationStepsPerUnit values of the impulse response h.
      
-     Set the desired values for halfTheInterpolationOrder and interpolationStepsPerUnit before calling this.
+     You have to set the desired values for halfTheInterpolationOrder and 
+     interpolationStepsPerUnit before calling this.
      
      @return    always true. See __recalculateH.
      */
