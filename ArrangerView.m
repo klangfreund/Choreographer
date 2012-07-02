@@ -1657,12 +1657,7 @@
 
 - (void)magnifyWithEvent:(NSEvent *)event
 {
-//	NSLog(@"Magnification value is %f", [event magnification]);
-
-	zoomFactorX *= ([event magnification] + 1.0);
-	
-	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
-	
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX * ([event magnification] + 1.0)] forKey:@"arrangerZoomFactorX"];	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:document];	
 }
 
@@ -2471,13 +2466,14 @@
 - (void)setZoom:(NSNotification *)notification
 {
 	// get start time (time at the left edge of the view)
-	unsigned long startTime = [[self superview] bounds].origin.x / zoomFactorX;
-	
+	double zoomAmount = zoomFactorX / [document zoomFactorX];
+	NSLog(@"---amount %f", zoomAmount);
+
 	// X zoom factor
 	zoomFactorX = [document zoomFactorX];
 	
 	// restore start time 
-	NSRect r = NSMakeRect(startTime * zoomFactorX, [[self superview] bounds].origin.y, [[self superview] bounds].size.width, 1);
+	NSRect r = NSMakeRect([[self superview] bounds].origin.x / zoomAmount, [[self superview] bounds].origin.y, [[self superview] bounds].size.width, 1);
 	[self scrollRectToVisible:r];
 	
 	// Y zoom factor
