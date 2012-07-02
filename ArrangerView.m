@@ -670,7 +670,8 @@
 		
 		if(!audioItem) // drag from the finder, this audio file has yet to be imported
 		{
-			url = [NSURL URLWithString:[placeholder valueForKey:@"filePath"]];
+            url = [NSURL URLWithString:[[placeholder valueForKey:@"filePath"] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+
 			audioItem = [[document poolViewController] importFile:url];
 		}
 		
@@ -2467,18 +2468,15 @@
 {
 	// get start time (time at the left edge of the view)
 	double zoomAmount = zoomFactorX / [document zoomFactorX];
-	NSLog(@"---amount %f", zoomAmount);
 
-	// X zoom factor
+	// new zoom factors
 	zoomFactorX = [document zoomFactorX];
+	zoomFactorY = [document zoomFactorY];
 	
-	// restore start time 
+	// restore screen origin 
 	NSRect r = NSMakeRect([[self superview] bounds].origin.x / zoomAmount, [[self superview] bounds].origin.y, [[self superview] bounds].size.width, 1);
 	[self scrollRectToVisible:r];
 	
-	// Y zoom factor
-	zoomFactorY = [document zoomFactorY];
-
 	[self recalculateArrangerSize];
 	
 	// grid
