@@ -811,6 +811,11 @@ void AmbisonicsAudioEngine::removeAllRoutings()
 	audioSpeakerGainAndRouting.removeAllRoutings();
 }
 
+void AmbisonicsAudioEngine::setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening)
+{
+    audioSpeakerGainAndRouting.setPrelisteningOutputs(hardwareOutputsForPrelistening);
+}
+
 void AmbisonicsAudioEngine::enableNewRouting()
 {
 	// Since we're quite likely going to change the number of channels
