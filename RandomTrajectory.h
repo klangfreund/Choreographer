@@ -12,11 +12,10 @@
 
 @interface RandomTrajectory : Trajectory
 {
-	NSUInteger stability;
-	
     Breakpoint *initialPosition;
-	Breakpoint *boundingVolumePoint1, *boundingVolumePoint2;
-    Breakpoint *initialMinSpeed, *initialMaxSpeed;
 }
+
+- (SpatialPosition *)point1AtTime:(NSNumber *)time;
+- (SpatialPosition *)point2AtTime:(NSNumber *)time;
 
 @end

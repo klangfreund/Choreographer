@@ -46,8 +46,6 @@
         [bp setTimeEditable:NO]; // initial angle, time not editable
         [parameterBreakpointArray addBreakpoint:bp];
 
-        NSUInteger dur = [[trajectoryItem valueForKey:@"duration"] intValue];
-        NSLog(@"ehuntahuseous  %lu", dur);
         bp = [Breakpoint breakpointWithTime:[[trajectoryItem valueForKey:@"duration"] unsignedLongValue] value:360];
         [bp setDescriptor:@"Angle"];
         [parameterBreakpointArray addBreakpoint:bp];

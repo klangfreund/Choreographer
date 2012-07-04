@@ -341,20 +341,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			}
 
 			sum += n + 1;
-		}
-		
-//		switch([[editableTrajectory valueForKey:@"trajectoryType"] intValue])
-//		{
-//			case breakpointType:
-//				return [self breakpointTrajectory:editableTrajectory valueForTableColumn:tc row:row];
-//				break;
-//			case rotationType:
-//				return [self rotationTrajectory:editableTrajectory valueForTableColumn:tc row:row];
-//				break;
-//			case randomType:
-//				return [self randomTrajectory:editableTrajectory valueForTableColumn:tc row:row];
-//				break;
-//		}
+		}		
 	}
 	return nil;
 }
@@ -398,38 +385,6 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:self];
 }
-
-#pragma mark -
-#pragma mark NSTableView - getting values - specialised
-// -----------------------------------------------------------
-
-//- (id)breakpointTrajectory:(id)trajectory valueForTableColumn:(id)tc row:(int)row
-//{
-//	if(row == 0)
-//	{
-//		if ([[tc identifier] isEqualToString:@"name"]) return @"Region";
-//		else if ([[tc identifier] isEqualToString:@"time"]) return @"Time";
-//		else return [tc identifier];
-//	}
-//	else
-//	{
-//		row--;
-//		
-//		id breakpoint = [[trajectory positionBreakpointsWithInitialPosition:nil] objectAtIndex:row];
-//		if ([[tc identifier] isEqualToString:@"time"])
-//		{
-//			return [NSNumber numberWithUnsignedLong:[[breakpoint valueForKey:@"time"] unsignedLongValue]];
-//		}
-//		else
-//		{
-//			if([[trajectory valueForKey:@"adaptiveInitialPosition"] boolValue] && row == 0)
-//				return @">";
-//			else
-//				return [NSString stringWithFormat:@"%0.3f", [[breakpoint valueForKey:[tc identifier]] doubleValue]];
-//		}
-//
-//	}
-//}
 
 
 #pragma mark -
@@ -484,6 +439,23 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 - (void)randomTrajectory:(id)trajectory setValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(int)row;
 {
+	TrajectoryItem *editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+	
+    NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];
+    [tempArray addObjectsFromArray:[editableTrajectory positionBreakpoints]];
+    [tempArray addObjectsFromArray:[editableTrajectory parameterBreakpoints]];
+    
+    Breakpoint* bp = [tempArray objectAtIndex:row - 1];
+    
+    if ([[tc identifier] isEqualToString:@"time"])
+        [bp setTime:[objectValue integerValue]];
+    else if([bp breakpointType] != breakpointTypeValue)
+        [bp setValue:objectValue forKey:[tc identifier]];
+    else if([[tc identifier] isEqualToString:@"x"])
+        [bp setValue:objectValue forKey:@"value"];
+    
+    [editableTrajectory sortBreakpoints];
+	[editableTrajectory updateModel];	
 }
 
 

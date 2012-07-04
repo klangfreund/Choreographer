@@ -158,6 +158,8 @@
 // -----------------------------------------------------------------------------
 - (SpatialPosition *)interpolatedPositionAtTime:(NSUInteger)time
 {
+    if([breakpoints count] == 1) return [breakpoints objectAtIndex:0];
+    
     Breakpoint *bp1, *bp2;
     
     for(Breakpoint *bp in breakpoints)

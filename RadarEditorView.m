@@ -411,22 +411,29 @@
 
 	
 		case randomType:
-			position = [trajectoryItem valueForKeyPath:@"trajectory.boundingVolumePoint1.position"];
+			position = [[trajectoryItem trajectory] performSelector:@selector(point1AtTime:) withObject:[NSNumber numberWithInt:0]];
 			pt1 = [self makePointX:[position x] Y:[position y] Z:[position z]];									  
 
-			position = [trajectoryItem valueForKeyPath:@"trajectory.boundingVolumePoint2.position"];
+			position = [[trajectoryItem trajectory] performSelector:@selector(point2AtTime:) withObject:[NSNumber numberWithInt:0]];
 			pt2 = [self makePointX:[position x] Y:[position y] Z:[position z]];									  
 
-			NSRect r = NSMakeRect(pt1.x, pt1.y1, pt2.x - pt1.x, pt2.y1 - pt1.y1);
-				
-			boundingVolumePathXY = [NSBezierPath bezierPathWithRect:r];
-			
+			NSRect r;
+							
 			if(trajectoryItem == editableTrajectory)
 				[lineColorEditable set];
 			else
 				[lineColorNonEditable set];
 			
+            r = NSMakeRect(pt1.x, pt1.y1, pt2.x - pt1.x, pt2.y1 - pt1.y1);
+			boundingVolumePathXY = [NSBezierPath bezierPathWithRect:r];
 			[boundingVolumePathXY stroke];
+            
+            DRAW_XZ(    r = NSMakeRect(pt1.x, pt1.y2, pt2.x - pt1.x, pt2.y2 - pt1.y2);
+                        boundingVolumePathXY = [NSBezierPath bezierPathWithRect:r];
+                        [boundingVolumePathXY stroke];
+                    )
+            
+            
 			break;
 	}
 	

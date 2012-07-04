@@ -108,8 +108,8 @@
 
 - (SpatialPosition *)namePosition
 {
-	SpatialPosition *pos1, *pos2;
-	float x,y,z;
+//	SpatialPosition *pos1, *pos2;
+//	float x,y,z;
 	
 	if(![[self valueForKey:@"adaptiveInitialPosition"] boolValue])
 	{
@@ -133,13 +133,13 @@
 				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
 			case 1:
 				return [trajectory valueForKey:@"rotationCentre"];
-			case 2:
-				pos1 = [trajectory valueForKey:@"boundingVolumePoint1"];
-				pos2 = [trajectory valueForKey:@"boundingVolumePoint2"];
-				x = pos1.x + (pos2.x - pos1.x) * 0.5;
-				y = pos1.y + (pos2.y - pos1.y) * 0.5;
-				z = pos1.z + (pos2.z - pos1.z) * 0.5;
-				return [SpatialPosition positionWithX:x Y:y Z:z];
+//			case 2:
+//				pos1 = [trajectory valueForKey:@"boundingVolumePoint1"];
+//				pos2 = [trajectory valueForKey:@"boundingVolumePoint2"];
+//				x = pos1.x + (pos2.x - pos1.x) * 0.5;
+//				y = pos1.y + (pos2.y - pos1.y) * 0.5;
+//				z = pos1.z + (pos2.z - pos1.z) * 0.5;
+//				return [SpatialPosition positionWithX:x Y:y Z:z];
 			default:
 				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
 		}
