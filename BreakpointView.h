@@ -27,6 +27,8 @@
 	
 	BOOL isKey; // this breakpoint view is being edited
 
+    NSString *label;
+
 	NSString *xAxisValueKeypath, *yAxisValueKeypath;
     NSString *breakpointDescriptor;
 	unsigned int xAxisMax; // min is always 0
@@ -49,6 +51,7 @@
 
 @property(retain) BreakpointArray *breakpointArray;
 @property(retain) NSString *xAxisValueKeypath, *yAxisValueKeypath;
+@property(retain) NSString *label;
 @property(retain) NSString *breakpointDescriptor;
 @property unsigned int xAxisMax;
 @property float zoomFactorX;

@@ -21,6 +21,7 @@
 
 @implementation BreakpointView
 @synthesize xAxisValueKeypath, yAxisValueKeypath;
+@synthesize label;
 @synthesize breakpointDescriptor;
 @synthesize breakpointArray;
 @synthesize xAxisMax;
@@ -75,7 +76,7 @@
 	double yAxisFactor = rect.size.height / (yAxisMax - yAxisMin);
 	
 
-    // middle line
+    // draw middle line
     
     if(showMiddleLine)
     {
@@ -89,6 +90,15 @@
         [[NSGraphicsContext currentContext] setShouldAntialias:YES];
     }
     
+
+	// draw label
+
+	NSArray *keys = [NSArray arrayWithObjects:NSFontAttributeName, NSForegroundColorAttributeName, nil];
+	NSArray *values = [NSArray arrayWithObjects:[NSFont systemFontOfSize:16], [NSColor colorWithCalibratedWhite:0.25 alpha:0.5], nil];
+	NSDictionary *attributes = [[NSDictionary dictionaryWithObjects:values forKeys:keys] retain];
+	[label drawAtPoint:NSMakePoint(rect.origin.x + 2, rect.origin.y + 2) withAttributes:attributes];
+
+
 	// draw lines
 
 	[lineColor set];

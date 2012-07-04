@@ -37,8 +37,6 @@
 - (void)setupSubviews;
 
 // drawing
-//- (void)drawBreakpointTrajectory;
-//- (void)drawAutomatedTrajectory;
 - (void)redraw;
 
 // editing

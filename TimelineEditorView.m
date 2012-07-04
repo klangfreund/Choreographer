@@ -78,6 +78,7 @@
             breakpointView.yAxisMin = -1;
             breakpointView.yAxisMax = 1;
             breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"X";
             
             breakpointView = [breakpointViews objectAtIndex:1];
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
@@ -85,6 +86,7 @@
             breakpointView.toolTipString = @"time: %0.0f y: %0.2f";
             [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"Y";
 
             breakpointView = [breakpointViews objectAtIndex:2];
             breakpointView.breakpointArray = [trajectory positionBreakpointArray];
@@ -92,7 +94,8 @@
             breakpointView.toolTipString = @"time: %0.0f z: %0.2f";
             [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
             breakpointView.showMiddleLine = YES;
-            
+            breakpointView.label = @"Z";
+           
             numOfBreakpointViews = 3;
             
             break;
@@ -109,6 +112,7 @@
                 breakpointView.yAxisMin = -360;
                 breakpointView.yAxisMax = 360;
                 breakpointView.showMiddleLine = YES;
+                breakpointView.label = @"Angle";
             }
             else
             {
@@ -118,6 +122,7 @@
                 breakpointView.yAxisMin = -100;
                 breakpointView.yAxisMax = 100;
                 breakpointView.showMiddleLine = YES;
+                breakpointView.label = @"Speed";
             }
             
             [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
@@ -224,9 +229,6 @@
         }
     }
 }
-
-//- (void)drawAutomatedTrajectory;
-//{}
 
 - (void)redraw
 {
