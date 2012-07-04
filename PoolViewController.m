@@ -720,7 +720,7 @@
 {
     if(i < 0)
     {
-        [[AudioEngine sharedAudioEngine] stopPrelisten];
+        [[AudioEngine sharedAudioEngine] stopPrelistening];
     }
     else if([[document valueForKey:@"keyboardModifierKeys"] intValue] == modifierAlt)
     {
@@ -741,9 +741,9 @@
         
         
         if([item isKindOfClass:[AudioItem class]])
-            [[AudioEngine sharedAudioEngine] startPrelisten:item];
+            [[AudioEngine sharedAudioEngine] startPrelistening:item];
         else
-            [[AudioEngine sharedAudioEngine] stopPrelisten];  
+            [[AudioEngine sharedAudioEngine] stopPrelistening];  
     }
 }
 

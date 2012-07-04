@@ -15,7 +15,7 @@
 	NSArray *bufferSizes;
 	NSInteger selectedBufferSizeIndex;
     
-	NSArray *availableOutputDeviceNames;    
+	NSArray *availableOutputDeviceNames;  
 }
 
 @property (retain) NSArray *availableOutputDeviceNames;

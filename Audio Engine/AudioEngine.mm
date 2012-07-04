@@ -24,7 +24,6 @@
 
 static AudioEngine *sharedAudioEngine = nil;
 
-
 + (AudioEngine *)sharedAudioEngine
 {
     if (!sharedAudioEngine)
@@ -77,8 +76,14 @@ static AudioEngine *sharedAudioEngine = nil;
     projectAudioSettingsWindowController = [[ProjectAudioSettingsWindowController alloc] init];
 	
 	// settings
-	[self setTestNoiseVolume:-12];
+    if(![[NSUserDefaults standardUserDefaults] valueForKey:@"testNoiseVolume"])
+        [self setTestNoiseVolume:-12]; // default
+    else
+        [self setTestNoiseVolume:[[[NSUserDefaults standardUserDefaults] valueForKey:@"testNoiseVolume"] floatValue]];
     
+    [self setPrelisteningVolume:[[[NSUserDefaults standardUserDefaults] valueForKey:@"prelisteningVolume"] floatValue]];
+    
+    [self setPrelisteningChannel:1];
 
     // find preferred output device and set it
     selectedOutputDeviceIndex = 0; // default
@@ -216,7 +221,11 @@ static AudioEngine *sharedAudioEngine = nil;
 	ambisonicsAudioEngine->disableArrangerLoop();
 }
 
-- (void)startPrelisten:(id)audioItem
+#pragma mark -
+#pragma mark prelistening
+// -----------------------------------------------------------
+
+- (void)startPrelistening:(id)audioItem
 {
     int sampleRate = (int)ambisonicsAudioEngine->getCurrentSampleRate();
 	double fromMsToSamples = 0.001*sampleRate;
@@ -226,19 +235,46 @@ static AudioEngine *sharedAudioEngine = nil;
     
 	NSString *filePath = [audioItem valueForKeyPath:@"audioFile.filePathString"];
     
-	NSLog(@"start prelisten:\nstart: %lu dur:%lu\nfile: %@", offsetInFile, duration, filePath);
+	// NSLog(@"start prelistening:\nstart: %lu dur:%lu\nfile: %@", offsetInFile, duration, filePath);
     
     ambisonicsAudioEngine->startPrelisten([filePath UTF8String], offsetInFile, offsetInFile+duration);
 
 }
 
-- (void)stopPrelisten
+- (void)stopPrelistening
 {
-    NSLog(@"stop prelisten");
-    
     ambisonicsAudioEngine->stopPrelistening();
 }
 
+- (void)setPrelisteningVolume:(float)dbValue
+{
+	prelisteningVolume = dbValue;
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:prelisteningVolume] forKey:@"prelisteningVolume"];
+    
+//    float gain = pow(10, 0.05 * dbValue);
+//	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
+}
+
+- (void)setPrelisteningChannel:(NSInteger)channel
+{
+    prelisteningChannel = channel;
+    [self setPrelisteningChannels:[NSIndexSet indexSetWithIndex:channel-1]];
+}
+
+- (void)setPrelisteningChannels:(NSIndexSet *)channels
+{
+    BigInteger hardwareOutputsForPrelistening;
+    NSUInteger channel = [channels firstIndex];
+    
+    while(channel != NSNotFound)
+    {
+        hardwareOutputsForPrelistening.setBit(channel);
+        channel = [channels indexGreaterThanIndex: channel];
+    }
+
+    ambisonicsAudioEngine->setPrelisteningOutputs(hardwareOutputsForPrelistening);
+    ambisonicsAudioEngine->enableNewRouting();
+}
 
 #pragma mark -
 #pragma mark bounce to disk
@@ -384,7 +420,7 @@ static AudioEngine *sharedAudioEngine = nil;
     ambisonicsAudioEngine->enableDistanceBasedFiltering(halfCutoffUnit != 0);
 
     ambisonicsAudioEngine->setDistanceWithHalfTheOpenCutoffFrequency(halfCutoffUnit);
-    NSLog(@"setDistanceBasedFiltering %f", halfCutoffUnit);
+//    NSLog(@"setDistanceBasedFiltering %f", halfCutoffUnit);
 }
 
 - (void)setDistanceBasedDelay:(double)milisecondsPerUnit
@@ -392,12 +428,15 @@ static AudioEngine *sharedAudioEngine = nil;
     ambisonicsAudioEngine->enableDopplerEffect(milisecondsPerUnit != 0);
 
     ambisonicsAudioEngine->setUnitScaleFactorForDopplerEffect(milisecondsPerUnit * 3.4);
-    NSLog(@"setDistanceBasedDelay %f", milisecondsPerUnit * 3.4);
+//   NSLog(@"setDistanceBasedDelay %f", milisecondsPerUnit * 3.4);
 }
  
 - (void)setTestNoiseVolume:(float)dbValue
 {
-	float gain = pow(10, 0.05 * dbValue);
+	testNoiseVolume = dbValue;
+    [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:testNoiseVolume] forKey:@"testNoiseVolume"];
+    
+    float gain = pow(10, 0.05 * dbValue);
 	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
 }
 

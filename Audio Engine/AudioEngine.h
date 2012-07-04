@@ -46,6 +46,10 @@
     NSString *selectedOutputDeviceName;
     int numberOfAvailableOutputDevices;
 
+	float testNoiseVolume;    
+	float prelisteningVolume;
+    NSInteger prelisteningChannel;
+
 	NSTimer *hardwareStateTimer;
 }
 
@@ -75,8 +79,16 @@
 - (void)setLoopStart:(unsigned long)start end:(unsigned long)end;
 - (void)unsetLoop;
 
-- (void)startPrelisten:(id)audioItem;
-- (void)stopPrelisten;
+// Prelistening
+
+- (void)startPrelistening:(id)audioItem;
+- (void)stopPrelistening;
+- (void)setPrelisteningVolume:(float)dbValue;
+- (void)setPrelisteningChannels:(NSIndexSet *)channels;
+- (void)setPrelisteningChannel:(NSInteger)channel;
+
+
+// Bounce
 
 - (void)bounceToDisk:(NSURL *)URL start:(NSUInteger)start end:(NSUInteger)end;
 
