@@ -294,22 +294,30 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
 : audioTransportSource (audioTransportSource_),
   audioRegionMixer (audioRegionMixer_),
   aepChannelHardwareOutputPairs (),
+  permanentlyMutedAepChannel(0.0, false, true, false, 0.0, 0.0, 0.0), 
+                    // gain, solo, mute, pinkNoise, x, y, z
   numberOfHardwareOutputChannels (0),
   numberOfMutedChannels (0),
   numberOfSoloedChannels (0),
   numberOfChannelsWithActivatedPinkNoise (0),
   numberOfChannelsWithEnabledMeasurement (0),
-  pinkNoiseGeneratorAudioSource (),
+  positionOfSpeakers (),
   monoAudioBuffer (1, INITIAL_TEMP_BUFFER_SIZE),
-  positionOfSpeakers ()
+  pinkNoiseGeneratorAudioSource (),
+  hardwareOutputsForPrelistening (0)
 {
 	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
         "argument) called.")
 	
-	// initialize the pinkNoiseInfo
+	// initialize the monoChannelInfo
 	monoChannelInfo.buffer = &monoAudioBuffer;
 	monoChannelInfo.startSample = 0;
 	monoChannelInfo.numSamples = 0;
+    
+    // TEMP
+    BigInteger tempHardwareOutputsForPrelistening;
+    tempHardwareOutputsForPrelistening.setBit (0);
+    setPrelisteningOutputs (tempHardwareOutputsForPrelistening);
 }
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
@@ -596,6 +604,12 @@ void AudioSpeakerGainAndRouting::removeAllRoutings()
 	aepChannelHardwareOutputPairs.clear();
 }
 
+void AudioSpeakerGainAndRouting::setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening_)
+{
+    hardwareOutputsForPrelistening = hardwareOutputsForPrelistening_;
+}
+
+
 
 void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutputChannel)
 {
@@ -603,7 +617,7 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
         + ", " + String(hardwareOutputChannel) + ") called.")
 	
 	// check if the arguments define a valid configuration.
-	if (aepChannel < 0 && hardwareOutputChannel < 0)
+	if (aepChannel < -2 && hardwareOutputChannel < -1)
 	{
 		DEB("Error. Both arguments (aepChannel and hardwareOutputChannel) are "
             "smaller than zero. This is not a valid set of arguments!")
@@ -623,18 +637,29 @@ void AudioSpeakerGainAndRouting::setNewRouting(int aepChannel, int hardwareOutpu
 	// ... now we are sure to have a valid configuration.
 	
 	
-	if (aepChannel < 0)
+	if (aepChannel == -1)
 	{
 		// Remove the pair with the given hardwareOutputChannel.
 		aepChannelHardwareOutputPairs.deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
 	}
-	else if (hardwareOutputChannel < 0)
+	else if (hardwareOutputChannel == -1)
 	{
 		// Remove the pair with the given aepChannel.
 		aepChannelHardwareOutputPairs.deletePairIfItContainsAEPChannel(aepChannel);
 	}
 	else
-	{	
+	{
+        // Get rid of an old connection, if it intersects with this new
+        // connection.
+        if (aepChannelHardwareOutputPairs.containsAEPChannel(aepChannel))
+        {
+            aepChannelHardwareOutputPairs.deletePairIfItContainsAEPChannel(aepChannel);
+        }
+        if (aepChannelHardwareOutputPairs.containsHardwareOutputChannel(hardwareOutputChannel))
+        {
+            aepChannelHardwareOutputPairs.deletePairIfItContainsHardwareOutputChannel(hardwareOutputChannel);
+        }
+        
 		// Add the pair.
 		aepChannelHardwareOutputPairs.add(aepChannel, hardwareOutputChannel);
 	}
@@ -662,6 +687,19 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 	// temp:
 	DEB("AudioSpeakerGainAndRouting::enableNewRouting: OutputChannels (before) = " 
         + String(audioDeviceSetup.outputChannels.toInteger()))
+    
+    // If there are hardware outputs used exclusively for prelistening, add them
+    // to the aepChannelHardwareOutputPairs, with a value of -1 for the
+    // AEP channel. This indicates, that it will have the
+    // permanentlyMutedAepChannel settings attached to it.
+    for (int i=0; i != numberOfHardwareOutputChannels; ++i)
+    {
+        if (hardwareOutputsForPrelistening[i]
+            && !aepChannelHardwareOutputPairs.containsHardwareOutputChannel(i))
+        {
+            aepChannelHardwareOutputPairs.add(-2, i);
+        }
+    }
 	
 	// Figure out which hardware outputs will be in use.
 	audioDeviceSetup.outputChannels.clear();
@@ -735,8 +773,20 @@ int AudioSpeakerGainAndRouting::enableNewRouting(AudioDeviceManager *audioDevice
 		// Fill the aepChannelSettingsOrderedByActiveHardwareChannels array.
 		int AepChannelConnectedWithTheIthActiveHardwareOutput
 		    = aepChannelHardwareOutputPairs.getAepChannel(i);
+
+        if (AepChannelConnectedWithTheIthActiveHardwareOutput != -2)
+        // The regular case
+        // where real AEP channel settings are used.
+        {
 		aepChannelSettingsOrderedByActiveHardwareChannels.add(
 		    aepChannelSettingsOrderedByAepChannel[AepChannelConnectedWithTheIthActiveHardwareOutput]);
+        }
+        else
+        // If a hardware output is used for prelistening only
+        // use the permanentlyMutedAepChannel.
+        {
+            aepChannelSettingsOrderedByActiveHardwareChannels.add(&permanentlyMutedAepChannel);
+        }
 	}
 	
     // Update the positionOfSpeakers and
@@ -861,62 +911,46 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 		// To save some typing and make the code more readable.
 		const int nrOfActiveHWChannels = aepChannelSettingsOrderedByActiveHardwareChannels.size();
 
-		// Aquire a buffer of samples from the audioSource into the AudioSourceChannelInfo info.
-		audioTransportSource->getNextAudioBlock(info);
+        // Aquire the buffer of samples from the audioTransportSource into the 
+        // AudioSourceChannelInfo info.
+        audioTransportSource->getNextAudioBlock(info);
 		
+        // Pink Noise
+        // ----------
 		// Before gain, mute or solo is applied to the audio stream, pink noise
-        // or audio from the file prelistener is added if desired. They come 
-        // before the gain, so that they are controllable  on each channel via 
+        // is added if desired. It comes 
+        // before the gain, so that it is controllable on each channel via 
         // the corresponding gain.
-        if (numberOfChannelsWithActivatedPinkNoise != 0 || audioSourceFilePrelistener.isPlaying())
+        if (numberOfChannelsWithActivatedPinkNoise != 0)
         {
             // Set up the tempChannelInfo
             if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
             {
                 monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
             }
-            
             monoChannelInfo.startSample = info.startSample;
             monoChannelInfo.numSamples = info.numSamples;
             
-            // pink noise
-            // ----------
-            if (numberOfChannelsWithActivatedPinkNoise != 0)
-            {
-                // At least one of the AEP channels (maybe not even a hardware output channel)
-                // has pink noise engaged.
-                
-                // There is only one mono noise source for all channels.
-                // Or stated differently: The noise on all channels is correlated
-                // (which is good for judging the balance in loudness).
-                
-                // Generate the pink noise.
-                pinkNoiseGeneratorAudioSource.getNextAudioBlock(monoChannelInfo);
-                
-                // Put it on all channels
-                for (int n = 0; n < nrOfActiveHWChannels; n++)
-                {
-                    // Add the pink noise to the channels that wants it.
-                    if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
-                    {
-                        info.buffer->addFrom(n, info.startSample, 
-                                             monoAudioBuffer, 0, info.startSample, info.numSamples);
-                    }
-                }
-            }
+            // At least one of the AEP channels (maybe not even a hardware output channel)
+            // has pink noise engaged.
             
-            if (audioSourceFilePrelistener.isPlaying())
+            // There is only one mono noise source for all channels.
+            // Or stated differently: The noise on all channels is correlated
+            // (which is good for judging the balance in loudness).
+            
+            // Generate the pink noise.
+            pinkNoiseGeneratorAudioSource.getNextAudioBlock(monoChannelInfo);
+            
+            // Put it on all channels
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
             {
-                // Get the audio from the file prelistener
-                audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
-                
-                // Put it on all channels
-                for (int n = 0; n < nrOfActiveHWChannels; n++)
+                // Add the pink noise to the channels that wants it.
+                if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
                 {
                     info.buffer->addFrom(n, info.startSample, 
-                                             monoAudioBuffer, 0, info.startSample, info.numSamples);
+                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
+                }
             }
-        }
         }
 
 		// gain	(only gain, nothing else)	
@@ -975,6 +1009,35 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				}				
 			}
 		}
+    
+        // file prelistener
+        // ----------------
+        // This won't be controllabe in gain by the aep settings.
+        // The reason: It might also play on channels without a connection
+        // to a set of visible aep settings.
+        if (audioSourceFilePrelistener.isPlaying())
+        {
+            // Set up the tempChannelInfo
+            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
+            {
+                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
+            }
+            monoChannelInfo.startSample = info.startSample;
+            monoChannelInfo.numSamples = info.numSamples;
+            
+            // Get the audio from the file prelistener
+            audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
+            
+            // Put it to the desired channels
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
+            {
+                if (hardwareOutputsForPrelistening[n])
+                {
+                    info.buffer->addFrom(n, info.startSample, 
+                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
+                }
+            }
+        }
 		
 		// measurement (for drawing vu bars in the GUI)
 		// -----------

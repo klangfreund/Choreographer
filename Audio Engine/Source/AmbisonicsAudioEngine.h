@@ -275,6 +275,12 @@ public:
 	 To enable this state, call enableNewRouting.
 	 */	
 	void removeAllRoutings();
+    
+    /** The bits of the prelisteningOutputs define, if a hardware output should play the audio from the file prelistener.
+     
+     To enable this, call enableNewRouting.
+     */
+    void setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening);
 	
 	/** It activates the hardware channels needed for the desired
 	 routing and assignes the corresponding AEP settings to them.

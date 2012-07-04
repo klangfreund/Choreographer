@@ -192,11 +192,18 @@ public:
 private:
     /** 
 	 The AEP audio channel.
+     Indexing starts at 0.
+     
+     A value of -1 represents the permanently muted AEP channel. This channel
+     wont be displayed in the user interface. It is set if a hardware
+     channel is exclusively used for prelistening and is not connected to a
+     AEP channel.
      */
     int aepChannel;
 	
     /**
-	 The (physical) hardware output channel
+	 The (physical) hardware output channel.
+     Indexing starts at 0.
      */
     int hardwareOutputChannel;
 	
@@ -391,10 +398,10 @@ public:
 	 old connections will be removed.
 	 
 	 To remove the connection with aepChannel, call
-	 sotNewRouting(aepChannel, 0).
+	 setNewRouting(aepChannel, -1).
 
 	 To remove the connection with hardwareOutputChannel, call
-	 sotNewRouting(0, hardwareOutputChannel).
+	 setNewRouting(-1, hardwareOutputChannel).
 	 
 	 To enable the new routing, call enableNewRouting.
 	 */
@@ -403,9 +410,21 @@ public:
 	/** Removes all connections between the AEP channels and
 	 the audio hardware output channels.
 	 
-	To enable this routing free state, call enableNewRouting.
+	To enable this, call enableNewRouting.
+     
+     Or you could call e.g.
+     - removeAllRoutings ();
+     - setNewRouting (1,2);
+     - setNewRouting (2,1);
+     - enableNewRouting ();
 	*/	
 	void removeAllRoutings();
+    
+    /** The bits of the prelisteningOutputs define, if a hardware output should play the audio from the file prelistener.
+     
+    To enable this, call enableNewRouting.
+     */
+    void setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening_);
 	
 	/** Activates the hardware channels needed for the desired
 	 routing and assignes the corresponding AEP settings to them.
@@ -502,6 +521,13 @@ private:
 	
 	
 	OwnedArray<AepChannelSettings> aepChannelSettingsOrderedByAepChannel;
+    
+    AepChannelSettings permanentlyMutedAepChannel;
+        ///< This settings are used if the file pre listener puts his audio
+        /// onto a hardware channel that is not connected to a real AEP channel.
+        /// Its not the most ressource efficient way, but sadly I couldn't
+        /// figure out another method.
+    
 	Array<AepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannels;
 	
 	Array<AepChannelSettings*> aepChannelSettingsOrderedByActiveHardwareChannelsBackup;
@@ -524,6 +550,7 @@ private:
 	AudioSourceChannelInfo monoChannelInfo; ///< Used in getNextAudioBlock .
 	PinkNoiseGeneratorAudioSource pinkNoiseGeneratorAudioSource;
     AudioSourceFilePrelistener audioSourceFilePrelistener;
+    BigInteger hardwareOutputsForPrelistening;
 	
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
 	CriticalSection audioSpeakerGainAndRoutingLock;
