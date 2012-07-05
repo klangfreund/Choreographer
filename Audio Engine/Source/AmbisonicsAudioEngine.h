@@ -281,6 +281,10 @@ public:
      To enable this, call enableNewRouting.
      */
     void setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening);
+    
+    /** Sets the prelistening gain (for all prelistening hardware channels).
+     */
+    void setPrelisteningGain (double prelisteningGain_);
 	
 	/** It activates the hardware channels needed for the desired
 	 routing and assignes the corresponding AEP settings to them.

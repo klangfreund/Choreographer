@@ -425,6 +425,10 @@ public:
     To enable this, call enableNewRouting.
      */
     void setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening_);
+    
+    /** Sets the prelistening gain (for all prelistening hardware channels).
+     */
+    void setPrelisteningGain (double prelisteningGain_);
 	
 	/** Activates the hardware channels needed for the desired
 	 routing and assignes the corresponding AEP settings to them.
@@ -551,6 +555,9 @@ private:
 	PinkNoiseGeneratorAudioSource pinkNoiseGeneratorAudioSource;
     AudioSourceFilePrelistener audioSourceFilePrelistener;
     BigInteger hardwareOutputsForPrelistening;
+    double prelisteningGain;
+    double newPrelisteningGain;
+    bool newPrelisteningGainSet;
 	
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
 	CriticalSection audioSpeakerGainAndRoutingLock;

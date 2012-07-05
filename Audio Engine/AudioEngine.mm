@@ -251,8 +251,8 @@ static AudioEngine *sharedAudioEngine = nil;
 	prelisteningVolume = dbValue;
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:prelisteningVolume] forKey:@"prelisteningVolume"];
     
-//    float gain = pow(10, 0.05 * dbValue);
-//	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
+    float gain = pow(10, 0.05 * dbValue);
+    ambisonicsAudioEngine->setPrelisteningGain(gain);
 }
 
 - (void)setPrelisteningChannel:(NSInteger)channel

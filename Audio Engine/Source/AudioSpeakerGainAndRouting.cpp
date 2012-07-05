@@ -304,7 +304,10 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
   positionOfSpeakers (),
   monoAudioBuffer (1, INITIAL_TEMP_BUFFER_SIZE),
   pinkNoiseGeneratorAudioSource (),
-  hardwareOutputsForPrelistening (0)
+  hardwareOutputsForPrelistening (0),
+  prelisteningGain (1.0),
+  newPrelisteningGain (prelisteningGain),
+  newPrelisteningGainSet (false)
 {
 	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
         "argument) called.")
@@ -602,6 +605,12 @@ void AudioSpeakerGainAndRouting::removeAllRoutings()
 void AudioSpeakerGainAndRouting::setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening_)
 {
     hardwareOutputsForPrelistening = hardwareOutputsForPrelistening_;
+}
+
+void AudioSpeakerGainAndRouting::setPrelisteningGain(double prelisteningGain_)
+{
+    newPrelisteningGain = prelisteningGain_;
+    newPrelisteningGainSet = true;
 }
 
 
@@ -1062,6 +1071,20 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
             
             // Get the audio from the file prelistener
             audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
+            
+            // Apply the gain
+            int channel = 0;
+            if (newPrelisteningGainSet)
+            {
+                // If a new gain is set, apply a gain ramp
+                monoChannelInfo.buffer->applyGainRamp(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain, newPrelisteningGain);
+                prelisteningGain = newPrelisteningGain;
+                newPrelisteningGainSet = false;
+            }
+            else
+            {
+                monoChannelInfo.buffer->applyGain(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain);
+            }
             
             // Put it to the desired channels
             for (int n = 0; n < nrOfActiveHWChannels; n++)
