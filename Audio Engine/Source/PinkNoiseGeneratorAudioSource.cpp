@@ -16,8 +16,6 @@
 //==============================================================================
 PinkNoiseGeneratorAudioSource::PinkNoiseGeneratorAudioSource()
     : amplitude (1.0),
-	  newAmplitude (1.0),
-	  newAmplitudeSet (false),
       b0 (0.0),
       b1 (0.0),
       b2 (0.0),
@@ -32,9 +30,9 @@ PinkNoiseGeneratorAudioSource::~PinkNoiseGeneratorAudioSource()
 //==============================================================================
 void PinkNoiseGeneratorAudioSource::setAmplitude (const double newAmplitude_)
 {
-    newAmplitude = newAmplitude_;
-	newAmplitudeSet = true;
+    amplitude = newAmplitude_;
 }
+
 
 //==============================================================================
 void PinkNoiseGeneratorAudioSource::prepareToPlay (int samplesPerBlockExpected,
@@ -76,19 +74,6 @@ void PinkNoiseGeneratorAudioSource::getNextAudioBlock (const AudioSourceChannelI
 		pink = pink * amplitude;
 		
 		*info.buffer->getSampleData (lastChannel, info.startSample + i) = pink;
-	}
-	
-	if (newAmplitudeSet)
-	{
-		// The audio block should have a gain ramp from amplitude to newAmplitude.
-		// Since the multiplication with "amplitude" has already taken place,
-		// the gain ramp has to take this into account.
-		double startGain = 1.0; // = amplitude / amplitude
-		double endGain = newAmplitude / amplitude;
-		info.buffer->applyGainRamp(lastChannel, info.startSample, info.numSamples, startGain, endGain);
-		
-		amplitude = newAmplitude;
-		newAmplitudeSet = false;
 	}
 	
 	// put the (same) noise to the remaining channels

@@ -269,7 +269,13 @@ private:
 //==============================================================================
 //==============================================================================
 /**
+ Implements the functionality of the Speaker Setup window of the Choreographer.
+ 
+ A brief description on how the routing is implemented
+ -----------------------------------------------------
+ 
  TODO
+ 
  */
 class JUCE_API  AudioSpeakerGainAndRouting  : public AudioSource
 {
