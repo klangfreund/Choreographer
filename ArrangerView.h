@@ -11,6 +11,7 @@
 #import "CHGlobals.h"
 #import "AudioItem.h"
 #import "Region.h"
+#import "RulerView.h"
 
 @interface MarqueeView : NSView
 {
@@ -40,6 +41,7 @@ typedef enum _ArrangerViewDragAndDropAction
 {
 	CHProjectDocument *document;
 	IBOutlet id playbackController;
+    IBOutlet RulerView* arrangerRuler;
 
     NSManagedObject *projectSettings;
 	

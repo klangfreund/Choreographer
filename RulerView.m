@@ -235,7 +235,18 @@
 	}
 
 }
-	
+
+- (void)setWidth:(float)width
+{
+    NSSize s = [self frame].size;
+    if(width > s.width)
+    {
+        s.width = width;
+        [self setFrameSize:s];
+        [self setNeedsDisplay:YES];
+    }
+}
+
 - (void)setHorizontalRulerType:(NSPopUpButton *)sender
 {
 	int num = [sender indexOfSelectedItem];

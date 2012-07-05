@@ -365,6 +365,13 @@
 
 	[self setNeedsDisplay:YES];
 }
+
+- (void)setFrameSize:(NSSize)newSize
+{
+    [super setFrameSize:newSize];
+    [arrangerRuler setWidth:newSize.width];
+
+}
 	
 #pragma mark -
 #pragma mark drag and drop

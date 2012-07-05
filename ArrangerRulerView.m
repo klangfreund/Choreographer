@@ -366,9 +366,7 @@
 		zoomFactor = newZoomFactor;
 		
 		// new width
-		NSSize s = [self frame].size;
-		s.width = [[document valueForKey:@"arrangerView"] frame].size.width * 2;
-		[self setFrameSize:s];
+        [self setWidth:[[document valueForKey:@"arrangerView"] frame].size.width];
 	}
 }
 
