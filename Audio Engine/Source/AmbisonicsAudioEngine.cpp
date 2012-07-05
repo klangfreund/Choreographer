@@ -816,6 +816,11 @@ void AmbisonicsAudioEngine::setPrelisteningOutputs (BigInteger hardwareOutputsFo
     audioSpeakerGainAndRouting.setPrelisteningOutputs(hardwareOutputsForPrelistening);
 }
 
+void AmbisonicsAudioEngine::setPrelisteningGain (double prelisteningGain_)
+{
+    audioSpeakerGainAndRouting.setPrelisteningGain(prelisteningGain_);
+}
+
 void AmbisonicsAudioEngine::enableNewRouting()
 {
 	// Since we're quite likely going to change the number of channels

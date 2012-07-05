@@ -304,7 +304,10 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
   positionOfSpeakers (),
   monoAudioBuffer (1, INITIAL_TEMP_BUFFER_SIZE),
   pinkNoiseGeneratorAudioSource (),
-  hardwareOutputsForPrelistening (0)
+  hardwareOutputsForPrelistening (0),
+  prelisteningGain (1.0),
+  newPrelisteningGain (prelisteningGain),
+  newPrelisteningGainSet (false)
 {
 	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
         "argument) called.")
@@ -313,11 +316,6 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
 	monoChannelInfo.buffer = &monoAudioBuffer;
 	monoChannelInfo.startSample = 0;
 	monoChannelInfo.numSamples = 0;
-    
-    // TEMP
-    BigInteger tempHardwareOutputsForPrelistening;
-    tempHardwareOutputsForPrelistening.setBit (0);
-    setPrelisteningOutputs (tempHardwareOutputsForPrelistening);
 }
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
@@ -607,6 +605,12 @@ void AudioSpeakerGainAndRouting::removeAllRoutings()
 void AudioSpeakerGainAndRouting::setPrelisteningOutputs (BigInteger hardwareOutputsForPrelistening_)
 {
     hardwareOutputsForPrelistening = hardwareOutputsForPrelistening_;
+}
+
+void AudioSpeakerGainAndRouting::setPrelisteningGain(double prelisteningGain_)
+{
+    newPrelisteningGain = prelisteningGain_;
+    newPrelisteningGainSet = true;
 }
 
 
@@ -1009,35 +1013,6 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				}				
 			}
 		}
-    
-        // file prelistener
-        // ----------------
-        // This won't be controllabe in gain by the aep settings.
-        // The reason: It might also play on channels without a connection
-        // to a set of visible aep settings.
-        if (audioSourceFilePrelistener.isPlaying())
-        {
-            // Set up the tempChannelInfo
-            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
-            {
-                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
-            }
-            monoChannelInfo.startSample = info.startSample;
-            monoChannelInfo.numSamples = info.numSamples;
-            
-            // Get the audio from the file prelistener
-            audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
-            
-            // Put it to the desired channels
-            for (int n = 0; n < nrOfActiveHWChannels; n++)
-            {
-                if (hardwareOutputsForPrelistening[n])
-                {
-                    info.buffer->addFrom(n, info.startSample, 
-                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
-                }
-            }
-        }
 		
 		// measurement (for drawing vu bars in the GUI)
 		// -----------
@@ -1078,6 +1053,49 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			
 			
 		}
+        
+        // file prelistener
+        // ----------------
+        // This won't be controllabe in gain by the aep settings.
+        // The reason: It might also play on channels without a connection
+        // to a set of visible aep settings.
+        if (audioSourceFilePrelistener.isPlaying())
+        {
+            // Set up the tempChannelInfo
+            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
+            {
+                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
+            }
+            monoChannelInfo.startSample = info.startSample;
+            monoChannelInfo.numSamples = info.numSamples;
+            
+            // Get the audio from the file prelistener
+            audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
+            
+            // Apply the gain
+            int channel = 0;
+            if (newPrelisteningGainSet)
+            {
+                // If a new gain is set, apply a gain ramp
+                monoChannelInfo.buffer->applyGainRamp(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain, newPrelisteningGain);
+                prelisteningGain = newPrelisteningGain;
+                newPrelisteningGainSet = false;
+            }
+            else
+            {
+                monoChannelInfo.buffer->applyGain(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain);
+            }
+            
+            // Put it to the desired channels
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
+            {
+                if (hardwareOutputsForPrelistening[n])
+                {
+                    info.buffer->addFrom(n, info.startSample, 
+                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
+                }
+            }
+        }
 	}
 }
 
