@@ -233,7 +233,9 @@
 
 - (void)updateAudioEngine:(NSNotification *)notification
 {
-	[updateRegions release];
+//    NSLog(@"UPDATE  --  ENGINE");
+
+    [updateRegions release];
 	updateRegions = [[NSMutableSet alloc] init];
 	
 	NSDictionary *info = [notification userInfo];
@@ -296,14 +298,14 @@
 				{
 					[updateRegions addObject:object];
 					
-					if([object valueForKey:@"trajectoryItem"] == NULL)
-					{
-						// after a trajectory has been removed from a group region
-						// it can't be found by iterating through the trajectory's
-						// regions (as above)
-						
-						[object calculatePositionBreakpoints];						
-					}
+//					if([object valueForKey:@"trajectoryItem"] == NULL)
+//					{
+//						// after a trajectory has been removed from a group region
+//						// it can't be found by iterating through the trajectory's
+//						// regions (as above)
+//						
+//						[object calculatePositionBreakpoints];						
+//					}
 				}
 			}
 		}
@@ -334,8 +336,8 @@
 	for(id region in updateRegions)
 	{
 		// update audio engine
-		[[AudioEngine sharedAudioEngine] modifyAudioRegion:region];			
 		[region calculatePositionBreakpoints];
+		[[AudioEngine sharedAudioEngine] modifyAudioRegion:region];			
 	}
 	
 }

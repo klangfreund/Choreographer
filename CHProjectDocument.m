@@ -256,7 +256,7 @@
 
 - (void)archiveProjectSettings
 {
-    NSLog(@"archiveProjectSettings");
+//    NSLog(@"archiveProjectSettings");
 
     NSMutableData *data;
 	NSKeyedArchiver *archiver;

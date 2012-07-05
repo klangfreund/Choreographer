@@ -597,7 +597,12 @@
 
 	[newItem setValue:[NSNumber numberWithInt:newTrajectoryType] forKey:@"trajectoryType"];
 	[newItem setValue:regionsForNewTrajectoryItem forKey:@"regions"];
-	
+
+	for(id region in regionsForNewTrajectoryItem)
+    {
+        [region setValue:[NSNumber numberWithInt:1] forKey:@"trajectoryDurationMode"];
+    }
+    
 	// store data
 	[newItem archiveData];
 	

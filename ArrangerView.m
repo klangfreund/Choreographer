@@ -639,6 +639,7 @@
 	}
 	
 	[region setValue:[[draggedTrajectories objectAtIndex:0] valueForKey:@"item"] forKey:@"trajectoryItem"];
+    [region setValue:[NSNumber numberWithInt:1] forKey:@"trajectoryDurationMode"]; // reset duration mode
 	[self addRegionToSelection:region];
 	
 	for(Region *rg in placeholderRegions)
