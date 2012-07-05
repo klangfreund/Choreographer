@@ -313,11 +313,6 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
 	monoChannelInfo.buffer = &monoAudioBuffer;
 	monoChannelInfo.startSample = 0;
 	monoChannelInfo.numSamples = 0;
-    
-    // TEMP
-    BigInteger tempHardwareOutputsForPrelistening;
-    tempHardwareOutputsForPrelistening.setBit (0);
-    setPrelisteningOutputs (tempHardwareOutputsForPrelistening);
 }
 
 AudioSpeakerGainAndRouting::~AudioSpeakerGainAndRouting()
@@ -1009,35 +1004,6 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 				}				
 			}
 		}
-    
-        // file prelistener
-        // ----------------
-        // This won't be controllabe in gain by the aep settings.
-        // The reason: It might also play on channels without a connection
-        // to a set of visible aep settings.
-        if (audioSourceFilePrelistener.isPlaying())
-        {
-            // Set up the tempChannelInfo
-            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
-            {
-                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
-            }
-            monoChannelInfo.startSample = info.startSample;
-            monoChannelInfo.numSamples = info.numSamples;
-            
-            // Get the audio from the file prelistener
-            audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
-            
-            // Put it to the desired channels
-            for (int n = 0; n < nrOfActiveHWChannels; n++)
-            {
-                if (hardwareOutputsForPrelistening[n])
-                {
-                    info.buffer->addFrom(n, info.startSample, 
-                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
-                }
-            }
-        }
 		
 		// measurement (for drawing vu bars in the GUI)
 		// -----------
@@ -1078,6 +1044,35 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
 			
 			
 		}
+        
+        // file prelistener
+        // ----------------
+        // This won't be controllabe in gain by the aep settings.
+        // The reason: It might also play on channels without a connection
+        // to a set of visible aep settings.
+        if (audioSourceFilePrelistener.isPlaying())
+        {
+            // Set up the tempChannelInfo
+            if (monoAudioBuffer.getNumSamples() < info.buffer->getNumSamples())
+            {
+                monoAudioBuffer.setSize(1, info.buffer->getNumSamples());
+            }
+            monoChannelInfo.startSample = info.startSample;
+            monoChannelInfo.numSamples = info.numSamples;
+            
+            // Get the audio from the file prelistener
+            audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
+            
+            // Put it to the desired channels
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
+            {
+                if (hardwareOutputsForPrelistening[n])
+                {
+                    info.buffer->addFrom(n, info.startSample, 
+                                         monoAudioBuffer, 0, info.startSample, info.numSamples);
+                }
+            }
+        }
 	}
 }
 
