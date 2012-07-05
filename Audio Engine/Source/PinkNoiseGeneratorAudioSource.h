@@ -32,7 +32,7 @@ public:
 
     //==============================================================================
     /** Sets the signal's amplitude. */
-    void setAmplitude (const double newAmplitude_);		
+    void setGain (const double gain_);	
 
     //==============================================================================
     /** Implementation of the AudioSource method. */
@@ -50,9 +50,7 @@ public:
 
 private:
     //==============================================================================
-	bool newAmplitudeSet;
-    double amplitude;
-	double newAmplitude;
+    double gain;
 	double b0, b1, b2; // used for the "pink noise filter"
 	Random juceRandom;
 

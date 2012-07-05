@@ -776,9 +776,9 @@ bool AmbisonicsAudioEngine::activatePinkNoise(int aepChannel, bool enable)
 	return audioSpeakerGainAndRouting.activatePinkNoise(aepChannel, enable);
 }
 
-void AmbisonicsAudioEngine::setAmplitudeOfPinkNoiseGenerator(const double amplitude)
+void AmbisonicsAudioEngine::setGainOfPinkNoiseGenerator(const double gain)
 {
-	audioSpeakerGainAndRouting.setAmplitudeOfPinkNoiseGenerator(amplitude);
+	audioSpeakerGainAndRouting.setGainOfPinkNoiseGenerator(gain);
 }
 
 bool AmbisonicsAudioEngine::enableMeasurement(int aepChannel, bool enable)
@@ -1008,7 +1008,7 @@ bool AmbisonicsAudioEngine::setGainEnvelopeForRegion (const int regionID,
 
 void AmbisonicsAudioEngine::setMasterGain(const float newGain)
 {
-	audioTransportSource.setGain(newGain);
+	audioSpeakerGainAndRouting.setMasterGain(newGain);
 }
 
 void AmbisonicsAudioEngine::enableDopplerEffect (bool enable)

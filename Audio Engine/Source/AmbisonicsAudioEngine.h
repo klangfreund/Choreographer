@@ -228,7 +228,7 @@ public:
 	 * Setting a new amplitude won't result in a click, since a gain
 	 * ramp is applied to avoid it.
 	 */
-	void setAmplitudeOfPinkNoiseGenerator(const double amplitude);
+	void setGainOfPinkNoiseGenerator(const double gain);
 	
 	/** Enables or disables the measurement for the chosen aepChannel.
 	 */
