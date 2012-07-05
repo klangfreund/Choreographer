@@ -924,7 +924,39 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
         // Aquire the buffer of samples from the audioTransportSource into the 
         // AudioSourceChannelInfo info.
         audioTransportSource->getNextAudioBlock(info);
-		
+
+
+        // solo will overwrite the mute configuration
+        if (numberOfSoloedChannels > 0) 
+        {
+            // solo
+            // ----
+            // There is at least one solo in one channel enabled.
+            // Soloing has a higher priority than muting. Meaning:
+            // As soon as there is a channel soloed, muting doesn't
+            // affect any channel anymore.
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
+            {
+                if (!aepChannelSettingsOrderedByActiveHardwareChannels[n]->getSoloStatus())
+                {
+                    info.buffer->clear(n, info.startSample, info.numSamples);			
+                }
+            }
+            
+        }
+        else if (numberOfMutedChannels > 0)
+        {
+            // mute
+            // ----
+            for (int n = 0; n < nrOfActiveHWChannels; n++)
+            {
+                if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getMuteStatus())
+                {
+                    info.buffer->clear(n, info.startSample, info.numSamples);
+                }
+            }				
+        }
+        
         // Pink Noise
         // ----------
 		// Before gain, mute or solo is applied to the audio stream, pink noise
@@ -965,63 +997,17 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
                 }
             }
         }
-
-		// gain	(only gain, nothing else)	
-		if (numberOfMutedChannels == 0 && numberOfSoloedChannels == 0)
-		{
-			// neither a solo nor a mute
-			for (int n = 0; n < nrOfActiveHWChannels; n++)
-			{
-				info.buffer->applyGainRamp(n, info.startSample, info.numSamples,
-                    aepChannelSettingsOrderedByActiveHardwareChannels[n]->getLastGain(),
-                    aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
-				
-				aepChannelSettingsOrderedByActiveHardwareChannels[n]->setLastGain(aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
-			}
-		}
-		else
-		{
-			// mute or solo is engaged
-			if (numberOfSoloedChannels > 0) 
-			{
-				// solo
-				// ----
-				// There is at least one solo in one channel enabled.
-				// Soloing has a higher priority than muting. Meaning:
-				// As soon as there is a channel soloed, muting doesn't
-				// affect any channel anymore.
-				for (int n = 0; n < nrOfActiveHWChannels; n++)
-				{
-					if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getSoloStatus())
-					{
-						info.buffer->applyGain(n, info.startSample, info.numSamples, 
-					        aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
-					}
-					else
-					{
-						info.buffer->clear(n, info.startSample, info.numSamples);						
-					}
-				}
-				
-			}
-			else
-			{
-				// mute
-				// ----
-				for (int n = 0; n < nrOfActiveHWChannels; n++)
-				{
-					if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getMuteStatus())
-					{
-						info.buffer->clear(n, info.startSample, info.numSamples);
-					}
-					else
-					{
-						info.buffer->applyGain(n, info.startSample, info.numSamples, 
-							aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
-					}
-				}				
-			}
-		}
+        
+        // channel gain
+        // ------------
+        for (int n = 0; n < nrOfActiveHWChannels; n++)
+        {
+            info.buffer->applyGainRamp(n, info.startSample, info.numSamples,
+                                       aepChannelSettingsOrderedByActiveHardwareChannels[n]->getLastGain(),
+                                       aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
+            
+            aepChannelSettingsOrderedByActiveHardwareChannels[n]->setLastGain(aepChannelSettingsOrderedByActiveHardwareChannels[n]->getGain());
+        }
 		
 		// measurement (for drawing vu bars in the GUI)
 		// -----------
