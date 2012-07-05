@@ -27,6 +27,8 @@ typedef enum _RulerMouseDraggingAction
 	RulerMouseDraggingAction mouseDraggingAction;
 
     NSDictionary *labelAttribute;
+    
+    id draggedMarker;
 }
 
 - (void)update:(NSNotification *)notification;

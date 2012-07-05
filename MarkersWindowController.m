@@ -75,12 +75,35 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
     else return nil;
 }
 
+- (NSUInteger)locatorGreaterThan:(NSUInteger)loc
+{
+    for(id marker in [self markers])
+    {
+        if([[marker valueForKey:@"time"] unsignedIntegerValue] > loc)
+            return [[marker valueForKey:@"time"] unsignedIntegerValue];
+    }
+    return NSNotFound;
+}
+
+- (NSUInteger)locatorLessThan:(NSUInteger)loc
+{
+    id lastMarker = nil;
+    
+    for(id marker in [self markers])
+    {
+        if(lastMarker && [[marker valueForKey:@"time"] unsignedIntegerValue] >= loc)
+            return [[lastMarker valueForKey:@"time"] unsignedIntegerValue];
+
+        lastMarker = marker;
+    }
+    return NSNotFound;
+}
 
 #pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
 
-- (void)newMarkerWithName:(NSString *)name time:(NSUInteger)time
+- (id)newMarkerWithName:(NSString *)name time:(NSUInteger)time
 {
     NSManagedObject* newMarker;
 	NSManagedObjectContext *context = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
@@ -89,6 +112,8 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
     
     [newMarker setValue:[NSNumber numberWithUnsignedInteger:time] forKey:@"time"];
     [newMarker setValue:name forKey:@"name"];
+    
+    return newMarker;
 }
 
 - (void)deleteMarker:(id)marker
@@ -97,6 +122,10 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
     [context deleteObject:marker];
 }
 
+//- (void)selectMarker:(id)marker
+//{
+//    [markersArrayController setSelectedObjects:[NSArray arrayWithObject:marker]];
+//}
 
 #pragma mark -
 #pragma mark table view delegate method

@@ -15,6 +15,7 @@
 #import "SelectionRectangle.h"
 #import "PlaybackController.h"
 #import "SettingsMenu.h"
+#import "MarkersWindowController.h"
 
 @implementation ArrangerView
 
@@ -140,7 +141,6 @@
 	// init playhead position
 	[playbackController setLocator:0];
 	
-
 	[self setNeedsDisplay:YES];
 }
 
@@ -1105,7 +1105,17 @@
 
 		// tab
 		case 48:
-			if([event modifierFlags] & NSShiftKeyMask)
+            if([event modifierFlags] & NSAlternateKeyMask)
+            {
+                if(!([event modifierFlags] & NSShiftKeyMask))
+                   locator = [[MarkersWindowController sharedMarkersWindowController] locatorGreaterThan:[playbackController locator]];
+                else
+                    locator = [[MarkersWindowController sharedMarkersWindowController] locatorLessThan:[playbackController locator]];
+				
+                if(locator != NSNotFound)
+					[playbackController setLocator:locator];
+            }
+			else if([event modifierFlags] & NSShiftKeyMask)
 			{
 				locator = [arrangerTabStops indexLessThanIndex:[playbackController locator]];
 				if(locator == NSNotFound)
@@ -2493,7 +2503,7 @@
 
 - (void)update:(NSNotification *)notification
 {
-	NSLog(@"arranger update");
+//	NSLog(@"arranger update");
 	[self setNeedsDisplay:YES];
 }
 

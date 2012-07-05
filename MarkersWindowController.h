@@ -24,7 +24,9 @@
 - (NSArray *)markers;
 
 // actions
-- (void)newMarkerWithName:(NSString *)name time:(NSUInteger)time;
+- (id)newMarkerWithName:(NSString *)name time:(NSUInteger)time;
 - (void)deleteMarker:(id)marker;
 
+- (NSUInteger)locatorGreaterThan:(NSUInteger)loc;
+- (NSUInteger)locatorLessThan:(NSUInteger)loc;
 @end

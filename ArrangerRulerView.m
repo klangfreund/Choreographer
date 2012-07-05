@@ -261,28 +261,38 @@
 - (void)mouseDownInMarkerArea:(NSPoint)localPoint doubleClick:(BOOL)dc
 {
 	mouseDraggingAction = rulerDragMarker;
+    draggedMarker = nil;
     
 	CHProjectDocument *document = [[[self window] windowController] document];
     float eventLocator = localPoint.x;
     float resolution = ceil(pow(10,round(log10(1 / zoomFactor))));
 
-    if(document.keyboardModifierKeys == modifierCommand)
+    if(dc)
     {
-        // command click: set new marker
-        NSUInteger newLocator = eventLocator < 0 ? 0 : eventLocator / zoomFactor;
-        newLocator = round(newLocator / resolution) * resolution;
-
-        [[MarkersWindowController sharedMarkersWindowController] newMarkerWithName:@"new loc" time:newLocator];
+        // double click: set new marker
+        if(document.keyboardModifierKeys == modifierCommand)
+        {
+            NSUInteger newLocator = [[arrangerView valueForKeyPath:@"playbackController.locator"] unsignedIntegerValue];            
+            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithName:@"new loc" time:newLocator];
+        }
+        else
+        {
+            NSUInteger newLocator = eventLocator < 0 ? 0 : eventLocator / zoomFactor;
+            newLocator = round(newLocator / resolution) * resolution;
+            
+            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithName:@"new loc" time:newLocator];
+        }
     }
     else
     {
         id markers = [[MarkersWindowController sharedMarkersWindowController] markers];
         for(id marker in markers)
         {
+            // find marker
             if(eventLocator / zoomFactor - resolution * 2 < [[marker valueForKey:@"time"] unsignedIntegerValue] &&
                eventLocator / zoomFactor + resolution * 2 > [[marker valueForKey:@"time"] unsignedIntegerValue])
             {
-                [[MarkersWindowController sharedMarkersWindowController] deleteMarker:marker];
+                draggedMarker = marker;
                 break;
             }
         }
@@ -305,9 +315,12 @@
 
 - (void)mouseUp:(NSEvent *)event
 {
-	mouseDraggingAction = rulerDragNone;
+	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 
-//	[self setNeedsDisplay:YES];
+    if(draggedMarker && mouseDraggingAction == rulerDragMarker && localPoint.y < 0)
+        [[MarkersWindowController sharedMarkersWindowController] deleteMarker:draggedMarker];
+        
+	mouseDraggingAction = rulerDragNone;
 }
 
 - (void)mouseDragged:(NSEvent *)event
@@ -344,6 +357,11 @@
             [projectSettings setValue:[NSNumber numberWithUnsignedInt:loopRegionEnd] forKey:@"loopRegionStart"];
 		}
 	}
+	else if(mouseDraggingAction == rulerDragMarker)
+	{
+        if(document.keyboardModifierKeys == modifierCommand) proposedLocator = [[arrangerView valueForKeyPath:@"playbackController.locator"] unsignedIntegerValue];
+        [draggedMarker setValue:[NSNumber numberWithUnsignedInteger:proposedLocator] forKey:@"time"];
+    }
 	
 	[playbackController setLoop];
 	[self setNeedsDisplay:YES];

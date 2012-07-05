@@ -111,7 +111,7 @@
                                                 dBFalloffPerUnit:[[projectSettings valueForKey:@"distanceBasedAttenuationDbFalloff"] doubleValue]
                                              attenuationExponent:[[projectSettings valueForKey:@"distanceBasedAttenuationExponent"] doubleValue]];
 
-    double factor = [[projectSettings valueForKey:@"distanceBasedDelay"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedDelayDistanceScaleFactor"] doubleValue] : 0;
+    double factor = [[projectSettings valueForKey:@"distanceBasedDelay"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedDelayMilisecondsPerUnit"] doubleValue] : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedDelay:factor];
     double halfCutoff = [[projectSettings valueForKey:@"distanceBasedFiltering"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedFilteringHalfCutoffUnit"] doubleValue] : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedFiltering:halfCutoff];
