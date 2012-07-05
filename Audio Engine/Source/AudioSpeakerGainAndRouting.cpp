@@ -306,8 +306,9 @@ AudioSpeakerGainAndRouting::AudioSpeakerGainAndRouting(AudioTransportSourceMod* 
   pinkNoiseGeneratorAudioSource (),
   hardwareOutputsForPrelistening (0),
   prelisteningGain (1.0),
-  newPrelisteningGain (prelisteningGain),
-  newPrelisteningGainSet (false)
+  lastPrelisteningGain (prelisteningGain),
+  masterGain (1.0),
+  lastMasterGain (masterGain)
 {
 	DEB("AudioSpeakerGainAndRouting: constructor (with AudioDeviceManager "
         "argument) called.")
@@ -395,6 +396,12 @@ bool AudioSpeakerGainAndRouting::setSpeakerPosition(int aepChannel, double x, do
     updateThePositionOfSpeakers();
     
 	return true;
+}
+
+void AudioSpeakerGainAndRouting::setMasterGain (double newMasterGain)
+{
+    masterGain = newMasterGain;
+    audioTransportSource->setGain(newMasterGain);
 }
 
 bool AudioSpeakerGainAndRouting::setGain(int aepChannel, double gain)
@@ -509,9 +516,9 @@ bool AudioSpeakerGainAndRouting::activatePinkNoise(int aepChannel, bool enable)
 	}
 }
 
-void AudioSpeakerGainAndRouting::setAmplitudeOfPinkNoiseGenerator(const double newAmplitude_)
+void AudioSpeakerGainAndRouting::setGainOfPinkNoiseGenerator(const double gain_)
 {
-	pinkNoiseGeneratorAudioSource.setAmplitude(newAmplitude_);
+	pinkNoiseGeneratorAudioSource.setGain(gain_);
 }
 
 
@@ -609,8 +616,7 @@ void AudioSpeakerGainAndRouting::setPrelisteningOutputs (BigInteger hardwareOutp
 
 void AudioSpeakerGainAndRouting::setPrelisteningGain(double prelisteningGain_)
 {
-    newPrelisteningGain = prelisteningGain_;
-    newPrelisteningGainSet = true;
+    prelisteningGain = prelisteningGain_;
 }
 
 
@@ -945,13 +951,16 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
             // Generate the pink noise.
             pinkNoiseGeneratorAudioSource.getNextAudioBlock(monoChannelInfo);
             
-            // Put it on all channels
+            // Apply the master gain.
+            monoChannelInfo.buffer->applyGainRamp(0, monoChannelInfo.startSample, monoChannelInfo.numSamples, lastMasterGain, masterGain);
+            
+            // Put it on all channels.
             for (int n = 0; n < nrOfActiveHWChannels; n++)
             {
                 // Add the pink noise to the channels that wants it.
                 if (aepChannelSettingsOrderedByActiveHardwareChannels[n]->getPinkNoiseStatus())
                 {
-                    info.buffer->addFrom(n, info.startSample, 
+                    info.buffer->addFrom(n, monoChannelInfo.startSample, 
                                          monoAudioBuffer, 0, info.startSample, info.numSamples);
                 }
             }
@@ -1072,19 +1081,11 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
             // Get the audio from the file prelistener
             audioSourceFilePrelistener.getNextAudioBlock(monoChannelInfo);
             
-            // Apply the gain
-            int channel = 0;
-            if (newPrelisteningGainSet)
-            {
-                // If a new gain is set, apply a gain ramp
-                monoChannelInfo.buffer->applyGainRamp(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain, newPrelisteningGain);
-                prelisteningGain = newPrelisteningGain;
-                newPrelisteningGainSet = false;
-            }
-            else
-            {
-                monoChannelInfo.buffer->applyGain(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, prelisteningGain);
-            }
+            // Apply the master- and the prelistening gain
+            const int channel = 0;
+            monoChannelInfo.buffer->applyGainRamp(channel, monoChannelInfo.startSample, monoChannelInfo.numSamples, lastMasterGain*lastPrelisteningGain, masterGain*prelisteningGain);
+            
+            lastPrelisteningGain = prelisteningGain;
             
             // Put it to the desired channels
             for (int n = 0; n < nrOfActiveHWChannels; n++)
@@ -1096,6 +1097,8 @@ void AudioSpeakerGainAndRouting::getNextAudioBlock (const AudioSourceChannelInfo
                 }
             }
         }
+        
+        lastMasterGain = masterGain;
 	}
 }
 

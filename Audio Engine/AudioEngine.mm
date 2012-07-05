@@ -437,7 +437,7 @@ static AudioEngine *sharedAudioEngine = nil;
     [[NSUserDefaults standardUserDefaults] setValue:[NSNumber numberWithFloat:testNoiseVolume] forKey:@"testNoiseVolume"];
     
     float gain = pow(10, 0.05 * dbValue);
-	ambisonicsAudioEngine->setAmplitudeOfPinkNoiseGenerator(gain);
+	ambisonicsAudioEngine->setGainOfPinkNoiseGenerator(gain);
 }
 
 - (void)setSampleRate:(NSUInteger)sr

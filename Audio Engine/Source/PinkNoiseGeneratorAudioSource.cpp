@@ -15,7 +15,7 @@
 
 //==============================================================================
 PinkNoiseGeneratorAudioSource::PinkNoiseGeneratorAudioSource()
-    : amplitude (1.0),
+    : gain (1.0),
       b0 (0.0),
       b1 (0.0),
       b2 (0.0),
@@ -28,9 +28,9 @@ PinkNoiseGeneratorAudioSource::~PinkNoiseGeneratorAudioSource()
 }
 
 //==============================================================================
-void PinkNoiseGeneratorAudioSource::setAmplitude (const double newAmplitude_)
+void PinkNoiseGeneratorAudioSource::setGain (const double gain_)
 {
-    amplitude = newAmplitude_;
+    gain = gain_;
 }
 
 
@@ -71,7 +71,7 @@ void PinkNoiseGeneratorAudioSource::getNextAudioBlock (const AudioSourceChannelI
 		pink = pink * correctionFactorForUnityGain;
 		
 		// Apply the amplitude
-		pink = pink * amplitude;
+		pink = pink * gain;
 		
 		*info.buffer->getSampleData (lastChannel, info.startSample + i) = pink;
 	}

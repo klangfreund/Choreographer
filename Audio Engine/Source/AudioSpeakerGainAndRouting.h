@@ -346,6 +346,17 @@ public:
 	 */	
 	bool setSpeakerPosition(int aepChannel, double x, double y, double z);
 	
+    /** Changes the gain to apply to the outputs.
+     
+     To be able to see this change in the VU meter for the audioTransportSource
+     and the pink noise, but not for the prelistener, this masterGain is
+     applied at those 3 sources seperately.
+	 
+	 @param newMasterGain  a factor by which to multiply the outgoing samples,
+	 so 1.0 = 0dB, 0.5 = -6dB, 2.0 = 6dB, etc.
+	 */
+    void setMasterGain(double newMasterGain);
+    
 	/** Sets the gain of the chosen aepChannel.
 	 */
 	bool setGain(int aepChannel, double gain);
@@ -368,10 +379,8 @@ public:
 	
 	/** Sets the amplitude of the pink noise generator.
 	 * This affects the volume of all pink noises on all channels.
-	 * Setting a new amplitude won't result in a click, since a gain
-	 * ramp is applied to avoid it.
 	 */
-	void setAmplitudeOfPinkNoiseGenerator(const double newAmplitude_);
+	void setGainOfPinkNoiseGenerator(const double gain_);
 										  
 	/** Enables or disables the measurement for the chosen aepChannel.
 	 */
@@ -562,8 +571,10 @@ private:
     AudioSourceFilePrelistener audioSourceFilePrelistener;
     BigInteger hardwareOutputsForPrelistening;
     double prelisteningGain;
-    double newPrelisteningGain;
-    bool newPrelisteningGainSet;
+    double lastPrelisteningGain;
+    
+    double masterGain;
+    double lastMasterGain;
 	
 	CriticalSection connectionLock; ///< Used in enableNewRouting .
 	CriticalSection audioSpeakerGainAndRoutingLock;
