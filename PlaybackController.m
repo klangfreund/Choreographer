@@ -244,7 +244,7 @@
 	{
 		if(key == NSInsertedObjectsKey)
 		{
-			// NSLog(@"INSERT  --  %@",[info objectForKey:key]);
+//			NSLog(@"INSERT  --  %@",[info objectForKey:key]);
 			for(id object in [info objectForKey:key])
 			{		
 				if([object isKindOfClass:[TrajectoryItem class]])
@@ -254,13 +254,13 @@
 						// if the trajectory is newly created and immediately
 						// attached to a region, the regions position breakpoint
 						// have to be calculated
-						[region calculatePositionBreakpoints];
+						[self recursivelyAddUpdateRegions:region];
 					}
 				}
 				else if([object isKindOfClass:[AudioRegion class]])
 				{
 					// update audio engine for this region
-					[object calculatePositionBreakpoints];
+                    [self recursivelyAddUpdateRegions:object];
 					[[AudioEngine sharedAudioEngine] addAudioRegion:object];
 				}
 			}
@@ -276,7 +276,7 @@
 					// is attached to
 					for(Region *region in [object valueForKey:@"regions"])
 					{
-						[region calculatePositionBreakpoints];
+						//[region calculatePositionBreakpoints];
 						[self recursivelyAddUpdateRegions:region];
 					}
 				}

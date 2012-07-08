@@ -425,7 +425,7 @@
 
 - (void)updateTimeInModel
 {
-	NSLog(@"Region: updateTimeInModel");
+//	NSLog(@"Region: updateTimeInModel");
 	// synchronize data with new position of the regionView after dragging
 	
 	[self setValue:[NSNumber numberWithLong:(frame.origin.x - ARRANGER_OFFSET) / zoomFactorX] forKey:@"startTime"];

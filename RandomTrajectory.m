@@ -90,7 +90,7 @@
     NSUInteger timeSegment = 0;
 	NSUInteger duration;
 	int timeIncrement = 100;
-    int stability = 1000;
+    int stability = 100;
     float minSpeed, maxSpeed;
     float xMin, yMin, zMin;
     float xMax, yMax, zMax;
@@ -173,10 +173,9 @@
 
 			// calculate a new vector
             vector.d = minSpeed + (float)rand() / RAND_MAX * (maxSpeed - minSpeed);
-			vector.a = (float)rand() / RAND_MAX * 360;			
-            
+			vector.a = (float)rand() / RAND_MAX * 360;			            
             vector.e = zMin == zMax ? 0 : (float)rand() / RAND_MAX * 360;
-            
+
             timeSegment = 0;
 		}
 		
@@ -189,9 +188,9 @@
 		time += timeIncrement;
 		timeSegment += timeIncrement;
         
-		[tempPosition setX:tempPosition.x + vector.x];
-		[tempPosition setY:tempPosition.y + vector.y];
-		[tempPosition setZ:tempPosition.z + vector.z];
+		[tempPosition setX:tempPosition.x + vector.x * timeIncrement * 0.001];
+		[tempPosition setY:tempPosition.y + vector.y * timeIncrement * 0.001];
+		[tempPosition setZ:tempPosition.z + vector.z * timeIncrement * 0.001];
 		
 
         // check if tempPosition is inside bounding volume
@@ -233,7 +232,8 @@
 		}
 	}
 	
-	return [NSArray arrayWithArray:tempArray];
+//	NSLog(@"--%lu", [tempArray count]);
+    return [NSArray arrayWithArray:tempArray];
 }
 
 - (SpatialPosition *)point1AtTime:(NSNumber *)time

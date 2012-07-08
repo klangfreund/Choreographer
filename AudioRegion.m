@@ -271,7 +271,7 @@
 
 - (void)calculatePositionBreakpoints
 {
-//	NSLog(@"audio region --- calculate position breakpoints");
+	NSLog(@"audio region --- calculate position breakpoints");
 
 	[playbackBreakpointArray release];
 	tempBp1 = tempBp2 = nil;
