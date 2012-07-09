@@ -129,7 +129,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-	NSLog(@"Preset: %@ observe key path %@", self, keyPath);
+//	NSLog(@"Preset: %@ observe key path %@", self, keyPath);
 	[self setValue:[NSNumber numberWithBool:YES] forKey:@"dirty"];
 
 	// updateEngine
@@ -251,7 +251,7 @@
 
 - (void)setDirty:(BOOL)val
 {
-	NSLog(@"Preset: %@ setDirty %i", self, val);
+//	NSLog(@"Preset: %@ setDirty %i", self, val);
 
 	dirty = val;
 

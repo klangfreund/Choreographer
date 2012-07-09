@@ -104,7 +104,9 @@
 		
 		r = NSMakeRect(patchbayHardwarePinX, i * patchbayBoxHeight + patchbayTopOffset + patchbayBoxHeight * 0.5 - patchbayPinSize * 0.5, patchbayPinSize, patchbayPinSize);
 		
-		[[NSColor whiteColor] set];	
+		if(i != selectedhardwareDeviceOutputChannelPin)
+			[[NSColor whiteColor] set];	
+		
 		[NSBezierPath fillRect:r];
 		[[NSColor grayColor] set];	
 		[NSBezierPath strokeRect:r];
@@ -218,6 +220,15 @@
 	else if(-1 != (selectedhardwareDeviceOutputChannelPin = [self hardwarePinUnderPoint:localPoint]))
 	{
 		patchCordDraggingType = fromHardwareToChannel;
+
+        for(i=0;i<numberOfOutputChannels;i++)
+        {
+            if(selectedhardwareDeviceOutputChannelPin == [[[speakerSetupPreset speakerChannelAtIndex:i] valueForKey:@"hardwareDeviceOutputChannel"] intValue])
+            {
+                selectedPatchCord = i;
+                break;
+            }
+        }
 	}
 	else
 	{
@@ -244,23 +255,20 @@
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 	draggingCurrentPosition = localPoint;
 	int i;
-	SpeakerChannel *channel;
 
 	if(patchCordDraggingType == fromChannelToHardware)
 	{
 		selectedhardwareDeviceOutputChannelPin = [self hardwarePinUnderPoint:localPoint];		
 		if(-1 != selectedhardwareDeviceOutputChannelPin)
 		{
-			for(i=0;i<[speakerSetupPreset countSpeakerChannels];i++)
-			{
-				channel = [speakerSetupPreset speakerChannelAtIndex:i];
-				if(selectedhardwareDeviceOutputChannelPin == [[channel valueForKey:@"hardwareDeviceOutputChannel"] intValue])
-				{
-					// there is a channel already connected to this hardware output
+            for(i=0;i<numberOfOutputChannels;i++)
+            {
+                if(selectedhardwareDeviceOutputChannelPin == [[[speakerSetupPreset speakerChannelAtIndex:selectedOutputChannelPin] valueForKey:@"hardwareDeviceOutputChannel"] intValue])
+                {
 					selectedhardwareDeviceOutputChannelPin = -1;
-					break;
-				}
-			}
+                    break;
+                }
+            }
 		}
 	}
 	if(patchCordDraggingType == fromHardwareToChannel) selectedOutputChannelPin = [self outputPinUnderPoint:localPoint];
@@ -271,8 +279,19 @@
 
 - (void)mouseUp:(NSEvent *)theEvent
 {
+    int i;
+    
 	if(-1 != selectedOutputChannelPin && -1 != selectedhardwareDeviceOutputChannelPin)
 	{
+        for(i=0;i<expectedNumberOfhardwareDeviceOutputChannels;i++)
+        {
+            if(selectedhardwareDeviceOutputChannelPin == [[[speakerSetupPreset speakerChannelAtIndex:i] valueForKey:@"hardwareDeviceOutputChannel"] intValue])
+            {
+                [[speakerSetupPreset speakerChannelAtIndex:i] setValue:[NSNumber numberWithInt:-1] forKey:@"hardwareDeviceOutputChannel"];
+                break;
+            }
+        }
+
 		[[speakerSetupPreset speakerChannelAtIndex:selectedOutputChannelPin] setValue:[NSNumber numberWithInt:selectedhardwareDeviceOutputChannelPin] forKey:@"hardwareDeviceOutputChannel"];
 	}
 	
@@ -306,7 +325,7 @@
 	NSRect r;
 	int i;
 	
-	for(i=0;i<numberOfhardwareDeviceOutputChannels;i++)
+	for(i=0;i<expectedNumberOfhardwareDeviceOutputChannels;i++)
 	{
 		r = NSMakeRect(patchbayHardwarePinX, i * patchbayBoxHeight + patchbayTopOffset + patchbayBoxHeight * 0.5 - patchbayPinSize * 0.5, patchbayPinSize, patchbayPinSize);
 		

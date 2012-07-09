@@ -105,8 +105,6 @@
 
 - (void)updateGUI
 {
-    NSLog(@"Speaker Setup Window Controller: update GUI");
-	
 	// stop any running test noise
 
 	if(testNoiseChannel > -1)
@@ -320,9 +318,7 @@
 }
 
 - (void)newPreset
-{
-	NSLog(@"new");
-	
+{	
 	// initalize a new setup
 	
 	tempSetupPreset = [[SpeakerSetupPreset alloc] init];
@@ -344,8 +340,6 @@
 
 - (void)renamePreset
 {
-	NSLog(@"rename");
-
 	[self setValue:@"Rename Speaker Setup Preset" forKey:@"renameSheetMessage"];
 	[self setValue:@"Rename" forKey:@"renameSheetOkButtonText"];
 
@@ -363,8 +357,6 @@
 
 - (void)copyPreset
 {
-	NSLog(@"copy");
-
 	// copy the currently selected setup
 	
 	tempSetupPreset = [[[speakerSetups selectedPreset] copy] retain];
@@ -423,8 +415,6 @@
 
 - (void)deletePreset
 {
-	NSLog(@"delete");
-
 	NSAlert *alert = [NSAlert alertWithMessageText:@"Do you really want to delete the speaker setup preset"
 									 defaultButton:@"Delete"
 								   alternateButton:@"Cancel"
@@ -451,8 +441,6 @@
 
 - (void)import
 {
-	NSLog(@"import");
-
 	// choose audio file in an open panel
 	NSOpenPanel *openPanel = [NSOpenPanel openPanel];
     NSArray *fileTypes = [NSArray arrayWithObjects: @"xml", NULL];
@@ -466,7 +454,6 @@
     {
         if (result == NSOKButton)
         {
-            NSLog(@"...do import");
             [speakerSetups importXMLData:[openPanel URLs]];
             [openPanel orderOut:self];
         }
@@ -475,8 +462,6 @@
 
 - (void)export
 {
-	NSLog(@"export");
-
     NSSavePanel *savePanel = [NSSavePanel savePanel];
 
 	//    [savePanel setAllowsMultipleSelection:NO];
@@ -498,8 +483,6 @@
 
 - (void)saveSelectedPresetAs
 {
-	NSLog(@"saveSelectedPresetAs");
-	
 	// copy the currently selected setup
 	
 	tempSetupPreset = [[[speakerSetups selectedPreset] copy] retain];
