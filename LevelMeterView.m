@@ -62,12 +62,17 @@
 	int i;
 	NSRect r = [self frame];
 	
+	r.size.width -= 10;
+	r.size.height -= 10;
+	r.origin.x = 5;
+	r.origin.y = 5;
+	
 	float factor = r.size.height / 58;
 	
 	// Ticks
 	[[NSGraphicsContext currentContext] setShouldAntialias:NO];
 	[tickColor set];
-	for(i=0;6 + i * factor < r.size.height - 6;i++)
+	for(i=0;6 + i * factor < r.size.height;i++)
 	{
 		if(i % 5)
 			[NSBezierPath strokeLineFromPoint:NSMakePoint(3, 6 + i * factor) toPoint:NSMakePoint(22, 6 + i * factor)];
@@ -77,11 +82,6 @@
 	
 
 	// Rect
-	r.size.width -= 10;
-	r.size.height -= 10;
-	r.origin.x = 5;
-	r.origin.y = 5;
-	
 	[[NSColor blackColor] set];
 	NSRectFill(r);
 	
@@ -121,7 +121,7 @@
 		r = NSMakeRect(6, 6 - 0 * factor, 13, 4);
 		NSRectFill(r);
 	}
-	else
+	else if(peakLevel >= -57)
 	{
 		if(peakLevel > -6)
 			[hotColor set];
@@ -199,7 +199,7 @@
 - (void)setLevel:(float)dBValue
 {
 	level = dBValue > 0 ? 0 : dBValue;
-	
+
 	[self setNeedsDisplay:YES];
 }
 
@@ -330,7 +330,7 @@
 
 	
 	NSRect r = [self frame];
-	float factor = r.size.height / 58;
+	float factor = (r.size.height-10) / 58;
 	
 	
 	// Labels
