@@ -46,11 +46,16 @@
 			
 	[self setFrameOrigin:newOrigin];
 
-//	NSRect r = [self bounds];
-//	r.size.width = 10;	
-//	[self scrollRectToVisible:r]; 
-	
-	[[self superview] setNeedsDisplay:YES];
+    // scroll to visible
+    float min = [[self superview] visibleRect].origin.x;
+    float max = min + [[self superview] visibleRect].size.width;
+
+    if(newOrigin.x < min || newOrigin.x > max)
+    {
+        NSRect r = [self bounds];
+        r.size.width = [[self superview] visibleRect].size.width;	
+        [self scrollRectToVisible:r];
+    }
 }
 
 // -----------------------------------------------------------
