@@ -261,8 +261,8 @@
 
 - (void)keyDown:(NSEvent *)event
 {
-//	unsigned short keyCode = [event keyCode];
-//	NSLog(@"App key code: %d ", keyCode);
+	unsigned short keyCode = [event keyCode];
+	NSLog(@"App key code: %d ", keyCode);
 }
 
 

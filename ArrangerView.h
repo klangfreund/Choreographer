@@ -77,7 +77,8 @@ typedef enum _ArrangerViewDragAndDropAction
 	NSMutableSet *selectedTrajectories;
 
 	// properties
-	NSUInteger arrangerSizeX, arrangerSizeY;
+	NSUInteger arrangerContentStart, arrangerContentEnd;
+    NSUInteger arrangerMinY, arrangerMaxY;
 	NSMutableIndexSet *arrangerTabStops;
 
 	// mouse actions
@@ -105,6 +106,9 @@ typedef enum _ArrangerViewDragAndDropAction
 - (void)recalculateYGridPath;
 - (void)recalculateArrangerProperties;
 - (void)recalculateArrangerSize;
+- (void)zoomToFitContent;
+- (void)zoomToFitSelection;
+
 
 // drag and drop
 - (void)trajectoryDraggingUpdated:(id <NSDraggingInfo>)info;

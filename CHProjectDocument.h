@@ -46,6 +46,8 @@
 - (IBAction)xZoomOut:(id)sender;
 - (IBAction)yZoomIn:(id)sender;
 - (IBAction)yZoomOut:(id)sender;
+- (IBAction)zoomToFitContent:(id)sender;
+- (IBAction)zoomToFitSelection:(id)sender;
 - (IBAction)importAudioFiles:(id)sender;
 - (IBAction)newTrajectory:(id)sender;
 - (IBAction)showPool:(id)sender;

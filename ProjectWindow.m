@@ -100,7 +100,12 @@
                 [document setValue:[NSNumber numberWithInt:1] forKeyPath:@"projectSettings.arrangerDisplayMode"];
             break;
 
-
+        case 44: // z 
+            if(document.keyboardModifierKeys == modifierShift)
+                [document zoomToFitContent:self];
+            else if(document.keyboardModifierKeys == modifierAlt)
+                [document zoomToFitSelection:self];
+            break;
             
         default:
 			[[self nextResponder] keyDown:event];

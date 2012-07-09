@@ -49,7 +49,7 @@
 	arrangerEditMode = arrangerModeNone;
 
 	draggingDirtyFlag = NO;
-	arrangerSizeX = arrangerSizeY = 0;
+	arrangerContentStart = arrangerContentEnd = arrangerMinY = arrangerMaxY = 0;
 
 
 	// register for dragging from pool
@@ -323,7 +323,8 @@
 
 - (void)recalculateArrangerProperties
 {	
-	arrangerSizeX = arrangerSizeY = 0;
+	arrangerContentStart = arrangerMinY = -1;
+    arrangerContentEnd = arrangerMaxY = 0;
 	NSUInteger value;
 	
 	[arrangerTabStops removeAllIndexes];
@@ -332,16 +333,25 @@
 	{		
 		value = ([region frame].origin.x - ARRANGER_OFFSET) / zoomFactorX;			
 		[arrangerTabStops addIndex:value];
+        
+        if(arrangerContentStart == -1 || value < arrangerContentStart)
+            arrangerContentStart = value;
 
 		value += [region frame].size.width / zoomFactorX;		
 		[arrangerTabStops addIndex:value];
 
-		if(value > arrangerSizeX)
-			arrangerSizeX = value;
+		if(value > arrangerContentEnd)
+			arrangerContentEnd = value;
 
-		value = [[region valueForKeyPath:@"yPosInArranger"] unsignedLongValue] + AUDIO_BLOCK_HEIGHT;			
-		if(value > arrangerSizeY)
-			arrangerSizeY = value;
+		value = [[region valueForKeyPath:@"yPosInArranger"] unsignedLongValue];
+
+        if(arrangerMinY == -1 || value < arrangerMinY)
+            arrangerMinY = value;
+        
+        value += AUDIO_BLOCK_HEIGHT;			
+		
+        if(value > arrangerMaxY)
+			arrangerMaxY = value;
 	}
 }
 
@@ -350,15 +360,15 @@
 	NSSize frameSize;	
 	NSSize clipFrameSize = [[self superview] bounds].size;
 			
-	if(arrangerSizeX * zoomFactorX <= clipFrameSize.width)
+	if(arrangerContentEnd * zoomFactorX <= clipFrameSize.width)
 		frameSize.width = clipFrameSize.width * 1.5;
 	else
-		frameSize.width = arrangerSizeX * zoomFactorX * 1.5;
+		frameSize.width = arrangerContentEnd * zoomFactorX * 1.5;
 	
-	if(arrangerSizeY * zoomFactorY <= clipFrameSize.height)
+	if(arrangerMaxY * zoomFactorY <= clipFrameSize.height)
 		frameSize.height = clipFrameSize.height * 1.2;
 	else
-		frameSize.height = arrangerSizeY * zoomFactorY * 1.2;
+		frameSize.height = arrangerMaxY * zoomFactorY * 1.2;
 	
 	[self setFrameSize:frameSize];
 
@@ -371,8 +381,74 @@
 {
     [super setFrameSize:newSize];
     [arrangerRuler setWidth:newSize.width];
-
 }
+
+- (void)zoomToFitContent
+{    
+    // calculate zoom factors
+    zoomFactorX = ([self visibleRect].size.width - ARRANGER_OFFSET - 10) / (arrangerContentEnd - arrangerContentStart);
+    zoomFactorY = ([self visibleRect].size.height - 10) / (arrangerMaxY - arrangerMinY);
+    
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];    
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
+    
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:document];	
+    
+    // set origin
+    [self scrollPoint:NSMakePoint(arrangerContentStart * zoomFactorX, arrangerMinY * zoomFactorY)];
+
+    [self setNeedsDisplay:YES];
+}
+
+
+- (void)zoomToFitSelection
+{
+    if([selectedRegions count] == 0) return;
+    
+	NSUInteger start, end;
+    NSUInteger minY, maxY;
+    
+    start = minY = -1;
+    end = maxY = 0;
+	
+    NSUInteger value;
+
+	for(Region *region in selectedRegions)
+	{		
+		value = ([region frame].origin.x - ARRANGER_OFFSET) / zoomFactorX;			
+        
+        if(start == -1 || value < start)
+            start = value;
+        
+		value += [region frame].size.width / zoomFactorX;		
+        
+		if(value > end)
+			end = value;
+        
+		value = [[region valueForKeyPath:@"yPosInArranger"] unsignedLongValue];
+        
+        if(arrangerMinY == -1 || value < minY)
+            minY = value;
+        
+        value += AUDIO_BLOCK_HEIGHT;			
+		
+        if(value > maxY)
+			maxY = value;
+	}
+
+    // calculate zoom factors
+    zoomFactorX = ([self visibleRect].size.width - ARRANGER_OFFSET - 10) / (end - start);
+    zoomFactorY = ([self visibleRect].size.height - 10) / (maxY - minY);
+    
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];    
+	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorY] forKey:@"arrangerZoomFactorY"];
+    
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:document];	
+    
+    // set origin
+    [self scrollPoint:NSMakePoint(start * zoomFactorX, minY * zoomFactorY)];
+}
+
 	
 #pragma mark -
 #pragma mark drag and drop

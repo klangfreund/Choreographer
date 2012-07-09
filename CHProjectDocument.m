@@ -384,6 +384,17 @@
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"arrangerViewZoomFactorDidChange" object:self];	
 }
 
+- (IBAction)zoomToFitContent:(id)sender
+{
+    [arrangerView zoomToFitContent];
+}
+
+- (IBAction)zoomToFitSelection:(id)sender
+{
+    [arrangerView zoomToFitSelection];
+}
+
+
 
 - (IBAction)importAudioFiles:(id)sender
 {

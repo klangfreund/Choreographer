@@ -59,7 +59,7 @@
 	{
 		case 0:
 			[self setBounceStart:0];
-			[self setBounceEnd:[[document valueForKeyPath:@"arrangerView.arrangerSizeX"] integerValue]];
+			[self setBounceEnd:[[document valueForKeyPath:@"arrangerView.arrangerContentEnd"] integerValue]];
 			break;
 		case 1:
 			[self setBounceStart:[[document valueForKeyPath:@"projectSettings.loopRegionStart"] integerValue]];
@@ -83,7 +83,7 @@
 {
 	bounceEnd = val;
 
-	if((bounceMode == 0 && bounceEnd != [[document valueForKeyPath:@"arrangerView.arrangerSizeX"] unsignedIntValue])
+	if((bounceMode == 0 && bounceEnd != [[document valueForKeyPath:@"arrangerView.arrangerContentEnd"] unsignedIntValue])
 	   || (bounceMode == 1 && bounceEnd != [[document valueForKeyPath:@"projectSettings.loopRegionEnd"] integerValue]))
 		[self setBounceMode:2];
 }
