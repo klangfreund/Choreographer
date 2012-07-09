@@ -86,10 +86,9 @@
 
 	if(TRUE)//type == minSecRulerType)
 	{		
-		if(zoomFactor <= 100 && zoomFactor > 13)
+		if(zoomFactor > 13)
 		{
-			increment = 10;
-			
+			increment = 10;			
 			subdivision = 10;
 		}
 		else if(zoomFactor <= 13 && zoomFactor > 9)
@@ -167,13 +166,12 @@
 			increment = 300000;
 			subdivision = 5;
 		}
-		else if(zoomFactor <= 0.0002 && zoomFactor > 0.00001)
+		else //if(zoomFactor <= 0.0002 && zoomFactor > 0.00001)
 		{
 			increment = 600000;
 			subdivision = 6;
 		}
 	}
-
 	[[NSGraphicsContext currentContext] setShouldAntialias:NO];
 		
 	// draw only visible part
@@ -190,8 +188,7 @@
 	while(index < NUM_OF_LABELS && i < endTime)
 	{
 		// label
-		[labels[index] setFrame:NSMakeRect(i * zoomFactor + 2 + ARRANGER_OFFSET, y, 50, 10)];
-		
+		[labels[index] setFrame:NSMakeRect(i * zoomFactor + 2 + ARRANGER_OFFSET, y, 70, 10)];
 
 		type = minSecRulerType;
 		switch(type)
@@ -201,9 +198,16 @@
 				sec = (i / 1000) % 60;
 				min = (i / 60000) % 60;
 				hour = (i / 3600000);
-				if(increment >= 600000) [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%d:%02d", hour, min, sec]];
-				if(increment < 1000) [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d.%03d", min, sec, milisec]];
-				else [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d", min, sec]];
+				if(hour == 0)
+                {
+                    if(increment < 1000) [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d.%03d", min, sec, milisec]];
+                    else [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d", min, sec]];
+                }
+                else
+                {
+                    if(increment < 1000) [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d:%02d.%03d", hour, min, sec, milisec]];
+                    else [labels[index] setStringValue:[NSString stringWithFormat:@"%d:%02d:%02d", hour, min, sec]];
+                }
 				break;
 				
 				
@@ -233,7 +237,6 @@
 		[labels[index] setFrame:NSMakeRect(0, 0, 0, 0)];
 		index++;
 	}
-
 }
 
 - (void)setWidth:(float)width

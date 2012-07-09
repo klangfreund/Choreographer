@@ -302,6 +302,7 @@
 
 	float i;
 	float step = zoomFactorX * xGridAmount;
+    step = step < 1 ? 1 : step;
 	switch([[projectSettings valueForKey:@"arrangerXGridLines"] integerValue])
 	{
 		case 0:

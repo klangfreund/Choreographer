@@ -456,24 +456,23 @@
 												</object>
 												<int key="NSPeriodicDelay">400</int>
 												<int key="NSPeriodicInterval">75</int>
-												<object class="NSMenuItem" key="NSMenuItem" id="465887330">
-													<reference key="NSMenu" ref="616628087"/>
-													<string key="NSTitle">Min:Sec</string>
-													<string key="NSKeyEquiv"/>
-													<int key="NSKeyEquivModMask">1048576</int>
-													<int key="NSMnemonicLoc">2147483647</int>
-													<int key="NSState">1</int>
-													<reference key="NSOnImage" ref="971462003"/>
-													<reference key="NSMixedImage" ref="78410733"/>
-													<string key="NSAction">_popUpItemAction:</string>
-													<reference key="NSTarget" ref="580180687"/>
-												</object>
+												<nil key="NSMenuItem"/>
 												<bool key="NSMenuItemRespectAlignment">YES</bool>
 												<object class="NSMenu" key="NSMenu" id="616628087">
 													<string key="NSTitle">OtherViews</string>
 													<object class="NSMutableArray" key="NSMenuItems">
 														<bool key="EncodedWithXMLCoder">YES</bool>
-														<reference ref="465887330"/>
+														<object class="NSMenuItem" id="465887330">
+															<reference key="NSMenu" ref="616628087"/>
+															<string key="NSTitle">Min:Sec</string>
+															<string key="NSKeyEquiv"/>
+															<int key="NSKeyEquivModMask">1048576</int>
+															<int key="NSMnemonicLoc">2147483647</int>
+															<reference key="NSOnImage" ref="971462003"/>
+															<reference key="NSMixedImage" ref="78410733"/>
+															<string key="NSAction">_popUpItemAction:</string>
+															<reference key="NSTarget" ref="580180687"/>
+														</object>
 														<object class="NSMenuItem" id="311205448">
 															<reference key="NSMenu" ref="616628087"/>
 															<bool key="NSIsDisabled">YES</bool>
@@ -521,7 +520,7 @@
 															</object>
 															<string key="NSFrameSize">{704, 40}</string>
 															<reference key="NSSuperview" ref="906541231"/>
-															<reference key="NSNextKeyView" ref="828841369"/>
+															<reference key="NSNextKeyView" ref="155188406"/>
 															<string key="NSClassName">ArrangerRulerView</string>
 														</object>
 													</object>
@@ -558,7 +557,7 @@
 											</object>
 											<string key="NSFrame">{{0, 415}, {802, 40}}</string>
 											<reference key="NSSuperview" ref="127152705"/>
-											<reference key="NSNextKeyView" ref="906541231"/>
+											<reference key="NSNextKeyView" ref="828841369"/>
 											<int key="NSsFlags">133120</int>
 											<reference key="NSVScroller" ref="828841369"/>
 											<reference key="NSHScroller" ref="539465428"/>
@@ -575,6 +574,7 @@
 									<int key="NSvFlags">34</int>
 									<string key="NSFrame">{{803, 0}, {197, 484}}</string>
 									<reference key="NSSuperview" ref="40368260"/>
+									<reference key="NSNextKeyView"/>
 									<string key="NSClassName">NSView</string>
 								</object>
 							</object>
@@ -1458,7 +1458,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
 				<object class="NSView" key="NSWindowView" id="715004108">
-					<reference key="NSNextResponder"/>
+					<nil key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1628,7 +1628,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 						</object>
 					</object>
 					<string key="NSFrameSize">{230, 93}</string>
-					<reference key="NSSuperview"/>
 					<reference key="NSNextKeyView" ref="66201035"/>
 					<string key="NSReuseIdentifierKey">_NS:2837</string>
 				</object>

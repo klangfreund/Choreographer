@@ -344,6 +344,7 @@
 {
 	float zoomFactorX = [[projectSettings valueForKey:@"arrangerZoomFactorX"] floatValue];
 	zoomFactorX *= 1.2;
+	zoomFactorX = zoomFactorX > 25 ? 25 : zoomFactorX;
 
 	[projectSettings setValue:[NSNumber numberWithFloat:zoomFactorX] forKey:@"arrangerZoomFactorX"];
 	
