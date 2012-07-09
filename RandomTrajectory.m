@@ -91,6 +91,7 @@
 	NSUInteger duration;
 	int timeIncrement = 100;
     int stability = 100;
+    BOOL needsBreakpoint;
     float minSpeed, maxSpeed;
     float xMin, yMin, zMin;
     float xMax, yMax, zMax;
@@ -175,15 +176,20 @@
             vector.d = minSpeed + (float)rand() / RAND_MAX * (maxSpeed - minSpeed);
 			vector.a = (float)rand() / RAND_MAX * 360;			            
             vector.e = zMin == zMax ? 0 : (float)rand() / RAND_MAX * 360;
+            needsBreakpoint = YES;
 
             timeSegment = 0;
 		}
 		
 		// update breakpoint
-        bp = [[[Breakpoint alloc] init] autorelease];
-		[bp setPosition:[[tempPosition copy] autorelease]];
-		[bp setTime:time];
-		[tempArray addObject:bp];
+        if(needsBreakpoint)
+        {
+            bp = [[[Breakpoint alloc] init] autorelease];
+            [bp setPosition:[[tempPosition copy] autorelease]];
+            [bp setTime:time];
+            [tempArray addObject:bp];
+            needsBreakpoint = NO;
+        }
 		
 		time += timeIncrement;
 		timeSegment += timeIncrement;
@@ -199,40 +205,47 @@
 		{
 			tempPosition.x = 2 * xMin - tempPosition.x;
             vector.x *= -1;
+            needsBreakpoint = YES;
 		}
 		if(tempPosition.x > xMax)
 		{
             tempPosition.x = 2 * xMax - tempPosition.x;
             if(tempPosition.x < xMin) tempPosition.x = xMin;
             vector.x *= -1;
+            needsBreakpoint = YES;
 		}
 
 		if(tempPosition.y < yMin)
 		{
 			tempPosition.y = 2 * yMin - tempPosition.y;
             vector.y *= -1;
+            needsBreakpoint = YES;
 		}
 		if(tempPosition.y > yMax)
 		{
             tempPosition.y = 2 * yMax - tempPosition.y;
             if(tempPosition.y < yMin) tempPosition.y = yMin;
             vector.y *= -1;
+            needsBreakpoint = YES;
 		}
         
         if(tempPosition.z < zMin)
 		{
 			tempPosition.z = 2 * zMin - tempPosition.z;
             vector.z *= -1;
+            needsBreakpoint = YES;
 		}
 		if(tempPosition.z > zMax)
 		{
             tempPosition.z = 2 * zMax - tempPosition.z;
             if(tempPosition.z < zMin) tempPosition.z = zMin;
             vector.z *= -1;
+            needsBreakpoint = YES;
 		}
 	}
 	
-//	NSLog(@"--%lu", [tempArray count]);
+    
+//	NSLog(@"\n--%lu\n", [tempArray count]);
     return [NSArray arrayWithArray:tempArray];
 }
 

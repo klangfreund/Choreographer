@@ -366,7 +366,9 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			[pos setValue:objectValue forKey:@"y"];
 		else if ([[tc identifier] isEqualToString:@"z"])
 			[pos setValue:objectValue forKey:@"z"];
-	}
+
+        [[EditorContent sharedEditorContent] updateModelForSelectedPoints];
+    }
 	else if(displayMode == trajectoryDisplayMode)
 	{
 		switch([[editableTrajectory valueForKey:@"trajectoryType"] intValue])
