@@ -100,7 +100,7 @@ AudioSourceAmbipanning::AudioSourceAmbipanning (AudioFormatReader* const audioFo
       audioBlockEndPosition (-2),
       previousSpacialPoint (nullptr),
 	  nextSpacialPoint (nullptr),
-	  nextSpacialPointIndex (0),
+	  nextSpacialPointIndex (1),
 	  newSpacialEnvelopeSet (false),
 	  numberOfSpeakersChanged (false),
       audioSourceGainEnvelope (audioFormatReader, 
