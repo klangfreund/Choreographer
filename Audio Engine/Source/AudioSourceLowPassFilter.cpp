@@ -17,6 +17,7 @@ AudioSourceLowPassFilter::AudioSourceLowPassFilter (PositionableAudioSource * po
     constantSpacialPosition (true),
     previousSpacialPoint (),
     nextSpacialPoint (),
+    nextSpacialPointIndex (1),
     currentSpacialPosition (),
     iirFilter()
 {
@@ -135,7 +136,8 @@ bool AudioSourceLowPassFilter::isLooping () const
 
 void AudioSourceLowPassFilter::setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)
 {
-    DEB("AudioSourceLowPassFilter: setSpacialEnvelope called")
+    DEB("AudioSourceLowPassFilter::setSpacialEnvelope called.\n"
+        "AudioSourceLowPassFilter: newSpacialEnvelope.size() = " + String(newSpacialEnvelope_.size()))
     
 	if (newSpacialEnvelope_.size() != 0)
 	{
@@ -143,6 +145,9 @@ void AudioSourceLowPassFilter::setSpacialEnvelope (const Array<SpacialEnvelopePo
         
         // To ensure that the filter doesn't start oscillating.
         iirFilter.reset();
+        
+        // Reset the nextSpacialPointIndex.
+        nextSpacialPointIndex = 1;
         
         // Copy the elements over from the Array newSpacialEnvelope_ to the
         // OwnedArray newSpacialEnvelope.
@@ -202,28 +207,31 @@ inline void AudioSourceLowPassFilter::prepareForNewPosition (int newPosition,
     // - nextSpacialPointIndex_
     // - previousSpacialPoint_
     // - nextSpacialPoint_
-	while (spacialEnvelope[nextSpacialPointIndex]->getPosition() <= newPosition)
-	{
-		(*nextSpacialPointIndex_)++;
-	}
-	*previousSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_ - 1];
-	*nextSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_];
-
-	// Figure out the *currentSpacialPosition_
-    // ---------------------------------------
-    
-    // The distance in time. In samples.
-	double distance = double ((*nextSpacialPoint_)->getPosition() 
-                              - (*previousSpacialPoint_)->getPosition());
-    // In samples.
-	double distanceFromPreviousSpacialPointPosToCurrentPos = double(newPosition 
-    - (*previousSpacialPoint_)->getPosition());
-    
-    double factor = distanceFromPreviousSpacialPointPosToCurrentPos / distance;
-    
-    currentSpacialPosition_->x = (*previousSpacialPoint_)->getX() + factor * ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX());
-    currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
-    currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
+    if (!constantSpacialPosition)
+    { 
+        while (spacialEnvelope[nextSpacialPointIndex]->getPosition() <= newPosition)
+        {
+            (*nextSpacialPointIndex_)++;
+        }
+        *previousSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_ - 1];
+        *nextSpacialPoint_ = spacialEnvelope[*nextSpacialPointIndex_];
+        
+        // Figure out the *currentSpacialPosition_
+        // ---------------------------------------
+        
+        // The distance in time. In samples.
+        double distance = double ((*nextSpacialPoint_)->getPosition() 
+                                  - (*previousSpacialPoint_)->getPosition());
+        // In samples.
+        double distanceFromPreviousSpacialPointPosToCurrentPos = double(newPosition 
+                                                                        - (*previousSpacialPoint_)->getPosition());
+        
+        double factor = distanceFromPreviousSpacialPointPosToCurrentPos / distance;
+        
+        currentSpacialPosition_->x = (*previousSpacialPoint_)->getX() + factor * ((*nextSpacialPoint_)->getX() - (*previousSpacialPoint_)->getX());
+        currentSpacialPosition_->y = (*previousSpacialPoint_)->getY() + factor * ((*nextSpacialPoint_)->getY() - (*previousSpacialPoint_)->getY());
+        currentSpacialPosition_->z = (*previousSpacialPoint_)->getZ() + factor * ((*nextSpacialPoint_)->getZ() - (*previousSpacialPoint_)->getZ());
+    }
 }
 
 double AudioSourceLowPassFilter::lambda = 0.0;
