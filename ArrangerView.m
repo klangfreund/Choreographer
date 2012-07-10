@@ -403,9 +403,9 @@
 
 - (void)zoomToFitSelection
 {
-    if([selectedRegions count] == 0) return;
+    if([[self selectedAudioRegions] count] == 0) return;
     
-	NSUInteger start, end;
+    NSUInteger start, end;
     NSUInteger minY, maxY;
     
     start = minY = -1;
@@ -413,7 +413,7 @@
 	
     NSUInteger value;
 
-	for(Region *region in selectedRegions)
+	for(Region *region in [self selectedAudioRegions])
 	{		
 		value = ([region frame].origin.x - ARRANGER_OFFSET) / zoomFactorX;			
         
@@ -1655,10 +1655,10 @@
                 else if([selectedRegions count] > 1)
                     [[context undoManager] setActionName:@"crop audio regions"];
                                 
-                draggingDirtyFlag = NO;
             }
         }
         
+        draggingDirtyFlag = NO;
         [self recalculateArrangerProperties];
     }
 

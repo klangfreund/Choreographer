@@ -130,7 +130,10 @@
     id markers = [[MarkersWindowController sharedMarkersWindowController] markers];
     for(id marker in markers)
     {
-        x = [[marker valueForKey:@"time"] unsignedIntegerValue] * zoomFactor;
+        if(marker == draggedMarker)
+            x = tempMarkerTime * zoomFactor;
+        else
+            x = [[marker valueForKey:@"time"] unsignedIntegerValue] * zoomFactor;
 
         markerPath = [[[NSBezierPath alloc] init] autorelease];
         
@@ -273,14 +276,15 @@
         if(document.keyboardModifierKeys == modifierCommand)
         {
             NSUInteger newLocator = [[arrangerView valueForKeyPath:@"playbackController.locator"] unsignedIntegerValue];            
-            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithName:@"new loc" time:newLocator];
+            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithTime:newLocator];
         }
         else
         {
             NSUInteger newLocator = eventLocator < 0 ? 0 : eventLocator / zoomFactor;
             newLocator = round(newLocator / resolution) * resolution;
             
-            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithName:@"new loc" time:newLocator];
+            draggedMarker = [[MarkersWindowController sharedMarkersWindowController] newMarkerWithTime:newLocator];
+            tempMarkerTime = newLocator;
         }
     }
     else
@@ -292,7 +296,8 @@
             if(eventLocator / zoomFactor - resolution * 2 < [[marker valueForKey:@"time"] unsignedIntegerValue] &&
                eventLocator / zoomFactor + resolution * 2 > [[marker valueForKey:@"time"] unsignedIntegerValue])
             {
-                draggedMarker = marker;
+                draggedMarker = [marker retain];
+                tempMarkerTime = [[marker valueForKey:@"time"] unsignedIntegerValue];
                 break;
             }
         }
@@ -317,10 +322,21 @@
 {
 	NSPoint localPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 
-    if(draggedMarker && mouseDraggingAction == rulerDragMarker && localPoint.y < 0)
+    if(mouseDraggingAction == rulerDragMarker)
+    {
+        if(draggedMarker && mouseDraggingAction == rulerDragMarker && localPoint.y < 0)
         [[MarkersWindowController sharedMarkersWindowController] deleteMarker:draggedMarker];
+
+        [draggedMarker setValue:[NSNumber numberWithUnsignedInteger:tempMarkerTime] forKey:@"time"];
+        
+        [draggedMarker release];
+        draggedMarker = nil;
+        
+        [[MarkersWindowController sharedMarkersWindowController] update];
+    }
         
 	mouseDraggingAction = rulerDragNone;
+    
 }
 
 - (void)mouseDragged:(NSEvent *)event
@@ -360,7 +376,7 @@
 	else if(mouseDraggingAction == rulerDragMarker)
 	{
         if(document.keyboardModifierKeys == modifierCommand) proposedLocator = [[arrangerView valueForKeyPath:@"playbackController.locator"] unsignedIntegerValue];
-        [draggedMarker setValue:[NSNumber numberWithUnsignedInteger:proposedLocator] forKey:@"time"];
+        tempMarkerTime = proposedLocator;
     }
 	
 	[playbackController setLoop];

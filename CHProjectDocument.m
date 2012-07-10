@@ -14,6 +14,7 @@
 #import "AudioFile.h"
 #import "ToolbarController.h"
 #import "PlaybackController.h"
+#import "MarkersWindowController.h"
 
 @implementation CHProjectDocument
 
@@ -499,12 +500,15 @@
 	if(flag)
 	{
 		[[EditorContent sharedEditorContent] synchronizeWithArranger:arrangerView pool:poolViewController];
+        [[MarkersWindowController sharedMarkersWindowController] synchronizeWithProject:self];
 	}
 	else
 	{
 		// document is being closed
 		[[EditorContent sharedEditorContent] synchronizeWithArranger:nil pool:nil];
+        [[MarkersWindowController sharedMarkersWindowController] synchronizeWithProject:nil];
 	}
+    
 }
 
 #pragma mark -

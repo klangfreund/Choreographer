@@ -43,17 +43,16 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
     [super dealloc];
 }
 
+- (void)showWindow:(id)sender
+{
+    [super showWindow:sender];
+    [self synchronizeWithProject:project];
+}
+
 #pragma mark -
 #pragma mark accessors
 // -----------------------------------------------------------
 
-
-// binding in IB
-- (NSManagedObjectContext *)managedObjectContext
-{
-	id document = [[NSDocumentController sharedDocumentController] currentDocument];
-	return [document managedObjectContext];
-}
 
 - (NSArray *)markers
 {
@@ -100,18 +99,54 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
 }
 
 #pragma mark -
+#pragma mark IB actions
+// -----------------------------------------------------------
+
+- (void)addMarker:(id)sender
+{
+    [self newMarkerWithTime:0];
+}
+
+- (void)deleteSelectedMarker:(id)sender
+{
+    id markers = [markersArrayController selectedObjects];
+    
+    if([markers count])
+        [self deleteMarker:[markers objectAtIndex:0]];
+}
+
+#pragma mark -
 #pragma mark actions
 // -----------------------------------------------------------
 
-- (id)newMarkerWithName:(NSString *)name time:(NSUInteger)time
+- (void)update
+{
+    [markersArrayController setContent:[self markers]];
+}
+
+- (void)synchronizeWithProject:(id)proj
+{
+    project = proj;
+    if(project)
+        [markersArrayController setContent:[self markers]];
+    else
+        [markersArrayController setContent:nil];
+}
+
+- (id)newMarkerWithTime:(NSUInteger)time
 {
     NSManagedObject* newMarker;
 	NSManagedObjectContext *context = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
     
-    newMarker = [NSEntityDescription insertNewObjectForEntityForName:@"Marker" inManagedObjectContext:context];
+    if(context)
+    {
+        newMarker = [NSEntityDescription insertNewObjectForEntityForName:@"Marker" inManagedObjectContext:context];
     
-    [newMarker setValue:[NSNumber numberWithUnsignedInteger:time] forKey:@"time"];
-    [newMarker setValue:name forKey:@"name"];
+        [newMarker setValue:[NSNumber numberWithUnsignedInteger:time] forKey:@"time"];
+        [newMarker setValue:@"marker" forKey:@"name"];
+    
+        [self update];
+    }
     
     return newMarker;
 }
@@ -120,12 +155,10 @@ static MarkersWindowController *sharedMarkersWindowController = nil;
 {    
     NSManagedObjectContext *context = [[[NSDocumentController sharedDocumentController] currentDocument] managedObjectContext];
     [context deleteObject:marker];
+
+    [self synchronizeWithProject:project];
 }
 
-//- (void)selectMarker:(id)marker
-//{
-//    [markersArrayController setSelectedObjects:[NSArray arrayWithObject:marker]];
-//}
 
 #pragma mark -
 #pragma mark table view delegate method

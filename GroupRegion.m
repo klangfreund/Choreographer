@@ -44,6 +44,7 @@
 - (void)drawRect:(NSRect)rect
 {
 	[super drawRect:rect];
+    [super drawFrame:[self frame]];
 }
 
 - (void)recalcFrame

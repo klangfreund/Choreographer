@@ -329,14 +329,16 @@
 	// color
 	NSColor *frameColor = color;
 	
-	// locked / unlocked
-	if([[self valueForKey:@"locked"] boolValue])
-	{
-		frameColor = [NSColor blackColor];
-	}
-
 	[frameColor set];
 	[[NSBezierPath bezierPathWithRoundedRect:frame xRadius:5 yRadius:5] stroke];	
+
+	// locked
+	if([[self valueForKey:@"locked"] boolValue])
+	{
+		[[NSColor blackColor] set];
+        NSRect r = NSInsetRect(frame, -1, -1);
+        [[NSBezierPath bezierPathWithRoundedRect:r xRadius:5 yRadius:5] stroke];	
+	}
 }
 
 - (NSColor *)color

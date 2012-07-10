@@ -29,6 +29,7 @@ typedef enum _RulerMouseDraggingAction
     NSDictionary *labelAttribute;
     
     id draggedMarker;
+    NSUInteger tempMarkerTime;
 }
 
 - (void)update:(NSNotification *)notification;
