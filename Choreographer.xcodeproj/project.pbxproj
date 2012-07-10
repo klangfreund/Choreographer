@@ -14,6 +14,11 @@
 		15009E5611C0150A00FCE0F7 /* SettingsPopupButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 15009E5511C0150A00FCE0F7 /* SettingsPopupButton.m */; };
 		15012D201369313D0000116A /* LevelMeterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15012D1F1369313D0000116A /* LevelMeterView.m */; };
 		150C8947133AB1D1005A585D /* Path.m in Sources */ = {isa = PBXBuildFile; fileRef = 150C8946133AB1D1005A585D /* Path.m */; };
+		1510F7B215AC67B8000253CB /* Button-Split.png in Resources */ = {isa = PBXBuildFile; fileRef = 1510F7B015AC67B8000253CB /* Button-Split.png */; };
+		1510F7B315AC67B8000253CB /* Button-Trim.png in Resources */ = {isa = PBXBuildFile; fileRef = 1510F7B115AC67B8000253CB /* Button-Trim.png */; };
+		1510F7B515AC6922000253CB /* Button-Play.png in Resources */ = {isa = PBXBuildFile; fileRef = 1510F7B415AC6922000253CB /* Button-Play.png */; };
+		1510F7B715AC6B60000253CB /* Button-Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 1510F7B615AC6B60000253CB /* Button-Pause.png */; };
+		1510F7BB15AC6CB3000253CB /* Button-Stop.png in Resources */ = {isa = PBXBuildFile; fileRef = 1510F7BA15AC6CB3000253CB /* Button-Stop.png */; };
 		15155E55139CE34200A8BC0D /* MarkersWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15155E54139CE34200A8BC0D /* MarkersWindow.xib */; };
 		15155E98139CE92100A8BC0D /* Choreographer.help in Resources */ = {isa = PBXBuildFile; fileRef = 15155E7E139CE92100A8BC0D /* Choreographer.help */; };
 		151739B70EB3A5F500EABE92 /* TableEditorWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 151739B60EB3A5F500EABE92 /* TableEditorWindowController.m */; };
@@ -30,6 +35,12 @@
 		15204C3A0E4AFC78005E66F0 /* SpatialPosition.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204C390E4AFC78005E66F0 /* SpatialPosition.m */; };
 		15204D000E4B031C005E66F0 /* Playhead.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204CFD0E4B031C005E66F0 /* Playhead.m */; };
 		15204D010E4B031C005E66F0 /* RulerPlayhead.m in Sources */ = {isa = PBXBuildFile; fileRef = 15204CFF0E4B031C005E66F0 /* RulerPlayhead.m */; };
+		1533A43E15AC6FC000CD9706 /* Button-Return.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A43D15AC6FC000CD9706 /* Button-Return.png */; };
+		1533A44015AC744A00CD9706 /* Button-Loop.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A43F15AC744A00CD9706 /* Button-Loop.png */; };
+		1533A44215AC781D00CD9706 /* Button-NoLoop.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A44115AC781D00CD9706 /* Button-NoLoop.png */; };
+		1533A44415AC7ED700CD9706 /* Button-Delete.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A44315AC7ED700CD9706 /* Button-Delete.png */; };
+		1533A44715AC871D00CD9706 /* Button-Duplicate.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A44515AC871D00CD9706 /* Button-Duplicate.png */; };
+		1533A44815AC871D00CD9706 /* Button-Repeat.png in Resources */ = {isa = PBXBuildFile; fileRef = 1533A44615AC871D00CD9706 /* Button-Repeat.png */; };
 		1534F84F140BBE6300A4FDB5 /* BreakpointArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 1534F84E140BBE6300A4FDB5 /* BreakpointArray.m */; };
 		153F154A0DF6D7C40037238D /* ProjectWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F15490DF6D7C40037238D /* ProjectWindow.m */; };
 		153F154E0DF6D9530037238D /* RulerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 153F154D0DF6D9530037238D /* RulerScrollView.m */; };
@@ -147,6 +158,11 @@
 		15012D1F1369313D0000116A /* LevelMeterView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LevelMeterView.m; sourceTree = "<group>"; };
 		150C8945133AB1D1005A585D /* Path.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Path.h; sourceTree = "<group>"; };
 		150C8946133AB1D1005A585D /* Path.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Path.m; sourceTree = "<group>"; };
+		1510F7B015AC67B8000253CB /* Button-Split.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Split.png"; sourceTree = "<group>"; };
+		1510F7B115AC67B8000253CB /* Button-Trim.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Trim.png"; sourceTree = "<group>"; };
+		1510F7B415AC6922000253CB /* Button-Play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Play.png"; sourceTree = "<group>"; };
+		1510F7B615AC6B60000253CB /* Button-Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Pause.png"; sourceTree = "<group>"; };
+		1510F7BA15AC6CB3000253CB /* Button-Stop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Stop.png"; sourceTree = "<group>"; };
 		151525B00DDAFE8900BB5114 /* CHGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHGlobals.h; sourceTree = "<group>"; };
 		15155E7E139CE92100A8BC0D /* Choreographer.help */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Choreographer.help; sourceTree = "<group>"; };
 		151739B50EB3A5F500EABE92 /* TableEditorWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableEditorWindowController.h; sourceTree = "<group>"; };
@@ -175,6 +191,12 @@
 		15204CFD0E4B031C005E66F0 /* Playhead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Playhead.m; sourceTree = "<group>"; };
 		15204CFE0E4B031C005E66F0 /* RulerPlayhead.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulerPlayhead.h; sourceTree = "<group>"; };
 		15204CFF0E4B031C005E66F0 /* RulerPlayhead.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulerPlayhead.m; sourceTree = "<group>"; };
+		1533A43D15AC6FC000CD9706 /* Button-Return.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Return.png"; sourceTree = "<group>"; };
+		1533A43F15AC744A00CD9706 /* Button-Loop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Loop.png"; sourceTree = "<group>"; };
+		1533A44115AC781D00CD9706 /* Button-NoLoop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-NoLoop.png"; sourceTree = "<group>"; };
+		1533A44315AC7ED700CD9706 /* Button-Delete.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Delete.png"; sourceTree = "<group>"; };
+		1533A44515AC871D00CD9706 /* Button-Duplicate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Duplicate.png"; sourceTree = "<group>"; };
+		1533A44615AC871D00CD9706 /* Button-Repeat.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Button-Repeat.png"; sourceTree = "<group>"; };
 		1534F84D140BBE6300A4FDB5 /* BreakpointArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BreakpointArray.h; sourceTree = "<group>"; };
 		1534F84E140BBE6300A4FDB5 /* BreakpointArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = BreakpointArray.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		153F15480DF6D7C40037238D /* ProjectWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProjectWindow.h; sourceTree = "<group>"; };
@@ -716,6 +738,17 @@
 		15A82A37111B952900F31B92 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				1510F7BA15AC6CB3000253CB /* Button-Stop.png */,
+				1510F7B615AC6B60000253CB /* Button-Pause.png */,
+				1510F7B415AC6922000253CB /* Button-Play.png */,
+				1533A43D15AC6FC000CD9706 /* Button-Return.png */,
+				1510F7B015AC67B8000253CB /* Button-Split.png */,
+				1510F7B115AC67B8000253CB /* Button-Trim.png */,
+				1533A43F15AC744A00CD9706 /* Button-Loop.png */,
+				1533A44115AC781D00CD9706 /* Button-NoLoop.png */,
+				1533A44315AC7ED700CD9706 /* Button-Delete.png */,
+				1533A44515AC871D00CD9706 /* Button-Duplicate.png */,
+				1533A44615AC871D00CD9706 /* Button-Repeat.png */,
 				15AAAEFA12C22A8C00BF3035 /* choreographer_logo.eps */,
 				15C88D1D11BFC74000130A5E /* choreographer_icons.icns */,
 				15D16336116BE3EF00E22B42 /* folder.png */,
@@ -1003,6 +1036,17 @@
 				1586A9B613B3B45100262B02 /* SpeakerSetupChannelStrip.xib in Resources */,
 				1500639914C47225001361BF /* HardwareSettingsWindow.xib in Resources */,
 				1500639F14C47280001361BF /* ProjectAudioSettingsWindow.xib in Resources */,
+				1510F7B215AC67B8000253CB /* Button-Split.png in Resources */,
+				1510F7B315AC67B8000253CB /* Button-Trim.png in Resources */,
+				1510F7B515AC6922000253CB /* Button-Play.png in Resources */,
+				1510F7B715AC6B60000253CB /* Button-Pause.png in Resources */,
+				1510F7BB15AC6CB3000253CB /* Button-Stop.png in Resources */,
+				1533A43E15AC6FC000CD9706 /* Button-Return.png in Resources */,
+				1533A44015AC744A00CD9706 /* Button-Loop.png in Resources */,
+				1533A44215AC781D00CD9706 /* Button-NoLoop.png in Resources */,
+				1533A44415AC7ED700CD9706 /* Button-Delete.png in Resources */,
+				1533A44715AC871D00CD9706 /* Button-Duplicate.png in Resources */,
+				1533A44815AC871D00CD9706 /* Button-Repeat.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

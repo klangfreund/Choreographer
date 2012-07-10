@@ -2078,10 +2078,12 @@
 
 - (void)repeat:(id)sender
 {
-    NSModalSession session = [NSApp beginModalSessionForWindow:repeatRegionPanel];
     int i, count = 1;
     int dirty = [selectedRegions count];
+    if(dirty == 0) return;
     
+    NSModalSession session = [NSApp beginModalSessionForWindow:repeatRegionPanel];
+
     NSPoint origin = [[self window] frame].origin;
     origin.x += [[self window] frame].size.width * 0.5 - [repeatRegionPanel frame].size.width * 0.5;
     origin.y += [[self window] frame].size.height * 0.5 - [repeatRegionPanel frame].size.height * 0.5;
