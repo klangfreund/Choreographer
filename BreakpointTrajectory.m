@@ -104,11 +104,6 @@
 	[trajectoryItem updateModel];
 }
 
-- (void)removeBreakpoint:(id)bp
-{
-	[positionBreakpointArray removeBreakpoint:bp];
-}
-
 //- (void)sortBreakpoints
 //{
 //	[positionBreakpointArray sort];

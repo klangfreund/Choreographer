@@ -78,6 +78,8 @@
 -(void)mouseDragged:(NSEvent *)event
 {
 	float eventLocator = [self convertPoint:[event locationInWindow] fromView:self].x + [[[self superview] superview] bounds].origin.x;
+	eventLocator -= ARRANGER_OFFSET;
+    
 	NSUInteger newLocator = eventLocator < 0 ? 0 : eventLocator / zoomFactorX;
 	newLocator = round(newLocator / resolution) * resolution;
 	

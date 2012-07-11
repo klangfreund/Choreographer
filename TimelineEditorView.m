@@ -85,6 +85,9 @@
             breakpointView.yAxisValueKeypath = @"y";
             breakpointView.toolTipString = @"time: %0.0f y: %0.2f";
             [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
+            breakpointView.breakpointDescriptor = nil;
+            breakpointView.yAxisMin = -1;
+            breakpointView.yAxisMax = 1;
             breakpointView.showMiddleLine = YES;
             breakpointView.label = @"Y";
 
@@ -93,6 +96,9 @@
             breakpointView.yAxisValueKeypath = @"z";
             breakpointView.toolTipString = @"time: %0.0f z: %0.2f";
             [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
+            breakpointView.breakpointDescriptor = nil;
+            breakpointView.yAxisMin = -1;
+            breakpointView.yAxisMax = 1;
             breakpointView.showMiddleLine = YES;
             breakpointView.label = @"Z";
            
@@ -100,35 +106,109 @@
             
             break;
             
-        case rotationType:
+        case rotationAngleType:
             breakpointView = [breakpointViews objectAtIndex:0];
             breakpointView.breakpointArray = [trajectory parameterBreakpointArray];
             
-            if([[trajectory valueForKey:@"parameterMode"] intValue] == 0)
-            {
-                breakpointView.yAxisValueKeypath = @"value";
-                breakpointView.toolTipString = @"time: %0.0f angle: %0.2f";
-                breakpointView.breakpointDescriptor = @"Angle";
-                breakpointView.yAxisMin = -360;
-                breakpointView.yAxisMax = 360;
-                breakpointView.showMiddleLine = YES;
-                breakpointView.label = @"Angle";
-            }
-            else
-            {
-                breakpointView.yAxisValueKeypath = @"value";
-                breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
-                breakpointView.breakpointDescriptor = @"Speed";
-                breakpointView.yAxisMin = -100;
-                breakpointView.yAxisMax = 100;
-                breakpointView.showMiddleLine = YES;
-                breakpointView.label = @"Speed";
-            }
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f angle: %0.2f";
+            breakpointView.breakpointDescriptor = @"Angle";
+            breakpointView.yAxisMin = -360;
+            breakpointView.yAxisMax = 360;
+            breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"Angle";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
+
+            numOfBreakpointViews = 1;            
+            break;
+
+        case rotationSpeedType:           
+            breakpointView = [breakpointViews objectAtIndex:0];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"Speed";
+            breakpointView.yAxisMin = -360;
+            breakpointView.yAxisMax = 360;
+            breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"Speed";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
             
-            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];
+            numOfBreakpointViews = 1;            
+            break;
+
+        case randomType:           
+            breakpointView = [breakpointViews objectAtIndex:0];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"MaxSpeed";
+            breakpointView.yAxisMin = 0;
+            breakpointView.yAxisMax = 4.0;
+            breakpointView.showMiddleLine = NO;
+            breakpointView.label = @"Max Speed";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
             
-            numOfBreakpointViews = 1;
+            breakpointView = [breakpointViews objectAtIndex:1];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"MinSpeed";
+            breakpointView.yAxisMin = 0;
+            breakpointView.yAxisMax = 4.0;
+            breakpointView.showMiddleLine = NO;
+            breakpointView.label = @"Min Speed";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
             
+            breakpointView = [breakpointViews objectAtIndex:2];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"Stability";
+            breakpointView.yAxisMin = 0;
+            breakpointView.yAxisMax = 10.0;
+            breakpointView.showMiddleLine = NO;
+            breakpointView.label = @"Stability";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
+            
+            numOfBreakpointViews = 3;            
+            break;
+            
+        case circularRandomType:           
+            breakpointView = [breakpointViews objectAtIndex:0];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"MaxSpeed";
+            breakpointView.yAxisMin = -360;
+            breakpointView.yAxisMax = 360;
+            breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"Max Speed";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
+            
+            breakpointView = [breakpointViews objectAtIndex:1];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"MinSpeed";
+            breakpointView.yAxisMin = -360;
+            breakpointView.yAxisMax = 360;
+            breakpointView.showMiddleLine = YES;
+            breakpointView.label = @"Min Speed";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
+            
+            breakpointView = [breakpointViews objectAtIndex:2];
+            breakpointView.breakpointArray = [trajectory parameterBreakpointArray];            
+            breakpointView.yAxisValueKeypath = @"value";
+            breakpointView.toolTipString = @"time: %0.0f speed: %0.2f";
+            breakpointView.breakpointDescriptor = @"Stability";
+            breakpointView.yAxisMin = 0;
+            breakpointView.yAxisMax = 10.0;
+            breakpointView.showMiddleLine = NO;
+            breakpointView.label = @"Stability";
+            [breakpointView setUpdateCallbackObject:editableTrajectory selector:@selector(updateModel)];            
+            
+            numOfBreakpointViews = 3;            
             break;
             
         default:

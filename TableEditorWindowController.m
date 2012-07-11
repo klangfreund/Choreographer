@@ -182,10 +182,12 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			case breakpointType:
 				return (row != 0);
 				break;
-			case rotationType:
+			case rotationSpeedType:
+			case rotationAngleType:
 				return (row != 0);
 				break;
 			case randomType:
+			case circularRandomType:
 				return (row != 0);
 				break;
 		}
@@ -376,7 +378,8 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 			case breakpointType:
 				return [self breakpointTrajectory:editableTrajectory setValue:(id)objectValue forTableColumn:tc row:row];
 				break;
-			case rotationType:
+			case rotationSpeedType:
+			case rotationAngleType:
 				return [self rotationTrajectory:editableTrajectory setValue:(id)objectValue forTableColumn:tc row:row];
 				break;
 			case randomType:

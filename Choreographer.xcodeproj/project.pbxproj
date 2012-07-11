@@ -99,6 +99,7 @@
 		15C29D940ECB56F50071DDAA /* TrajectoryInspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15C29D920ECB56F50071DDAA /* TrajectoryInspector.xib */; };
 		15C6D25E11C7E304001ABA00 /* Trajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C6D25D11C7E304001ABA00 /* Trajectory.m */; };
 		15C6D76311C83BD0001ABA00 /* RotationTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */; };
+		15C7459E15ACDD7A0057F921 /* CircularRandomTrajectory.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C7459D15ACDD790057F921 /* CircularRandomTrajectory.m */; };
 		15C88D1E11BFC74000130A5E /* choreographer_icons.icns in Resources */ = {isa = PBXBuildFile; fileRef = 15C88D1D11BFC74000130A5E /* choreographer_icons.icns */; };
 		15C95F971113218F0083EC3A /* ArrangerScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15C95F961113218F0083EC3A /* ArrangerScrollView.m */; };
 		15CC427F112BE81D00632A6B /* PoolViews.m in Sources */ = {isa = PBXBuildFile; fileRef = 15CC427E112BE81D00632A6B /* PoolViews.m */; };
@@ -313,6 +314,8 @@
 		15C6D25D11C7E304001ABA00 /* Trajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trajectory.m; sourceTree = "<group>"; };
 		15C6D76111C83BD0001ABA00 /* RotationTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RotationTrajectory.h; sourceTree = "<group>"; };
 		15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RotationTrajectory.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		15C7459C15ACDD790057F921 /* CircularRandomTrajectory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularRandomTrajectory.h; sourceTree = "<group>"; };
+		15C7459D15ACDD790057F921 /* CircularRandomTrajectory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularRandomTrajectory.m; sourceTree = "<group>"; };
 		15C88D1D11BFC74000130A5E /* choreographer_icons.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = choreographer_icons.icns; sourceTree = "<group>"; };
 		15C95F951113218F0083EC3A /* ArrangerScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrangerScrollView.h; sourceTree = "<group>"; };
 		15C95F961113218F0083EC3A /* ArrangerScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ArrangerScrollView.m; sourceTree = "<group>"; };
@@ -824,6 +827,8 @@
 				15C6D76211C83BD0001ABA00 /* RotationTrajectory.m */,
 				1560817311CECAA00033C628 /* RandomTrajectory.h */,
 				1560817411CECAA00033C628 /* RandomTrajectory.m */,
+				15C7459C15ACDD790057F921 /* CircularRandomTrajectory.h */,
+				15C7459D15ACDD790057F921 /* CircularRandomTrajectory.m */,
 			);
 			name = Trajectory;
 			sourceTree = "<group>";
@@ -1139,6 +1144,7 @@
 				15FAE2E6152B703B00357D56 /* ProjectDocument.xcdatamodeld in Sources */,
 				22E5A10B1529E67B00E987BA /* AudioSourceLowPassFilter.cpp in Sources */,
 				2271E028159C6AAC0053E819 /* AudioSourceFilePrelistener.cpp in Sources */,
+				15C7459E15ACDD7A0057F921 /* CircularRandomTrajectory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

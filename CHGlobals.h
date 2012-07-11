@@ -76,8 +76,10 @@ typedef enum _TrajectoryType
 {
 	notSet = -1,
 	breakpointType = 0,
-	rotationType,
+	rotationSpeedType,
+	rotationAngleType,
 	randomType,
+	circularRandomType,
 	externalType
 } TrajectoryType;
 

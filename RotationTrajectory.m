@@ -18,6 +18,7 @@
 	{
         trajectoryItem = item;
         parameterBreakpointArray = [[BreakpointArray alloc] init];
+        Breakpoint *bp;
 
 		initialPosition = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.5 Y:0 Z:0]] retain];
         [initialPosition setDescriptor:@"Init"];
@@ -26,37 +27,28 @@
 		rotationCentre = [[Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.0 Y:0 Z:0]] retain];
         [rotationCentre setDescriptor:@"Center"];
         [parameterBreakpointArray addBreakpoint:rotationCentre];
-
-        parameterMode = 0; // 0=Angle, 1=Speed
                 
-        [self resetParameters];
+        if([[trajectoryItem valueForKey:@"trajectoryType"] intValue] == rotationAngleType)
+        {
+            bp = [Breakpoint breakpointWithTime:0 value:0];
+            [bp setDescriptor:@"Angle"];
+            [bp setTimeEditable:NO]; // initial angle, time not editable
+            [parameterBreakpointArray addBreakpoint:bp];
+            
+            bp = [Breakpoint breakpointWithTime:[[trajectoryItem valueForKey:@"duration"] unsignedLongValue] value:360];
+            [bp setDescriptor:@"Angle"];
+            [parameterBreakpointArray addBreakpoint:bp];
+        }
+        if([[trajectoryItem valueForKey:@"trajectoryType"] intValue] == rotationSpeedType)
+        {
+            bp = [Breakpoint breakpointWithTime:0 value:10];
+            [bp setDescriptor:@"Speed"];
+            [bp setTimeEditable:NO]; // initial speed, time not editable
+            [parameterBreakpointArray addBreakpoint:bp];
+        }    
     }
 
     return self;	
-}
-
-- (void)resetParameters
-{
-    Breakpoint *bp;
-    
-    if(parameterMode == 0)
-    {
-        bp = [Breakpoint breakpointWithTime:0 value:0];
-        [bp setDescriptor:@"Angle"];
-        [bp setTimeEditable:NO]; // initial angle, time not editable
-        [parameterBreakpointArray addBreakpoint:bp];
-
-        bp = [Breakpoint breakpointWithTime:[[trajectoryItem valueForKey:@"duration"] unsignedLongValue] value:360];
-        [bp setDescriptor:@"Angle"];
-        [parameterBreakpointArray addBreakpoint:bp];
-    }
-    else
-    {
-        bp = [Breakpoint breakpointWithTime:0 value:10];
-        [bp setDescriptor:@"Speed"];
-        [bp setTimeEditable:NO]; // initial speed, time not editable
-        [parameterBreakpointArray addBreakpoint:bp];
-    }    
 }
 
 
@@ -73,8 +65,6 @@
             initialPosition = [bp retain];
     }
     
-    parameterMode = [coder decodeIntForKey:@"parameterMode"];
-
 	return self;
 }
 
@@ -82,7 +72,6 @@
 {
     [super encodeWithCoder:coder];
     [coder encodeObject:parameterBreakpointArray forKey:@"parameterBreakpointArray"];
-    [coder encodeInt:parameterMode forKey:@"parameterMode"];
 }
 
 - (void)dealloc
@@ -93,34 +82,13 @@
 	[super dealloc];
 }
 
-- (int)parameterMode
-{
-    return parameterMode;
-}
-
-- (void)setParameterMode:(int)val
-{
-    if(parameterMode != val)
-    {       
-        parameterMode = val;
-
-        // TODO: do you really want - dialog
-
-        [parameterBreakpointArray removeBreakpointsWithDescriptor:@"Speed"];
-        [parameterBreakpointArray removeBreakpointsWithDescriptor:@"Angle"];
-
-        [self resetParameters];
-        [trajectoryItem updateModel];        
-    }
-}
-
-
 
 - (NSArray *)playbackBreakpointArrayWithInitialPosition:(SpatialPosition *)pos duration:(long)dur mode:(int)mode
 {
 	NSUInteger originalDur = [[trajectoryItem valueForKey:@"duration"] unsignedLongValue];
 	NSUInteger duration;
 	NSUInteger time = 0;
+    int direction = 1;
 	
 	Breakpoint *bp;
 	SpatialPosition *startPosition, *tempPosition;
@@ -130,11 +98,21 @@
     float speed;
     int timeIncrement;
 	int azimuthIncrement;
+    BOOL translation = NO;
 
 	if(pos)
 		startPosition = [[pos copy] autorelease];
 	else
 		startPosition = [[[initialPosition position] copy] autorelease];
+    
+    // translate
+    if(rotationCentre.x != 0.0 ||
+       rotationCentre.y != 0.0)
+    {
+        startPosition.x -= rotationCentre.x;
+        startPosition.y -= rotationCentre.y;
+        translation = YES;
+    }
     
     tempPosition = [[startPosition copy] autorelease];
 	
@@ -148,16 +126,24 @@
 	else
 		duration = dur;
 	
-    while(time < duration)
+    while(time <= duration)
     {
         bp = [[[Breakpoint alloc] init] autorelease];
         [bp setPosition:[[tempPosition copy] autorelease]];
         [bp setTime:time];
+        
+        if(translation)  // translate back
+        {
+            bp.position.x += rotationCentre.x;
+            bp.position.y += rotationCentre.y;
+        }        
+        
         [tempArray addObject:bp];
         
-        if(parameterMode == 0)
+        if([[trajectoryItem valueForKey:@"trajectoryType"] intValue] == rotationAngleType)
         {
             timeIncrement = 100;
+            time += timeIncrement;
             
             if(mode == durationModeOriginal)
             {
@@ -168,32 +154,74 @@
                 double scalingFactor = (double)originalDur / dur;
                 [tempPosition setA:[startPosition a] + [angleBreakpoints interpolatedValueAtTime:time * scalingFactor]];
             }            
-            if(mode == durationModeLoop)
+            else if(mode == durationModeLoop)
             {
                 [tempPosition setA:[startPosition a] + [angleBreakpoints interpolatedValueAtTime:(time % originalDur)]];                       
             }
-        }
-        else
-        {
-            speed = [speedBreakpoints interpolatedValueAtTime:time];
-            timeIncrement = 1000. / fabs(speed);
-            azimuthIncrement = speed > 0 ? 1 : -1;
-        
-            if(mode == durationModeLoop && (time % originalDur) < timeIncrement && time > timeIncrement)
+            else if(mode == durationModePalindrome)
             {
-                [tempPosition setA:[startPosition a]];
-                time -= (time % originalDur);
+                if(mode == durationModePalindrome && (time % originalDur) < timeIncrement && time > timeIncrement)
+                    direction *= -1;
+                
+                if(direction == 1)
+                    [tempPosition setA:[startPosition a] + [angleBreakpoints interpolatedValueAtTime:(time % originalDur)]];                       
+                else if(direction == -1)
+                    [tempPosition setA:[startPosition a] + [angleBreakpoints interpolatedValueAtTime:originalDur - (time % originalDur)]];                       
             }
-            else if(mode == durationModePalindrome && (time % originalDur) < timeIncrement && time > timeIncrement)
-                azimuthIncrement *= -1;
+        }
+        else if([[trajectoryItem valueForKey:@"trajectoryType"] intValue] == rotationSpeedType)
+        {
+            if(mode == durationModeOriginal)
+            {
+                speed = [speedBreakpoints interpolatedValueAtTime:time];
+            }
+            else if(mode == durationModeScaled)
+            {
+                double scalingFactor = (double)originalDur / dur;
+                speed = [speedBreakpoints interpolatedValueAtTime:time * scalingFactor];
+            }            
+            else if(mode == durationModeLoop)
+            {
+                speed = [speedBreakpoints interpolatedValueAtTime:(time % originalDur)];
+            }
+            else if(mode == durationModePalindrome)
+            {
+                if((time % originalDur) < timeIncrement && time > timeIncrement)
+                    direction *= -1;
+
+                if(direction == 1)
+                    speed = [speedBreakpoints interpolatedValueAtTime:(time % originalDur)];
+                else if(direction == -1)
+                    speed = [speedBreakpoints interpolatedValueAtTime:originalDur - (time % originalDur)];
+            }
+
+            timeIncrement = 1000. / fabs(speed);
+            time += timeIncrement;
+            azimuthIncrement = speed > 0 ? 1 : -1;
             
             [tempPosition setA:[tempPosition a] + azimuthIncrement];
         }
-
-         time += timeIncrement;
     }
 
-	return [NSArray arrayWithArray:tempArray];
+    // last bp
+    if([[trajectoryItem valueForKey:@"trajectoryType"] intValue] == rotationAngleType &&
+       (mode == durationModeOriginal || mode == durationModeScaled))
+    {
+        bp = [[[Breakpoint alloc] init] autorelease];
+        [tempPosition setA:[startPosition a] + [angleBreakpoints interpolatedValueAtTime:duration]];                       
+        [bp setPosition:[[tempPosition copy] autorelease]];
+        [bp setTime:duration];
+
+        if(translation)  // translate back
+        {
+            bp.position.x += rotationCentre.x;
+            bp.position.y += rotationCentre.y;
+        }        
+
+        [tempArray addObject:bp];
+    }
+
+    return [NSArray arrayWithArray:tempArray];
 }
 
 @end
