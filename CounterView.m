@@ -86,7 +86,7 @@
 	NSMutableDictionary *attrsFirstSeparator = [NSMutableDictionary dictionary];
 	[attrsDeselected setObject:[NSFont systemFontOfSize:fontSize] forKey:NSFontAttributeName];
 	[attrsSelected setObject:[NSFont systemFontOfSize:fontSize] forKey:NSFontAttributeName];
-	[attrsSelected setObject:[NSColor blackColor] forKey:NSForegroundColorAttributeName];
+	[attrsSelected setObject:[NSColor whiteColor] forKey:NSForegroundColorAttributeName];
 	[attrsFirstSeparator setObject:[NSFont systemFontOfSize:fontSize] forKey:NSFontAttributeName];
 	[attrsFirstSeparator setObject:[NSColor grayColor] forKey:NSForegroundColorAttributeName];
 	
@@ -154,7 +154,8 @@
 {
 	unsigned short keyCode = [event keyCode];
 	int i = [event modifierFlags] & NSShiftKeyMask ? -1 : 1; 
-	NSLog(@"Counter View key code: %d ", keyCode);
+    int character = [[event charactersIgnoringModifiers] characterAtIndex:0];
+	NSLog(@"Counter View key code: %d character %d", keyCode, character);
 
 	int num = -1;
 	
@@ -194,7 +195,6 @@
 
 		// tab or dot
 		case 48:
-		case 47:
 		case 65:
 			[self rotateSelectionBy:i];
 			return;
@@ -218,6 +218,12 @@
 			
 			return;
 	}
+    
+    if(character == 46) // dot
+    {
+        [self rotateSelectionBy:i];
+        return;
+    }
 	
 	if(num == -1)
 		[self setNumber:0 reset:YES];
@@ -301,6 +307,6 @@
 - (void)setType:(int)value {}
 - (void)setLocator:(NSUInteger)value {}
 - (void)setLocators {}
-- (void)commitValues {}
+- (void)commitValues { selectedNumberField = -1; [self setNeedsDisplay:YES]; }
 
 @end

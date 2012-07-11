@@ -29,33 +29,28 @@
         bp = [Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:-0.5 Y:-0.5 Z:0]];
         [bp setDescriptor:@"Point1"];
         [bp setTimeEditable:NO]; // initial value, time not editable
-        [bp setBreakpointType:breakpointTypeInitial];
         [parameterBreakpointArray addBreakpoint:bp];
 
         bp = [Breakpoint breakpointWithPosition:[SpatialPosition positionWithX:0.5 Y:0.5 Z:0]];
         [bp setDescriptor:@"Point2"];
         [bp setTimeEditable:NO]; // initial value, time not editable
-        [bp setBreakpointType:breakpointTypeInitial];
         [parameterBreakpointArray addBreakpoint:bp];
 
         // speed
         bp = [Breakpoint breakpointWithTime:0 value:0.1];
         [bp setDescriptor:@"MinSpeed"];
         [bp setTimeEditable:NO]; // initial value, time not editable
-        [bp setBreakpointType:breakpointTypeInitial];
         [parameterBreakpointArray addBreakpoint:bp];
         
         bp = [Breakpoint breakpointWithTime:0 value:0.2];
         [bp setDescriptor:@"MaxSpeed"];
         [bp setTimeEditable:NO]; // initial value, time not editable
-        [bp setBreakpointType:breakpointTypeInitial];
         [parameterBreakpointArray addBreakpoint:bp];
         
         // stability
         bp = [Breakpoint breakpointWithTime:0 value:1.0];
         [bp setDescriptor:@"Stability"];
         [bp setTimeEditable:NO]; // initial value, time not editable
-        [bp setBreakpointType:breakpointTypeInitial];
         [parameterBreakpointArray addBreakpoint:bp];
 
  	}

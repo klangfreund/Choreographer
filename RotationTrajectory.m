@@ -33,7 +33,6 @@
             bp = [Breakpoint breakpointWithTime:0 value:0];
             [bp setDescriptor:@"Angle"];
             [bp setTimeEditable:NO]; // initial angle, time not editable
-            [bp setBreakpointType:breakpointTypeInitial];
             [parameterBreakpointArray addBreakpoint:bp];
             
 //            bp = [Breakpoint breakpointWithTime:[[trajectoryItem valueForKey:@"duration"] unsignedLongValue] value:360];
@@ -45,7 +44,6 @@
             bp = [Breakpoint breakpointWithTime:0 value:10];
             [bp setDescriptor:@"Speed"];
             [bp setTimeEditable:NO]; // initial speed, time not editable
-            [bp setBreakpointType:breakpointTypeInitial];
             [parameterBreakpointArray addBreakpoint:bp];
         }    
     }
