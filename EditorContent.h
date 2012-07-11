@@ -38,6 +38,7 @@
 
 - (void)setDisplayedItems;
 
+- (void)duplicateSelectedPoints;
 - (void)deleteSelectedPoints;
 - (void)updateModelForSelectedPoints;
 - (void)setSelectedPointsTo:(SpatialPosition *)pos;

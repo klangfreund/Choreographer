@@ -88,6 +88,12 @@
 	NSBeep();
 }
 
+- (void)duplicateBreakpoint:(id)bp
+{
+	[positionBreakpointArray addBreakpoint:[bp copy]];
+	[parameterBreakpointArray addBreakpoint:[bp copy]];
+}
+
 - (void)removeBreakpoint:(id)bp
 {
 	[positionBreakpointArray removeBreakpoint:bp];

@@ -753,6 +753,7 @@
 			p.y = activeAreaOfDisplay == 0 ? [breakpoint y] : [breakpoint z];
 			
 			// ALT click opens alternativeTimelinePanel
+            /*
 			if([event modifierFlags] & NSAlternateKeyMask)
 			{
 				if(NSPointInRect(p, r))
@@ -764,6 +765,7 @@
 					return;
 				}
 			}
+            */
 
 			// SHIFT key pressed
 			if([event modifierFlags] & NSShiftKeyMask)

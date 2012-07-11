@@ -66,9 +66,13 @@
     else
         [backgroundColor set];
     
-	[[NSBezierPath bezierPathWithRoundedRect:rect xRadius:5 yRadius:5] fill];
+    if(xAxisMax > 0)
+        rect.size.width = xAxisMax * zoomFactorX;
 	
-	if(rect.size.height < [BreakpointBezierPath handleSize] || rect.size.width < [BreakpointBezierPath handleSize]) return;
+	[[NSBezierPath bezierPathWithRoundedRect:rect xRadius:5 yRadius:5] fill];
+    
+	// too small
+    if(rect.size.height < [BreakpointBezierPath handleSize] || rect.size.width < [BreakpointBezierPath handleSize]) return;
 	
 	frame = rect;
 

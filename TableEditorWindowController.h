@@ -24,6 +24,8 @@
 
 // menu actions
 - (IBAction)addBreakpoint:(id)sender;
+- (IBAction)duplicateBreakpoint:(id)sender;
+- (IBAction)deleteBreakpoint:(id)sender;
 
 // table view setting values
 - (void)breakpointTrajectory:(id)trajectory setValue:(id)objectValue forTableColumn:(NSTableColumn *)tc row:(int)row;

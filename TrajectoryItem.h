@@ -42,6 +42,7 @@
 
 - (void)addBreakpointAtPosition:(SpatialPosition *)pos time:(unsigned long)time;
 - (void)sortBreakpoints;
+- (void)duplicateBreakpoint:(id)bp;
 - (void)removeBreakpoint:(id)bp;
 
 // serialisation

@@ -92,13 +92,32 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
     [[[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"] addBreakpointAtPosition:newPos time:-1];
 }
 
+- (IBAction)duplicateBreakpoint:(id)sender
+{
+    [[EditorContent sharedEditorContent] duplicateSelectedPoints];
+}
+
+- (IBAction)deleteBreakpoint:(id)sender
+{
+    [[EditorContent sharedEditorContent] deleteSelectedPoints];
+}
+
 - (BOOL)validateUserInterfaceItem:(id)item
 {    
-	if ([item action] == @selector(addBreakpoint:) && displayMode == trajectoryDisplayMode)
+	id editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
+
+	if(displayMode == trajectoryDisplayMode)
     {
-        return YES;
+        if ([item action] == @selector(addBreakpoint:) && [[editableTrajectory valueForKey:@"trajectoryType"] intValue] == breakpointType)
+            return YES;
+
+        if ([item action] == @selector(duplicateBreakpoint:) && [tableEditorView selectedRow] != -1)
+            return YES;
+
+        if ([item action] == @selector(deleteBreakpoint:) && [tableEditorView selectedRow] != -1)
+            return YES;
     }
-    
+
     return NO;
 }
 

@@ -208,6 +208,7 @@
 
 
 - (void)sortBreakpoints { [trajectory sortBreakpoints]; }
+- (void)duplicateBreakpoint:(id)bp { [trajectory duplicateBreakpoint:bp]; }
 - (void)removeBreakpoint:(id)bp { [trajectory removeBreakpoint:bp]; }
 
 - (NSString *)trajectoryTypeString
