@@ -158,7 +158,7 @@
 	displayedTrajectories = [[EditorContent sharedEditorContent] valueForKey:@"displayedTrajectories"];
 	editableTrajectory = [[EditorContent sharedEditorContent] valueForKey:@"editableTrajectory"];
 	
-	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == playheadDisplayMode)
 	{
 		[self drawRegionPositions:rect];
 	}
@@ -314,7 +314,7 @@
 		[handleBezierPathXY fill];
 		DRAW_XZ([handleBezierPathXZ fill]);
 	
-		if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
+		if(trajectory == editableTrajectory && displayMode != playheadDisplayMode)
 			[handleFrameColorEditable set];
 		else
 			[handleFrameColorNonEditable set];
@@ -345,7 +345,7 @@
 		
 		if([editorSelection containsObject:bp])
 			[handleFillColorSelected set];
-		else if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
+		else if(trajectory == editableTrajectory && displayMode != playheadDisplayMode)
 			[handleFillColorEditable set];
 		else
 			[handleFillColorNonEditable set];
@@ -353,7 +353,7 @@
 		[breakpointBezierPathXY fill];
 		DRAW_XZ([breakpointBezierPathXZ fill]);
 		
-		if(trajectory == editableTrajectory && displayMode != locatorDisplayMode)
+		if(trajectory == editableTrajectory && displayMode != playheadDisplayMode)
 			[handleFrameColorEditable set];
 		else
 			[handleFrameColorNonEditable set];

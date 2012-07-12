@@ -379,7 +379,7 @@
 	
 	
 //	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"time" ascending:YES];
-//	NSArray *breakpointsArraySorted = [tempArray sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]];
+//	NSArray *breakpointsArraySorted = [tempArray playheadDisplayMode:[NSArray arrayWithObject:sortDescriptor]];
 
 }
 

@@ -58,7 +58,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 
 	// selection
  
-	if(displayMode != locatorDisplayMode)
+	if(displayMode != playheadDisplayMode)
     {
         NSMutableIndexSet *rowIndexes = [[[NSMutableIndexSet alloc] init] autorelease];
 
@@ -172,7 +172,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 	// draw background for title rows
 	
-	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == playheadDisplayMode)
 	{
 		[cell setDrawsBackground: (row == 0)];
 		[cell setSelectable: (row != 0)];
@@ -223,7 +223,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 {
 	int n, sum;
 
-	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == playheadDisplayMode)
 	{
 		// plus 1: title row
 		return [[[EditorContent sharedEditorContent] valueForKey:@"displayedAudioRegions"] count] + 1;
@@ -258,7 +258,7 @@ static TableEditorWindowController *sharedTableEditorWindowController = nil;
 	SpatialPosition *pos;
 	int n, sum;
 	
-	if(displayMode == regionDisplayMode || displayMode == locatorDisplayMode)
+	if(displayMode == regionDisplayMode || displayMode == playheadDisplayMode)
 	{
 		if(row == 0)
 		{
