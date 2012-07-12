@@ -46,14 +46,17 @@
 }
 
 
-
 - (Breakpoint *)copyWithZone:(NSZone *)zone
 {
 	Breakpoint *newBp = [[Breakpoint alloc] init];
 	
-	[newBp setTime:time];
+	[newBp setBreakpointType:breakpointType];
+    [newBp setTime:time];
+	[newBp setHasTime:hasTime];
+    [newBp setTimeEditable:timeEditable];
 	[newBp setValue:value];
 	[newBp setPosition:position];
+    [newBp setDescriptor:[descriptor copy]];
 	
 	return newBp;
 }

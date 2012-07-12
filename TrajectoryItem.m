@@ -115,11 +115,12 @@
 	{
 		switch([self trajectoryType])
 		{
-			case 0:
+			case breakpointType:
 				return [(SpatialPosition *)[[trajectory valueForKeyPath:@"positionBreakpoints"] objectAtIndex:0] position];
-			case 1:
-				return [trajectory valueForKey:@"initialPosition"];
-			case 2:
+			case rotationSpeedType:
+			case rotationAngleType:
+			case randomType:
+			case circularRandomType:
 				return [trajectory valueForKey:@"initialPosition"];
 			default:
 				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
@@ -129,9 +130,10 @@
 	{
 		switch([self trajectoryType])
 		{
-			case 0:
+			case breakpointType:
 				return [SpatialPosition positionWithX:0. Y:0. Z:0.];
-			case 1:
+			case rotationSpeedType:
+			case rotationAngleType:
 				return [trajectory valueForKey:@"rotationCentre"];
 //			case 2:
 //				pos1 = [trajectory valueForKey:@"boundingVolumePoint1"];
@@ -206,6 +208,7 @@
 
 
 - (void)sortBreakpoints { [trajectory sortBreakpoints]; }
+- (void)duplicateBreakpoint:(id)bp { [trajectory duplicateBreakpoint:bp]; }
 - (void)removeBreakpoint:(id)bp { [trajectory removeBreakpoint:bp]; }
 
 - (NSString *)trajectoryTypeString

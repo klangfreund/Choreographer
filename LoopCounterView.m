@@ -156,6 +156,7 @@
 
 - (void)commitValues
 {
+	NSUInteger tempStartLocator = locators[0];
 	NSUInteger tempEndLocator = locators[1];
 	
 	[self numberFieldsStartingAtIndex:0 toLocatorAtIndex:0];
@@ -167,9 +168,11 @@
 
 	id document = [[[self window] windowController] document];
 
-	[document setValue:[NSNumber numberWithUnsignedLong:locators[0]] forKeyPath:@"projectSettings.loopRegionStart"];
-	
-	if(tempEndLocator != locators[1]) // loop region end has been changed
+	if(tempStartLocator != locators[0]) // loop region start has been changed
+    {
+        [document setValue:[NSNumber numberWithUnsignedLong:locators[0]] forKeyPath:@"projectSettings.loopRegionStart"];
+	}
+	else if(tempEndLocator != locators[1]) // loop region end has been changed
 	{
 		[document setValue:[NSNumber numberWithUnsignedLong:locators[1]] forKeyPath:@"projectSettings.loopRegionEnd"];
 	}
@@ -177,6 +180,8 @@
 	{
 		[document setValue:[NSNumber numberWithUnsignedLong:locators[0] + locators[2]] forKeyPath:@"projectSettings.loopRegionEnd"];
 	}
+    
+    [super commitValues];
 }
 
 @end

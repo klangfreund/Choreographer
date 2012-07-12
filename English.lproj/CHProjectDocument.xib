@@ -995,8 +995,6 @@
 								<int key="NSvFlags">268</int>
 								<string key="NSFrame">{{8, 6}, {86, 17}}</string>
 								<reference key="NSSuperview" ref="532330049"/>
-								<reference key="NSWindow"/>
-								<reference key="NSNextKeyView"/>
 								<bool key="NSEnabled">YES</bool>
 								<object class="NSButtonCell" key="NSCell" id="34062846">
 									<int key="NSCellFlags">67239424</int>
@@ -1023,14 +1021,12 @@
 						</object>
 						<string key="NSFrameSize">{290, 50}</string>
 						<reference key="NSSuperview" ref="542135914"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="973343482"/>
 						<string key="NSClassName">LoopCounterView</string>
 					</object>
 				</object>
 				<string key="NSFrameSize">{290, 50}</string>
 				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="532330049"/>
 				<string key="NSClassName">NSView</string>
 			</object>
@@ -1042,7 +1038,7 @@
 					<object class="NSButton" id="135020595">
 						<reference key="NSNextResponder" ref="435967860"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{52, 13}, {34, 36}}</string>
+						<string key="NSFrame">{{33, 0}, {34, 36}}</string>
 						<reference key="NSSuperview" ref="435967860"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="43106197"/>
@@ -1068,7 +1064,7 @@
 					<object class="NSButton" id="43106197">
 						<reference key="NSNextResponder" ref="435967860"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{85, 13}, {34, 36}}</string>
+						<string key="NSFrame">{{66, 0}, {34, 36}}</string>
 						<reference key="NSSuperview" ref="435967860"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView"/>
@@ -1098,7 +1094,7 @@
 					<object class="NSButton" id="912341771">
 						<reference key="NSNextResponder" ref="435967860"/>
 						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{19, 13}, {34, 36}}</string>
+						<string key="NSFrameSize">{34, 36}</string>
 						<reference key="NSSuperview" ref="435967860"/>
 						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="135020595"/>
@@ -1122,16 +1118,17 @@
 						</object>
 					</object>
 				</object>
-				<string key="NSFrameSize">{138, 63}</string>
+				<string key="NSFrameSize">{100, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="912341771"/>
 				<string key="NSClassName">NSView</string>
 			</object>
 			<object class="NSSlider" id="386912358">
-				<nil key="NSNextResponder"/>
+				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<string key="NSFrameSize">{100, 26}</string>
+				<reference key="NSSuperview"/>
 				<bool key="NSEnabled">YES</bool>
 				<object class="NSSliderCell" key="NSCell" id="62764329">
 					<int key="NSCellFlags">67501824</int>
@@ -1666,14 +1663,14 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<reference key="NSNextKeyView" ref="66201035"/>
 					<string key="NSReuseIdentifierKey">_NS:2837</string>
 				</object>
-				<string key="NSScreenRect">{{-372, 800}, {1920, 1080}}</string>
+				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSButton" id="142750587">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{50, 30}</string>
+				<string key="NSFrameSize">{50, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView"/>
@@ -1705,7 +1702,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSButton" id="291806503">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{50, 30}</string>
+				<string key="NSFrameSize">{50, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView"/>
@@ -1733,7 +1730,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSButton" id="449547359">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{50, 30}</string>
+				<string key="NSFrameSize">{50, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView"/>
@@ -1761,7 +1758,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSButton" id="337083100">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{50, 30}</string>
+				<string key="NSFrameSize">{50, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView"/>
@@ -1789,7 +1786,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 			<object class="NSButton" id="99862198">
 				<reference key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
-				<string key="NSFrameSize">{50, 30}</string>
+				<string key="NSFrameSize">{50, 36}</string>
 				<reference key="NSSuperview"/>
 				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView"/>
@@ -3427,6 +3424,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 							<reference ref="715004108"/>
 						</object>
 						<reference key="parent" ref="0"/>
+						<string key="objectName">Repeat Region Panel</string>
 					</object>
 					<object class="IBObjectRecord">
 						<int key="objectID">1068</int>
@@ -4942,7 +4940,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 				<string>{99, 42}</string>
 				<string>{23.200000000000003, 23.200000000000003}</string>
 				<string>{23.200000000000003, 23.200000000000003}</string>
-				<string>{141, 58}</string>
+				<string>{141, 61}</string>
 				<string>{23.200000000000003, 23.200000000000003}</string>
 				<string>{141, 60}</string>
 				<string>{23.200000000000003, 23.200000000000003}</string>

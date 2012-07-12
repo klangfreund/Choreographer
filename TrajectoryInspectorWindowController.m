@@ -39,13 +39,15 @@ static TrajectoryInspectorWindowController *sharedTrajectoryInspectorWindowContr
         
     switch ([[currentTrajectoryItem valueForKey:@"trajectoryType"] intValue])
 	{
-		case 0:
+		case breakpointType:
 			sheet = breakpointInspectorWindow;
 			break;
-		case 1:
+		case rotationAngleType:
+        case rotationSpeedType:
 			sheet = rotationInspectorWindow;
 			break;
-		case 2:
+		case randomType:
+        case circularRandomType:
 			sheet = randomInspectorWindow;
 			break;
 	}

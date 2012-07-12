@@ -66,50 +66,45 @@
 - (void)keyDown:(NSEvent *)event
 {
 	unsigned short keyCode = [event keyCode];
-	NSLog(@"ProjectWindow key code: %d ", keyCode);
-	
-//	short num = -1;
-	
-	switch(keyCode)
+    int character = [[event charactersIgnoringModifiers] characterAtIndex:0];
+    
+    //carriage return (36) or enter (76)
+	if(keyCode == 36 || keyCode == 76)
 	{
-		//carriage return
-		case 36:
-		// enter
-		case 76:
-			
 			if([event modifierFlags] & NSCommandKeyMask)
 				[playbackController returnToZero];
 			else
 				[playbackController stopPlayback];
-			break;		
-			
-
-		// spacebar = PLAY / PAUSE
-		case 49:
+    }
+    
+    // spacebar = PLAY / PAUSE
+    else if(keyCode == 49)
 			[playbackController startStop];
-			break;
 			
-        // shortcuts
-        case 18:
-            if([event modifierFlags] & NSAlternateKeyMask)
+    // 1
+    else if(keyCode == 18)
+    {
+        if([event modifierFlags] & NSAlternateKeyMask)
                 [document setValue:[NSNumber numberWithInt:0] forKeyPath:@"projectSettings.arrangerDisplayMode"];
-            break;
-            
-        case 19:
-            if([event modifierFlags] & NSAlternateKeyMask)
+    }
+    
+    // 2
+    else if(keyCode == 19)
+    {
+        if([event modifierFlags] & NSAlternateKeyMask)
                 [document setValue:[NSNumber numberWithInt:1] forKeyPath:@"projectSettings.arrangerDisplayMode"];
-            break;
-
-        case 44: // z 
-            if(document.keyboardModifierKeys == modifierShift)
+    }
+    
+    // 'z' or 'Z'
+    else if(character == 90 || character == 122)
+    {
+        if(document.keyboardModifierKeys == modifierShift)
                 [document zoomToFitContent:self];
             else if(document.keyboardModifierKeys == modifierAlt)
                 [document zoomToFitSelection:self];
-            break;
-            
-        default:
-			[[self nextResponder] keyDown:event];
-	}
+    }       
+ 
+    else  [[self nextResponder] keyDown:event];
 }
 
 @end

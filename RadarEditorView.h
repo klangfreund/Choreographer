@@ -81,9 +81,6 @@ typedef struct _RadarPoint
 - (void)drawAdditionalHandles:(TrajectoryItem *)trajectory;
 - (void)drawAdditionalShapes:(TrajectoryItem *)trajectory forRegion:(AudioRegion *)region;
 
-//- (void)drawRotationTrajectory:(id)trajectory;
-//- (void)drawRandomTrajectory:(id)trajectory;
-
 // IB actions
 - (IBAction)gridModeMenu:(id)sender;
 

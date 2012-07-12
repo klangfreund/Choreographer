@@ -104,6 +104,7 @@
 	[playbackController setValue:projectSettings forKey:@"projectSettings"];
     
     // initialize audio engine
+    [[AudioEngine sharedAudioEngine] setAmbisonicsOrder:[[projectSettings valueForKey:@"ambisonicsOrder"] floatValue]];    
     int mode = [[projectSettings valueForKey:@"distanceBasedAttenuation"] boolValue] ? [[projectSettings valueForKey:@"distanceBasedAttenuationMode"] intValue] + 1 : 0;
     [[AudioEngine sharedAudioEngine] setDistanceBasedAttenuation:mode
                                                   centreZoneSize:[[projectSettings valueForKey:@"distanceBasedAttenuationCentreZoneSize"] doubleValue]

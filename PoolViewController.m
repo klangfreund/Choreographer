@@ -897,7 +897,7 @@
 - (NSString *)nodeImageName:(id)node
 {
 	/* depending on the type return the appropriate image */
-	if([node valueForKey:@"isLeaf"] == [NSNumber numberWithBool:NO])
+	if(![[node valueForKey:@"isLeaf"] boolValue])// == [NSNumber numberWithBool:NO])
 		return @"folder";
 	
 	if([[node valueForKey:@"type"] isEqualToString:CHAudioItemType])

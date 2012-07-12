@@ -246,10 +246,14 @@
 
 - (void)removeBreakpoint:(id)bp
 {
-	if([breakpoints count] > 1 && // only breakpoint can't be removed
-       ([breakpoints indexOfObject:bp] != 0 || [bp timeEditable]))  // first breakpoint can't be removed
+	if([breakpoints count] > 1 &&   // only breakpoint can't be removed
+       [bp timeEditable])           // time not editable = first breakpoint = unremovable
     {
 		[breakpoints removeObject:bp];
+    }
+    else
+    {
+        NSBeep();
     }
 }
 

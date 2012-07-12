@@ -375,7 +375,9 @@
 
 	switch([[trajectoryItem valueForKey:@"trajectoryType"] intValue])
 	{
-		case rotationType:
+		case rotationSpeedType:
+		case rotationAngleType:
+        case circularRandomType:
 			rotationPath = [NSBezierPath bezierPath];
 			
 			centre = [trajectoryItem valueForKeyPath:@"trajectory.rotationCentre.position"];
@@ -438,275 +440,6 @@
 	}
 	
 }
-
-- (void)drawRotationTrajectory:(TrajectoryItem *)trajectory
-{
-//	NSBezierPath *rotationPath;
-//	BreakpointBezierPath *initialPositionBezierPathXY, *initialPositionBezierPathXZ;
-//	BreakpointBezierPath *centreBezierPathXY, *centreBezierPathXZ;
-//	RadarPoint p, cp;
-//	float radius;
-//	id breakpoint;
-//	
-//	// centre handle
-//	Position *centre = [trajectory trajectoryAttributeForKey:@"centre"];
-//
-//	cp = [self makePointX:[centre x] Y:[centre y] Z:[centre z]];									  
-//									  
-//	centreBezierPathXY = [BreakpointBezierPath centrePosition:NSMakePoint(cp.x, cp.y1)];
-//	centreBezierPathXZ = [BreakpointBezierPath centrePosition:NSMakePoint(cp.x, cp.y2)];
-//	
-//	// draw circle
-//	rotationPath = [NSBezierPath bezierPath];
-//
-//	if(![trajectory adaptiveInitialPosition])
-//	{
-//		breakpoint = [trajectory trajectoryAttributeForKey:@"initialPosition"];
-//		radius = pow(pow([centre x] - [breakpoint x],2)+pow([centre y] - [breakpoint y],2), 0.5) * (radarSize - 10) * 0.5;
-//		[rotationPath appendBezierPathWithArcWithCenter:NSMakePoint(cp.x, cp.y1) radius:radius startAngle:0 endAngle:360];
-//	}
-//	else if ([region regionPosition])	// initial breakpoint is adaptive and this trajectory is drawn
-//										// together with an associated audio region
-//	{
-//		radius = pow(pow([centre x] - [[region regionPosition] x],2)+pow([centre y] - [[region regionPosition] y],2), 0.5) * (radarSize - 10) * 0.5;
-//		[rotationPath appendBezierPathWithArcWithCenter:NSMakePoint(cp.x, cp.y1) radius:radius startAngle:0 endAngle:360];
-//	}
-//	else
-//	{
-//		float array[2];
-//		array[0] = 1.0; //segment painted with stroke color
-//		array[1] = 2.0; //segment not painted with a color
-//		[rotationPath setLineDash: array count: 2 phase: 0.0];
-//		[rotationPath appendBezierPathWithArcWithCenter:NSMakePoint(cp.x, cp.y1) radius:radarSize * 0.1 startAngle:0 endAngle:360];
-//	}
-//	if(trajectory == editableTrajectory)
-//		[lineColorEditable set];
-//	else
-//		[lineColorNonEditable set];
-//
-//	[rotationPath stroke];
-//
-//
-//	// draw centre handle
-//	if([editorSelection containsObject:centre])
-//			[handleFillColorSelected set];
-//	else if(trajectory == editableTrajectory)
-//		[handleFillColorEditable set];
-//	else
-//		[handleFillColorNonEditable set];
-//		
-//	[centreBezierPathXY fill];
-//	DRAW_XZ([centreBezierPathXZ fill]);
-//
-//	if(trajectory == editableTrajectory)
-//		[handleFrameColorEditable set];
-//	else
-//		[handleFrameColorNonEditable set];
-//
-//	[centreBezierPathXY stroke];
-//	DRAW_XZ([centreBezierPathXZ stroke]);
-//
-//	// initial position
-//	if(![trajectory adaptiveInitialPosition])
-//	{
-//		breakpoint = [[trajectory breakpointArray] objectAtIndex:0];
-//		p = [self makePointX:[breakpoint x] Y:[breakpoint y] Z:[breakpoint z]];									  
-//	
-//		initialPositionBezierPathXY = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y1)];
-//		initialPositionBezierPathXZ = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y2)];
-//	}
-//	else if ([region regionPosition])	// initial breakpoint is adaptive and this trajectory is drawn
-//										// together with an associated audio region
-//	{
-//		p = [self makePointX:[[region regionPosition] x] Y:[[region regionPosition] y] Z:[[region regionPosition] z]];
-//		
-//		initialPositionBezierPathXY = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y1)];
-//		initialPositionBezierPathXZ = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y2)];
-//	}
-//	else
-//	{
-//		p = cp;
-//		p.x -= 10;
-//		
-//		initialPositionBezierPathXY = [BreakpointBezierPath adaptiveInitialPosition:NSMakePoint(p.x, p.y1)];
-//		initialPositionBezierPathXZ = [BreakpointBezierPath adaptiveInitialPosition:NSMakePoint(p.x, p.y2)];
-//	}
-//	
-//	if([editorSelection containsObject:[trajectory trajectoryAttributeForKey:@"initialPosition"]])
-//		[handleFillColorSelected set];
-//	else if(trajectory == editableTrajectory)
-//		[handleFillColorEditable set];
-//	else
-//		[handleFillColorNonEditable set];
-//
-//	[initialPositionBezierPathXY fill];
-//	DRAW_XZ([initialPositionBezierPathXZ fill]);
-//
-//	
-//	else if(trajectory == editableTrajectory || [region regionPosition])
-//		[handleFrameColorEditable set];
-//	else
-//		[handleFrameColorNonEditable set];
-//
-//	[initialPositionBezierPathXY stroke];
-//	DRAW_XZ([initialPositionBezierPathXZ stroke]);
-//	
-//
-//	// trajectory name
-//	
-//	if([region regionPosition]) return; // only if displayed without an associated region
-//
-//	NSString *string = [NSString stringWithFormat:@"%@", [[trajectory valueForKey:@"node"] valueForKey:@"name"]];
-//	if(trajectory == editableTrajectory)
-//	{
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y1 + 7) withAttributes:attributesEditable];
-//		DRAW_XZ([string drawAtPoint:NSMakePoint(p.x - 5, p.y2 + 7) withAttributes:attributesEditable]);
-//	}
-//	else
-//	{
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y1 + 7) withAttributes:attributesNonEditable];
-//		DRAW_XZ([string drawAtPoint:NSMakePoint(p.x - 5, p.y2 + 7) withAttributes:attributesNonEditable]);
-//	}
-}
-
-- (void)drawRandomTrajectory:(TrajectoryItem *)trajectory
-{
-//	NSBezierPath *boundingBoxPathXY, *boundingBoxPathXZ;
-//	BreakpointBezierPath *initialPositionBezierPathXY, *initialPositionBezierPathXZ;
-//	BreakpointBezierPath *vol1BezierPathXY, *vol1BezierPathXZ;
-//	BreakpointBezierPath *vol2BezierPathXY, *vol2BezierPathXZ;
-//	RadarPoint p, vol1, vol2;
-//	Position *vol1Breakpoint, *vol2Breakpoint;
-//	id breakpoint;
-//	
-//	//  bounding volume
-//	vol1Breakpoint = [[trajectory breakpointArray] objectAtIndex:1];
-//	vol1 = [self makePointX:[vol1Breakpoint x] Y:[vol1Breakpoint y] Z:[vol1Breakpoint z]];									  
-//	vol2Breakpoint = [[trajectory breakpointArray] objectAtIndex:2];
-//	vol2 = [self makePointX:[vol2Breakpoint x] Y:[vol2Breakpoint y] Z:[vol2Breakpoint z]];									  
-//
-//	NSRect r = NSMakeRect(vol1.x, vol1.y1, vol2.x - vol1.x, vol2.y1 - vol1.y1);
-//	
-//	boundingBoxPathXY = [NSBezierPath bezierPathWithRect:r];
-//	
-//	r.origin.y = vol1.y2;
-//	r.size.height = vol2.y2 - vol1.y2;
-//	
-//	boundingBoxPathXZ = [NSBezierPath bezierPathWithRect:r];
-//	
-//	if(trajectory == editableTrajectory)
-//		[lineColorEditable set];
-//	else
-//		[lineColorNonEditable set];
-//	
-//	[boundingBoxPathXY stroke];
-//	[boundingBoxPathXZ stroke];
-//	
-//
-//	// volume handle 1
-//	
-//	vol1BezierPathXY = [BreakpointBezierPath auxilaryHandlePosition:NSMakePoint(vol1.x, vol1.y1)];
-//	vol1BezierPathXZ = [BreakpointBezierPath auxilaryHandlePosition:NSMakePoint(vol1.x, vol1.y2)];
-//
-//	if([editorSelection containsObject:vol1Breakpoint])
-//		[handleFillColorSelected set];
-//	else if(trajectory == editableTrajectory)
-//		[handleFillColorEditable set];
-//	else
-//		[handleFillColorNonEditable set];
-//	
-//	[vol1BezierPathXY fill];
-//	[vol1BezierPathXZ fill];
-//	
-//	if(trajectory == editableTrajectory)
-//		[handleFrameColorEditable set];
-//	else
-//		[handleFrameColorNonEditable set];
-//	
-//	[vol1BezierPathXY stroke];
-//	[vol1BezierPathXZ stroke];
-//
-//	
-//	// volume handle 2
-//	
-//	vol2BezierPathXY = [BreakpointBezierPath auxilaryHandlePosition:NSMakePoint(vol2.x, vol2.y1)];
-//	vol2BezierPathXZ = [BreakpointBezierPath auxilaryHandlePosition:NSMakePoint(vol2.x, vol2.y2)];
-//
-//	if([editorSelection containsObject:vol2Breakpoint])
-//		[handleFillColorSelected set];
-//	else if(trajectory == editableTrajectory)
-//		[handleFillColorEditable set];
-//	else
-//		[handleFillColorNonEditable set];
-//	
-//	[vol2BezierPathXY fill];
-//	[vol2BezierPathXZ fill];
-//	
-//	if(trajectory == editableTrajectory)
-//		[handleFrameColorEditable set];
-//	else
-//		[handleFrameColorNonEditable set];
-//	
-//	[vol2BezierPathXY stroke];
-//	[vol2BezierPathXZ stroke];
-//	
-//
-//	// initial position
-//	if(![trajectory adaptiveInitialPosition])
-//	{
-//		breakpoint = [[trajectory breakpointArray] objectAtIndex:0];
-//		p = [self makePointX:[breakpoint x] Y:[breakpoint y] Z:[breakpoint z]];									  
-//		
-//		initialPositionBezierPathXY = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y1)];
-//		initialPositionBezierPathXZ = [BreakpointBezierPath initialPosition:NSMakePoint(p.x, p.y2)];
-//	}
-//	else
-//	{
-//		p.x = vol2.x - (vol2.x - vol1.x) * 0.5;
-//		p.y1 = vol2.y1 - (vol2.y1 - vol1.y1) * 0.5;
-//		p.y2 = vol2.y2 - (vol2.y2 - vol1.y2) * 0.5;
-//		
-//		initialPositionBezierPathXY = [BreakpointBezierPath adaptiveInitialPosition:NSMakePoint(p.x, p.y1)];
-//		initialPositionBezierPathXZ = [BreakpointBezierPath adaptiveInitialPosition:NSMakePoint(p.x, p.y2)];
-//	}
-//	
-//	if([editorSelection containsObject:[[trajectory breakpointArray] objectAtIndex:0]])
-//		[handleFillColorSelected set];
-//	else if(trajectory == editableTrajectory)
-//		[handleFillColorEditable set];
-//	else
-//		[handleFillColorNonEditable set];
-//	
-//	[initialPositionBezierPathXY fill];
-//	DRAW_XZ([initialPositionBezierPathXZ fill]);
-//	
-//	
-//	else if(trajectory == editableTrajectory || [region regionPosition])
-//		[handleFrameColorEditable set];
-//	else
-//		[handleFrameColorNonEditable set];
-//	
-//	[initialPositionBezierPathXY stroke];
-//	DRAW_XZ([initialPositionBezierPathXZ stroke]);
-//	
-//	
-//	// trajectory name
-//	
-//	if([region regionPosition]) return; // only if displayed without an associated region
-//
-//	NSString *string = [NSString stringWithFormat:@"%@", [[trajectory valueForKey:@"node"] valueForKey:@"name"]];
-//	if(trajectory == editableTrajectory)
-//	{
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y1 + 7) withAttributes:attributesEditable];
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y2 + 7) withAttributes:attributesEditable];
-//	}
-//	else
-//	{
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y1 + 7) withAttributes:attributesNonEditable];
-//		[string drawAtPoint:NSMakePoint(p.x - 5, p.y2 + 7) withAttributes:attributesNonEditable];
-//	}
-}
-
 
 - (BOOL)isOpaque
 {
@@ -1020,6 +753,7 @@
 			p.y = activeAreaOfDisplay == 0 ? [breakpoint y] : [breakpoint z];
 			
 			// ALT click opens alternativeTimelinePanel
+            /*
 			if([event modifierFlags] & NSAlternateKeyMask)
 			{
 				if(NSPointInRect(p, r))
@@ -1031,6 +765,7 @@
 					return;
 				}
 			}
+            */
 
 			// SHIFT key pressed
 			if([event modifierFlags] & NSShiftKeyMask)

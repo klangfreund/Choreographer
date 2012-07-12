@@ -16,17 +16,8 @@
 {
     Breakpoint *rotationCentre;
     Breakpoint *initialPosition;
-
-    int parameterMode; // 0=Circle Sector, 1=Angular Speed
 }
 
-@property int parameterMode;
-
 - (id)initWithTrajectoryItem:(TrajectoryItem *)item;
-- (void)resetParameters;
-
-// accessors
-- (int)parameterMode;
-- (void)setParameterMode:(int)val;
 
 @end

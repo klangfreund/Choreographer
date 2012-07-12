@@ -157,6 +157,17 @@ static EditorContent *sharedEditorContent = nil;
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"updateEditors" object:nil];
 }
 
+- (void)duplicateSelectedPoints
+{
+	for(id breakpoint in editorSelection)
+	{
+		[editableTrajectory duplicateBreakpoint:breakpoint];
+	}
+	[editableTrajectory updateModel];
+	
+	[editorSelection removeAllObjects];
+}
+
 - (void)deleteSelectedPoints
 {
 	for(id breakpoint in editorSelection)

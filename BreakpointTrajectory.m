@@ -104,11 +104,6 @@
 	[trajectoryItem updateModel];
 }
 
-- (void)removeBreakpoint:(id)bp
-{
-	[positionBreakpointArray removeBreakpoint:bp];
-}
-
 //- (void)sortBreakpoints
 //{
 //	[positionBreakpointArray sort];
@@ -138,7 +133,7 @@
 	}
 	else if(mode == durationModeOriginal)
 	{
-		tempArray = [[positionBreakpointArray.breakpoints copy] autorelease];
+		tempArray = [[positionBreakpointArray.breakpoints mutableCopy] autorelease];
 	}
 	else if(mode == durationModeLoop)
 	{
@@ -148,10 +143,11 @@
 		while (time < dur)
 		{
 			bp = [[[positionBreakpointArray objectAtIndex:(i++ % count)] copy] autorelease];
-			if(bp.time == 0 && i != 1) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
+            if(bp.time == 0 && i != 1) // first breakpoint (NB. it is assumed that there is always a bp at time == 0)
 			{
 				timeOffset += originalDur;
 				time = bp.time + timeOffset + 1;
+                bp.timeEditable = YES;
 			}
 			else
 			{
@@ -175,6 +171,7 @@
 			{
 				timeOffset += originalDur;
 				time = bp.time + timeOffset;
+                bp.timeEditable = YES;
 				direction = 0; // upwards
 			}
 			else if(i == count-1) // last breakpoint
@@ -208,7 +205,6 @@
 		[bp setBreakpointType:breakpointTypeInitial];
 		[tempArray replaceObjectAtIndex:0 withObject:bp];
 	}
-	
 	
 	return [NSArray arrayWithArray:tempArray];
 }

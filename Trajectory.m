@@ -10,6 +10,7 @@
 #import "BreakpointTrajectory.h"
 #import "RotationTrajectory.h"
 #import "RandomTrajectory.h"
+#import "CircularRandomTrajectory.h"
 
 
 @implementation Trajectory
@@ -26,7 +27,8 @@
 		case breakpointType:
 			trajectory = [[[BreakpointTrajectory alloc] initWithDefaultBreakpoint] autorelease];
 			break;
-		case rotationType:
+		case rotationSpeedType:
+		case rotationAngleType:
 			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
 			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 			trajectory = [[[RotationTrajectory alloc] initWithTrajectoryItem:trajectoryItem] autorelease];
@@ -35,6 +37,11 @@
 			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
 			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
 			trajectory = [[[RandomTrajectory alloc] init] autorelease];
+			break;
+		case circularRandomType:
+			[trajectoryItem setValue:[NSNumber numberWithInt:1000] forKey:@"duration"];
+			[trajectoryItem setValue:[NSNumber numberWithBool:YES] forKey:@"adaptiveInitialPosition"];
+			trajectory = [[[CircularRandomTrajectory alloc] init] autorelease];
 			break;
 	}
 		
@@ -81,9 +88,16 @@
 	NSBeep();
 }
 
+- (void)duplicateBreakpoint:(id)bp
+{
+	[positionBreakpointArray addBreakpoint:[bp copy]];
+	[parameterBreakpointArray addBreakpoint:[bp copy]];
+}
+
 - (void)removeBreakpoint:(id)bp
 {
-	NSBeep();
+	[positionBreakpointArray removeBreakpoint:bp];
+	[parameterBreakpointArray removeBreakpoint:bp];
 }
 
 @end
