@@ -21,7 +21,7 @@ AudioSourceLowPassFilter::AudioSourceLowPassFilter (PositionableAudioSource * po
     currentSpacialPosition (),
     iirFilter()
 {
-	DEB("AudioSourceLowPassFilter: constructor called.");
+	// DEB("AudioSourceLowPassFilter: constructor called.");
   
     // Define an initial spacial envelope.
     Array<SpacialEnvelopePoint> initialSpacialEnvelope;
@@ -34,7 +34,7 @@ AudioSourceLowPassFilter::AudioSourceLowPassFilter (PositionableAudioSource * po
 
 AudioSourceLowPassFilter::~AudioSourceLowPassFilter()
 {
-	DEB("AudioSourceLowPassFilter: destructor called.");
+	// DEB("AudioSourceLowPassFilter: destructor called.");
 }
 
 /** Implementation of the AudioSource method. */
@@ -136,8 +136,8 @@ bool AudioSourceLowPassFilter::isLooping () const
 
 void AudioSourceLowPassFilter::setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)
 {
-    DEB("AudioSourceLowPassFilter::setSpacialEnvelope called.\n"
-        "AudioSourceLowPassFilter: newSpacialEnvelope.size() = " + String(newSpacialEnvelope_.size()))
+    //DEB("AudioSourceLowPassFilter::setSpacialEnvelope called.\n"
+    //    "AudioSourceLowPassFilter: newSpacialEnvelope.size() = " + String(newSpacialEnvelope_.size()))
     
 	if (newSpacialEnvelope_.size() != 0)
 	{
@@ -182,7 +182,7 @@ void AudioSourceLowPassFilter::setSpacialEnvelope (const Array<SpacialEnvelopePo
 
 void AudioSourceLowPassFilter::setSource (PositionableAudioSource * positionableAudioSource_)
 {
-    DEB("AudioSourceLowPassFilter: setSource called")
+    // DEB("AudioSourceLowPassFilter: setSource called")
     
     positionableAudioSource = positionableAudioSource_;
     positionableAudioSource->setNextReadPosition(nextPlayPosition);

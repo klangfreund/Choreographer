@@ -27,7 +27,7 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
     currentSpacialPosition (),
     sourceBuffer(1,0)
 {
-	DEB("AudioSourceDopplerEffect: constructor called.");
+	// DEB("AudioSourceDopplerEffect: constructor called.");
     
     sourceInfo.buffer = &sourceBuffer;
     oneOverSampleRate = 1/sampleRate_;
@@ -45,18 +45,18 @@ AudioSourceDopplerEffect::AudioSourceDopplerEffect (AudioSourceGainEnvelope& aud
     // But I couldn't figure out a more elegant solution...
     recalculateH(sampleRate_);
     
-    // Temp
-    DEB("AudioSourceDopplerEffect constructor: ")
-    for (double k = -halfTheInterpolationOrder; k < halfTheInterpolationOrder + 1.0; k += 0.1)
-    {
-        DEB("h(" + String(k) + ") = " + String(h(k)))
-    }
+    // // Temp
+    // DEB("AudioSourceDopplerEffect constructor: ")
+    // for (double k = -halfTheInterpolationOrder; k < halfTheInterpolationOrder + 1.0; k += 0.1)
+    // {
+    //     DEB("h(" + String(k) + ") = " + String(h(k)))
+    // }
     
 }
 
 AudioSourceDopplerEffect::~AudioSourceDopplerEffect()
 {
-	DEB("AudioSourceDopplerEffect: destructor called.");
+	// DEB("AudioSourceDopplerEffect: destructor called.");
 }
 
 /** Implementation of the AudioSource method. */
@@ -88,10 +88,10 @@ void AudioSourceDopplerEffect::setNextReadPosition (int64 newPosition)
 	// of the last audio block
 	if (newPosition != audioBlockEndPosition)
 	{
-		DEB("AudioSourceDopplerEffect.setNextReadPosition: newPosition = "
-            + String(newPosition))
-		DEB("AudioSourceDopplerEffect.setNextReadPosition: expected newPosition: " 
-			+ String(audioBlockEndPosition))
+		// DEB("AudioSourceDopplerEffect.setNextReadPosition: newPosition = "
+        //     + String(newPosition))
+		// DEB("AudioSourceDopplerEffect.setNextReadPosition: expected newPosition: " 
+		// 	+ String(audioBlockEndPosition))
 		
         if (!constantSpacialPosition)
         {
@@ -720,7 +720,7 @@ bool AudioSourceDopplerEffect::isLooping () const
 
 void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePoint>& newSpacialEnvelope_)
 {
-    DEB("AudioSourceDopplerEffect: setSpacialEnvelope called")
+    // DEB("AudioSourceDopplerEffect: setSpacialEnvelope called")
 	
 	if (newSpacialEnvelope_.size() != 0)
 	{
@@ -900,14 +900,14 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
         // Add the points from closestPointsInBetween to the newSpacialEnvelope.
         if (closestPointsInBetween.size() > 0)
         {
-            // start debugging
-            for (int i=0; i!=closestPointsInBetween.size(); ++i)
-            {
-                DEB("AudioSourceDopplerEffect: setSpacialEnvelope:")
-                DEB("closestPointsInBetween[" + String(i) + "]->getPosition() ="
-                    + String(closestPointsInBetween[i]->getPosition()))
-            }
-            // end debugging
+//            // start debugging
+//            for (int i=0; i!=closestPointsInBetween.size(); ++i)
+//            {
+//                DEB("AudioSourceDopplerEffect: setSpacialEnvelope:")
+//                DEB("closestPointsInBetween[" + String(i) + "]->getPosition() ="
+//                    + String(closestPointsInBetween[i]->getPosition()))
+//            }
+//            // end debugging
             
             // Add the newly found points to the newSpacialEnvelope.
             newSpacialEnvelope.addCopiesOf(closestPointsInBetween);
@@ -916,12 +916,12 @@ void AudioSourceDopplerEffect::setSpacialEnvelope (const Array<SpacialEnvelopePo
             newSpacialEnvelope.sort(spacialEnvelopePointPointerComparator);
             
             // start debugging
-            for (int i=0; i!=newSpacialEnvelope.size(); ++i)
-            {
-                DEB("AudioSourceDopplerEffect: setSpacialEnvelope:")
-                DEB("newSpacialEnvelope[" + String(i) + "]->getPosition() ="
-                    + String(newSpacialEnvelope[i]->getPosition()))
-            }
+//            for (int i=0; i!=newSpacialEnvelope.size(); ++i)
+//            {
+//                DEB("AudioSourceDopplerEffect: setSpacialEnvelope:")
+//                DEB("newSpacialEnvelope[" + String(i) + "]->getPosition() ="
+//                    + String(newSpacialEnvelope[i]->getPosition()))
+//            }
             // end debugging
             
         }

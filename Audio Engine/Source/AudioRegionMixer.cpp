@@ -98,11 +98,16 @@ bool AudioRegionMixer::addRegion (const int& regionID,
              bufferingEnabled);		
 		audioRegionToAdd->audioSourceAmbipanning = audioSourceAmbipanning;
 		
-		// add the region
-		regions.add(audioRegionToAdd);
-		
 		// prepare it to be played
 		audioRegionToAdd->audioSourceAmbipanning->prepareToPlay(samplesPerBlockExpected, sampleRate);
+        
+        // This look is needed since we don't want to change the regions
+        // array the same time it could be used it the getNextAudioBlock
+        // method.
+        const ScopedLock sl (lock);
+        
+		// add the region
+		regions.add(audioRegionToAdd);
 		
 		// update totalLength, if needed
 		if (totalLength < endPosition )
@@ -121,18 +126,25 @@ bool AudioRegionMixer::modifyRegion (const int& regionID,
                                      const int& newEndPosition,
                                      const int& newStartPositionOfAudioFileInTimeline)
 {
-    DEB("AudioRegionMixer: modifyRegion called.\n"
+    DEB("AudioRegionMixer::modifyRegion called.\n"
         "regionID = " + String(regionID) +
         ", newStartPosition = " + String(newStartPosition) +
         ", newEndPosition = " + String(newEndPosition) +
         ", newStartPositionOfAudioFileInTimeline = " +
         String(newStartPositionOfAudioFileInTimeline));
+    
+    DEB("AudioRegionMixer: regions.size() = " + String(regions.size()))
 	
 	int index;
 	bool foundTheRegion = findRegion(regionID, index);
 	
 	if (foundTheRegion)
 	{
+        // This look is needed since we don't want to change the regions
+        // array the same time it could be used it the getNextAudioBlock
+        // method.
+        const ScopedLock sl (lock);
+        
 		AudioRegion* audioRegionToModify = (AudioRegion*)regions[index];
 		
 		// check if this input set is invalid
@@ -178,6 +190,11 @@ bool AudioRegionMixer::removeRegion (const int regionID)
 	
 	if (foundTheRegion)
 	{
+        // This look is needed since we don't want to change the regions
+        // array the same time it could be used it the getNextAudioBlock
+        // method.
+        const ScopedLock sl (lock);
+        
 		AudioRegion* audioRegionToDelete = (AudioRegion*)regions[index];
 		delete audioRegionToDelete->audioSourceAmbipanning;
 		delete audioRegionToDelete;
@@ -198,7 +215,10 @@ void AudioRegionMixer::removeAllRegions ()
 {
 	DEB("AudioRegionMixer: removeAllRegions called.");
 	
-	const ScopedLock sl (lock);
+    // This look is needed since we don't want to change the regions
+    // array the same time it could be used it the getNextAudioBlock
+    // method.
+    const ScopedLock sl (lock);
 	
 	// Deallocate memory...
 	for (int i = 0; i < regions.size(); i++)
@@ -501,6 +521,11 @@ void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
             AudioRegion* currentAudioRegion;
             const int startOfThisChunk = nextPlayPosition;
             const int endOfThisChunk = nextPlayPosition + info.numSamples;
+            
+            // This lock is needed because otherwise it would be possible to
+            // change the regions array from another method while going through
+            // the following for-loop
+            const ScopedLock sl (lock);
 
             for (int i = 0; i != regions.size(); ++i)
             {	
@@ -517,7 +542,7 @@ void AudioRegionMixer::getNextAudioBlock (const AudioSourceChannelInfo& info)
                     int numberOfSamplesOfCurrentRegionInThisChunk
                     = endPositionOfCurrentRegionInThisChunk - startPositionOfCurrentRegionInThisChunk;
                     
-                    // place the "virtual reading head" to the right position in the (multi channel) audio file
+                    // place the "virtual reading head" to the correct position in the (multi channel) audio file
                     currentAudioRegion->audioSourceAmbipanning->setNextReadPosition(
                         startPositionOfCurrentRegionInThisChunk - currentAudioRegion->startPositionOfAudioFileInTimeline);
                     

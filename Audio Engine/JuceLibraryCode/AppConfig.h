@@ -18,7 +18,7 @@
 
 // If you would like to set the DEBUG flag above but don't want the 
 // debug output of the audio engine, outcomment the next line:
-//#define AUDIO_ENGINE_DEBUG 1
+#define AUDIO_ENGINE_DEBUG 1
 
 
 //#define  JUCE_FORCE_DEBUG
