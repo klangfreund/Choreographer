@@ -373,9 +373,9 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 
                     // The main task of this method:
                     // Fill the samples.
-					while (currentPosition != audioBlockEndPosition)
+					while (currentPosition != audioBlockEndPosition) // Step through the samples
 					{
-						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) 
+						for (int channel = 0; channel < info.buffer->getNumChannels(); channel++) // Step through the channels
 						{
 							*sample[channel] *= channelFactor[channel];
 							sample.set(channel, sample[channel] + 1);
