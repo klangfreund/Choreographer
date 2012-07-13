@@ -55,8 +55,8 @@
 	[newBp setHasTime:hasTime];
     [newBp setTimeEditable:YES];
 	[newBp setValue:value];
-	[newBp setPosition:position];
-    [newBp setDescriptor:[descriptor copy]];
+	[newBp setPosition:[[position copy] autorelease]];
+    [newBp setDescriptor:[[descriptor copy] autorelease]];
 	
 	return newBp;
 }

@@ -90,8 +90,8 @@
 
 - (void)duplicateBreakpoint:(id)bp
 {
-	[positionBreakpointArray addBreakpoint:[bp copy]];
-	[parameterBreakpointArray addBreakpoint:[bp copy]];
+	[positionBreakpointArray addBreakpoint:[[bp copy] autorelease]];
+	[parameterBreakpointArray addBreakpoint:[[bp copy] autorelease]];
 }
 
 - (void)removeBreakpoint:(id)bp

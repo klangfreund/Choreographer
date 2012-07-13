@@ -77,7 +77,7 @@
 
 	[meterBridgeChannelStrips release];
 
-	NSArray *subviews = [[channelStripView subviews] copy];
+	NSArray *subviews = [[[channelStripView subviews] copy] autorelease];
 	for(NSView *view in subviews)
 	{
 		[view removeFromSuperview];
@@ -87,7 +87,7 @@
 
 	NSUInteger numberOfOutputChannels =  [[AudioEngine sharedAudioEngine] numberOfSpeakerChannels];
 
-	NSNib* nib = [[NSNib alloc] initWithNibNamed:@"MeterBridgeChannelStrip" bundle:nil] ;
+	NSNib* nib = [[[NSNib alloc] initWithNibNamed:@"MeterBridgeChannelStrip" bundle:nil] autorelease];
 	
 	NSRect r = [[self window] frame];
 	id item;

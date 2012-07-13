@@ -1113,7 +1113,7 @@
 
 - (Region *)makeCopyOf:(Region *)originalRegion
 {
-	Region *newRegion;
+	Region *newRegion = nil;
 	
 	if([originalRegion isKindOfClass:[AudioRegion class]])
 	{
@@ -1149,7 +1149,7 @@
 	}
 	
     // copy gain curve
-	BreakpointArray *gainBreakpointArray = [[originalRegion valueForKey:@"gainBreakpointArray"] copy];
+	BreakpointArray *gainBreakpointArray = [[[originalRegion valueForKey:@"gainBreakpointArray"] copy] autorelease];
 	[newRegion setValue:gainBreakpointArray forKey:@"gainBreakpointArray"];
 
 
@@ -1589,7 +1589,7 @@
 
 - (void)mouseUp:(NSEvent *)event
 {
-	Region *aRegion, *region1;
+	Region *aRegion, *region1 = nil;
 
     if(draggingDirtyFlag)
     {
@@ -1686,7 +1686,7 @@
 	
 
 	
-	[SelectionRectangle release];
+	[SelectionRectangle dispose];
 	
 	[tempSelectedRegions release];
 	tempSelectedRegions = nil;
@@ -2669,10 +2669,6 @@
 - (void)recalcFrame
 {
 	NSRect frame;
-	float zoomFactorX, zoomFactorY;
-
-	zoomFactorX = [[[[self window] windowController] document] zoomFactorX];
-	zoomFactorY = [[[[self window] windowController] document] zoomFactorY];		
 
 	frame.origin.x = startTime;
 	frame.origin.y = yPosition;

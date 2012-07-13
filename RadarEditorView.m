@@ -847,10 +847,10 @@
 	
 	draggingOrigin.x = -1;
 
-	[SelectionRectangle release];
+	[SelectionRectangle dispose];
 	showSelectionRectangle = NO;
 
-	[ToolTip release];
+	[ToolTip dispose];
 
 	hit = nil;
 }

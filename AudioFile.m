@@ -61,12 +61,10 @@
 
 + (UInt64)dataPacketsOfAudioFile:(AudioFileID)audioFileID;
 {
-	OSStatus err;
-
 	UInt64 dataPackets;						
 	UInt32 propsize = sizeof(UInt64);
 
-	err = AudioFileGetProperty(audioFileID,
+	/* OSStatus err = */ AudioFileGetProperty(audioFileID,
 							   kAudioFilePropertyAudioDataPacketCount,
 							   &propsize,
 							   &dataPackets);
@@ -244,14 +242,14 @@
 
 - (void)relinkAudioFile
 {
-    NSUInteger actualDuration, proposedDuration;
-    id originalAudioItem; 
+    NSUInteger actualDuration, proposedDuration = 0;
+//    id originalAudioItem; 
 
 	for(id audioItem in [self valueForKey:@"audioItems"])
 	{
 		if([[audioItem valueForKey:@"isOriginal"] boolValue])
 		{
-            originalAudioItem = audioItem;
+//            originalAudioItem = audioItem;
             proposedDuration = [[audioItem valueForKey:@"duration"] unsignedLongValue];
             break;
 		}
@@ -418,8 +416,8 @@
 		
 		y1 /= ceil(stepsize);
 		y1 *= overviewHeight * 0.5;
-		y2 /= ceil(stepsize);
-		y2 *= overviewHeight * 0.5;
+//		y2 /= ceil(stepsize);
+//		y2 *= overviewHeight * 0.5;
 		[waveformPath moveToPoint: NSMakePoint(i, overviewBaseline + y1)];
 		[waveformPath lineToPoint: NSMakePoint(i, overviewBaseline - y1)];
 	}

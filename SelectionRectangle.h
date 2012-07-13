@@ -15,7 +15,7 @@
 }
 
 + (id)sharedSelectionRectangle;
-+ (void)release;
++ (void)dispose;
 - (void)addRectangleWithOrigin:(NSPoint)pt forView:(NSView *)view;
 - (void)setCurrentMousePosition:(NSPoint)pt;
 - (void)setCurrentMouseDelta:(NSPoint)delta;
