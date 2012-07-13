@@ -291,12 +291,26 @@ public:
 	
 private:
 	/**
-	 Figures out between which audioEnvelopePoints we are right now
-	 and sets up nextSpacialPointIndex, previousSpacialPoint and nextSpacialPoint.
-	 It also calculates the values of the float-arrays channelFactorAtPreviousSpacialPoint,
-	 channelFactorAtNextSpacialPoint, channelFactorDelta and channelFactor.
+	 It figures out the following parameters given the newPosition and
+     the nextSpacialPointIndex:
+     - nextSpacialPointIndex (if it was specified too low)
+     - previousSpacialPoint
+     - nextSpacialPoint
+     - positionOfNextPoint
+     - channelFactorAtNextPoint
+     
+     Ensure the *nextSpacialPointIndex_ is really the next one seen from the
+     newPosition, or set it to 1 if there is doubt.
+     
+     @param newPosition             The position in time (in samples) of interest.
+     @param nextSpacialPointIndex_  Will be modified.
+     This must be lower or equal to the index of
+     the next spacial point in the envelope.
+     If the value is lower, then it will be
+     increased until it is this index.
 	 */
-	inline void prepareForNewPosition (int newPosition);
+	inline void prepareForNewPosition (int newPosition,
+                                       int * nextSpacialPointIndex_);
 	
 	/**
 	 Calculates the distanceGain and the modifiedOrder,

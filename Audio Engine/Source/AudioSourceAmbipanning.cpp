@@ -251,9 +251,12 @@ void AudioSourceAmbipanning::getNextAudioBlock (const AudioSourceChannelInfo& in
 		else
 		{
 			constantSpacialPosition = false;
-			prepareForNewPosition(audioBlockEndPosition);
-                // The variables are set up for the
-                // next call of getNextAudioBlock(..)
+            
+            // Set up the variables for the
+            // next call of getNextAudioBlock(..)
+            nextSpacialPointIndex = 1;
+			prepareForNewPosition(nextPlayPosition,
+                                  &nextSpacialPointIndex);
             channelFactor = channelFactorAtNextPoint;
                 // The channelFactor is used a couple of lines below
                 // for the applyGainRamp(...). 
@@ -479,7 +482,9 @@ void AudioSourceAmbipanning::setNextReadPosition (int64 newPosition)
 		
 		// figure out between which audioEnvelopePoints we are right now
 		// and set up all variables needed by getNextAudioBlock(..)
-		prepareForNewPosition(newPosition);	
+		nextSpacialPointIndex = 1;
+        prepareForNewPosition(nextPlayPosition,
+                              &nextSpacialPointIndex);;	
 	}
 	
 	nextPlayPosition = newPosition;
@@ -648,7 +653,8 @@ void AudioSourceAmbipanning::setDistanceModeTo2(double centerRadius_,
 	outsideCenterExponent = outsideCenterExponent_;
 }
 
-inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
+inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition,
+                                                          int * nextSpacialPointIndex_)
 {
     if (!constantSpacialPosition)
     { 
@@ -657,11 +663,11 @@ inline void AudioSourceAmbipanning::prepareForNewPosition(int newPosition)
         nextSpacialPointIndex = 1; // since the first spacialEnvelopePoint has to be at position 0.
         while (spacialEnvelope[nextSpacialPointIndex]->getPosition() <= newPosition)
         {
-            nextSpacialPointIndex++;
+            (*nextSpacialPointIndex_)++;
         }
         
-        previousSpacialPoint = spacialEnvelope[nextSpacialPointIndex - 1];
-        nextSpacialPoint = spacialEnvelope[nextSpacialPointIndex];
+        previousSpacialPoint = spacialEnvelope[*nextSpacialPointIndex_ - 1];
+        nextSpacialPoint = spacialEnvelope[*nextSpacialPointIndex_];
         
         // The array channelFactorAtNextPoint should correspond
         // to the newPosition. We have to figure out its values.

@@ -79,8 +79,8 @@ public:
 private:
 	/**
 	 It figures out the other parameters given the newPosition.
-     Either the *nextSpacialPointIndex_ is really the next one seen from the
-     newPosition, or in needs to be set to 1 before calling this.
+     Ensure the *nextSpacialPointIndex_ is really the next one seen from the
+     newPosition, or set it to 1 if there is doubt.
      
      @param newPosition             The position in time (in samples) of interest.
      @param nextSpacialPointIndex_  Will be modified.
@@ -98,10 +98,6 @@ private:
      @param currentSpacialPosition_ Will be modified.
                                     The position in space of the point at the
                                     time position newPosition.
-     @param deltaSpacialPosition_   Will be modified.
-                                    The difference in space of two adjecent
-                                    samples between the previousSpacialPoint_
-                                    and the nextSpacialPoint_.
 	 */
 	inline void prepareForNewPosition (int newPosition,
                                        int * nextSpacialPointIndex_,
