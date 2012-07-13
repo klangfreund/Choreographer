@@ -1,0 +1,75 @@
+{
+    "content": {
+        "001": {
+            "title": "Get started"
+        },
+        "002": {
+            "title": "Editors"
+        },
+        "003": {
+            "title": "Menu Reference"
+        },
+        "004": {
+            "title": "More..."
+        },
+        "101": {
+            "title": "About Choreographer",
+            "content": "<p>Choreographer is a sequencer / composition environment for spatial music. It is aimed at composers or sound artists seeking a flexible and intuitive tool for 3D sound source placement.</p><p>The audio rendering engine which is integrated in this software, is designed for sound spatialisation in Ambisonics and implements Ambisonics Equivalent Panning, a technique conceived at the ICST.</p>"
+        },
+        "102": {
+            "title": "Create a new project",
+            "content": "<p>Open Choreographer and select <em>New project...</em> from the File Menu (cmd-N). This opens a new window where you can name your project and select where to save it and set the sample rate.</p><p>It is recommendable but not necessary to keep the project file and all audio files in the same folder.</p>"
+        },
+        "103": {
+            "title": "Import audio",
+            "content": "<p>Select <em>Import audio...</em> from the File Menu (cmd-shift-I) or drag the audio files directly to the arranger window from the finder.</p><p>Audio files must be mono and match the project's sample rate</p>"
+        },
+        "104": {
+            "title": "Place audio in time",
+            "content": "Drag the audio regions from the pool in the arranger window.</p><p><img src='../img/arranger_pool.png' /></p><p>Unlike other audio programs, this software does not follow a multitrack tape recorder model. The arranger window is a blank canvas. The user is encouraged to arrange their audio regions freely in whatever formation (eg. groups, layers, clouds) they best represent the underlying artistic idea.</p><p>The are a few possibilities to edit audio regions (cut, split, crop). But there are no further facilities for sound design (eg. plugins or effects).</p>",
+            "related": ["201"]
+        },
+        "105": {
+            "title": "Place audio in space",
+            "content": "<p>Select the audio region(s) to be spatialized in the arranger.</p><p>Open the radar editor window (chose <em>Radar Editor</em> from the <em>Windows</em> menu or press cmd-2)</p><p>Make sure the editor is set to region mode <img src='../img/region_mode.png' /></p><p>Drag the audio region to its intended position.</p><p><img src='../img/radar_editor.png' /></p><p>If you prefer to have numeric control over the positions of the audio regions, open the table editor window (chose <em>Table Editor</em> from the <em>Windows</em> menu or press cmd-3).</p><p><img src='../img/table_editor_regions.png' /></p>",
+            "related": ["202","203"]
+        },
+        "106": {
+            "title": "Move audio in space",
+            "content": "--"
+        },
+        "201": {
+            "title": "Main arranger window",
+            "content": "<p>Arrange audio regions in time.</p><img src='../img/arranger_pool.png' /></p>"
+        },
+        "202": {
+            "title": "Radar editor window",
+            "content": "<p><img src='../img/playhead_mode.png' align='left' hspace='5' />In playhead mode you can monitor the position of each audio regions at the current time (ie. under the playhead).</p><p><img src='../img/region_mode.png' align='left' hspace='5' />In region mode you can edit the position of audio regions selected in the arranger or trajectories that are selected in the pool.</p><p><img src='../img/radar_editor.png' /></p>",
+            "related": ["203","204"]
+        },
+        "203": {
+            "title": "Table editor window",
+            "content": "<p><img src='../img/playhead_mode.png' align='left' hspace='5' />In playhead mode you can monitor the position of each audio regions at the current time (ie. under the playhead).</p><p><img src='../img/region_mode.png' align='left' hspace='5' />In region mode you can edit the position of audio regions selected in the arranger or trajectories that are selected in the pool.</p><p><img src='../img/table_editor_regions.png' /></p>",
+            "related": ["202","204"]
+        },
+        "204": {
+            "title": "Timeline editor window",
+            "content": "--"
+        },
+        "401": {
+            "title": "Ambisonics equivalent panning",
+            "content": "<p>Ambisonics is a surround-system for encoding and rendering a 3D sound field. The encoding can be carried out in an arbitrary degree of accuracy (the so-called order).</p><p>Normally, Ambisonics requires two processing steps. First, the sound is encoded and converted into a multi- channel format that carries all spatial information. Second, this multi-channel format is decoded for playback, ie converted in discrete speaker signals. Ambisonics Equivalent Panning (AEP) uses a function that is equivalent to the result of a concatenation of encoding and decoding, which takes less computing power.</p>"
+        },
+        "402": {
+            "title": "SpatDIF",
+            "content": "<p>Spatial sound description interchange format.</p><p>More information: <a href='http://spatdif.org'>spatdif.org</a></p>"
+        }
+    },
+    "navigation": {
+        "001": ["101","102","103","104","105","106"],
+        "002": ["201","202","203","204"],
+        "003": [],
+        "004": ["401","402"]
+    }
+}
+

@@ -1270,7 +1270,7 @@
 
 - (BOOL)becomeFirstResponder
 {
-	NSLog(@"ArrangerView -- becomeFirstResponder...");
+//	NSLog(@"ArrangerView -- becomeFirstResponder...");
 	return YES;
 }
 

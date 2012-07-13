@@ -53,7 +53,7 @@
 	[newBp setBreakpointType:breakpointType];
     [newBp setTime:time];
 	[newBp setHasTime:hasTime];
-    [newBp setTimeEditable:timeEditable];
+    [newBp setTimeEditable:YES];
 	[newBp setValue:value];
 	[newBp setPosition:position];
     [newBp setDescriptor:[descriptor copy]];

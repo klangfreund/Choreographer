@@ -78,7 +78,8 @@ static EditorContent *sharedEditorContent = nil;
 	
 	// get selected regions from arranger window
 	[selectedAudioRegions release];
-	selectedAudioRegions = [[[arranger valueForKey:@"selectedAudioRegions"] sortedArrayUsingDescriptors:nil] retain];
+	NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"startTime" ascending:YES];
+	selectedAudioRegions = [[[arranger valueForKey:@"selectedAudioRegions"] sortedArrayUsingDescriptors:[NSArray arrayWithObject:sortDescriptor]] retain];
 	
 	// get all regions from arranger window
 	[allAudioRegions release];
@@ -117,7 +118,7 @@ static EditorContent *sharedEditorContent = nil;
 	
 	if([[NSUserDefaults standardUserDefaults] integerForKey:@"editorContentMode"] == 0)
 	{
-        displayMode = locatorDisplayMode;
+        displayMode = playheadDisplayMode;
         [infoString setString:[NSString stringWithFormat:@"%@ @locator %ld", projectName, locator]];
 
 		NSMutableArray *tempArray = [[[NSMutableArray alloc] init] autorelease];

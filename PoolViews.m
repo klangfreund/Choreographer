@@ -31,7 +31,7 @@
 
 -(BOOL)becomeFirstResponder
 {
-    NSLog(@"Pool Outline View -- becomeFirstResponder...");
+//    NSLog(@"Pool Outline View -- becomeFirstResponder...");
 	hasFocus = YES;
 	return YES;
 }
