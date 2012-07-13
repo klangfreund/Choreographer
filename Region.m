@@ -117,10 +117,8 @@
 	
 	// color
 	NSColor *backgroundColor;
-	NSColor *frameColor;
 	
 	color = [self color];
-	frameColor	= color;
 
 	if([[self valueForKey:@"selected"] boolValue])
 	{

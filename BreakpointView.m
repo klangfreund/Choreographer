@@ -54,7 +54,7 @@
 {
 	NSPoint p1, p2;
 	BreakpointBezierPath *breakpointBezierPath;
-	double xAxisValue, yAxisValue;
+	double xAxisValue, yAxisValue = 0;
 	Breakpoint *bp;
 //	double halfHandleSize = [BreakpointBezierPath handleSize] * 0.5;
 	
@@ -99,7 +99,7 @@
 
 	NSArray *keys = [NSArray arrayWithObjects:NSFontAttributeName, NSForegroundColorAttributeName, nil];
 	NSArray *values = [NSArray arrayWithObjects:[NSFont systemFontOfSize:16], [NSColor colorWithCalibratedWhite:0.25 alpha:0.5], nil];
-	NSDictionary *attributes = [[NSDictionary dictionaryWithObjects:values forKeys:keys] retain];
+	NSDictionary *attributes = [NSDictionary dictionaryWithObjects:values forKeys:keys];// retain];
 	[label drawAtPoint:NSMakePoint(rect.origin.x + 2, rect.origin.y + 2) withAttributes:attributes];
 
 
@@ -392,9 +392,9 @@
         [self performUpdateCallback];
     }
 
-	[ToolTip release];
+	[ToolTip dispose];
 
-	[SelectionRectangle release];
+	[SelectionRectangle dispose];
 	showSelectionRectangle = NO;
 }
 

@@ -21,7 +21,7 @@ static SelectionRectangle	*sharedSelectionRectangle = nil;
 	return sharedSelectionRectangle;
 }
 
-+ (void)release
++ (void)dispose
 {
     [sharedSelectionRectangle removeFromSuperview];
     [sharedSelectionRectangle release];

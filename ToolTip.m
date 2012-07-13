@@ -34,7 +34,7 @@ static ToolTip	*sharedToolTip = nil;
 	return sharedToolTip;
 }
 
-+ (void)release
++ (void)dispose
 {
     [sharedToolTip dealloc];
     sharedToolTip = nil;

@@ -45,7 +45,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     BreakpointArray *copy = [[[self class] allocWithZone: zone] init];
-    [copy setBreakpoints:[[self breakpoints] mutableCopyWithZone:zone]];
+    [copy setBreakpoints:[[[self breakpoints] mutableCopyWithZone:zone] autorelease]];
     return copy;
 }
 
@@ -101,7 +101,7 @@
 
 - (void)cropStart:(float)start duration:(float)duration
 {
-	NSMutableArray *tempArray = [breakpoints copy];
+	NSMutableArray *tempArray = [[breakpoints copy] autorelease];
     Breakpoint *bp;
     
     float startValue = [self interpolatedValueAtTime:start];
@@ -160,7 +160,7 @@
 {
     if([breakpoints count] == 1) return [breakpoints objectAtIndex:0];
     
-    Breakpoint *bp1, *bp2;
+    Breakpoint *bp1 = nil, *bp2 = nil;
     
     for(Breakpoint *bp in breakpoints)
     {
@@ -187,7 +187,7 @@
 
 - (float)interpolatedValueAtTime:(NSUInteger)time
 {
-    Breakpoint *bp1, *bp2 = nil;
+    Breakpoint *bp1 = nil, *bp2 = nil;
     
     if([breakpoints count] == 1 || time == 0)
         return [(Breakpoint *)[breakpoints objectAtIndex:0] value];

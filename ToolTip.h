@@ -24,7 +24,7 @@
 }
 
 + (id)sharedToolTip;
-+ (void)release;
++ (void)dispose;
 - (void)setString:(NSString *)string inView:(NSView *)view;
 
 @end

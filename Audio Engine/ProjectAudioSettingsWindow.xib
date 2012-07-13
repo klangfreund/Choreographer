@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.10">
 	<data>
-		<int key="IBDocument.SystemTarget">1070</int>
-		<string key="IBDocument.SystemVersion">11D50b</string>
-		<string key="IBDocument.InterfaceBuilderVersion">1617</string>
-		<string key="IBDocument.AppKitVersion">1138.32</string>
-		<string key="IBDocument.HIToolboxVersion">568.00</string>
+		<int key="IBDocument.SystemTarget">1060</int>
+		<string key="IBDocument.SystemVersion">11E53</string>
+		<string key="IBDocument.InterfaceBuilderVersion">2182</string>
+		<string key="IBDocument.AppKitVersion">1138.47</string>
+		<string key="IBDocument.HIToolboxVersion">569.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin</string>
-			<string key="NS.object.0">1617</string>
+			<string key="NS.object.0">2182</string>
 		</object>
 		<object class="NSArray" key="IBDocument.IntegratedClassDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -32,11 +32,8 @@
 			<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 		</object>
 		<object class="NSMutableDictionary" key="IBDocument.Metadata">
-			<bool key="EncodedWithXMLCoder">YES</bool>
-			<object class="NSArray" key="dict.sortedKeys" id="0">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-			</object>
-			<reference key="dict.values" ref="0"/>
+			<string key="NS.key.0">PluginDependencyRecalculationVersion</string>
+			<integer value="1" key="NS.object.0"/>
 		</object>
 		<object class="NSMutableArray" key="IBDocument.RootObjects" id="1000">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -69,7 +66,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{17, 228}, {197, 18}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="464575710"/>
 							<string key="NSReuseIdentifierKey">_NS:239</string>
 							<bool key="NSEnabled">YES</bool>
@@ -102,10 +98,9 @@
 						<object class="NSButton" id="901331792">
 							<reference key="NSNextResponder" ref="363169774"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{18, 127}, {197, 18}}</string>
+							<string key="NSFrame">{{18, 127}, {164, 18}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView" ref="416498190"/>
+							<reference key="NSNextKeyView" ref="139943287"/>
 							<string key="NSReuseIdentifierKey">_NS:239</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="23935473">
@@ -130,7 +125,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{18, 464}, {197, 18}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="785838636"/>
 							<string key="NSReuseIdentifierKey">_NS:239</string>
 							<bool key="NSEnabled">YES</bool>
@@ -166,7 +160,6 @@
 											<int key="NSvFlags">267</int>
 											<string key="NSFrame">{{235, 149}, {235, 22}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="901529546"/>
 											<bool key="NSEnabled">YES</bool>
 											<object class="NSPopUpButtonCell" key="NSCell" id="891964682">
@@ -234,7 +227,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{18, 151}, {34, 19}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="653371891"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -258,7 +250,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -283,9 +275,11 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<object class="NSDictionary" key="NSAttributes" id="487816371">
+														<object class="NSDictionary" key="NSAttributes" id="490685692">
 															<bool key="EncodedWithXMLCoder">YES</bool>
-															<reference key="dict.sortedKeys" ref="0"/>
+															<object class="NSArray" key="dict.sortedKeys" id="0">
+																<bool key="EncodedWithXMLCoder">YES</bool>
+															</object>
 															<reference key="dict.values" ref="0"/>
 														</object>
 													</object>
@@ -310,7 +304,7 @@
 													<int key="NSColorSpace">6</int>
 													<string key="NSCatalogName">System</string>
 													<string key="NSColorName">textBackgroundColor</string>
-													<object class="NSColor" key="NSColor">
+													<object class="NSColor" key="NSColor" id="610662641">
 														<int key="NSColorSpace">3</int>
 														<bytes key="NSWhite">MQA</bytes>
 													</object>
@@ -331,7 +325,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{57, 153}, {94, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="523828110"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -355,7 +348,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -378,7 +371,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="1" key="NS.max"/>
@@ -418,7 +411,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{18, 96}, {34, 19}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="545686558"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -441,7 +433,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -463,7 +455,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<object class="NSDecimalNumberPlaceholder" key="NS.max" id="1025039849">
@@ -498,7 +490,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{57, 98}, {158, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="8327439"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -518,7 +509,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{18, 119}, {34, 19}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="298122905"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -541,7 +531,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -563,7 +553,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<reference key="NS.min" ref="1025039849"/>
 													<real value="0.0" key="NS.max"/>
@@ -591,7 +581,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{57, 121}, {128, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="243619789"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -611,7 +600,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{235, 119}, {34, 19}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="6913781"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -634,7 +622,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -656,7 +644,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<reference key="NS.min" ref="1025039849"/>
 													<real value="0.0" key="NS.max"/>
@@ -684,7 +672,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{274, 121}, {91, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="767684888"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -704,7 +691,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{235, 96}, {34, 19}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="614731680"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -727,7 +713,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -749,7 +735,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<reference key="NS.max" ref="1025039849"/>
@@ -777,7 +763,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{274, 98}, {121, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="113659439"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -797,7 +782,6 @@
 											<int key="NSvFlags">10</int>
 											<string key="NSFrame">{{20, 14}, {450, 66}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="828167722"/>
 											<string key="NSReuseIdentifierKey">_NS:499</string>
 											<string key="NSClassName">AttenuationCurveView</string>
@@ -807,7 +791,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{15, 182}, {119.99072265625, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="866573081"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -831,7 +814,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{232, 182}, {119.99072265625, 14}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="125751128"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -851,7 +833,6 @@
 											<int key="NSvFlags">12</int>
 											<string key="NSFrame">{{217, 98}, {5, 98}}</string>
 											<reference key="NSSuperview" ref="429193765"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="152959278"/>
 											<string key="NSReuseIdentifierKey">_NS:1557</string>
 											<string key="NSOffsets">{0, 0}</string>
@@ -874,14 +855,12 @@
 									</object>
 									<string key="NSFrame">{{1, 1}, {491, 208}}</string>
 									<reference key="NSSuperview" ref="785838636"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="424763258"/>
 									<string key="NSReuseIdentifierKey">_NS:632</string>
 								</object>
 							</object>
 							<string key="NSFrame">{{17, 248}, {493, 210}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="429193765"/>
 							<string key="NSReuseIdentifierKey">_NS:630</string>
 							<string key="NSOffsets">{0, 0}</string>
@@ -917,7 +896,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{18, 26}, {58, 19}}</string>
 											<reference key="NSSuperview" ref="193550427"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="923825790"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -940,7 +918,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -962,7 +940,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<reference key="NS.max" ref="1025039849"/>
@@ -990,7 +968,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{86, 28}, {218, 14}}</string>
 											<reference key="NSSuperview" ref="193550427"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="901331792"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -1014,7 +991,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -1037,7 +1014,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="1" key="NS.max"/>
@@ -1062,14 +1039,12 @@
 									</object>
 									<string key="NSFrame">{{1, 1}, {491, 68}}</string>
 									<reference key="NSSuperview" ref="464575710"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="463440670"/>
 									<string key="NSReuseIdentifierKey">_NS:632</string>
 								</object>
 							</object>
 							<string key="NSFrame">{{18, 154}, {493, 70}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="193550427"/>
 							<string key="NSReuseIdentifierKey">_NS:630</string>
 							<string key="NSOffsets">{0, 0}</string>
@@ -1105,7 +1080,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{18, 26}, {58, 19}}</string>
 											<reference key="NSSuperview" ref="265813"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="401342047"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -1129,7 +1103,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -1152,7 +1126,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="30" key="NS.max"/>
@@ -1180,7 +1154,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{81, 28}, {112, 14}}</string>
 											<reference key="NSSuperview" ref="265813"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="378028104"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -1204,7 +1177,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -1227,7 +1200,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="1" key="NS.max"/>
@@ -1254,7 +1227,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{235, 26}, {58, 19}}</string>
 											<reference key="NSSuperview" ref="265813"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="29528280"/>
 											<string key="NSReuseIdentifierKey">_NS:248</string>
 											<bool key="NSEnabled">YES</bool>
@@ -1278,7 +1250,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -1301,7 +1273,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="102" key="NS.max"/>
@@ -1329,7 +1301,6 @@
 											<int key="NSvFlags">268</int>
 											<string key="NSFrame">{{298, 28}, {115, 14}}</string>
 											<reference key="NSSuperview" ref="265813"/>
-											<reference key="NSWindow"/>
 											<reference key="NSNextKeyView" ref="512833490"/>
 											<string key="NSReuseIdentifierKey">_NS:3936</string>
 											<bool key="NSEnabled">YES</bool>
@@ -1353,7 +1324,7 @@
 															<string>numberStyle</string>
 															<string>positiveInfinitySymbol</string>
 														</object>
-														<object class="NSMutableArray" key="dict.values">
+														<object class="NSArray" key="dict.values">
 															<bool key="EncodedWithXMLCoder">YES</bool>
 															<boolean value="YES"/>
 															<integer value="1040"/>
@@ -1376,7 +1347,7 @@
 													</object>
 													<object class="NSAttributedString" key="NS.nan">
 														<string key="NSString">NaN</string>
-														<reference key="NSAttributes" ref="487816371"/>
+														<reference key="NSAttributes" ref="490685692"/>
 													</object>
 													<real value="0.0" key="NS.min"/>
 													<real value="1" key="NS.max"/>
@@ -1401,14 +1372,12 @@
 									</object>
 									<string key="NSFrame">{{1, 1}, {491, 68}}</string>
 									<reference key="NSSuperview" ref="416498190"/>
-									<reference key="NSWindow"/>
 									<reference key="NSNextKeyView" ref="639843193"/>
 									<string key="NSReuseIdentifierKey">_NS:632</string>
 								</object>
 							</object>
 							<string key="NSFrame">{{18, 53}, {493, 70}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="265813"/>
 							<string key="NSReuseIdentifierKey">_NS:630</string>
 							<string key="NSOffsets">{0, 0}</string>
@@ -1434,7 +1403,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{127, 514}, {98, 14}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="815660553"/>
 							<string key="NSReuseIdentifierKey">_NS:3936</string>
 							<bool key="NSEnabled">YES</bool>
@@ -1454,7 +1422,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{20, 512}, {96, 19}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
 							<reference key="NSNextKeyView" ref="673566686"/>
 							<string key="NSReuseIdentifierKey">_NS:1476</string>
 							<bool key="NSEnabled">YES</bool>
@@ -1476,7 +1443,7 @@
 											<string>numberStyle</string>
 											<string>positiveInfinitySymbol</string>
 										</object>
-										<object class="NSMutableArray" key="dict.values">
+										<object class="NSArray" key="dict.values">
 											<bool key="EncodedWithXMLCoder">YES</bool>
 											<boolean value="YES"/>
 											<integer value="1040"/>
@@ -1498,7 +1465,7 @@
 									</object>
 									<object class="NSAttributedString" key="NS.nan">
 										<string key="NSString">NaN</string>
-										<reference key="NSAttributes" ref="487816371"/>
+										<reference key="NSAttributes" ref="490685692"/>
 									</object>
 									<real value="0.0" key="NS.min"/>
 									<reference key="NS.max" ref="1025039849"/>
@@ -1526,8 +1493,6 @@
 							<int key="NSvFlags">268</int>
 							<string key="NSFrame">{{386, 19}, {122, 17}}</string>
 							<reference key="NSSuperview" ref="363169774"/>
-							<reference key="NSWindow"/>
-							<reference key="NSNextKeyView"/>
 							<string key="NSReuseIdentifierKey">_NS:1534</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSButtonCell" key="NSCell" id="781800283">
@@ -1545,14 +1510,36 @@
 								<int key="NSPeriodicInterval">75</int>
 							</object>
 						</object>
+						<object class="NSTextField" id="139943287">
+							<reference key="NSNextResponder" ref="363169774"/>
+							<int key="NSvFlags">268</int>
+							<string key="NSFrame">{{186, 129}, {320, 14}}</string>
+							<reference key="NSSuperview" ref="363169774"/>
+							<reference key="NSNextKeyView" ref="416498190"/>
+							<string key="NSReuseIdentifierKey">_NS:1505</string>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="440297860">
+								<int key="NSCellFlags">68288064</int>
+								<int key="NSCellFlags2">272761856</int>
+								<string key="NSContents"> this feature is experimental, it may cause audio dropouts</string>
+								<reference key="NSSupport" ref="26"/>
+								<string key="NSCellIdentifier">_NS:1505</string>
+								<reference key="NSControlView" ref="139943287"/>
+								<bool key="NSDrawsBackground">YES</bool>
+								<reference key="NSBackgroundColor" ref="610662641"/>
+								<object class="NSColor" key="NSTextColor">
+									<int key="NSColorSpace">1</int>
+									<bytes key="NSRGB">MSAwIDAAA</bytes>
+								</object>
+							</object>
+						</object>
 					</object>
 					<string key="NSFrameSize">{527, 551}</string>
 					<reference key="NSSuperview"/>
-					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView" ref="303721155"/>
 					<string key="NSReuseIdentifierKey">_NS:2837</string>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1280, 778}}</string>
+				<string key="NSScreenRect">{{-372, 800}, {1920, 1080}}</string>
 				<string key="NSMinSize">{527, 573}</string>
 				<string key="NSMaxSize">{10000000000000, 10000000000000}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
@@ -1568,6 +1555,54 @@
 						<reference key="destination" ref="608527442"/>
 					</object>
 					<int key="connectionID">141</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">closeWindow:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="512833490"/>
+					</object>
+					<int key="connectionID">212</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">attenuationCurveView</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="113659439"/>
+					</object>
+					<int key="connectionID">218</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: distanceBasedFiltering</string>
+						<reference key="source" ref="828167722"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="828167722"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: distanceBasedFiltering</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">distanceBasedFiltering</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">171</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: distanceBasedDelay</string>
+						<reference key="source" ref="901331792"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="901331792"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: distanceBasedDelay</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">distanceBasedDelay</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">169</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1603,6 +1638,22 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.distanceBasedAttenuationCentreExponent</string>
+						<reference key="source" ref="767684888"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="767684888"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: self.distanceBasedAttenuationCentreExponent</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.distanceBasedAttenuationCentreExponent</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">220</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
 						<string key="label">enabled: distanceBasedAttenuation</string>
 						<reference key="source" ref="866573081"/>
 						<reference key="destination" ref="1001"/>
@@ -1616,6 +1667,22 @@
 						</object>
 					</object>
 					<int key="connectionID">156</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.distanceBasedAttenuationCentreZoneSize</string>
+						<reference key="source" ref="866573081"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="866573081"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: self.distanceBasedAttenuationCentreZoneSize</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.distanceBasedAttenuationCentreZoneSize</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">216</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1635,35 +1702,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: distanceBasedDelay</string>
-						<reference key="source" ref="901331792"/>
+						<string key="label">selectedIndex: self.distanceBasedAttenuationMode</string>
+						<reference key="source" ref="125751128"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="901331792"/>
+							<reference key="NSSource" ref="125751128"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: distanceBasedDelay</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">distanceBasedDelay</string>
+							<string key="NSLabel">selectedIndex: self.distanceBasedAttenuationMode</string>
+							<string key="NSBinding">selectedIndex</string>
+							<string key="NSKeyPath">self.distanceBasedAttenuationMode</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">169</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: distanceBasedFiltering</string>
-						<reference key="source" ref="828167722"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="828167722"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: distanceBasedFiltering</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">distanceBasedFiltering</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">171</int>
+					<int key="connectionID">233</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1699,86 +1750,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: distanceBasedAttenuation</string>
-						<reference key="source" ref="243619789"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector" id="114698383">
-							<reference key="NSSource" ref="243619789"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">enabled: distanceBasedAttenuation</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">distanceBasedAttenuation</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">197</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled: distanceBasedAttenuation</string>
-						<reference key="source" ref="8327439"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector" id="966318072">
-							<reference key="NSSource" ref="8327439"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">enabled: distanceBasedAttenuation</string>
-							<string key="NSBinding">enabled</string>
-							<string key="NSKeyPath">distanceBasedAttenuation</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">202</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">closeWindow:</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="512833490"/>
-					</object>
-					<int key="connectionID">212</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.distanceBasedAttenuationCentreZoneSize</string>
-						<reference key="source" ref="866573081"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="866573081"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: self.distanceBasedAttenuationCentreZoneSize</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.distanceBasedAttenuationCentreZoneSize</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">216</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">attenuationCurveView</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="113659439"/>
-					</object>
-					<int key="connectionID">218</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.distanceBasedAttenuationCentreExponent</string>
-						<reference key="source" ref="767684888"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="767684888"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: self.distanceBasedAttenuationCentreExponent</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.distanceBasedAttenuationCentreExponent</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">220</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
 						<string key="label">value: self.distanceBasedAttenuationCentreDB</string>
 						<reference key="source" ref="901529546"/>
 						<reference key="destination" ref="1001"/>
@@ -1792,6 +1763,22 @@
 						</object>
 					</object>
 					<int key="connectionID">222</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: distanceBasedAttenuation</string>
+						<reference key="source" ref="243619789"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector" id="114698383">
+							<reference key="NSSource" ref="243619789"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: distanceBasedAttenuation</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">distanceBasedAttenuation</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">197</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1811,19 +1798,55 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">selectedIndex: self.distanceBasedAttenuationMode</string>
-						<reference key="source" ref="125751128"/>
+						<string key="label">enabled2: self.distanceBasedAttenuationMode</string>
+						<reference key="source" ref="243619789"/>
 						<reference key="destination" ref="1001"/>
 						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="125751128"/>
+							<reference key="NSSource" ref="243619789"/>
 							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">selectedIndex: self.distanceBasedAttenuationMode</string>
-							<string key="NSBinding">selectedIndex</string>
+							<string key="NSLabel">enabled2: self.distanceBasedAttenuationMode</string>
+							<string key="NSBinding">enabled2</string>
 							<string key="NSKeyPath">self.distanceBasedAttenuationMode</string>
+							<object class="NSDictionary" key="NSOptions">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSArray" key="dict.sortedKeys">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<string>NSMultipleValuesPlaceholder</string>
+									<string>NSNoSelectionPlaceholder</string>
+									<string>NSNotApplicablePlaceholder</string>
+									<string>NSNullPlaceholder</string>
+									<string>NSValueTransformerName</string>
+								</object>
+								<object class="NSArray" key="dict.values">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<integer value="-1"/>
+									<integer value="-1"/>
+									<integer value="-1"/>
+									<integer value="-1"/>
+									<string>NSNegateBoolean</string>
+								</object>
+							</object>
+							<reference key="NSPreviousConnector" ref="114698383"/>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">233</int>
+					<int key="connectionID">249</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">enabled: distanceBasedAttenuation</string>
+						<reference key="source" ref="8327439"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector" id="966318072">
+							<reference key="NSSource" ref="8327439"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">enabled: distanceBasedAttenuation</string>
+							<string key="NSBinding">enabled</string>
+							<string key="NSKeyPath">distanceBasedAttenuation</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">202</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1861,7 +1884,7 @@
 									<string>NSNotApplicablePlaceholder</string>
 									<string>NSNullPlaceholder</string>
 								</object>
-								<object class="NSMutableArray" key="dict.values">
+								<object class="NSArray" key="dict.values">
 									<bool key="EncodedWithXMLCoder">YES</bool>
 									<integer value="-1"/>
 									<integer value="-1"/>
@@ -1874,42 +1897,6 @@
 						</object>
 					</object>
 					<int key="connectionID">247</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">enabled2: self.distanceBasedAttenuationMode</string>
-						<reference key="source" ref="243619789"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="243619789"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">enabled2: self.distanceBasedAttenuationMode</string>
-							<string key="NSBinding">enabled2</string>
-							<string key="NSKeyPath">self.distanceBasedAttenuationMode</string>
-							<object class="NSDictionary" key="NSOptions">
-								<bool key="EncodedWithXMLCoder">YES</bool>
-								<object class="NSArray" key="dict.sortedKeys">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<string>NSMultipleValuesPlaceholder</string>
-									<string>NSNoSelectionPlaceholder</string>
-									<string>NSNotApplicablePlaceholder</string>
-									<string>NSNullPlaceholder</string>
-									<string>NSValueTransformerName</string>
-								</object>
-								<object class="NSMutableArray" key="dict.values">
-									<bool key="EncodedWithXMLCoder">YES</bool>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<integer value="-1"/>
-									<string>NSNegateBoolean</string>
-								</object>
-							</object>
-							<reference key="NSPreviousConnector" ref="114698383"/>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">249</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1926,6 +1913,22 @@
 						</object>
 					</object>
 					<int key="connectionID">259</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: self.distanceBasedDelayMilisecondsPerUnit</string>
+						<reference key="source" ref="639843193"/>
+						<reference key="destination" ref="1001"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="639843193"/>
+							<reference key="NSDestination" ref="1001"/>
+							<string key="NSLabel">value: self.distanceBasedDelayMilisecondsPerUnit</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">self.distanceBasedDelayMilisecondsPerUnit</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">284</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -1974,22 +1977,6 @@
 						</object>
 					</object>
 					<int key="connectionID">278</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: self.distanceBasedDelayMilisecondsPerUnit</string>
-						<reference key="source" ref="639843193"/>
-						<reference key="destination" ref="1001"/>
-						<object class="NSNibBindingConnector" key="connector">
-							<reference key="NSSource" ref="639843193"/>
-							<reference key="NSDestination" ref="1001"/>
-							<string key="NSLabel">value: self.distanceBasedDelayMilisecondsPerUnit</string>
-							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">self.distanceBasedDelayMilisecondsPerUnit</string>
-							<int key="NSNibBindingConnectorVersion">2</int>
-						</object>
-					</object>
-					<int key="connectionID">284</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
@@ -2062,6 +2049,7 @@
 							<reference ref="673566686"/>
 							<reference ref="303721155"/>
 							<reference ref="512833490"/>
+							<reference ref="139943287"/>
 						</object>
 						<reference key="parent" ref="608527442"/>
 					</object>
@@ -2611,6 +2599,20 @@
 						<reference key="object" ref="167961449"/>
 						<reference key="parent" ref="206985516"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">289</int>
+						<reference key="object" ref="139943287"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="440297860"/>
+						</object>
+						<reference key="parent" ref="363169774"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">290</int>
+						<reference key="object" ref="440297860"/>
+						<reference key="parent" ref="139943287"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -2716,6 +2718,8 @@
 					<string>277.IBNumberFormatterLocalizesFormatMetadataKey</string>
 					<string>277.IBNumberFormatterSampleNumberKey</string>
 					<string>277.IBPluginDependency</string>
+					<string>289.IBPluginDependency</string>
+					<string>290.IBPluginDependency</string>
 					<string>83.IBNSWindowAutoPositionCentersHorizontal</string>
 					<string>83.IBNSWindowAutoPositionCentersVertical</string>
 					<string>83.IBPluginDependency</string>
@@ -2728,7 +2732,7 @@
 					<string>89.IBPluginDependency</string>
 					<string>90.IBPluginDependency</string>
 				</object>
-				<object class="NSMutableArray" key="dict.values">
+				<object class="NSArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2829,6 +2833,8 @@
 					<boolean value="YES"/>
 					<real value="1000"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<boolean value="NO"/>
 					<boolean value="NO"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2854,53 +2860,15 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">286</int>
+			<int key="maxID">290</int>
 		</object>
-		<object class="IBClassDescriber" key="IBDocument.Classes">
-			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
-				<bool key="EncodedWithXMLCoder">YES</bool>
-				<object class="IBPartialClassDescription">
-					<string key="className">AttenuationCurveView</string>
-					<string key="superclassName">NSView</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/AttenuationCurveView.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">ProjectAudioSettingsWindowController</string>
-					<string key="superclassName">NSWindowController</string>
-					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">closeWindow:</string>
-						<string key="NS.object.0">id</string>
-					</object>
-					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">closeWindow:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">closeWindow:</string>
-							<string key="candidateClassName">id</string>
-						</object>
-					</object>
-					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">attenuationCurveView</string>
-						<string key="NS.object.0">AttenuationCurveView</string>
-					</object>
-					<object class="NSMutableDictionary" key="toOneOutletInfosByName">
-						<string key="NS.key.0">attenuationCurveView</string>
-						<object class="IBToOneOutletInfo" key="NS.object.0">
-							<string key="name">attenuationCurveView</string>
-							<string key="candidateClassName">AttenuationCurveView</string>
-						</object>
-					</object>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">./Classes/ProjectAudioSettingsWindowController.h</string>
-					</object>
-				</object>
-			</object>
-		</object>
+		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>
 		<string key="IBDocument.TargetRuntimeIdentifier">IBCocoaFramework</string>
+		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDependencyDefaults">
+			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.macosx</string>
+			<real value="1060" key="NS.object.0"/>
+		</object>
 		<object class="NSMutableDictionary" key="IBDocument.PluginDeclaredDevelopmentDependencies">
 			<string key="NS.key.0">com.apple.InterfaceBuilder.CocoaPlugin.InterfaceBuilder3</string>
 			<integer value="3000" key="NS.object.0"/>
@@ -2915,7 +2883,7 @@
 				<string>NSMenuMixedState</string>
 				<string>NSSwitch</string>
 			</object>
-			<object class="NSMutableArray" key="dict.values">
+			<object class="NSArray" key="dict.values">
 				<bool key="EncodedWithXMLCoder">YES</bool>
 				<string>{11, 11}</string>
 				<string>{10, 3}</string>
